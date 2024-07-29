@@ -18,7 +18,6 @@ db.Sequelize = Sequelize;
 db.connectDB = connectDB;
 
 
-
 const check = async () => {
   try {
     await connectDB.authenticate();
