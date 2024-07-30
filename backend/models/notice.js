@@ -23,7 +23,7 @@ module.exports = (connectDB, DataTypes) => {
       isNotice: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
-      },
+      }
     },
     {
       timestamps: true,

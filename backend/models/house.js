@@ -11,7 +11,7 @@ module.exports = (connectDB, DataTypes) => {
       house_no: {
         type: DataTypes.STRING(10),
         allowNull: false,
-      },
+      }
     },
     {
       timestamps: true,

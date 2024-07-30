@@ -15,7 +15,7 @@ module.exports = (connectDB, DataTypes) => {
             media: {
                 type: DataTypes.STRING,
                 allowNull: true
-            },
+            }
         },
         {
             timestamps: true,
