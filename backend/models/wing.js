@@ -19,5 +19,5 @@ module.exports = (connectDB,DataTypes)=>{
         }
     ) 
 
-    
+    return Wing
 }
