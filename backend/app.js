@@ -4,6 +4,10 @@ const CustomError = require('./utils/CustomError')
 const globalErrorHandler = require('./utils/globalErrorHandler')
 
 
+
+const user_route = require('./routes/user_route');
+
+
 // USE MODULES HERE
 const app = express();
 
@@ -16,6 +20,7 @@ if (process.env.NODE_ENV === 'development') {
 // app.use(cookieParser());
 
 // USE ROUTES HERE
+app.use('/api/v1/users',user_route)
 app.use('*', (req, res, next) => {
     const err = new CustomError(`can't find ${req.originalUrl} on the server`, 404);
     next(err)
