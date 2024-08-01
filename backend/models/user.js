@@ -19,7 +19,7 @@ module.exports = (connectDB, DataTypes) => {
                 allowNull: false,
             },
             number: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.STRING,
                 allowNull: false,
             },
             passcode: {

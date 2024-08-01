@@ -6,7 +6,7 @@ dotenv.config({ path: "./config.env" });
 const app = require("./app");
 
 
-const connection = require("./models/connection");
+const connection = require("./config/connection");
 
 // connection to database
 connection.check();

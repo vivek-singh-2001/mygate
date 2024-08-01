@@ -17,13 +17,14 @@ const db = {};
 db.Sequelize = Sequelize;
 db.connectDB = connectDB;
 
-db.User = require('./user')(connectDB,DataTypes)
-db.House = require('./house')(connectDB,DataTypes)
-db.Blog = require('./blog')(connectDB,DataTypes)
-db.Notice = require('./notice')(connectDB,DataTypes)
-db.Society = require('./society')(connectDB,DataTypes)
-db.Wing = require('./wing')(connectDB,DataTypes)
-db.HouseUser = require('./HouseUser')(connectDB,DataTypes)
+
+db.User = require('../models/user')(connectDB,DataTypes)
+db.House = require('../models/house')(connectDB,DataTypes)
+db.Blog = require('../models/blog')(connectDB,DataTypes)
+db.Notice = require('../models/notice')(connectDB,DataTypes)
+db.Society = require('../models/society')(connectDB,DataTypes)
+db.Wing = require('../models/wing')(connectDB,DataTypes)
+db.HouseUser = require('../models/HouseUser')(connectDB,DataTypes)
 
 
 
