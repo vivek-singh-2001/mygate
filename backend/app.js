@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require('morgan');
 const CustomError = require('./utils/CustomError')
 const globalErrorHandler = require('./utils/globalErrorHandler')
+const cors = require('cors')
 
 
 
@@ -15,7 +16,7 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'))
 }
 
-// app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: "http://localhost:5500", credentials: true }));
 // app.use(express.json());
 // app.use(cookieParser());
 
