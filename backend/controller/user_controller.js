@@ -1,4 +1,4 @@
-const {db} = require('../models/connection');
+const {db} = require('../config/connection');
 const asyncErrorHandler = require('../utils/asyncErrorHandler');
 const CustomError = require('../utils/CustomError');
 const { Sequelize, DataTypes } = require("sequelize");
