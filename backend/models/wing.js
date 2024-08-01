@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize")
+const society = require("./society")
 
 module.exports = (connectDB,DataTypes)=>{
     const Wing = connectDB.define(
@@ -16,8 +17,8 @@ module.exports = (connectDB,DataTypes)=>{
                 allowNull:false,
                 type:DataTypes.STRING(10)
             }
+            
         }
     ) 
-
     return Wing
 }
