@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(cors({ origin: "http://localhost:5500", credentials: true }));
-// app.use(express.json());
+app.use(express.json());
 // app.use(cookieParser());
 
 // USE ROUTES HERE

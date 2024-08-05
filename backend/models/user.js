@@ -1,4 +1,5 @@
 const { types } = require("pg")
+const crypto = require('crypto');
 
 module.exports = (connectDB, DataTypes) => {
     const User = connectDB.define(
@@ -36,19 +37,8 @@ module.exports = (connectDB, DataTypes) => {
                 }
             },
             password: {
-                type: DataTypes.VIRTUAL,
-                get() {
-                    return () => this.generatePassword();
-                },
-                set(value) {
-                    if (value) {
-                        this.setDataValue('hashedPassword', bcrypt.hashSync(value, 10));
-                    }
-                }
-            },
-            hashedPassword: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             dateofbirth: {
                 type: DataTypes.DATEONLY,
@@ -76,12 +66,12 @@ module.exports = (connectDB, DataTypes) => {
             hooks: {
                 beforeCreate: async (user) => {
                     const generatedPassword = user.generatePassword();
-                    user.hashedPassword = await bcrypt.hash(generatedPassword, 10);
+                    user.password = encryptPassword(generatedPassword);
                 },
                 beforeUpdate: async (user) => {
                     if (user.changed('firstname') || user.changed('dateofbirth')) {
                         const generatedPassword = user.generatePassword();
-                        user.hashedPassword = await bcrypt.hash(generatedPassword, 10);
+                        user.password = encryptPassword(generatedPassword);
                     }
                 }
             }
@@ -95,7 +85,12 @@ module.exports = (connectDB, DataTypes) => {
     };
 
     User.prototype.validPassword = function(password) {
-        return bcrypt.compareSync(password, this.hashedPassword);
+        const encryptedPassword = encryptPassword(password);
+        return this.password === encryptedPassword;
+    };
+
+    const encryptPassword = (password) => {
+        return crypto.createHash('sha256').update(password).digest('hex');
     };
 
     return User;
