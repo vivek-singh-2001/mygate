@@ -5,8 +5,9 @@ const globalErrorHandler = require('./utils/globalErrorHandler')
 const cors = require('cors')
 
 
-
+// import routes here 
 const user_route = require('./routes/user_route');
+const society_route = require('./routes/society_route');
 
 
 // USE MODULES HERE
@@ -22,6 +23,7 @@ app.use(express.json());
 
 // USE ROUTES HERE
 app.use('/api/v1/users',user_route)
+app.use('/api/v1/society',society_route)
 app.use('*', (req, res, next) => {
     const err = new CustomError(`can't find ${req.originalUrl} on the server`, 404);
     next(err)

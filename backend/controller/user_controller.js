@@ -1,139 +1,97 @@
-const { db, sequelize } = require("../config/connection");
-const asyncErrorHandler = require("../utils/asyncErrorHandler");
-const CustomError = require("../utils/CustomError");
-const { Sequelize, DataTypes, where } = require("sequelize");
+const {db,sequelize} = require('../config/connection');
+const asyncErrorHandler = require('../utils/asyncErrorHandler');
+const CustomError = require('../utils/CustomError');
+const { Sequelize, DataTypes } = require("sequelize");
 const checkRecordExists = require("../utils/checkRecordExists");
-const { Op } = Sequelize;
+const {Op} = Sequelize
 
-// getting the db models instances
-const { User, House, HouseUser } = db;
+// getting the user model instance
+const { User, House, HouseUser, Wing, Society } = db;
 
-exports.getAllUser = asyncErrorHandler(async (req, res, next) => {
-  // Extract query parameters from request
-  const { search } = req.query;
 
-  // Build search query
-  const whereClause = search
-    ? {
-        [Op.or]: [
-          { firstname: { [Op.iLike]: `%${search}%` } },
-          { number: { [Op.iLike]: `%${search}%` } },
-          { email: { [Op.iLike]: `%${search}%` } },
+exports.getUserById = asyncErrorHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  // Find the user by ID and include related house, wing, and society details
+  const user = await User.findOne({
+    where: { id },
+    include: [
+      {
+        model: House,
+        as: 'Houses',
+        include: [
+          {
+            model: Wing,
+            as: 'Wing',
+            include: [
+              {
+                model: Society,
+                as: 'Society',
+              },
+            ],
+          },
         ],
-      }
-    : {};
+      },
+    ],
+  });
 
-  // Fetch users based on search query
-  const users = await User.findAll({ where: whereClause });
+  if (!user) {
+    return next(new CustomError(`User with ID ${id} not found`, 404));
+  }
 
   res.status(200).json({
-    status: "success",
+    status: 'success',
     data: {
-      users,
+      user,
     },
   });
 });
 
-// Fetch users by society ID
-exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
-  const { societyId } = req.params;
 
-  if (!societyId) {
-    return next(new CustomError("Society ID is required", 400));
+
+
+exports.updateUser = asyncErrorHandler(async (req, res, next) => {
+
+
+ //  Allowed fields for update
+    const allowedUpdateFields = ['firstname', 'lastname', 'email', 'number', 'dateofbirth'];
+    
+ // Disallowed fields for update
+    const disallowedUpdateFields = ['isAdmin', 'isWINGADMIN', 'isMEMBER', 'createdAt', 'updatedAt','isowner'];
+
+  const userId = req.params.id;
+  const updateData = req.body;
+
+  // Check for disallowed fields in the request
+  const attemptedUpdates = Object.keys(updateData);
+  const disallowedFieldsAttempted = attemptedUpdates.filter(field => disallowedUpdateFields.includes(field));
+
+  if (disallowedFieldsAttempted.length > 0) {
+    // If any disallowed fields are attempted to be updated, return an error
+    return next(new CustomError(`You cannot update the following fields: ${disallowedFieldsAttempted.join(', ')}`, 400));
   }
 
-  const query = `
-      SELECT * FROM GetUsersBySociety($1);
-  `;
-  const values = [societyId];
+  // Filter only allowed fields
+  const updateFields = {};
+  allowedUpdateFields.forEach(field => {
+    if (updateData[field] !== undefined) {
+      updateFields[field] = updateData[field];
+    }
+  });
 
-  try {
-    const results = await db.connectDB.query(query, {
-      bind: values,
-      type: db.Sequelize.QueryTypes.SELECT,
-    });
+  // Update user with only allowed fields
+  const [updated] = await User.update(updateFields, { where: { id: userId } });
+
+  if (updated) {
+    const updatedUser = await User.findOne({ where: { id: userId } });
     res.status(200).json({
-      status: "success",
+      status: 'success',
       data: {
-        users: results,
+        user: updatedUser,
       },
     });
-  } catch (error) {
-    next(error);
-  }
-
-  //  using sequelize
-  //   const { societyId } = req.params;
-
-  //   if (!societyId) {
-  //     return next(new CustomError("Society ID is required", 400));
-  //   }
-
-  //   try {
-  //     const users = await db.User.findAll({
-  //       attributes: [
-  //         "id",
-  //         "firstname",
-  //         "lastname",
-  //         "email",
-  //         "number",
-  //         "isOwner",
-  //         "isAdmin",
-  //         "isWINGADMIN",
-  //         "isMEMBER",
-  //       ],
-  //       include: [
-  //         {
-  //           model: db.House,
-  //           attributes: ["house_no"],
-  //           include: [
-  //             {
-  //               model: db.Wing,
-  //               attributes: ["name"],
-  //               where: { SocietyId: societyId },
-  //             },
-  //           ],
-  //         },
-  //       ],
-  //     });
-
-  //     res.status(200).json({
-  //       status: "success",
-  //       data: {
-  //         users,
-  //       },
-  //     });
-  //   } catch (error) {
-  //     next(error);
-  //   }
-});
-
-// Fetch users by society ID and wing name
-exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
-  const { societyId, wingName } = req.params;
-
-  if (!societyId || !wingName) {
-    return next(new CustomError("Society ID and Wing Name are required", 400));
-  }
-
-  const query = `
-        SELECT * FROM GetUsersBySocietyAndWing($1, $2);
-    `;
-  const values = [societyId, wingName];
-
-  try {
-    const results = await db.connectDB.query(query, {
-      bind: values,
-      type: db.Sequelize.QueryTypes.SELECT,
-    });
-    res.status(200).json({
-      status: "success",
-      data: {
-        users: results,
-      },
-    });
-  } catch (error) {
-    next(error);
+  } else {
+    next(new CustomError('User not found', 404));
   }
 });
 
