@@ -62,11 +62,11 @@ module.exports = (connectDB, DataTypes) => {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false,
             },
-            isWINGADMIN: {
+            isWingAdmin: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: false,
             },
-            isMEMBER: {
+            isMember: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: true,
             }
