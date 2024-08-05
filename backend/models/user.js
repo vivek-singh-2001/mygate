@@ -1,5 +1,6 @@
 const { types } = require("pg")
 const crypto = require('crypto');
+const validator = require('validator');
 
 module.exports = (connectDB, DataTypes) => {
     const User = connectDB.define(
@@ -65,13 +66,18 @@ module.exports = (connectDB, DataTypes) => {
         {
             hooks: {
                 beforeCreate: async (user) => {
-                    const generatedPassword = user.generatePassword();
-                    user.password = encryptPassword(generatedPassword);
+                    if (!user.password) {
+                        const generatedPassword = user.generatePassword();
+                        user.password = await encryptPassword(generatedPassword);
+                    } else {
+                        validatePassword(user.password);
+                        user.password = await encryptPassword(user.password);
+                    }
                 },
                 beforeUpdate: async (user) => {
-                    if (user.changed('firstname') || user.changed('dateofbirth')) {
-                        const generatedPassword = user.generatePassword();
-                        user.password = encryptPassword(generatedPassword);
+                    if (user.changed('password')) {
+                        validatePassword(user.password);
+                        user.password = await encryptPassword(user.password);
                     }
                 }
             }
@@ -81,16 +87,30 @@ module.exports = (connectDB, DataTypes) => {
         const firstFourLettersOfFirstName = this.firstname.slice(0, 2).toLowerCase();
         const firstFourLettersOfLastName = this.firstname.slice(0, 2).toLowerCase();
         const birthYear = new Date(this.dateofbirth).getFullYear();
-        return `${firstFourLettersOfFirstName}${firstFourLettersOfLastName}@${birthYear}`;
+        console.log( `${firstFourLettersOfFirstName}-${firstFourLettersOfLastName}@${birthYear}`);
+        
+        return `${firstFourLettersOfFirstName}-${firstFourLettersOfLastName}@${birthYear}`;
     };
 
-    User.prototype.validPassword = function(password) {
-        const encryptedPassword = encryptPassword(password);
+    User.prototype.validPassword = async function(password) {
+        const encryptedPassword = await encryptPassword(password);
         return this.password === encryptedPassword;
     };
 
-    const encryptPassword = (password) => {
+    const encryptPassword = async (password) => {
         return crypto.createHash('sha256').update(password).digest('hex');
+    };
+
+    const validatePassword = (password) => {
+        if (!validator.isStrongPassword(password, {
+            minLength: 8,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 1,
+            minSymbols: 1
+        })) {
+            throw new Error('Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+        }
     };
 
     return User;
