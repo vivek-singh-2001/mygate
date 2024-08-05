@@ -7,7 +7,7 @@ const checkRecordExists = async (modelName, id) => {
   }
 
   const model = db[modelName];
-  console.log(model);
+  console.log(model, id);
   const record = await model.findByPk(id);
 
   return record !== null;
