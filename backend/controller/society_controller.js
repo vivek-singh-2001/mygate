@@ -54,7 +54,7 @@ if (!societyId) {
 
 try {
     const users = await db.User.findAll({
-        attributes: ['id', 'firstname', 'lastname', 'email', 'number', 'isOwner', 'isAdmin', 'isWINGADMIN', 'isMEMBER'],
+        attributes: ['id', 'firstname', 'lastname', 'email', 'number', 'isOwner', 'isAdmin', 'isWingAdmin', 'isMember'],
         include: [
             {
                 model: db.House,

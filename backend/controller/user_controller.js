@@ -57,7 +57,7 @@ exports.updateUser = asyncErrorHandler(async (req, res, next) => {
     const allowedUpdateFields = ['firstname', 'lastname', 'email', 'number', 'dateofbirth'];
     
  // Disallowed fields for update
-    const disallowedUpdateFields = ['isAdmin', 'isWINGADMIN', 'isMEMBER', 'createdAt', 'updatedAt','isowner'];
+    const disallowedUpdateFields = ['isAdmin', 'isWingAdmin', 'isMember', 'createdAt', 'updatedAt','isowner'];
 
   const userId = req.params.id;
   const updateData = req.body;
@@ -178,7 +178,7 @@ exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
         return next(new CustomError('User not found', 404))
     }
 
-    if (!user.validPassword(currentPassword)) {
+    if (! (await user.validPassword(currentPassword))) {
         return next(new CustomError("Current password is incorrect", 401));
     }
 

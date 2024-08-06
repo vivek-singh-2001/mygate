@@ -60,6 +60,10 @@ module.exports = (connectDB, DataTypes) => {
             isMember: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: true,
+            },
+            passwordChangedAt:{
+                type: DataTypes.DATE,
+                allowNull: true,
             }
 
         },
@@ -68,6 +72,7 @@ module.exports = (connectDB, DataTypes) => {
                 beforeCreate: async (user) => {
                     if (!user.password) {
                         const generatedPassword = user.generatePassword();
+                        console.log(generatedPassword);
                         user.password = await encryptPassword(generatedPassword);
                     } else {
                         validatePassword(user.password);
@@ -78,6 +83,7 @@ module.exports = (connectDB, DataTypes) => {
                     if (user.changed('password')) {
                         validatePassword(user.password);
                         user.password = await encryptPassword(user.password);
+                        user.passwordChangedAt = Date.now();
                     }
                 }
             }
@@ -87,7 +93,6 @@ module.exports = (connectDB, DataTypes) => {
         const firstFourLettersOfFirstName = this.firstname.slice(0, 2).toLowerCase();
         const firstFourLettersOfLastName = this.firstname.slice(0, 2).toLowerCase();
         const birthYear = new Date(this.dateofbirth).getFullYear();
-        console.log( `${firstFourLettersOfFirstName}-${firstFourLettersOfLastName}@${birthYear}`);
         
         return `${firstFourLettersOfFirstName}-${firstFourLettersOfLastName}@${birthYear}`;
     };
@@ -96,6 +101,18 @@ module.exports = (connectDB, DataTypes) => {
         const encryptedPassword = await encryptPassword(password);
         return this.password === encryptedPassword;
     };
+
+
+    User.prototype.isPasswordChanged = async function (JWTTimestamp) {
+        if (this.passwordChangedAt) {
+          const passwordChangedTimestamp = parseInt(
+            this.passwordChangedAt.getTime() / 1000,
+            10
+          );
+          return JWTTimestamp < passwordChangedTimestamp;
+        }
+        return false;
+      };
 
     const encryptPassword = async (password) => {
         return crypto.createHash('sha256').update(password).digest('hex');
