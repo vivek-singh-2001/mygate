@@ -18,11 +18,11 @@ db.Sequelize = Sequelize;
 db.connectDB = connectDB;
 
 
-db.User = require('../models/user')(connectDB,DataTypes)
+db.User = require('../features/users/userModel')(connectDB,DataTypes)
 db.House = require('../models/house')(connectDB,DataTypes)
 db.Blog = require('../models/blog')(connectDB,DataTypes)
 db.Notice = require('../models/notice')(connectDB,DataTypes)
-db.Society = require('../models/society')(connectDB,DataTypes)
+db.Society = require('../features/society/societyModel')(connectDB,DataTypes)
 db.Wing = require('../models/wing')(connectDB,DataTypes)
 db.HouseUser = require('../models/HouseUser')(connectDB,DataTypes)
 
