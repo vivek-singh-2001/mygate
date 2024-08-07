@@ -4,6 +4,7 @@ const CustomError = require('./utils/CustomError')
 const globalErrorHandler = require('./utils/globalErrorHandler')
 const cookieParser = require('cookie-parser');
 const cors = require('cors')
+const passport = require('passport');
 
 // import routes here 
 const user_route = require('./features/users/userApis');
@@ -20,6 +21,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use(cors({ origin: "http://localhost:5500", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 
 // USE ROUTES HERE
 app.use('/api/v1/users',user_route)
