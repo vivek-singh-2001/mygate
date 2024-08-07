@@ -25,6 +25,8 @@ db.Notice = require('../features/notice/noticeModel.js')(connectDB,DataTypes)
 db.Society = require('../features/society/societyModel')(connectDB,DataTypes)
 db.Wing = require('../features/wing/wingmodel.js')(connectDB,DataTypes)
 db.HouseUser = require('../features/houseuser/HouseUserModel.js')(connectDB,DataTypes)
+db.ChatRoom = require('../features/chat/chatRoom.js')(connectDB,DataTypes)
+db.ChatMessage = require("../features/chat/chatMessage.js")(connectDB, DataTypes);
 
 
 
@@ -62,6 +64,14 @@ db.Blog.belongsTo(db.User);
 
 db.User.belongsToMany(db.House, { through: db.HouseUser });
 db.House.belongsToMany(db.User, { through: db.HouseUser });
+
+
+// Associations
+db.User.hasMany(db.ChatMessage, { foreignKey: 'userId' });
+db.ChatMessage.belongsTo(db.User, { foreignKey: 'userId' });
+
+db.ChatRoom.hasMany(db.ChatMessage, { foreignKey: 'roomId' });
+db.ChatMessage.belongsTo(db.ChatRoom, { foreignKey: 'roomId' });
 
 
 const check = async () => {
