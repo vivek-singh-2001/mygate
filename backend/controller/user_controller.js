@@ -178,7 +178,7 @@ exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
         return next(new CustomError('User not found', 404))
     }
 
-    if (!user.validPassword(currentPassword)) {
+    if (!(await user.validPassword(currentPassword))) {
         return next(new CustomError("Current password is incorrect", 401));
     }
 
