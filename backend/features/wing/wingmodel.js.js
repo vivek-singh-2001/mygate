@@ -1,5 +1,3 @@
-const { DataTypes } = require("sequelize")
-const society = require("./society")
 
 module.exports = (connectDB,DataTypes)=>{
     const Wing = connectDB.define(

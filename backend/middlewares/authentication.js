@@ -24,7 +24,14 @@ exports.login = asyncErrorHandler(async (req, res, next) => {
   res.cookie("jwtToken", token, {
     // httpOnly: true,
     // secure: process.env.NODE_ENV === "production",  // Only set cookie over HTTPS in production environment
-    expiresIn: process.env.JWT_EXPIRES_IN * 60 ,
+    expiresIn: '1d',
+  });
+
+
+  res.cookie("jwtAuth", token, {
+    maxAge:  24 * 60 * 60 *  1000,  //1day
+    // secure:true,
+    // httpOnly: true,
   });
 
   res.status(200).json({
@@ -32,6 +39,9 @@ exports.login = asyncErrorHandler(async (req, res, next) => {
     token,
   });
 });
+
+
+// logout the user
 
 exports.logout = asyncErrorHandler(async (req, res, next) => {
   // Clear the JWT token cookie
@@ -44,12 +54,15 @@ exports.logout = asyncErrorHandler(async (req, res, next) => {
     .json({ status: "success", message: "Logged out successfully" });
 });
 
+
+// protect the access
+
 exports.protect = asyncErrorHandler(async (req, res, next) => {
   // 1. Read the token and check if it exists
   const { jwtToken: token } = req.cookies;
 
   if (!token) {
-    next(new CustomError("You are not logged in!", 401));
+   return next(new CustomError("You are not logged in!", 401));
   }
 
   // 2. Validate the token
@@ -83,25 +96,3 @@ exports.protect = asyncErrorHandler(async (req, res, next) => {
   next();
 });
 
-exports.logout = asyncErrorHandler(async (req, res, next) => {
-  const role = req.params.role;
-
-  if (role === "admin" || role === "vendor") {
-    // Clear the JWT token cookie
-    res.clearCookie("jwtAuth", {
-      expires: new Date(Date.now()),
-      // httpOnly: true,
-    });
-    res.clearCookie("loggedRole", {
-      expires: new Date(Date.now()),
-      // httpOnly: true,
-    });
-
-    res.status(200).json({
-      status: "Success",
-      message: `${role} logged out successfully`,
-    });
-  } else {
-    return next(new CustomError("Page not Found!", 404));
-  }
-});

@@ -18,13 +18,13 @@ db.Sequelize = Sequelize;
 db.connectDB = connectDB;
 
 
-db.User = require('../models/user')(connectDB,DataTypes)
-db.House = require('../models/house')(connectDB,DataTypes)
-db.Blog = require('../models/blog')(connectDB,DataTypes)
-db.Notice = require('../models/notice')(connectDB,DataTypes)
-db.Society = require('../models/society')(connectDB,DataTypes)
-db.Wing = require('../models/wing')(connectDB,DataTypes)
-db.HouseUser = require('../models/HouseUser')(connectDB,DataTypes)
+db.User = require('../features/users/userModel')(connectDB,DataTypes)
+db.House = require('../features/house/houseModel.js')(connectDB,DataTypes)
+db.Blog = require('../features/blog/blogModel.js')(connectDB,DataTypes)
+db.Notice = require('../features/notice/noticeModel.js')(connectDB,DataTypes)
+db.Society = require('../features/society/societyModel')(connectDB,DataTypes)
+db.Wing = require('../features/wing/wingmodel.js')(connectDB,DataTypes)
+db.HouseUser = require('../features/houseuser/HouseUserModel.js')(connectDB,DataTypes)
 
 
 

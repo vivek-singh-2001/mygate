@@ -6,10 +6,9 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors')
 
 // import routes here 
-const user_route = require('./routes/user_route');
-const society_route = require('./routes/society_route');
+const user_route = require('./features/users/userApis');
+const society_route = require('./features/society/societyApis');
 const auth_route = require('./routes/auth_route')
-
 
 // USE MODULES HERE
 const app = express();
