@@ -4,6 +4,8 @@ const asyncErrorHandler = require("../utils/asyncErrorHandler");
 const CustomError = require("../utils/CustomError");
 const jwt = require("jsonwebtoken");
 const util = require("util");
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const { User } = db;
 
@@ -25,13 +27,6 @@ exports.login = asyncErrorHandler(async (req, res, next) => {
     // httpOnly: true,
     // secure: process.env.NODE_ENV === "production",  // Only set cookie over HTTPS in production environment
     expiresIn: '1d',
-  });
-
-
-  res.cookie("jwtAuth", token, {
-    maxAge:  24 * 60 * 60 *  1000,  //1day
-    // secure:true,
-    // httpOnly: true,
   });
 
   res.status(200).json({
@@ -96,3 +91,17 @@ exports.protect = asyncErrorHandler(async (req, res, next) => {
   next();
 });
 
+// Google OAuth routes
+exports.googleAuth = passport.authenticate('google', { scope: ['profile', 'email'] });
+
+exports.googleAuthCallback = passport.authenticate('google', { failureRedirect: '/login' });
+
+exports.googleAuthSuccess = (req, res) => {
+  const token = signToken(req.user.id, req.user.email);
+
+  res.cookie("jwtToken", token, {
+    expiresIn: '1d',
+  });
+
+  res.redirect('/');
+};
