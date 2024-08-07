@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Sign-In Test</title>
+</head>
+<body>
+    <h1>Google Sign-In Test</h1>
+    <button id="google-sign-in">Sign in with Google</button>
+
+    <script>
+        document.getElementById('google-sign-in').addEventListener('click', () => {
+            window.location.href = 'http://localhost:5500/apiauth/google';
+        });
+    </script>
+</body>
+</html>
