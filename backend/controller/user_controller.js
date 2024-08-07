@@ -57,7 +57,7 @@ exports.updateUser = asyncErrorHandler(async (req, res, next) => {
     const allowedUpdateFields = ['firstname', 'lastname', 'email', 'number', 'dateofbirth'];
     
  // Disallowed fields for update
-    const disallowedUpdateFields = ['isAdmin', 'isWINGADMIN', 'isMEMBER', 'createdAt', 'updatedAt','isowner'];
+    const disallowedUpdateFields = ['isAdmin', 'isWingAdmin', 'isMember', 'createdAt', 'updatedAt','isowner'];
 
   const userId = req.params.id;
   const updateData = req.body;

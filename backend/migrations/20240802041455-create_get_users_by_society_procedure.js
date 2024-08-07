@@ -20,8 +20,8 @@ module.exports = {
         number VARCHAR,
         isOwner BOOLEAN,
         isAdmin BOOLEAN,
-        isWINGADMIN BOOLEAN,
-        isMEMBER BOOLEAN,
+        isWingAdmin BOOLEAN,
+        isMember BOOLEAN,
         house_no VARCHAR
       )
       LANGUAGE plpgsql
@@ -29,7 +29,7 @@ module.exports = {
       BEGIN
         RETURN QUERY
         SELECT 
-          u.id, u.firstname, u.lastname, u.email, u.number, u."isOwner", u."isAdmin", u."isWINGADMIN", u."isMEMBER",
+          u.id, u.firstname, u.lastname, u.email, u.number, u."isOwner", u."isAdmin", u."isWingAdmin", u."isMember",
           h.house_no
         FROM 
           "Users" u
@@ -56,8 +56,8 @@ module.exports = {
         number VARCHAR,
         isOwner BOOLEAN,
         isAdmin BOOLEAN,
-        isWINGADMIN BOOLEAN,
-        isMEMBER BOOLEAN,
+        isWingAdmin BOOLEAN,
+        isMember BOOLEAN,
         house_no VARCHAR
       )
       LANGUAGE plpgsql
@@ -65,7 +65,7 @@ module.exports = {
       BEGIN
         RETURN QUERY
         SELECT 
-          u.id, u.firstname, u.lastname, u.email, u.number, u."isOwner", u."isAdmin", u."isWINGADMIN", u."isMEMBER",
+          u.id, u.firstname, u.lastname, u.email, u.number, u."isOwner", u."isAdmin", u."isWingAdmin", u."isMember",
           h.house_no
         FROM 
           "Users" u

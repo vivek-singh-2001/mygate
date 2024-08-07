@@ -1,4 +1,5 @@
 module.exports = (connectDB, DataTypes) => {
+
   const Society = connectDB.define(
     "Society",
     {
@@ -9,9 +10,10 @@ module.exports = (connectDB, DataTypes) => {
         allowNull: false,
       },
       name: {
-        allowNull: false,
         type: DataTypes.STRING(100),
         unique: true,
+        allowNull: false,
+
       },
       address: {
         type: DataTypes.JSON,
