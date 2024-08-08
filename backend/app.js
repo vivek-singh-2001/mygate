@@ -10,7 +10,7 @@ const passport = require('./config/passport');
 // import routes here 
 const user_route = require('./features/users/userApis');
 const society_route = require('./features/society/societyApis');
-const auth_route = require('./routes/auth_route');
+const auth_route = require('./features/authentication/authApi');
 
 // USE MODULES HERE
 const app = express();

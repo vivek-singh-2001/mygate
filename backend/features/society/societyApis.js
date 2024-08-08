@@ -1,6 +1,6 @@
 const express = require("express");
 const societyController = require("./societyController");
-const authController = require("../../middlewares/authentication");
+const authController = require("../../features/authentication/authController");
 
 const { protect } = authController;
 
