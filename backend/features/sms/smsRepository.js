@@ -1,25 +1,25 @@
 const { User } = require("../../config/connection").db;
 
-exports.findUserByPhoneNumber = async (phoneNumber) => {
-    return await User.findOne({ where: { number: phoneNumber } });
+exports.findUserByContact = async (contact, contactType) => {
+  return await User.findOne({
+    where: { [contactType]: contact, isOwner: true },
+  });
 };
 
-exports.saveOtp = async (phoneNumber, otp) => {
-  console.log(phoneNumber, otp);
-
+exports.saveOtp = async (contact, contactType, otp) => {
   await User.update(
     { otp, otpExpiry: Date.now() + 5 * 60 * 1000 },
-    { where: { number: phoneNumber } }
+    { where: { [contactType]: contact, isOwner: true } }
   );
 };
 
-exports.verifyOtp = async (phoneNumber, otp) => {
-  const user = await User.findOne({ where: { number: phoneNumber, otp } });
+exports.verifyOtp = async (contact, contactType, otp) => {
+  const user = await User.findOne({ where: { [contactType]: contact, otp } });
 
   if (user && user.otpExpiry > Date.now()) {
     await User.update(
       { otp: null, otpExpiry: null },
-      { where: { number: phoneNumber } }
+      { where: { [contactType]: contact } }
     );
     return user;
   }

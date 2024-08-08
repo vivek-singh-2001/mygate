@@ -10,7 +10,7 @@
     <button id="google-sign-in">Sign in with Google</button>
     <h1>OTP Login Test</h1>
     <form id="send-otp-form">
-        <input type="text" id="phone-number" placeholder="Phone Number" required>
+        <input type="text" id="contact-input" placeholder="Phone Number or Email" required>
         <button type="submit">Send OTP</button>
     </form>
 
@@ -26,26 +26,23 @@
 
         document.getElementById('send-otp-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const phoneNumber = document.getElementById('phone-number').value;
-
-            console.log(phoneNumber);
+            const contact = document.getElementById('contact-input').value;
 
             const response = await fetch('http://localhost:7500/api/v1/sms/send-otp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ phoneNumber })
-            });            
+                body: JSON.stringify({ contact })
+            });
 
             const data = await response.json();
-            console.log(data);
             alert(data.message);
         });
 
         document.getElementById('verify-otp-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const phoneNumber = document.getElementById('phone-number').value;
+            const contact = document.getElementById('contact-input').value;
             const otp = document.getElementById('otp').value;
 
             const response = await fetch('http://localhost:7500/api/v1/sms/verify-otp', {
@@ -53,7 +50,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ phoneNumber, otp })
+                body: JSON.stringify({ contact, otp })
             });
 
             const data = await response.json();
