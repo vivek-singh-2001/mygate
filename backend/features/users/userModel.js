@@ -24,6 +24,14 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      otp: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      otpExpiry: {
+        type: DataTypes.DATE,
+        allowNull: true,
+      },
       passcode: {
         type: DataTypes.STRING(20),
         allowNull: true,
