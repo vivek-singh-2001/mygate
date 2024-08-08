@@ -11,6 +11,7 @@ const passport = require('./config/passport');
 const user_route = require('./features/users/userApis');
 const society_route = require('./features/society/societyApis');
 const auth_route = require('./routes/auth_route');
+const sms_route = require('./features/sms/smsApis')
 
 // USE MODULES HERE
 const app = express();
@@ -19,7 +20,7 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-app.use(cors({ origin: "http://localhost:5500", credentials: true }));
+app.use(cors({ origin: "http://127.0.0.1:5500", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -42,6 +43,7 @@ app.use(passport.session());
 app.use('/api/v1/users', user_route);
 app.use('/api/v1/society', society_route);
 app.use('/api/v1/auth', auth_route);
+app.use('/api/v1/sms', sms_route);
 app.use('*', (req, res, next) => {
     const err = new CustomError(`can't find ${req.originalUrl} on the server`, 404);
     next(err);
