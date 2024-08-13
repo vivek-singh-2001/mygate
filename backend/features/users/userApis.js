@@ -1,6 +1,6 @@
 const express = require("express");
 const userController = require("./userController");
-const authController = require('../../middlewares/authentication')
+const authController = require('../../features/authentication/authController')
 
 const {protect} = authController
 

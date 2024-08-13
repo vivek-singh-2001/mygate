@@ -97,11 +97,15 @@ exports.googleAuth = passport.authenticate('google', { scope: ['profile', 'email
 exports.googleAuthCallback = passport.authenticate('google', { failureRedirect: '/login' });
 
 exports.googleAuthSuccess = (req, res) => {
+  if (!req.user) {
+    return res.redirect('/login'); // Redirect to login if no user is found
+  }
+
   const token = signToken(req.user.id, req.user.email);
 
   res.cookie("jwtToken", token, {
     expiresIn: '1d',
   });
 
-  res.redirect('/');
+  res.redirect('/'); // Redirect to home or another page on successful sign-in
 };
