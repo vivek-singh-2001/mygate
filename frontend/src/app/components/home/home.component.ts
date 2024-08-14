@@ -1,24 +1,17 @@
-import { Component, ViewChild } from '@angular/core';
-import { SidebarModule } from 'primeng/sidebar';
-import { ButtonModule } from 'primeng/button';
-import { RippleModule } from 'primeng/ripple';
-import { AvatarModule } from 'primeng/avatar';
-import { StyleClassModule } from 'primeng/styleclass';
-import { Sidebar } from 'primeng/sidebar';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { NavigationComponent } from "./navigation/navigation.component";
+import { SideNavComponent } from "./side-nav/side-nav.component";
+import { MainDisplayComponent } from "./main-display/main-display.component";
+
 
 @Component({
-    selector: 'sidebar-headless-demo',
-    templateUrl: './home.component.html',
-    standalone: true,
-    imports: [SidebarModule, ButtonModule, RippleModule, AvatarModule, StyleClassModule,CommonModule]
+  selector: 'app-home',
+  standalone: true,
+  imports: [NavigationComponent, SideNavComponent, MainDisplayComponent],
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.css'
 })
 export class HomeComponent {
-    @ViewChild('sidebarRef') sidebarRef!: Sidebar;
 
-    closeCallback(e:any): void {
-        this.sidebarRef.close(e);
-    }
-
-    sidebarVisible: boolean = false;
+  
 }
