@@ -8,6 +8,7 @@ passport.use(new GoogleStrategy({
   callbackURL: "/api/v1/auth/google/callback"
 },
 async (accessToken, refreshToken, profile, done) => {
+ 
   try {
     const email = profile.emails[0].value;
     let user = await User.findOne({ where: { email } });
@@ -16,7 +17,6 @@ async (accessToken, refreshToken, profile, done) => {
       // If user is not found, return an error
       return done(new Error('User not found'), false);
     }
-
 
     done(null, user);
   } catch (error) {
