@@ -11,15 +11,21 @@ exports.login = asyncErrorHandler(async (req, res, next) => {
   }
 
   const token = await authService.login(email, password);
-  res.cookie("jwtToken", token, { expiresIn: '1d' });
+  res.cookie("jwtToken", token, 
+    { expiresIn: '1d',
+      httpOnly:false,
+     });
   res.status(200).json({ status: "success", token });
 });
 
 // Handle user logout
 exports.logout = asyncErrorHandler(async (req, res, next) => {
-  res.clearCookie("jwtToken", { expires: new Date(Date.now()) });
+  res.clearCookie("jwtToken",
+     { expires: new Date(Date.now()) });
+     res.clearCookie("connect.sid",
+      { expires: new Date(Date.now()) });
   res.status(200).json({ status: "success", message: "Logged out successfully" });
-});
+}); 
 
 // Protect routes
 exports.protect = asyncErrorHandler(async (req, res, next) => {
@@ -38,8 +44,8 @@ exports.googleAuthCallback = passport.authenticate('google', { failureRedirect: 
 
 exports.googleAuthSuccess = (req, res) => {
   const token = authService.signToken(req.user.id, req.user.email);
-  res.cookie("jwtToken", token, { expiresIn: '1d' });
-  res.redirect(`http://localhost:4200/google/success/?jwtToken=${token}`);
+  res.cookie("jwtToken", token, { expiresIn: '1d' ,httpOnly: true, secure: process.env.NODE_ENV === 'production',sameSite: 'lax', });
+  res.redirect(`http://localhost:4200/google/success?token=${token}`);
 };
 
 

@@ -1,55 +1,82 @@
-<form [formGroup]="loginForm" (ngSubmit)="onLogin()" >
-  <p-card header="login " [style]="{ width: '360px' }">
-    <div class="field">
-      <label for="email">Email</label>
-      <input
-        type="text"
-        pInputText
-        formControlName="email"
-        class="w-full"
-        name="email"
-        placeholder="Type your email"
-      />
-      <small *ngIf="email.invalid && (email.touched || email.dirty)" class="p-error">
-        <div *ngIf="email.errors?.['required']">Email is required</div>
-        <div *ngIf="email.errors?.['email']">Email should be valid</div>
-      </small>
-    </div>
-    <div class="field">
-      <label for="password">password</label>
-      <input
-        type="password"
-        pInputText
-        formControlName="password"
-        class="w-full"
-        name="password"
-        placeholder="Type your password"
-      />
-      <small *ngIf="password.invalid && (password.touched || password.dirty)" class="p-error">
-        <div *ngIf="password.errors?.['required']">password is required</div>
-      </small>
-    </div>
-    <p-button label="SIGN IN" styleClass="w-full" [disabled]="loginForm.invalid" type="submit" />
-    <hr class="my-3" />
-    <p-button
-      label="Login In with Google"
-      iconPos="left"
-      styleClass="w-full"
-      severity="info"
-      (click)="onGoogleLogin()"
-      
-    >
-    <ng-template pTemplate="icon">
-      <img src="../../../../public/assets/icons8-google.svg" alt="Google" style="width: 20px; height: 20px;" />
-    </ng-template>
-  </p-button>
-    <hr class="my-3" />
-    <p-button
-    label="Login In Mobile number"
-    icon="pi pi-phone"
-    iconPos="left"
-    styleClass="w-full"
-    severity="info"
-  />
-  </p-card>
-</form>
+<div class="main-container"  style="background-image: url('assets/building.jpg')">
+
+  <div class="login-container">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+      <p-card header="login " [style]="{ width: '360px' }">
+        <div class="field">
+          <label for="email">Email</label>
+          <input
+            type="text"
+            pInputText
+            formControlName="email"
+            class="w-full"
+            name="email"
+            placeholder="Type your email"
+          />
+          <small
+            *ngIf="email.invalid && (email.touched || email.dirty)"
+            class="p-error"
+          >
+            <div *ngIf="email.errors?.['required']">Email is required</div>
+            <div *ngIf="email.errors?.['email']">Email should be valid</div>
+          </small>
+        </div>
+        <div class="field">
+          <label for="password">password</label>
+          <input
+            type="password"
+            pInputText
+            formControlName="password"
+            class="w-full"
+            name="password"
+            placeholder="Type your password"
+          />
+          <small
+            *ngIf="password.invalid && (password.touched || password.dirty)"
+            class="p-error"
+          >
+            <div *ngIf="password.errors?.['required']">
+              password is required
+            </div>
+          </small>
+        </div>
+        <p-button
+          label="SIGN IN"
+          styleClass="w-full"
+          [disabled]="loginForm.invalid"
+          severity="contrast"
+          type="submit"
+        />
+        <hr class="my-3" />
+        <p-button
+          styleClass="w-full"
+          severity="contrast"
+          (click)="onGoogleLogin()"
+        >
+          <span class="flex align-items-center">
+            <img
+              src="assets/icons8-google.svg"
+              alt="Google"
+              style="width: 24px; height: 24px; margin-right: 36px"
+            />
+            <b>Login In with Google</b>
+          </span>
+        </p-button>
+        <hr class="my-3" />
+        <p-button styleClass="w-full" severity="contrast">
+          <span class="flex align-items-center">
+            <img
+              src="assets/phone.png"
+              alt="Google"
+              style="width: 24px; height: 24px; margin-right: 36px"
+            />
+            <b>Login In with Number</b>
+          </span>
+        </p-button>
+      </p-card>
+    </form>
+  </div>
+</div>
+
+<!-- Preload the background image -->
+<link rel="preload" href="../../../../public/assets/building.jpg" as="image">

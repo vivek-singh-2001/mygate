@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { NavigationComponent } from "./navigation/navigation.component";
+import { SideNavComponent } from "./side-nav/side-nav.component";
+import { MainDisplayComponent } from "./main-display/main-display.component";
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [NavigationComponent, SideNavComponent, MainDisplayComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
 
-  constructor(private authService: AuthService){}
-  onLogout(){
-    this.authService.logout();
-  }
+  
 }

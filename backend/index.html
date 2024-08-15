@@ -28,7 +28,7 @@
             e.preventDefault();
             const phoneNumber = document.getElementById('phone-number').value;
 
-            console.log(phoneNumber);
+           
 
             const response = await fetch('http://localhost:7500/api/v1/sms/send-otp', {
                 method: 'POST',

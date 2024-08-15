@@ -8,7 +8,7 @@ passport.use(new GoogleStrategy({
   callbackURL: "/api/v1/auth/google/callback"
 },
 async (accessToken, refreshToken, profile, done) => {
-  console.log('Google profile:', profile);
+ 
   try {
     const email = profile.emails[0].value;
     let user = await User.findOne({ where: { email } });
