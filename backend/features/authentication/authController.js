@@ -39,7 +39,7 @@ exports.googleAuthCallback = passport.authenticate('google', { failureRedirect: 
 exports.googleAuthSuccess = (req, res) => {
   const token = authService.signToken(req.user.id, req.user.email);
   res.cookie("jwtToken", token, { expiresIn: '1d' });
-  res.json({ message: "You are logged in successfully" });
+  res.redirect(`http://localhost:4200/google/success/?jwtToken=${token}`);
 };
 
 
