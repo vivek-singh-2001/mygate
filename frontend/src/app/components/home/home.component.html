@@ -1,18 +1,11 @@
-<app-navigation></app-navigation>
-<app-side-nav></app-side-nav>
-
-<!-- 
-<div class="container">
-  <nav class="header">
-    <app-navigation></app-navigation>
-  </nav>
-  <div class="main-body">
-    <div class="side-nav">
-      <app-side-nav></app-side-nav>
-    </div>
-    <div class="main-content">
-      <app-main-display></app-main-display>
-    </div>
+<div class="dashboard">
+  <app-navigation></app-navigation>
+  <div class="content-wrapper">
+    <app-side-nav
+      (expansionChanged)="onSidebarExpansionChanged($event)"
+    ></app-side-nav>
+    <app-main-display
+      [ngClass]="{ 'content-shifted': isSidebarExpanded }"
+    ></app-main-display>
   </div>
-</div> -->
-<!-- <button (click)="onLogout()">logout</button> -->
+</div>

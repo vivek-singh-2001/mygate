@@ -1,10 +1,25 @@
-<div class="card flex justify-content-start">
-    <p-sidebar [(visible)]="sidebarVisible">
-        <h3>Sidebar</h3>
-        <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </p>
-    </p-sidebar>
-    <p-button (onClick)="sidebarVisible = true" icon="pi pi-arrow-right" />
+<div class="sidebar" [ngClass]="{ expanded: isExpanded }">
+  <button
+    pButton
+    icon="pi pi-bars"
+    (click)="toggleSidebar()"
+    class="toggle-btn p-button-text"
+  ></button>
+  <div class="menu-container">
+    <ng-container *ngIf="isExpanded; else iconOnly">
+      <p-menu [model]="items" [style]="{ width: '100%' }"></p-menu>
+    </ng-container>
+    <ng-template #iconOnly>
+      <div class="icon-menu">
+        <button
+          pButton
+          *ngFor="let item of items"
+          [icon]="item.icon || ''"
+          class="p-button-text icon-btn"
+          pTooltip="{{ item.label }}"
+          tooltipPosition="right"
+        ></button>
+      </div>
+    </ng-template>
+  </div>
 </div>
