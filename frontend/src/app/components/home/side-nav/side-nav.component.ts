@@ -29,7 +29,7 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit() {
     this.items = [
-      { label: 'Dashboard', icon: 'pi pi-home' ,iconSize: 'large'},
+      { label: 'Dashboard', icon: 'pi pi-home' ,iconSize: 'large' },
       { label: 'Profile', icon: 'pi pi-user',iconSize: 'large' },
       { label: 'Settings', icon: 'pi pi-cog',iconSize: 'large' },
       { label: 'Messages', icon: 'pi pi-envelope',iconSize: 'large' },

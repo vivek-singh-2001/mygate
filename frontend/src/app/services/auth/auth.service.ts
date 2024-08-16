@@ -22,13 +22,12 @@ export class AuthService {
     const loginData = { email, password };
     return this.http.post<any>(`${this.apiUrl}/login`, loginData, {
       withCredentials: true,
-    });
+    })
   }
 
   // Optional: You may still want to check if the user is authenticated
   isLoggedIn(): boolean {
-    // You might need to adjust this based on your authentication strategy
-    return document.cookie.includes('authToken'); // Example of a simple check
+    return document.cookie.includes('authToken'); 
   }
 
   loginWithGoogle(): void {
@@ -62,6 +61,8 @@ export class AuthService {
         next: () => {
           // Redirect to login page after successful logout
           this.router.navigate(['/login']);
+        
+          
         },
         error: (error) => {
           console.error('Error during logout', error);

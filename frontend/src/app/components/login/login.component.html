@@ -1,4 +1,4 @@
-<div class="main-container"  style="background-image: url('assets/building.jpg')">
+<div class="main-container"  >
 
   <div class="login-container">
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
@@ -20,7 +20,7 @@
             <div *ngIf="email.errors?.['required']">Email is required</div>
             <div *ngIf="email.errors?.['email']">Email should be valid</div>
           </small>
-        </div>
+        </div> 
         <div class="field">
           <label for="password">password</label>
           <input
@@ -78,5 +78,3 @@
   </div>
 </div>
 
-<!-- Preload the background image -->
-<link rel="preload" href="../../../../public/assets/building.jpg" as="image">

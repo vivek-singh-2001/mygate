@@ -37,3 +37,21 @@
 /* } */ 
 
 ::ng-deep .large .p-button-icon { font-size: 1.5rem;}
+
+
+
+
+.p-button.p-button-text {
+  color: #1a1b1f;
+  
+}
+
+.p-button.p-button-text:hover {
+  color: blue;;
+}
+.p-button.p-button-text:active {
+  color: blue;;
+}
+
+
+

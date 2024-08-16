@@ -7,7 +7,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { MenuModule } from 'primeng/menu';
-import { AuthService } from '../../../services/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
+import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-navigation',
@@ -28,11 +29,18 @@ import { AuthService } from '../../../services/auth.service';
 export class NavigationComponent implements OnInit {
   items: MenuItem[] | undefined;
   item: MenuItem[] | undefined;
+  user:any;
 
 
-  constructor(private authService:AuthService){}
+  constructor(private authService:AuthService,private userService : UserService){}
 
-  ngOnInit() {
+  ngOnInit() :void{
+
+    this.loadUserData()
+    this.initializeMenu()
+  }
+
+  private initializeMenu(): void {
     this.items = [
       {
         label: 'Home',
@@ -71,6 +79,17 @@ export class NavigationComponent implements OnInit {
     ];
   }
 
+  private loadUserData(): void {
+    this.userService.getCurrentUser().subscribe({
+      next: (data) => {
+        this.user = data.data.user;
+      },
+      error: (error) => {
+        console.error('Failed to fetch user details', error);
+      }
+    });
+  }
+
   goToProfile() {
     console.log('Navigate to profile');
 
@@ -83,7 +102,6 @@ export class NavigationComponent implements OnInit {
 
   logout() {
    this.authService.logout();
-
   }
 
 }
