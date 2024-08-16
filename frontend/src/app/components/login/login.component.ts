@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import {
+  FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -10,7 +12,7 @@ import {
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -40,8 +42,15 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
+      skills: new FormArray([
+        new FormControl(null),
+        new FormControl(null),
+        new FormControl(null),
+      ])
     });
     this.authService.handleGoogleLoginCallback();
+
+   
   }
   get email() {
     return this.loginForm.controls['email'];
@@ -67,6 +76,7 @@ export class LoginComponent implements OnInit {
         },
       });
     }
+    console.log(this.loginForm.controls);
   }
 
   onGoogleLogin(): void {

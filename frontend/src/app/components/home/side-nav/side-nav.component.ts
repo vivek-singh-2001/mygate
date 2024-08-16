@@ -24,14 +24,15 @@ export class SideNavComponent implements OnInit {
   @Output() expansionChanged = new EventEmitter<boolean>();
 
   isExpanded: boolean = false;
-  items!: MenuItem[];
+  items!: MenuItem[string];
+
 
   ngOnInit() {
     this.items = [
-      { label: 'Dashboard', icon: 'pi pi-home' },
-      { label: 'Profile', icon: 'pi pi-user' },
-      { label: 'Settings', icon: 'pi pi-cog' },
-      { label: 'Messages', icon: 'pi pi-envelope' },
+      { label: 'Dashboard', icon: 'pi pi-home' ,iconSize: 'large' },
+      { label: 'Profile', icon: 'pi pi-user',iconSize: 'large' },
+      { label: 'Settings', icon: 'pi pi-cog',iconSize: 'large' },
+      { label: 'Messages', icon: 'pi pi-envelope',iconSize: 'large' },
     ];
   }
 
