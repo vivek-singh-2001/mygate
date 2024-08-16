@@ -16,6 +16,7 @@
           *ngFor="let item of items"
           [icon]="item.icon || ''"
           class="p-button-text icon-btn"
+          [ngClass]="item.iconSize" 
           pTooltip="{{ item.label }}"
           tooltipPosition="right"
         ></button>

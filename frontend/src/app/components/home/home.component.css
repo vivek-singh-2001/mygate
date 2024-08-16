@@ -9,6 +9,6 @@
       overflow: hidden;
     }
     .content-shifted {
-      margin-left: 190px;  
+      margin-left: 10px;  
       transition: margin-left 0.3s;
     }

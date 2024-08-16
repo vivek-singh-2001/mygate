@@ -1,30 +1,39 @@
- .sidebar {
-      width: 60px;
-      height: 100%;
-      background-color: #f8f9fa;
-      transition: width 0.3s;
-      overflow: hidden;
-    }
-    .sidebar.expanded {
-      width: 250px;
-    }
-    .toggle-btn {
-      margin: 10px;
-    }
-    .menu-container {
-      margin-top: 20px;
-    }
-    .icon-menu {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .icon-btn {
-      margin: 5px 0;
-      width: 40px;
-      height: 40px;
-    }
-    :host ::ng-deep .p-menu {
-      width: 100%;
-      border: none;
-    }
+.sidebar {
+  width: 60px;
+  height: 100%;
+  background-color: #f8f9fa;
+  transition: width 0.3s;
+  overflow: hidden;
+}
+.sidebar.expanded {
+  width: 250px;
+}
+::ng-deep .toggle-btn .p-button-icon{
+
+  font-size: 1.5rem;
+  margin-left: 10px
+}
+.menu-container {
+  margin-top: 20px;
+}
+.icon-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.icon-btn {
+  margin: 5px 0;
+  width: 60px;
+  height: 60px;
+}
+
+:host ::ng-deep .p-menu {
+  width: 100%;
+  border: none;
+}
+
+/* :host ::ng-deep .pi {
+  font-size: 1.5rem; /* This will affect all PrimeNG icons within this component */
+/* } */ 
+
+::ng-deep .large .p-button-icon { font-size: 1.5rem;}
