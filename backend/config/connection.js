@@ -25,6 +25,7 @@ db.Notice = require('../features/notice/noticeModel.js')(connectDB,DataTypes)
 db.Society = require('../features/society/societyModel')(connectDB,DataTypes)
 db.Wing = require('../features/wing/wingmodel.js')(connectDB,DataTypes)
 db.HouseUser = require('../features/houseuser/HouseUserModel.js')(connectDB,DataTypes)
+db.Chat = require('../features/chat/chatModel.js')(connectDB,DataTypes)
 
 
 
@@ -64,11 +65,22 @@ db.User.belongsToMany(db.House, { through: db.HouseUser });
 db.House.belongsToMany(db.User, { through: db.HouseUser });
 
 
+// ==============user-chat ========================================
+
+db.User.hasMany(db.Chat, { foreignKey: 'senderId', as: 'sentMessages' });
+db.User.hasMany(db.Chat, { foreignKey: 'receiverId', as: 'receivedMessages' });
+
+db.Chat.belongsTo(db.User, { foreignKey: 'senderId', as: 'sender' });
+db.Chat.belongsTo(db.User, { foreignKey: 'receiverId', as: 'receiver' });
+
+
+
+
 const check = async () => {
   try {
     await connectDB.authenticate();
     console.log("Connection has been established successfully.");
-    await db.connectDB.sync({ alter: true, force: false });
+    await db.connectDB.sync({alter:true,force: false});
     console.log("All models were synchronized successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);

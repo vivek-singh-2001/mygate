@@ -16,3 +16,10 @@ exports.getUsersBySocietyAndWing = async (societyId, wingName) => {
   }
   return users;
 };
+
+
+
+// Get society by user ID
+exports.getSocietyByUserId = async (userId) => {
+  return societyRepository.getSocietyByUserId(userId);
+};

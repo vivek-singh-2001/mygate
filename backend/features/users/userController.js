@@ -1,8 +1,16 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const userService = require("./userService");
+const util = require('util');
+const jwt = require("jsonwebtoken");
 
 exports.getUserById = asyncErrorHandler(async (req, res, next) => {
-  const { id } = req.params;
+  const { jwtToken } = req.cookies;
+  const decodedToken = await util.promisify(jwt.verify)(
+    jwtToken,
+    process.env.JWT_SECRET
+  );
+
+  const id = decodedToken.id
   try {
     const user = await userService.getUserById(id);
     res.status(200).json({ status: "success", data: { user } });

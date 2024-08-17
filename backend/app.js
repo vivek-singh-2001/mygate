@@ -12,6 +12,7 @@ const user_route = require('./features/users/userApis');
 const society_route = require('./features/society/societyApis');
 const auth_route = require('./features/authentication/authApi');
 const sms_route = require('./features/sms/smsApis')
+const chatRoutes = require('./features/chat/chatApi');
 
 // USE MODULES HERE
 const app = express();
@@ -44,6 +45,7 @@ app.use('/api/v1/users', user_route);
 app.use('/api/v1/society', society_route);
 app.use('/api/v1/auth', auth_route);
 app.use('/api/v1/sms', sms_route);
+app.use('/api/v1/chats', chatRoutes);
 app.use('*', (req, res, next) => {
     const err = new CustomError(`can't find ${req.originalUrl} on the server`, 404);
     next(err);
