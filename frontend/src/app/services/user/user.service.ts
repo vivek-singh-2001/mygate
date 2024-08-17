@@ -6,11 +6,22 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:7500/api/v1/users/getUser';
+  private userApiUrl = 'http://localhost:7500/api/v1/users/getUser';
+  private societyApiUrl = 'http://localhost:7500/api/v1/society';
 
   constructor(private http: HttpClient) {}
 
   getCurrentUser(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/me`, { withCredentials: true });
+    return this.http.get(`${this.userApiUrl}/me`, { withCredentials: true });
+  }
+
+ 
+  // Function to get the society by the current user's ID
+  getSocietyByUserId(): Observable<any> {
+    return this.http.get(`${this.societyApiUrl}/societyDetails/details`, { withCredentials: true });
+  }
+
+  getUsersBySocietyId(societyId:string): Observable<any>{
+    return this.http.get(`${this.societyApiUrl}/${societyId}`,{withCredentials:true} );
   }
 }

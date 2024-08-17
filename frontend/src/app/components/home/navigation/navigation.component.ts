@@ -38,6 +38,7 @@ export class NavigationComponent implements OnInit {
 
     this.loadUserData()
     this.initializeMenu()
+    this.userService.getSocietyByUserId()
   }
 
   private initializeMenu(): void {
@@ -83,6 +84,7 @@ export class NavigationComponent implements OnInit {
     this.userService.getCurrentUser().subscribe({
       next: (data) => {
         this.user = data.data.user;
+        console.log( "logged in user",this.user)
       },
       error: (error) => {
         console.error('Failed to fetch user details', error);
@@ -97,11 +99,12 @@ export class NavigationComponent implements OnInit {
 
   goToSettings() {
     console.log('Navigate to settings');
-    
   }
 
   logout() {
    this.authService.logout();
   }
+
+  
 
 }
