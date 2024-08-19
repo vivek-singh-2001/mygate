@@ -1,0 +1,18 @@
+.main-container {
+  display: flex;
+  /* background-color: pink; */
+  /* width: 100%; */
+  height: 90vh;
+}
+
+app-user-list {
+  flex: 0 0 30%; /* 30% width, don't grow, don't shrink */
+  overflow-y: auto; /* In case content overflows */
+  /* background-color: green; */
+}
+
+app-user-chat {
+  flex: 0 0 70%; /* 70% width, don't grow, don't shrink */
+  overflow-y: auto; /* In case content overflows */
+  /* background-color: black;/ */
+}

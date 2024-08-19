@@ -46,7 +46,7 @@ export class UserListComponent implements OnInit {
       .subscribe({
         next: (societyUsers: any) => {
           this.SocietyUsers = societyUsers.data.users;
-          console.log(this.SocietyUsers, 'society members');
+          // console.log(this.SocietyUsers, 'society members');
         },
         error: (error) => {
           console.error('Failed to fetch society users', error);

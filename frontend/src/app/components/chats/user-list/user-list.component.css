@@ -1,16 +1,13 @@
 /* src/app/components/user-list/user-list.component.css */
 .user-list-container {
-    height: 500px;
-    width: 200px;
-    border-right: 1px solid #ddd;
+    border: 1px solid #ddd;
     padding-right: 10px;
     overflow-y: auto !important;
-
   }
   
   .user-list {
     list-style: none;
-    padding: 0;
+    padding: 10px;
   }
   
   .user-list li {
@@ -20,5 +17,14 @@
   
   .user-list li:hover {
     background-color: #f0f0f0;
+  }
+
+  .user-card {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    height: 60px;
   }
   
