@@ -44,25 +44,3 @@ exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
   }
 });
 
-
-// Get society by user ID
-exports.getSocietyByUserId = asyncErrorHandler(async (req, res, next) => {
-  const { jwtToken } = req.cookies;
-  const decodedToken = await util.promisify(jwt.verify)(
-    jwtToken,
-    process.env.JWT_SECRET
-  );
-
-  const userId = decodedToken.id
-  console.log("userId", userId);
-  const society = await societyService.getSocietyByUserId(userId);
-
-  if (!society) {
-    return next(new CustomError('Society not found', 404));
-  }
-
-  res.status(200).json({
-    status: 'success',
-    data: { society },
-  });
-});

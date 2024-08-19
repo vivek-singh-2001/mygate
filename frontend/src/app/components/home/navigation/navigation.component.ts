@@ -21,7 +21,6 @@ import { UserService } from '../../../services/user/user.service';
     AvatarModule,
     BadgeModule,
     MenuModule,
-  
   ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css',
@@ -31,14 +30,11 @@ export class NavigationComponent implements OnInit {
   item: MenuItem[] | undefined;
   user:any;
 
-
   constructor(private authService:AuthService,private userService : UserService){}
 
   ngOnInit() :void{
-
     this.loadUserData()
     this.initializeMenu()
-    this.userService.getSocietyByUserId()
   }
 
   private initializeMenu(): void {
@@ -83,8 +79,8 @@ export class NavigationComponent implements OnInit {
   private loadUserData(): void {
     this.userService.getCurrentUser().subscribe({
       next: (data) => {
-        this.user = data.data.user;
-        console.log( "logged in user",this.user)
+        this.user = data.data.user.Houses[0]['Wing']['SocietyId'];
+        console.log('logged in user', this.user);
       },
       error: (error) => {
         console.error('Failed to fetch user details', error);
@@ -94,7 +90,6 @@ export class NavigationComponent implements OnInit {
 
   goToProfile() {
     console.log('Navigate to profile');
-
   }
 
   goToSettings() {
@@ -104,7 +99,4 @@ export class NavigationComponent implements OnInit {
   logout() {
    this.authService.logout();
   }
-
-  
-
 }
