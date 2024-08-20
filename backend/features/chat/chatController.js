@@ -9,6 +9,6 @@ exports.sendMessage = asyncErrorHandler(async (req, res, next) => {
 
 exports.getChatHistory = asyncErrorHandler(async (req, res, next) => {
   const { userId1, userId2 } = req.params;
-  const chats = await chatService.getChatHistory(userId1, userId2);
+  const [chats] = await chatService.getChatHistory(userId1, userId2);
   res.status(200).json({ status: 'success', chats });
 });

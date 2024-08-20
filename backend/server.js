@@ -31,7 +31,7 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
-  socket.on('sendMessage', async ({ receiverId, message, roomId }) => {
+  socket.on('sendMessage', async ({ receiverId, message,roomId }) => {
     try {
       // Create chat entry in the database
       await chatService.sendMessage(socket.user.id, receiverId, message);
