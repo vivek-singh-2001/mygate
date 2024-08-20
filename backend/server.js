@@ -2,6 +2,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
+const {chatService} = require('./features/chat/chatService')
 
 const app = require("./app");
 
@@ -30,16 +31,20 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
-  // Listen for chat messages
-  socket.on('sendMessage', (data) => {
-    const { senderId, receiverId, message } = data;
+  socket.on('sendMessage', async ({ receiverId, message, roomId }) => {
+    try {
+      // Create chat entry in the database
+      await chatService.sendMessage(socket.user.id, receiverId, message);
 
-    // Emit the message to the receiver
-    socket.to(receiverId).emit('receiveMessage', {
-      senderId,
-      message,
-      timestamp: new Date(),
-    });
+      // Emit the message to the receiver
+      io.to(roomId).emit('receiveMessage', {
+        senderId: socket.user.id,
+        receiverId,
+        message
+      });
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   });
 
   // Listen for joining a room
