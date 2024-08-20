@@ -29,16 +29,10 @@ export class ChatsComponent implements OnInit  {
 
   onUserSelected(user: any) {
     this.selectedUser = user;
-    console.log(this.selectedUser)
+    // console.log(this.selectedUser)
     this.messages = []; // Clear previous messages or fetch messages for the selected user
     this.chatService.joinRoom(`${user.id}`); // Join the chat room for the selected user
   }
 
-  sendMessage() {
-    if (this.newMessage.trim() && this.selectedUser) {
-      this.messages.push({ text: this.newMessage, isSender: true });
-      this.chatService.sendMessage(this.selectedUser.id, this.newMessage);
-      this.newMessage = '';
-    }
-  }
+  
 }

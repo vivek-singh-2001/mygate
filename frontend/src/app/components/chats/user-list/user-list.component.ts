@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
 import { CommonModule } from '@angular/common';
 import { switchMap } from 'rxjs/operators';
-import { __values } from 'tslib';
+
 
 @Component({
   selector: 'app-user-list',

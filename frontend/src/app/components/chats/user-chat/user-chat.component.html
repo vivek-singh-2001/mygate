@@ -1,24 +1,24 @@
-<div class="chat-container">
-  <ng-container *ngIf="selectedUser; else noUserSelected">
-    <div class="user-card">
-      <p>{{ selectedUser.firstname }}</p>
-    </div>
-    <div class="chat-window">
-      <div
-        class="message"
-        *ngFor="let message of messages"
-        [ngClass]="{ sent: message.isSender, received: !message.isSender }"
-      >
-        <div class="message-text">{{ message.text }}</div>
+  <div class="chat-container">
+    <ng-container *ngIf="selectedUser; else noUserSelected">
+      <div class="user-card">
+        <p>{{ selectedUser.firstname }}</p>
       </div>
-    </div>
-    <div class="input-container">
-      <input [(ngModel)]="newMessage" placeholder="Type a message..." />
-      <button (click)="sendMessage()">Send</button>
-    </div>
-  </ng-container>
+      <div class="chat-window">
+        <div
+          class="message"
+          *ngFor="let message of messages"
+          [ngClass]="{ sent: message.isSender, received: !message.isSender }"
+        >
+          <div class="message-text">{{ message.text }}</div>
+        </div>
+      </div>
+      <div class="input-container">
+        <input [(ngModel)]="newMessage" placeholder="Type a message..." />
+        <button (click)="sendMessage()">Send</button>
+      </div>
+    </ng-container>
 
-  <ng-template #noUserSelected>
-    <div class="no-user-selected">Select a user to start chat</div>
-  </ng-template>
-</div>
+    <ng-template #noUserSelected>
+      <div class="no-user-selected">Select a user to start chat</div>
+    </ng-template>
+  </div>
