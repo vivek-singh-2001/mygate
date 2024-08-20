@@ -1,3 +1,4 @@
+// chat.service.ts
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
@@ -25,20 +26,16 @@ export class ChatService {
     });
   }
 
-  sendMessage(receiverId: number, message: string): void {
-    this.socket.emit('sendMessage', { receiverId, message });
+  sendMessage(senderId: string, receiverId: string, message: string): void {
+    this.socket.emit('sendMessage', { senderId, receiverId, message });
   }
 
   receiveMessage(callback: (message: any) => void): void {
-    this.socket.on('chat message', callback);
+    this.socket.on('receiveMessage', callback);
   }
 
   joinRoom(roomId: string): void {
     this.socket.emit('joinRoom', roomId);
-  }
-
-  leaveRoom(roomId: string): void {
-    this.socket.emit('leaveRoom', roomId);
   }
 
   getChatHistory(userId1: number, userId2: number): Observable<any> {
