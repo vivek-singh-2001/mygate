@@ -43,9 +43,9 @@ export class UserChatComponent implements OnChanges {
                 console.log('Chat history:', history.chats); // Log to see the structure
 
                 // Check if history is an array or a single object
-                if (Array.isArray(history)) {
+                if (Array.isArray(history.chats)) {
                   // Handle array of messages
-                  this.messages = history.map((msg: any) => ({
+                  this.messages = history.chats.map((msg: any) => ({
                     text: msg.message,
                     isSender: msg.senderId === userData.id,
                   }));
