@@ -33,17 +33,19 @@
 }
 
 .message.sent {
-  align-self: flex-end;
+  text-align: right;
   background-color: #dcf8c6;
-  padding: 8px;
-  border-radius: 10px 10px 0 10px;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 5px;
 }
 
 .message.received {
-  align-self: flex-start;
-  background-color: #fff;
-  padding: 8px;
-  border-radius: 10px 10px 10px 0;
+  text-align: left;
+  background-color: #ffffff;
+  padding: 5px;
+  border-radius: 5px;
+  margin-bottom: 5px;
 }
 
 .input-container {

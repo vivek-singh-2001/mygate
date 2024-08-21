@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable,BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class ChatService {
   private socket: Socket;
   private apiUrl = 'http://localhost:7500/api/v1/chats/'; // Update with your API URL
+  private messageSubject = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) {
     // Initialize WebSocket connection
@@ -19,22 +20,30 @@ export class ChatService {
     });
 
     this.socket.on('connect', () => {
-      console.log('Connected to WebSocket server');
+      console.log('Connected to WebSocket server',this.socket.connected);
     });
 
     this.socket.on('disconnect', () => {
       console.log('Disconnected from WebSocket server');
     });
+
+    this.setupMessageListener()
+
+
   }
 
-  sendMessage(senderId: string, receiverId: string, message: string): void {
-    this.socket.emit('sendMessage', { senderId, receiverId, message });
+  sendMessage(senderId: string, receiverId: string, message: string,messageId: string): void {
+    this.socket.emit('sendMessage', { senderId, receiverId, message ,id: messageId});
   }
 
-  receiveMessage(callback: (message: any) => void): void {
-    this.socket.on('receiveMessage', callback);
-    console.log("callback", callback);
-    
+  setupMessageListener() {
+    this.socket.on('receiveMessage',(msg:any)=>{
+      this.messageSubject.next(msg);
+    });
+  }
+
+  getMessages(): Observable<any> {
+    return this.messageSubject.asObservable();
   }
 
   joinRoom(roomId: string): void {
@@ -51,4 +60,4 @@ export class ChatService {
     return this.http.get<any>(`${this.apiUrl}/history/${userId1}/${userId2}`);
   }
 }
-// aqd
+

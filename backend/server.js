@@ -31,7 +31,7 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
-  socket.on('sendMessage', async ({senderId, receiverId, message }) => {
+  socket.on('sendMessage', async ({senderId, receiverId, message,id }) => {
     try {
       // Create chat entry in the database
       console.log( senderId,receiverId,message);
@@ -42,7 +42,8 @@ io.on('connection', (socket) => {
        const roomId = `${senderId} - ${receiverId}`;
       
       // Emit the message to the receiver
-      io.to(receiverId).emit('receiveMessage', {
+      io.emit('receiveMessage', {
+        id,
         senderId,
         receiverId,
         message

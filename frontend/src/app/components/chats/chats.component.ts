@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './chats.component.html',
   styleUrl: './chats.component.css',
 })
-export class ChatsComponent implements OnInit {
+export class ChatsComponent  {
   messages: { text: string; isSender: boolean }[] = [];
   newMessage: string = '';
   selectedUser: any = null; // Adjust type according to your user model
@@ -24,13 +24,13 @@ export class ChatsComponent implements OnInit {
     private userService: UserService
   ) {}
 
-  ngOnInit() {
-    this.ChatService.receiveMessage((message: any) => {
-      if (message.receiverId === this.selectedUser.id) {
-        this.messages.push({ text: message.text, isSender: false });
-      }
-    });
-  }
+  // ngOnInit() {
+  //   this.ChatService.receiveMessage((message: any) => {
+  //     if (message.receiverId === this.selectedUser.id) {
+  //       this.messages.push({ text: message.text, isSender: false });
+  //     }
+  //   });
+  // }
 
   onUserSelected(user: any) {
     this.selectedUser = user;
