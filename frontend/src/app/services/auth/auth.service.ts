@@ -4,39 +4,33 @@ import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs';
 import { EMPTY } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'http://localhost:7500/api/v1/auth';
-  private googleUrl = 'http://localhost:7500/api/v1/auth/login';
+  // private googleUrl = 'http://localhost:7500/api/v1/auth/login';
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cookieService: CookieService
   ) {}
 
   login(email: string, password: string): Observable<any> {
     const loginData = { email, password };
     return this.http.post<any>(`${this.apiUrl}/login`, loginData, {
       withCredentials: true,
-    })
+    });
   }
 
   getToken(): string | null {
-    const name = 'jwtToken=';
-    const decodedCookie = decodeURIComponent(document.cookie);
-    const cookieArray = decodedCookie.split(';');
-
-    for (let i = 0; i < cookieArray.length; i++) {
-      let cookie = cookieArray[i].trim();
-      if (cookie.indexOf(name) === 0) {
-        return cookie.substring(name.length, cookie.length);
-      }
-    }
-    return null;
+    console.log('token from function',this.cookieService.get('jwtToken'));
+    
+    return this.cookieService.get('jwtToken'); // Retrieves the token from the cookie
   }
 
   loginWithGoogle(): void {
@@ -46,7 +40,7 @@ export class AuthService {
     this.route.queryParams.subscribe((params) => {
       if (params['token']) {
         const token = params['token'];
-        console.log('Google login successful, token received:', token)
+        console.log('Google login successful, token received:', token);
         this.router.navigate(['/home']);
       }
     });
@@ -67,8 +61,6 @@ export class AuthService {
         next: () => {
           // Redirect to login page after successful logout
           this.router.navigate(['/login']);
-        
-          
         },
         error: (error) => {
           console.error('Error during logout', error);

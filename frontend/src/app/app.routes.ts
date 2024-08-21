@@ -20,7 +20,6 @@ export const routes: Routes = [
       {path:'google/success', component: DashboardComponent}
     ]
   },
-    
   {
     path: '',
     redirectTo: 'login',

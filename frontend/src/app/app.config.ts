@@ -8,17 +8,15 @@ import {
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {AuthInterceptor }from './services/auth/auth.interceptor'
-import { AuthService } from './services/auth/auth.service';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    // { provide: AuthInterceptor, useClass: AuthInterceptor },
-    // { provide: AuthService, useClass: AuthService },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+
     provideAnimationsAsync(),
   ],
 };

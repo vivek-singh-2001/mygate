@@ -11,10 +11,12 @@ exports.login = asyncErrorHandler(async (req, res, next) => {
   }
 
   const token = await authService.login(email, password);
-  res.cookie("jwtToken", token, 
-    { expiresIn: '1d',
-      httpOnly:false,
-     });
+  res.cookie("jwtToken", token, {
+    maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+    httpOnly: false, // Ensure security if it's only accessed by the server
+    secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    sameSite: "Strict", // Controls cookie sending, helps prevent CSRF
+  });
   res.status(200).json({ status: "success", token });
 });
 
