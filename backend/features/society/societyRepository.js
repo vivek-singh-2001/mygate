@@ -23,3 +23,4 @@ exports.findUsersBySocietyAndWing = (societyId, wingName) => {
     type: db.Sequelize.QueryTypes.SELECT,
   });
 };
+

@@ -16,3 +16,4 @@ exports.getUsersBySocietyAndWing = async (societyId, wingName) => {
   }
   return users;
 };
+

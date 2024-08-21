@@ -1,5 +1,6 @@
 .main-content {
-      flex: 1;
-      padding: 20px;
-      transition: margin-left 0.3s;
-    }
+  height: auto;
+  width: auto;
+  padding: 20px;
+  transition: margin-left 0.3s;
+}

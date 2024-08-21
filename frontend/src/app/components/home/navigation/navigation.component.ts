@@ -21,7 +21,6 @@ import { UserService } from '../../../services/user/user.service';
     AvatarModule,
     BadgeModule,
     MenuModule,
-  
   ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.css',
@@ -29,15 +28,17 @@ import { UserService } from '../../../services/user/user.service';
 export class NavigationComponent implements OnInit {
   items: MenuItem[] | undefined;
   item: MenuItem[] | undefined;
-  user:any;
+  user: any;
+  userSocietyId: any;
 
+  constructor(
+    private authService: AuthService,
+    private userService: UserService
+  ) {}
 
-  constructor(private authService:AuthService,private userService : UserService){}
-
-  ngOnInit() :void{
-
-    this.loadUserData()
-    this.initializeMenu()
+  ngOnInit(): void {
+    this.loadUserData();
+    this.initializeMenu();
   }
 
   private initializeMenu(): void {
@@ -83,25 +84,25 @@ export class NavigationComponent implements OnInit {
     this.userService.getCurrentUser().subscribe({
       next: (data) => {
         this.user = data.data.user;
+        this.userSocietyId = data.data.user.Houses[0]['Wing']['SocietyId'];
+        console.log('logged in user', this.user);
+        console.log('logged in userSociety id', this.userSocietyId);
       },
       error: (error) => {
         console.error('Failed to fetch user details', error);
-      }
+      },
     });
   }
 
   goToProfile() {
     console.log('Navigate to profile');
-
   }
 
   goToSettings() {
     console.log('Navigate to settings');
-    
   }
 
   logout() {
-   this.authService.logout();
+    this.authService.logout();
   }
-
 }

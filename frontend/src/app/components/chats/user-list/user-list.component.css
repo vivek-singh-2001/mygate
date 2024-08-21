@@ -1,0 +1,30 @@
+/* src/app/components/user-list/user-list.component.css */
+.user-list-container {
+    border: 1px solid #ddd;
+    padding-right: 10px;
+    overflow-y: auto !important;
+  }
+  
+  .user-list {
+    list-style: none;
+    padding: 10px;
+  }
+  
+  .user-list li {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .user-list li:hover {
+    background-color: #f0f0f0;
+  }
+
+  .user-card {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    height: 60px;
+  }
+  

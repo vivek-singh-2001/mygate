@@ -1,0 +1,9 @@
+<!-- src/app/components/user-list/user-list.component.html -->
+<div class="user-list-container" >
+    <ul class="user-list">
+      <li *ngFor="let user of SocietyUsers" (click)="selectUser(user)" class="user-card">
+        {{ user.firstname }}
+      </li>
+    </ul>
+  </div>
+  

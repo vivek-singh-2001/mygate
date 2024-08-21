@@ -44,11 +44,11 @@ exports.forgotPassword = async (req,email) => {
 
   const message = `Forgot your password? Submit a PATCH request with your new password to: ${resetURL}\nIf you didn't forget your password, please ignore this email!`;
 
-  // await sendEmail({
-  //   email: user.email,
-  //   subject: 'Your password reset token (valid for 10 minutes)',
-  //   message,
-  // });
+  await sendEmail({
+    email: user.email,
+    subject: 'Your password reset token (valid for 10 minutes)',
+    message,
+  });
 
  // Send SMS
  if (user.number) {
