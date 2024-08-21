@@ -18,22 +18,14 @@ interface Message {
   styleUrls: ['./user-chat.component.css'],
 })
 export class UserChatComponent implements OnChanges {
-  @Input() selectedUser: any;
-  messages: Message[] = [];
-  newMessage: string = '';
-  currentUser: any;
 
-  constructor(
-    private userService: UserService,
-    private chatService: ChatService
-  ) {
-    // Listen for incoming messages and update the chat window
-    this.chatService.receiveMessage((message: any) => {
-      if (message.receiverId === this.selectedUser.id) {
-        this.messages.push({ text: message.message, isSender: false });
-      }
-    });
-  }
+  @Input() selectedUser:any
+  @Input() messages: { text: string, isSender: boolean }[] = [];
+  @Input() newMessage: string = '';
+
+
+  constructor(private chatService:ChatService){}
+ 
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['selectedUser'] && this.selectedUser) {

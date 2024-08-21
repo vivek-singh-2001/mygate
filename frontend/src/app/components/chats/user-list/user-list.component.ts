@@ -24,6 +24,7 @@ export class UserListComponent implements OnInit {
   }
   selectUser(user: any) {
     this.userSelected.emit(user);
+    
   }
 
   fetchUserAndSocietyUsers() {
@@ -35,7 +36,7 @@ export class UserListComponent implements OnInit {
           this.userData = this.userService.getCurrentUserData();
           if (this.userData) {
             this.societyId = this.userData.Houses[0]['Wing']['SocietyId'];
-            console.log(this.societyId);
+            console.log('userid',this.societyId,this.userData);
             // Return observable to fetch society users
             return this.userService.getUsersBySocietyId(this.societyId);
           } else {

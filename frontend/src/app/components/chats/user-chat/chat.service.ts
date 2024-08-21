@@ -9,9 +9,10 @@ import { Observable } from 'rxjs';
 })
 export class ChatService {
   private socket: Socket;
-  private apiUrl = 'http://localhost:7500/api/v1/chats';
+  private apiUrl = 'http://localhost:7500/api/v1/chats/'; // Update with your API URL
 
   constructor(private http: HttpClient) {
+    // Initialize WebSocket connection
     this.socket = io('http://localhost:7500', {
       transports: ['websocket'],
       withCredentials: true,
@@ -38,8 +39,14 @@ export class ChatService {
     this.socket.emit('joinRoom', roomId);
   }
 
+  // Leave a chat room
+  leaveRoom(roomId: string): void {
+    this.socket.emit('leaveRoom', roomId);
+  }
+
+  // Fetch chat history between two users
   getChatHistory(userId1: number, userId2: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/history/${userId1}/${userId2}`);
+    return this.http.get<any>(`${this.apiUrl}/history/${userId1}/${userId2}`);
   }
 }
 // aqd

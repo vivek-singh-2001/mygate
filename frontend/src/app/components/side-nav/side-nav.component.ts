@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
-import { Router } from '@angular/router';
+import { Router, RouterLinkActive } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 
@@ -34,10 +34,10 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit() {
     this.items = [
-      { label: 'Dashboard', icon: 'pi pi-home', iconSize: 'large', command: () => this.navigateTo('/dashboard') },
-      // { label: 'Profile', icon: 'pi pi-user', iconSize: 'large', command: () => this.navigateTo('/Profile') },
-      // { label: 'Settings', icon: 'pi pi-cog', iconSize: 'large', command: () => this.navigateTo('/Settings') },
-      { label: 'Messages', icon: 'pi pi-envelope', iconSize: 'large', command: () => this.navigateTo('/messages') },
+      { label: 'Dashboard', icon: 'pi pi-home', iconSize: 'large', command: () => this.goTo('/dashboard') },
+      { label: 'Profile', icon: 'pi pi-user', iconSize: 'large', command: () => this.goTo('/Profile') },
+      { label: 'Settings', icon: 'pi pi-cog', iconSize: 'large', command: () => this.goTo('/Settings') },
+      { label: 'Messages', icon: 'pi pi-envelope', iconSize: 'large', command: () => this.goTo('/messages') },
     ];
   }
 
@@ -46,10 +46,11 @@ export class SideNavComponent implements OnInit {
     this.expansionChanged.emit(this.isExpanded);
   }
 
-  navigateTo(route: string) {
-    this.router.navigate([route]).then(() => {
-      console.log('Current route:', this.router.url);
-    });
-    this.snackBar.open(`Navigated to ${route}`, 'Close', { duration: 1000 });
+  private goTo(path: string) {
+    this.router.navigate([path]);
+    this.snackBar.open('Navigated to'+ path, 'Close', {
+      duration: 2000,
+    }); 
   }
 }
+  

@@ -4,8 +4,12 @@
     <app-side-nav 
       (expansionChanged)="onSidebarExpansionChanged($event)"
     ></app-side-nav>
-    <app-main-display class="main-nav"
+    <div class="main-nav"
       [ngClass]="{ 'content-shifted': isSidebarExpanded }"
-    ></app-main-display>
+    >
+   <router-outlet>
+   </router-outlet>
+    
+  </div>
   </div>
 </div>

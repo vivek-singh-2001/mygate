@@ -1,7 +1,8 @@
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
-import { NgModule } from '@angular/core';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ChatsComponent } from './components/chats/chats.component';
 
 export const routes: Routes = [
   {
@@ -9,9 +10,17 @@ export const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'home',
-    component: HomeComponent},
-  { path: 'google/success', component: HomeComponent },
+    path: '',
+    component: HomeComponent,
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'messages', component: ChatsComponent },
+      {path:'home', component: DashboardComponent},
+      {path:'google/success', component: DashboardComponent}
+    ]
+  },
+    
   {
     path: '',
     redirectTo: 'login',
@@ -19,8 +28,4 @@ export const routes: Routes = [
   },
 ];
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
+
