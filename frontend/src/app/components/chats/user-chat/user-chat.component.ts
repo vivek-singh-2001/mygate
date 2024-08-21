@@ -6,7 +6,7 @@ import {
   OnInit,
   SimpleChanges,
   OnDestroy,
-  AfterViewChecked, ElementRef, ViewChild
+  AfterViewChecked, ElementRef, ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from './chat.service';
@@ -38,7 +38,7 @@ export class UserChatComponent implements OnInit, OnChanges, OnDestroy  , AfterV
   private messageSubscription!: Subscription;
   private selectedUserSubject = new BehaviorSubject<any>(null);
 
-  ngAfterViewChecked() {
+  ngAfterViewChecked(): void {
     this.scrollToBottom();
   }
 
@@ -140,12 +140,15 @@ export class UserChatComponent implements OnInit, OnChanges, OnDestroy  , AfterV
   }
 
   private scrollToBottom(): void {
-    try {
-      this.chatWindow.nativeElement.scrollTop = this.chatWindow.nativeElement.scrollHeight;
-    } catch (err) {
-      console.error('Could not scroll to bottom:', err);
+    if (this.chatWindow && this.chatWindow.nativeElement) {
+      try {
+        this.chatWindow.nativeElement.scrollTop = this.chatWindow.nativeElement.scrollHeight;
+      } catch (err) {
+        console.error('Could not scroll to bottom:', err);
+      }
     }
   }
+  
 
   sendMessage() {
     if (this.newMessage.trim() && this.selectedUser && this.currentUser) {

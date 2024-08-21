@@ -25,9 +25,18 @@ export class AuthService {
     })
   }
 
-  // Optional: You may still want to check if the user is authenticated
-  isLoggedIn(): boolean {
-    return document.cookie.includes('authToken'); 
+  getToken(): string | null {
+    const name = 'jwtToken=';
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const cookieArray = decodedCookie.split(';');
+
+    for (let i = 0; i < cookieArray.length; i++) {
+      let cookie = cookieArray[i].trim();
+      if (cookie.indexOf(name) === 0) {
+        return cookie.substring(name.length, cookie.length);
+      }
+    }
+    return null;
   }
 
   loginWithGoogle(): void {
@@ -36,11 +45,8 @@ export class AuthService {
   handleGoogleLoginCallback(): void {
     this.route.queryParams.subscribe((params) => {
       if (params['token']) {
-        // Process the token (e.g., store in cookie, localStorage, or directly use)
         const token = params['token'];
-        console.log('Google login successful, token received:', token);
-
-        // Redirect to home page
+        console.log('Google login successful, token received:', token)
         this.router.navigate(['/home']);
       }
     });
@@ -68,5 +74,9 @@ export class AuthService {
           console.error('Error during logout', error);
         },
       });
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
   }
 }
