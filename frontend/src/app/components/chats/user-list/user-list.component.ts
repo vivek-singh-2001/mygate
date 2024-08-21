@@ -24,7 +24,6 @@ export class UserListComponent implements OnInit {
   }
   selectUser(user: any) {
     this.userSelected.emit(user);
-    
   }
 
   fetchUserAndSocietyUsers() {
@@ -46,7 +45,9 @@ export class UserListComponent implements OnInit {
       )
       .subscribe({
         next: (societyUsers: any) => {
-          this.SocietyUsers = societyUsers.data.users;
+          this.SocietyUsers = societyUsers.data.users.filter(
+            (user:any) => user.id !== this.userData.id
+          );
           // console.log(this.SocietyUsers, 'society members');
         },
         error: (error) => {

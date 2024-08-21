@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
        const roomId = `${senderId} - ${receiverId}`;
       
       // Emit the message to the receiver
-      io.to(roomId).emit('receiveMessage', {
+      io.to(receiverId).emit('receiveMessage', {
         senderId,
         receiverId,
         message

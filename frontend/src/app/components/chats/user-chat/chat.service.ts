@@ -33,6 +33,8 @@ export class ChatService {
 
   receiveMessage(callback: (message: any) => void): void {
     this.socket.on('receiveMessage', callback);
+    console.log("callback", callback);
+    
   }
 
   joinRoom(roomId: string): void {
