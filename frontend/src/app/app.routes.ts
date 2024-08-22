@@ -3,6 +3,7 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ChatsComponent } from './components/chats/chats.component';
+import { PracticessComponent } from './components/practicess/practicess.component';
 
 export const routes: Routes = [
   {
@@ -20,7 +21,7 @@ export const routes: Routes = [
       {path:'google/success', component: DashboardComponent}
     ]
   },
-    
+    {path:'practice', component:PracticessComponent},
   {
     path: '',
     redirectTo: 'login',
