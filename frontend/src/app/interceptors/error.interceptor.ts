@@ -10,6 +10,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar'; // or any other notification service
 
+
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(private snackBar: MatSnackBar) {} // Inject your notification service

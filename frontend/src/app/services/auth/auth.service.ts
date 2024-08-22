@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { catchError } from 'rxjs';
 import { EMPTY } from 'rxjs';
-import { CookieService } from 'ngx-cookie-service';
+
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,7 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
-    private cookieService: CookieService
+  
   ) {}
 
   login(email: string, password: string): Observable<any> {
@@ -25,12 +25,6 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/login`, loginData, {
       withCredentials: true,
     });
-  }
-
-  getToken(): string | null {
-    console.log('token from function',this.cookieService.get('jwtToken'));
-    
-    return this.cookieService.get('jwtToken'); // Retrieves the token from the cookie
   }
 
   loginWithGoogle(): void {
@@ -66,9 +60,5 @@ export class AuthService {
           console.error('Error during logout', error);
         },
       });
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.getToken();
   }
 }
