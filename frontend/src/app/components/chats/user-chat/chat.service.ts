@@ -28,8 +28,6 @@ export class ChatService {
     });
 
     this.setupMessageListener()
-
-
   }
 
   sendMessage(senderId: string, receiverId: string, message: string,messageId: string): void {

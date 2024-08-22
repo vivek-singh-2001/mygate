@@ -21,7 +21,8 @@ export const routes: Routes = [
       {path:'google/success', component: DashboardComponent}
     ]
   },
-    {path:'practice', component:PracticessComponent},
+
+
   {
     path: '',
     redirectTo: 'login',

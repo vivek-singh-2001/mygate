@@ -75,7 +75,6 @@ exports.protect = asyncErrorHandler(async (req, res, next) => {
       401
     ));
   }
-
   // 4.Check if the user changed the password after the token was issued
 
   if (await user.isPasswordChanged(decodedToken.iat)) {
@@ -87,7 +86,6 @@ exports.protect = asyncErrorHandler(async (req, res, next) => {
 
   // 5. Attach vendor details to request object
   req.user = user;
-
   next();
 });
 
