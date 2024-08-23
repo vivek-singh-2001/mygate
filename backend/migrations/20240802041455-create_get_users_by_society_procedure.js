@@ -47,7 +47,7 @@ module.exports = {
 
     // Create procedure to fetch users by society ID and wing name
     await queryInterface.sequelize.query(`
-      CREATE OR REPLACE FUNCTION GetUsersBySocietyAndWing(society_id INT, wing_name VARCHAR)
+      CREATE OR REPLACE FUNCTION GetUsersBySocietyAndWing(society_id INT, wing_id INT)
       RETURNS TABLE(
         id INT,
         firstname VARCHAR,
@@ -77,7 +77,7 @@ module.exports = {
           "Wings" w ON h."WingId" = w.id
         WHERE 
           w."SocietyId" = society_id AND
-          w.name = wing_name;
+          w.id = wing_id;
       END;
       $$;
     `);

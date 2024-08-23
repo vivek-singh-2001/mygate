@@ -46,4 +46,10 @@ export class UserService {
       withCredentials: true,
     });
   }
+
+  getUsersBySocietyIdAndWingId(societyId: string, wingId:string): Observable<any> {
+    return this.http.get(`${this.societyApiUrl}/${societyId}/wing/${wingId}`, {
+      withCredentials: true,
+    });
+  }
 }

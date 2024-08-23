@@ -6,7 +6,9 @@ import {
   OnInit,
   SimpleChanges,
   OnDestroy,
-  AfterViewChecked, ElementRef, ViewChild,
+  AfterViewChecked,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from './chat.service';
@@ -14,22 +16,27 @@ import { UserService } from '../../../services/user/user.service';
 import { UserListComponent } from '../user-list/user-list.component';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { filter, withLatestFrom } from 'rxjs/operators';
+import { getTimeFromTimestamp } from '../../../utils/getTimeFromTimestamp';
+import { DatePipe } from '@angular/common';
 
 interface Message {
   id?: string; // Add an id field to uniquely identify messages
   text: string;
   isSender: boolean;
+  createdAt: string;
 }
 
 @Component({
   selector: 'app-user-chat',
   standalone: true,
   imports: [CommonModule, FormsModule, UserListComponent],
+  providers: [DatePipe],
   templateUrl: './user-chat.component.html',
   styleUrls: ['./user-chat.component.css'],
 })
-export class UserChatComponent implements OnInit, OnChanges, OnDestroy  , AfterViewChecked{
-  
+export class UserChatComponent
+  implements OnInit, OnChanges, OnDestroy, AfterViewChecked
+{
   @Input() selectedUser: any;
   @ViewChild('chatWindow') private chatWindow!: ElementRef;
   messages: Message[] = [];
@@ -44,7 +51,8 @@ export class UserChatComponent implements OnInit, OnChanges, OnDestroy  , AfterV
 
   constructor(
     private userService: UserService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -82,23 +90,30 @@ export class UserChatComponent implements OnInit, OnChanges, OnDestroy  , AfterV
   }
 
   private subscribeToMessages() {
-    this.messageSubscription = this.chatService.getMessages().pipe(
-      withLatestFrom(this.selectedUserSubject),
-      filter(([message, selectedUser]) =>
-        message &&
-        selectedUser &&
-        (message.senderId === selectedUser.id || message.receiverId === selectedUser.id)
+    this.messageSubscription = this.chatService
+      .getMessages()
+      .pipe(
+        withLatestFrom(this.selectedUserSubject),
+        filter(
+          ([message, selectedUser]) =>
+            message &&
+            selectedUser &&
+            (message.senderId === selectedUser.id ||
+              message.receiverId === selectedUser.id)
+        )
       )
-    ).subscribe(([message, _]) => {
-      // Check if the message is already in the messages array
-      if (!this.messages.some(m => m.id === message.id)) {
-        this.messages.push({
-          id: message.id,
-          text: message.message,
-          isSender: message.senderId === this.currentUser.id,
-        });
-      }
-    });
+      .subscribe(([message, _]) => {
+        // Check if the message is already in the messages array
+        if (!this.messages.some((m) => m.id === message.id)) {
+          this.messages.push({
+            id: message.id,
+            text: message.message,
+            isSender: message.senderId === this.currentUser.id,
+            createdAt:
+              this.datePipe.transform(message.createdAt, 'HH:mm') ?? '',
+          });
+        }
+      });
   }
 
   loadChatHistory() {
@@ -112,12 +127,8 @@ export class UserChatComponent implements OnInit, OnChanges, OnDestroy  , AfterV
                 id: msg.id,
                 text: msg.message,
                 isSender: msg.senderId === this.currentUser.id,
-              }));
-            } else if (history && typeof history === 'object') {
-              this.messages = [history].map((msg: any) => ({
-                id: msg.id,
-                text: msg.message,
-                isSender: msg.senderId === this.currentUser.id,
+                createdAt:
+                  this.datePipe.transform(msg.createdAt, 'HH:mm') ?? '',
               }));
             } else {
               console.error('Unexpected chat history format:', history);
@@ -142,17 +153,17 @@ export class UserChatComponent implements OnInit, OnChanges, OnDestroy  , AfterV
   private scrollToBottom(): void {
     if (this.chatWindow && this.chatWindow.nativeElement) {
       try {
-        this.chatWindow.nativeElement.scrollTop = this.chatWindow.nativeElement.scrollHeight;
+        this.chatWindow.nativeElement.scrollTop =
+          this.chatWindow.nativeElement.scrollHeight;
       } catch (err) {
         console.error('Could not scroll to bottom:', err);
       }
     }
   }
-  
 
   sendMessage() {
     if (this.newMessage.trim() && this.selectedUser && this.currentUser) {
-      const messageId = Date.now().toString(); // Generate a unique ID for the message
+      const messageId = Date.now().toString();
       this.chatService.sendMessage(
         this.currentUser.id,
         this.selectedUser.id,

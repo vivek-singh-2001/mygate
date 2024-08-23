@@ -25,16 +25,17 @@ exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
 });
 
 exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
-  const { societyId, wingName } = req.params;
+  const { societyId, wingId } = req.params;
 
-  if (!societyId || !wingName) {
+  if (!societyId || !wingId) {
     return next(new CustomError("Society ID and Wing Name are required", 400));
   }
 
   try {
-    const users = await societyService.getUsersBySocietyAndWing(societyId, wingName);
+    const users = await societyService.getUsersBySocietyAndWing(societyId, wingId);
     res.status(200).json({
       status: "success",
+      length:users.length,
       data: {
         users,
       },

@@ -9,7 +9,8 @@
           *ngFor="let message of messages"
           [ngClass]="{ sent: message.isSender, received: !message.isSender }"
         >
-          <div class="message-text">{{ message.text }}</div>
+            <small><p>{{message.createdAt }}</p></small>
+            <p>{{message.text}}</p>
         </div>
       </div>
       <div class="input-container">

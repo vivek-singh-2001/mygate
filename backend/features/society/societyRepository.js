@@ -12,11 +12,11 @@ exports.findUsersBySociety = (societyId) => {
   });
 };
 
-exports.findUsersBySocietyAndWing = (societyId, wingName) => {
+exports.findUsersBySocietyAndWing = (societyId, wingId) => {
   const query = `
         SELECT * FROM GetUsersBySocietyAndWing($1, $2);
     `;
-  const values = [societyId, wingName];
+  const values = [societyId, wingId];
 
   return db.connectDB.query(query, {
     bind: values,

@@ -27,26 +27,38 @@
 }
 
 .message {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
   max-width: 80%;
   word-wrap: break-word;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .message.sent {
-  text-align: right;
   background-color: #dcf8c6;
-  padding: 5px;
-  border-radius: 5px;
-  margin-bottom: 5px;
+  flex-direction: row;
+  text-align: left;
 }
 
 .message.received {
-  text-align: left;
   background-color: #ffffff;
-  padding: 5px;
-  border-radius: 5px;
-  margin-bottom: 5px;
+  flex-direction: row-reverse;
+  text-align: right;
 }
+
+.message-text {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+.message-text p {
+  margin: 0;
+}
+
 
 .input-container {
   display: flex;

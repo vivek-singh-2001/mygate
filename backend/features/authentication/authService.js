@@ -7,13 +7,15 @@ const sendSms = require('../../utils/sendSms')
 const util = require("util");
 const jwt = require("jsonwebtoken");
 const {Op} = require('sequelize');
-const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 
 exports.login = async (email, password) => {
   const user = await User.findOne({ where: { email } });
   if (!user || !(await user.validPassword(password))) {
     throw new CustomError("Invalid email or password", 401);
   }
+  // if(!user.isOwner){
+  //   throw new CustomError("you are not the head of the family ",401)
+  // }
   return signToken(user.id, user.email);
 };
 

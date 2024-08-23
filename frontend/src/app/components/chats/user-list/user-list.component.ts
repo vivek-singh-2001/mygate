@@ -3,7 +3,6 @@ import { UserService } from '../../../services/user/user.service';
 import { CommonModule } from '@angular/common';
 import { switchMap } from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-user-list',
   standalone: true,
@@ -35,9 +34,10 @@ export class UserListComponent implements OnInit {
           this.userData = this.userService.getCurrentUserData();
           if (this.userData) {
             this.societyId = this.userData.Houses[0]['Wing']['SocietyId'];
-            console.log('userid',this.societyId,this.userData);
+            const loggedInUserWingId = this.userData.Houses[0]['WingId'];
+            console.log('userid', this.societyId, this.userData);
             // Return observable to fetch society users
-            return this.userService.getUsersBySocietyId(this.societyId);
+            return this.userService.getUsersBySocietyIdAndWingId(this.societyId,loggedInUserWingId);
           } else {
             throw new Error('User data not available');
           }
@@ -45,10 +45,14 @@ export class UserListComponent implements OnInit {
       )
       .subscribe({
         next: (societyUsers: any) => {
+          // const loggedInUserWingId = this.userData.Houses[0]['WingId'];
+
           this.SocietyUsers = societyUsers.data.users.filter(
-            (user:any) => user.id !== this.userData.id
+            (user: any) =>
+              user.id !== this.userData.id &&
+              user.isowner === true 
           );
-          // console.log(this.SocietyUsers, 'society members');
+          console.log(this.SocietyUsers, 'society members');
         },
         error: (error) => {
           console.error('Failed to fetch society users', error);

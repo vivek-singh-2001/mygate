@@ -31,7 +31,7 @@ export class ChatService {
   }
 
   sendMessage(senderId: string, receiverId: string, message: string,messageId: string): void {
-    this.socket.emit('sendMessage', { senderId, receiverId, message ,id: messageId});
+    this.socket.emit('sendMessage', { senderId, receiverId, message , id: messageId});
   }
 
   setupMessageListener() {

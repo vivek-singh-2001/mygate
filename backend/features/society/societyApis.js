@@ -10,6 +10,6 @@ const { getUsersBySociety, getUsersBySocietyAndWing } = societyController;
 
 // Define routes
 router.get("/:societyId", protect, getUsersBySociety);
-router.get("/:societyId?/wing/:wingName?", protect, getUsersBySocietyAndWing);
+router.get("/:societyId/wing/:wingId", protect, getUsersBySocietyAndWing);
 
 module.exports = router;
