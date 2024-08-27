@@ -20,7 +20,7 @@ import { getTimeFromTimestamp } from '../../../utils/getTimeFromTimestamp';
 import { DatePipe } from '@angular/common';
 
 interface Message {
-  id?: string; // Add an id field to uniquely identify messages
+  id?: string;
   text: string;
   isSender: boolean;
   createdAt: string;
@@ -42,6 +42,7 @@ export class UserChatComponent
   messages: Message[] = [];
   newMessage: string = '';
   currentUser: any;
+  isLoading: boolean = true;
   private messageSubscription!: Subscription;
   private selectedUserSubject = new BehaviorSubject<any>(null);
 
@@ -64,6 +65,7 @@ export class UserChatComponent
     if (changes['selectedUser']) {
       this.selectedUserSubject.next(this.selectedUser);
       if (this.selectedUser && this.currentUser) {
+        this.isLoading=true;
         this.loadChatHistory();
         this.joinRoom();
       }
@@ -103,7 +105,6 @@ export class UserChatComponent
         )
       )
       .subscribe(([message, _]) => {
-        // Check if the message is already in the messages array
         if (!this.messages.some((m) => m.id === message.id)) {
           this.messages.push({
             id: message.id,
@@ -118,6 +119,7 @@ export class UserChatComponent
 
   loadChatHistory() {
     if (this.currentUser && this.selectedUser) {
+      this.isLoading = true;
       this.chatService
         .getChatHistory(this.currentUser.id, this.selectedUser.id)
         .subscribe({
@@ -134,10 +136,12 @@ export class UserChatComponent
               console.error('Unexpected chat history format:', history);
               this.messages = [];
             }
+            this.isLoading = false;
           },
           error: (error) => {
             console.error('Error fetching chat history:', error);
             this.messages = [];
+            this.isLoading = false;
           },
         });
     }

@@ -21,16 +21,8 @@ export class ChatsComponent  {
 
   constructor(
     private ChatService: ChatService,
-    private userService: UserService
   ) {}
 
-  // ngOnInit() {
-  //   this.ChatService.receiveMessage((message: any) => {
-  //     if (message.receiverId === this.selectedUser.id) {
-  //       this.messages.push({ text: message.text, isSender: false });
-  //     }
-  //   });
-  // }
 
   onUserSelected(user: any) {
     this.selectedUser = user;
