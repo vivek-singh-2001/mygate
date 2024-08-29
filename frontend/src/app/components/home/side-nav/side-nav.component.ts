@@ -34,10 +34,8 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit() {
     this.items = [
-      { label: 'Dashboard', icon: 'pi pi-home', iconSize: 'large', command: () => this.navigateTo('/dashboard') },
-      // { label: 'Profile', icon: 'pi pi-user', iconSize: 'large', command: () => this.navigateTo('/Profile') },
-      // { label: 'Settings', icon: 'pi pi-cog', iconSize: 'large', command: () => this.navigateTo('/Settings') },
-      { label: 'Messages', icon: 'pi pi-envelope', iconSize: 'large', command: () => this.navigateTo('/messages') },
+      { label: 'Dashboard', icon: 'pi pi-home', iconSize: 'large', command: () => this.navigateTo('/home/dashboard') },
+      { label: 'Messages', icon: 'pi pi-envelope', iconSize: 'large', command: () => this.navigateTo('/home/messages') },
     ];
   }
 

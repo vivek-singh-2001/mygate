@@ -49,8 +49,6 @@ export class LoginComponent implements OnInit {
       ])
     });
     this.authService.handleGoogleLoginCallback();
-
-   
   }
   get email() {
     return this.loginForm.controls['email'];

@@ -16,11 +16,10 @@ export class UserService {
 
   getCurrentUser(): Observable<any> {
     return this.http
-      .get(`${this.userApiUrl}/me`, { withCredentials: true })
+      .get(`${this.userApiUrl}/me`)
       .pipe(
         tap((response: any) => {
           this.userData.next(response.data.user);
-          // console.log(this.userData['_value'])
         })
       );
   }
@@ -42,14 +41,11 @@ export class UserService {
   }
 
   getUsersBySocietyId(societyId: string): Observable<any> {
-    return this.http.get(`${this.societyApiUrl}/${societyId}`, {
-      withCredentials: true,
-    });
+    return this.http.get(`${this.societyApiUrl}/${societyId}`);
   }
 
   getUsersBySocietyIdAndWingId(societyId: string, wingId:string): Observable<any> {
-    return this.http.get(`${this.societyApiUrl}/${societyId}/wing/${wingId}`, {
-      withCredentials: true,
-    });
+    return this.http.get(`${this.societyApiUrl}/${societyId}/wing/${wingId}`, 
+    );
   }
 }

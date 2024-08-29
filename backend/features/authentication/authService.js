@@ -13,9 +13,9 @@ exports.login = async (email, password) => {
   if (!user || !(await user.validPassword(password))) {
     throw new CustomError("Invalid email or password", 401);
   }
-  // if(!user.isOwner){
-  //   throw new CustomError("you are not the head of the family ",401)
-  // }
+  if(!user.isOwner){
+    throw new CustomError("you are not the head of the family ",401)
+  }
   return signToken(user.id, user.email);
 };
 
@@ -38,14 +38,10 @@ exports.signToken = signToken;
 exports.forgotPassword = async (req,email) => {
   const user = await User.findOne({ where: { email } });
   if (!user) throw new CustomError("There is no user with that email address", 404);
-
   const resetToken = await user.createResetPasswordToken();
   await user.save({ validateBeforeSave: false });
-
   const resetURL = `${req.protocol}://localhost:7500/resetPassword/${resetToken}`
-
   const message = `Forgot your password? Submit a PATCH request with your new password to: ${resetURL}\nIf you didn't forget your password, please ignore this email!`;
-
   await sendEmail({
     email: user.email,
     subject: 'Your password reset token (valid for 10 minutes)',

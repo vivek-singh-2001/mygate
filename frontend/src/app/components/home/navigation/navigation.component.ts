@@ -85,8 +85,6 @@ export class NavigationComponent implements OnInit {
       next: (data) => {
         this.user = data.data.user;
         this.userSocietyId = data.data.user.Houses[0]['Wing']['SocietyId'];
-        console.log('logged in user', this.user);
-        console.log('logged in userSociety id', this.userSocietyId);
       },
       error: (error) => {
         console.error('Failed to fetch user details', error);
