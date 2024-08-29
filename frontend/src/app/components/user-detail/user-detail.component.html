@@ -1,0 +1,101 @@
+<p-tabView styleClass="tabview-custom">
+  <p-tabPanel>
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center gap-2">
+        <p-avatar>
+         <span class="pi pi-info-circle"></span>
+
+        </p-avatar>
+          
+       
+        <span class="font-bold white-space-nowrap m-0"> Personal Details </span>
+      </div>
+    </ng-template>
+    <div
+      class="main-container border-1 surface-border border-round-2xl shadow-5"
+    >
+      <div class="profile flex">
+        <div class="left-display flex-1 flex align-items-center justify-content-center  m-2 px-5 py-3 ">
+          <p-card
+            header="Advanced Card"
+            subheader="Card Subheader"
+            [style]="{ width: '450px' , hieght:'auto',}"
+            class="border-round-2xl shadow-5"
+          >
+            <ng-template pTemplate="header">
+              <img
+                alt="Card"
+                src="https://primefaces.org/cdn/primeng/images/card-ng.jpg"
+              />
+            </ng-template>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            
+            <ng-template pTemplate="footer">
+              <div class="flex gap-3 mt-1">
+                <p-button
+                  label="Cancel"
+                  severity="secondary"
+                  class="w-full"
+                  styleClass="w-full"
+                />
+                <p-button label="Save" class="w-full" styleClass="w-full" />
+              </div>
+            </ng-template>
+          </p-card>
+        </div>
+        <div class="right-display flex-1 flex flex-column justify-content-around align-items-center justify-content-center m-2 px-5 py-3 ">
+            <p-card
+            header="Advanced Card"
+            subheader="Card Subheader"
+            [style]="{ width: '600px' , hieght:'100%',}"
+            class="border-round-2xl shadow-5 "
+          >
+            
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            
+            
+          </p-card>
+           <p-card
+            header="Advanced Card"
+            subheader="Card Subheader"
+            [style]="{ width: '600px' , hieght:'auto',}"
+            class="border-round-2xl shadow-5"
+          >
+            
+            <p>Lorem ipsum dolor sit amet...</p>
+            <p>Lorem ipsum dolor sit amet...</p>
+            
+            
+          </p-card>
+        </div>
+      </div>
+    </div>
+  </p-tabPanel>
+  <p-tabPanel header="Header II">
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center gap-2">
+        <p-avatar>
+         <span class="pi pi-android"></span>
+
+        </p-avatar>
+        <span class="font-bold white-space-nowrap m-0"> Family Details </span>
+      </div>
+    </ng-template>
+    <div
+      class="main-container border-1 surface-border border-round-2xl shadow-5"
+    >
+        
+        
+    </div>
+  </p-tabPanel>
+</p-tabView>
