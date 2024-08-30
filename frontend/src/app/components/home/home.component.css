@@ -1,8 +1,7 @@
 .dashboard {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  width: 100bh;
+  /* position: fixed; */
 }
 .content-wrapper {
   display: flex;
@@ -19,7 +18,8 @@
 }
 
 .main-nav{
-  /* background-color: blue; */
+  background-color: whitesmoke;
   width: 100%;
+
 }
 

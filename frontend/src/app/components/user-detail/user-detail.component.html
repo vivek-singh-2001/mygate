@@ -3,81 +3,78 @@
     <ng-template pTemplate="header">
       <div class="flex align-items-center gap-2">
         <p-avatar>
-         <span class="pi pi-info-circle"></span>
-
+          <span class="pi pi-info-circle"></span>
         </p-avatar>
-          
-       
         <span class="font-bold white-space-nowrap m-0"> Personal Details </span>
       </div>
     </ng-template>
-    <div
-      class="main-container border-1 surface-border border-round-2xl shadow-5"
-    >
-      <div class="profile flex">
-        <div class="left-display flex-1 flex align-items-center justify-content-center  m-2 px-5 py-3 ">
-          <p-card
-            header="Advanced Card"
-            subheader="Card Subheader"
-            [style]="{ width: '450px' , hieght:'auto',}"
-            class="border-round-2xl shadow-5"
-          >
-            <ng-template pTemplate="header">
-              <img
-                alt="Card"
-                src="https://primefaces.org/cdn/primeng/images/card-ng.jpg"
-              />
-            </ng-template>
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            
-            <ng-template pTemplate="footer">
-              <div class="flex gap-3 mt-1">
-                <p-button
-                  label="Cancel"
-                  severity="secondary"
-                  class="w-full"
-                  styleClass="w-full"
-                />
-                <p-button label="Save" class="w-full" styleClass="w-full" />
-              </div>
-            </ng-template>
-          </p-card>
+    <div class="main-container">
+      <div class="top-profile flex flex-wrap">
+        <div class="card flex-initial">
+          <p-image
+            class="flex align-items-center justify-content-center p-4"
+            src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg"
+            alt="Image"
+            width="auto"
+            height="150"
+            [preview]="true"
+          />
         </div>
-        <div class="right-display flex-1 flex flex-column justify-content-around align-items-center justify-content-center m-2 px-5 py-3 ">
-            <p-card
-            header="Advanced Card"
-            subheader="Card Subheader"
-            [style]="{ width: '600px' , hieght:'100%',}"
-            class="border-round-2xl shadow-5 "
+        <div class="card flex">
+          <div
+            class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2"
           >
-            
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            
-            
-          </p-card>
-           <p-card
-            header="Advanced Card"
-            subheader="Card Subheader"
-            [style]="{ width: '600px' , hieght:'auto',}"
-            class="border-round-2xl shadow-5"
+            <p><b>Name</b></p>
+            <p><b>Email</b></p>
+            <p><b>Phone</b></p>
+            <p><b>Gender</b></p>
+            <p><b>Date of Birth</b></p>
+          </div>
+          <div
+            class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
           >
-            
-            <p>Lorem ipsum dolor sit amet...</p>
-            <p>Lorem ipsum dolor sit amet...</p>
-            
-            
-          </p-card>
+            <p>Vivek singh</p>
+            <p>viveksingh.argusoft&#64;gmail.com</p>
+            <p>7976553607</p>
+            <p>Male</p>
+            <p>20 feb 2001</p>
+          </div>
         </div>
+        <div class="card flex">
+          <div
+            class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-8"
+          >
+            <p><b>Passcode</b></p>
+            <p><b>Role</b></p>
+            <p><b>Room No</b></p>
+            <p><b>Wing name</b></p>
+            <p><b>Wing Admin</b></p>
+          </div>
+          <div
+            class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
+          >
+            <p>675945</p>
+            <p>Admin & Owner</p>
+            <p>G-402</p>
+            <p>G</p>
+            <p>rahul singh</p>
+          </div>
+        </div>
+      </div>
+      <p-divider type="solid"></p-divider>
+      <div class="top-profile flex flex-wrap">
+        <div class="name-form flex flex-wrap  gap-8 p-4 ">
+          <div class="field flex  justify-content-between">
+            <label for="firstname" class="left-label flex align-items-center ">First Namegsgsgsegsegegge</label>
+            <input id="email" type="email" pInputText formControlName="email"  cols="60"   />
+          </div>
+          <div class="field flex  justify-content-between gap-8 ml-7">
+            <label for="email" class="flex align-items-center">Email</label>
+            <input id="email" type="email" pInputText formControlName="email"  />
+          </div>
+        </div>
+        
+        
       </div>
     </div>
   </p-tabPanel>
@@ -85,17 +82,11 @@
     <ng-template pTemplate="header">
       <div class="flex align-items-center gap-2">
         <p-avatar>
-         <span class="pi pi-android"></span>
-
+          <span class="pi pi-android"></span>
         </p-avatar>
         <span class="font-bold white-space-nowrap m-0"> Family Details </span>
       </div>
     </ng-template>
-    <div
-      class="main-container border-1 surface-border border-round-2xl shadow-5"
-    >
-        
-        
-    </div>
+    <p>dgkfdghdgdvgdv</p>
   </p-tabPanel>
 </p-tabView>
