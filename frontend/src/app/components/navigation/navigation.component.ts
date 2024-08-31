@@ -7,8 +7,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { MenuModule } from 'primeng/menu';
-import { AuthService } from '../../../services/auth/auth.service';
-import { UserService } from '../../../services/user/user.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { UserService } from '../../services/user/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
@@ -33,7 +34,8 @@ export class NavigationComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +96,8 @@ export class NavigationComponent implements OnInit {
 
   goToProfile() {
     console.log('Navigate to profile');
+    this.router.navigate(['/home/profile']);
+
   }
 
   goToSettings() {

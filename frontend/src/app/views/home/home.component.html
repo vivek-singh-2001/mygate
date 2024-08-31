@@ -1,10 +1,12 @@
-<div class="dashboard">
+<div class="page-view">
+  <div class="navigation">
   <app-navigation></app-navigation>
+  </div>
   <div class="content-wrapper">
     <app-side-nav
       (expansionChanged)="onSidebarExpansionChanged($event)"
     ></app-side-nav>
-    <div class="main-nav" [ngClass]="{ 'content-shifted': isSidebarExpanded }">
+    <div class="main-display" [ngClass]="{ 'content-shifted': isSidebarExpanded }">
       <router-outlet> </router-outlet>
     </div>
   </div>

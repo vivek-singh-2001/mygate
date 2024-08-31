@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationComponent } from "./navigation/navigation.component";
-import { SideNavComponent } from "./side-nav/side-nav.component";
-import { MainDisplayComponent } from "./main-display/main-display.component";
+import { NavigationComponent } from "../../components/navigation/navigation.component";
+import { SideNavComponent } from "../../components/side-nav/side-nav.component";
+
 import { RouterOutlet } from '@angular/router';
 
 
@@ -12,7 +12,6 @@ import { RouterOutlet } from '@angular/router';
   imports: [
     NavigationComponent,
     SideNavComponent,
-    MainDisplayComponent,
     CommonModule,
     RouterOutlet
   ],

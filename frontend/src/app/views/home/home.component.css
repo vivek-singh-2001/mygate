@@ -1,24 +1,29 @@
-.dashboard {
+.page-view{
   display: flex;
   flex-direction: column;
+}
+
+.navigation{
+  position: sticky;
+  top:0;
+  z-index: 1000;
 }
 .content-wrapper {
   display: flex;
   flex: 1;
   overflow: hidden;
   min-width: 100%;
+  /* padding-top: 80px; */
 
 }
 .content-shifted {
-  margin-left: 10px;
+  /* margin-left: 10px; */
   transition: margin-left 0.3s;
- 
   max-width: 100%;
 }
 
-.main-nav{
+.main-display{
   background-color: whitesmoke;
   width: 100%;
-
 }
 

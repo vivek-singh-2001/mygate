@@ -4,6 +4,7 @@
   background-color: #f8f9fa;
   transition: width 0.3s;
   overflow: hidden;
+  border-right: 1px solid #e5e7eb;
 }
 .sidebar.expanded {
   width: 250px;
