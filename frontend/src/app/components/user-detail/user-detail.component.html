@@ -62,19 +62,160 @@
         </div>
       </div>
       <p-divider type="solid"></p-divider>
-      <div class="top-profile flex flex-wrap">
-        <div class="name-form flex flex-wrap  gap-8 p-4 ">
-          <div class="field flex  justify-content-between">
-            <label for="firstname" class="left-label flex align-items-center ">First Namegsgsgsegsegegge</label>
-            <input id="email" type="email" pInputText formControlName="email"  cols="60"   />
+      <div class="bottom-profile flex flex-column ">
+        <div class="user-form flex flex-wrap w-full p-4">
+          <div class="left-form flex flex-column flex-1">
+            <div class="field flex justify-content-between">
+              <label for="firstname" class="left-label flex align-items-center"
+                ><b>First Name</b></label
+              >
+              <input
+                id="firstname"
+                type="text"
+                pInputText
+                formControlName="firstname"
+                [style]="{ width: '100%' }"
+              />
+            </div>
+            <div class="field flex justify-content-between">
+              <label for="firstname" class="left-label flex align-items-center"
+                ><b>Email Id</b>
+              </label>
+              <input
+                id="firstname"
+                type="text"
+                pInputText
+                formControlName="firstname"
+                [style]="{ width: '100%' }"
+                [disabled]="true"
+              />
+            </div>
+            <div class="field flex justify-content-between">
+              <label for="dob" class="left-label flex align-items-center"
+                ><b>Date of Birth</b></label
+              >
+              <p-calendar
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                inputId="icondisplay"
+                [style]="{ width: '100%' }"
+                [maxDate]="today"
+                formControlName="dob"
+              />
+            </div>
+            <div class="field flex justify-content-between">
+              <label for="room-no" class="left-label flex align-items-center"
+                ><b>Room No</b></label
+              >
+              <input
+                id="room-no"
+                type="text"
+                pInputText
+                formControlName="room-no"
+                [style]="{ width: '100%' }"
+              />
+            </div>
+            <div class="field flex justify-content-between">
+              <label for="wing-name" class="left-label flex align-items-center"
+                ><b>Wing name</b></label
+              >
+              <input
+                id="wing-name"
+                type="text"
+                pInputText
+                formControlName="wing-name"
+                [style]="{ width: '100%' }"
+                [disabled]="true"
+              />
+            </div>
+            <div class="field flex justify-content-between">
+              <label for="society-name" class="left-label flex align-items-center"
+                ><b>Society Name</b></label
+              >
+              <input
+                id="society-name"
+                type="text"
+                pInputText
+                formControlName="society-name"
+                [style]="{ width: '100%' }"
+                [disabled]="true"
+              />
+            </div>
+           
           </div>
-          <div class="field flex  justify-content-between gap-8 ml-7">
-            <label for="email" class="flex align-items-center">Email</label>
-            <input id="email" type="email" pInputText formControlName="email"  />
+          <div class="right-form flex flex-wrap flex-column flex-1">
+            <div class="field flex justify-content-between">
+              <label for="lastname" class="right-label flex align-items-center"
+                ><b>Last Name</b></label
+              >
+              <input
+                id="lastname"
+                type="lastname"
+                pInputText
+                formControlName="lastname"
+                [style]="{ width: '100%' }"
+              />
+            </div>
+            <div class="field flex justify-content-between">
+              <label for="number" class="right-label flex align-items-center"
+                ><b>Number</b></label
+              >
+              <p-inputNumber
+                id="number"
+                formControlName="number"
+                [style]="{ width: '100%' }"
+                maxlength="10"
+                [useGrouping]="false"
+              ></p-inputNumber>
+            </div>
+            <div class="field flex justify-content-between">
+              <label for="passcode" class="right-label flex align-items-center"
+                ><b>Passcode</b></label
+              >
+              <p-inputNumber
+                id="passcode"
+                formControlName="passcode"
+                [style]="{ width: '100%' }"
+                maxlength="6"
+                [useGrouping]="false"
+                [disabled]="true"
+                placeholder="123456"
+              ></p-inputNumber>
+            </div>
+            <div class="field flex justify-content-between">
+              <label for="gender" class="right-label flex align-items-center"
+                ><b>Gender</b></label
+              >
+              <p-dropdown
+                [options]="genders"
+                optionLabel="label" 
+                placeholder="Select Gender"
+                [style]="{ width: '100%' }"
+         
+              >
+              </p-dropdown>
+            </div>
+            <div class="field flex justify-content-between">
+              <label for="society-address" class="right-label flex align-items-start"
+                ><b>Society Address </b></label
+              >
+              <textarea
+                id="society-address"
+                rows="4"
+                type="text"
+                pInputText
+                formControlName="society-address"
+                [style]="{ width: '100%' }"
+                [disabled]="true"
+              ></textarea>
+            </div>
+           
           </div>
         </div>
-        
-        
+        <div class="button-profile flex align-items-center justify-content-center gap-6 mb-4">
+          <p-button label="Cancel"  [raised]="true"  severity="contrast" />
+          <p-button label="Submit" [raised]="true"  severity="contrast" />
+        </div>
       </div>
     </div>
   </p-tabPanel>

@@ -1,7 +1,6 @@
 .dashboard {
   display: flex;
   flex-direction: column;
-  /* position: fixed; */
 }
 .content-wrapper {
   display: flex;
