@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { catchError, BehaviorSubject, EMPTY, Observable, tap,switchMap } from 'rxjs';
 import { UserService } from '../user/user.service';
+import { HouseService } from '../houses/houseService';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,7 @@ export class AuthService {
     private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
+    private houseService: HouseService  
   ) {}
 
    // Login with email and password
@@ -29,6 +31,9 @@ export class AuthService {
         }
       }),
       switchMap(() => this.userService.getCurrentUser()), // Fetch and store user data after login
+      tap((user)=>{
+        this.houseService.setHouses(user.Houses);
+      }),
       tap(() => {
         this.router.navigate(['/home']);
       })
@@ -50,13 +55,18 @@ export class AuthService {
             localStorage.setItem('isLoggedIn', 'true');
           }
         }),
-        switchMap(() => this.userService.getCurrentUser()), // Fetch and store user data after Google login
+        switchMap(() => this.userService.getCurrentUser()), 
+        tap((user) => {
+        console.log('user from auth service',user.data.user)
+          this.houseService.setHouses(user.data.user.Houses); 
+        }),
         tap(() => {
           this.router.navigate(['/home'], { replaceUrl: true });
         })
       )
       .subscribe();
   }
+  
 
  // Logout function
  logout(): void {

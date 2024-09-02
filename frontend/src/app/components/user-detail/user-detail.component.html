@@ -33,11 +33,11 @@
           <div
             class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
           >
-            <p>Vivek singh</p>
-            <p>viveksingh.argusoft&#64;gmail.com</p>
-            <p>7976553607</p>
-            <p>Male</p>
-            <p>20 feb 2001</p>
+            <p>{{userDetails.firstname }} {{userDetails}}</p>
+            <p>{{userDetails.email}}</p>
+            <p>{{userDetails.number}}</p>
+            <p>{{userDetails.name}}</p>
+            <p>{{userDetails.dateofbirth}}</p>
           </div>
         </div>
         <div class="card flex">
@@ -53,41 +53,54 @@
           <div
             class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
           >
-            <p>675945</p>
-            <p>Admin & Owner</p>
-            <p>G-402</p>
-            <p>G</p>
-            <p>rahul singh</p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p></p>
           </div>
         </div>
       </div>
       <p-divider type="solid"></p-divider>
-      <div class="bottom-profile flex flex-column mt-6 ">
+      <form
+        [formGroup]="userProfileForm"
+        class="bottom-profile flex flex-column mt-6"
+        (ngSubmit)="onUserFormSubmit()"
+      >
         <div class="user-form flex flex-wrap w-full p-4">
           <div class="left-form flex flex-column flex-1">
             <div class="field flex justify-content-between">
               <label for="firstname" class="left-label flex align-items-center"
                 ><b>First Name</b></label
               >
-              <input
-                id="firstname"
-                type="text"
-                pInputText
-                formControlName="firstname"
-                [style]="{ width: '100%' }"
-              />
+              <div class="felx flex-column w-full">
+                <input
+                  id="firstname"
+                  type="text"
+                  formControlName="firstname"
+                  pInputText
+                  [style]="{ width: '100%' }"
+                />
+                <small
+                  *ngIf="
+                    userProfileForm.get('firstname')?.hasError('lettersOnly') &&
+                    userProfileForm.get('firstname')?.touched
+                  "
+                  class="p-error"
+                  >Only letters allowed.</small
+                >
+              </div>
             </div>
             <div class="field flex justify-content-between">
-              <label for="firstname" class="left-label flex align-items-center"
+              <label for="email" class="left-label flex align-items-center"
                 ><b>Email Id</b>
               </label>
               <input
                 id="firstname"
                 type="text"
+                formControlName="email"
                 pInputText
-                formControlName="firstname"
                 [style]="{ width: '100%' }"
-                [disabled]="true"
               />
             </div>
             <div class="field flex justify-content-between">
@@ -97,51 +110,50 @@
               <p-calendar
                 [iconDisplay]="'input'"
                 [showIcon]="true"
+                formControlName="dob"
                 inputId="icondisplay"
                 [style]="{ width: '100%' }"
                 [maxDate]="today"
-                formControlName="dob"
               />
             </div>
             <div class="field flex justify-content-between">
-              <label for="room-no" class="left-label flex align-items-center"
+              <label for="roomno" class="left-label flex align-items-center"
                 ><b>Room No</b></label
               >
               <input
-                id="room-no"
+                id="roomno"
                 type="text"
                 pInputText
-                formControlName="room-no"
+                formControlName="roomno"
                 [style]="{ width: '100%' }"
               />
             </div>
             <div class="field flex justify-content-between">
-              <label for="wing-name" class="left-label flex align-items-center"
+              <label for="wingname" class="left-label flex align-items-center"
                 ><b>Wing name</b></label
               >
               <input
-                id="wing-name"
+                id="wingname"
                 type="text"
                 pInputText
-                formControlName="wing-name"
+                formControlName="wingname"
                 [style]="{ width: '100%' }"
-                [disabled]="true"
               />
             </div>
             <div class="field flex justify-content-between">
-              <label for="society-name" class="left-label flex align-items-center"
+              <label
+                for="societyname"
+                class="left-label flex align-items-center"
                 ><b>Society Name</b></label
               >
               <input
-                id="society-name"
+                id="societyname"
                 type="text"
                 pInputText
-                formControlName="society-name"
+                formControlName="societyname"
                 [style]="{ width: '100%' }"
-                [disabled]="true"
               />
             </div>
-           
           </div>
           <div class="right-form flex flex-wrap flex-column flex-1">
             <div class="field flex justify-content-between">
@@ -151,8 +163,8 @@
               <input
                 id="lastname"
                 type="lastname"
-                pInputText
                 formControlName="lastname"
+                pInputText
                 [style]="{ width: '100%' }"
               />
             </div>
@@ -162,9 +174,9 @@
               >
               <p-inputNumber
                 id="number"
-                formControlName="number"
                 [style]="{ width: '100%' }"
                 maxlength="10"
+                formControlName="number"
                 [useGrouping]="false"
               ></p-inputNumber>
             </div>
@@ -174,11 +186,10 @@
               >
               <p-inputNumber
                 id="passcode"
-                formControlName="passcode"
                 [style]="{ width: '100%' }"
                 maxlength="6"
+                formControlName="passcode"
                 [useGrouping]="false"
-                [disabled]="true"
                 placeholder="123456"
               ></p-inputNumber>
             </div>
@@ -188,35 +199,42 @@
               >
               <p-dropdown
                 [options]="genders"
-                optionLabel="label" 
+                formControlName="gender"
                 placeholder="Select Gender"
                 [style]="{ width: '100%' }"
-         
               >
               </p-dropdown>
             </div>
             <div class="field flex justify-content-between">
-              <label for="society-address" class="right-label flex align-items-start"
+              <label
+                for="societyaddress"
+                class="right-label flex align-items-start"
                 ><b>Society Address </b></label
               >
               <textarea
-                id="society-address"
+                id="societyaddress"
                 rows="4"
                 type="text"
                 pInputText
-                formControlName="society-address"
+                formControlName="societyaddress"
                 [style]="{ width: '100%' }"
-                [disabled]="true"
               ></textarea>
             </div>
-           
           </div>
         </div>
-        <div class="button-profile flex align-items-center justify-content-center gap-6 mb-4">
-          <p-button label="Cancel"  [raised]="true"  severity="contrast" />
-          <p-button label="Submit" [raised]="true"  severity="contrast" />
+        <div
+          class="button-profile flex align-items-center justify-content-center gap-6 mb-4"
+        >
+          <p-button label="Cancel" [raised]="true" severity="contrast" />
+          <p-button
+            label="Submit"
+            [raised]="true"
+            severity="contrast"
+            type="submit"
+            [disabled]="userProfileForm.invalid"
+          />
         </div>
-      </div>
+      </form>
     </div>
   </p-tabPanel>
   <p-tabPanel header="Header II">
