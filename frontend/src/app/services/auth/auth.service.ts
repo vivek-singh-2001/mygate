@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { catchError, BehaviorSubject, EMPTY, Observable, tap } from 'rxjs';
+import { catchError, BehaviorSubject, EMPTY, Observable, tap,switchMap } from 'rxjs';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,65 +13,65 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private userService: UserService,
   ) {}
 
-  login(email: string, password: string): Observable<any> {
+   // Login with email and password
+   login(email: string, password: string): Observable<any> {
     const loginData = { email, password };
-    return this.http
-      .post<any>(`${this.apiUrl}/login`, loginData, {
+    return this.http.post<any>(`${this.apiUrl}/login`, loginData).pipe(
+      tap((response) => {
+        const token = response.token;
+        if (token) {
+          localStorage.setItem('authToken', token);
+          localStorage.setItem('isLoggedIn', 'true');
+        }
+      }),
+      switchMap(() => this.userService.getCurrentUser()), // Fetch and store user data after login
+      tap(() => {
+        this.router.navigate(['/home']);
       })
-      .pipe(
-        tap((response) => {
-          const token = response.token;
-          if (token) {
-            localStorage.setItem('authToken', token);
-            localStorage.setItem('isLoggedIn', 'true');
-            this.router.navigate(['/home']);
-          }
-        })
-      );
+    );
   }
 
   loginWithGoogle(): void {
     window.location.href = `${this.apiUrl}/google`;
   }
 
+  // Handle the Google login callback
   handleGoogleLoginCallback(): void {
-    this.route.queryParams.subscribe((params) => {
-      if (params['token']) {
-        const token = params['token'];
-        localStorage.setItem('authToken', token);
-        localStorage.setItem('isLoggedIn', 'true');
-
-        this.router.navigate(['/home'], { replaceUrl: true });
-        console.log('log in with google');
-      }
-    });
-  }
-
-  // Logout function
-  logout(): void {
-    this.http
-      .post(`${this.apiUrl}/logout`, {}, )
+    this.route.queryParams
       .pipe(
-        catchError((error) => {
-          console.error('Logout failed', error);
-          return EMPTY;
+        tap((params) => {
+          if (params['token']) {
+            const token = params['token'];
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('isLoggedIn', 'true');
+          }
+        }),
+        switchMap(() => this.userService.getCurrentUser()), // Fetch and store user data after Google login
+        tap(() => {
+          this.router.navigate(['/home'], { replaceUrl: true });
         })
       )
-      .subscribe({
-        next: () => {
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('isLoggedIn');
-
-          this.router.navigate(['/login']);
-        },
-        error: (error) => {
-          console.error('Error during logout', error);
-        },
-      });
+      .subscribe();
   }
+
+ // Logout function
+ logout(): void {
+  this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
+    next: () => {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('isLoggedIn');
+      this.userService.clearUserData(); // Clear stored user data on logout
+      this.router.navigate(['/login']);
+    },
+    error: (error) => {
+      console.error('Error during logout', error);
+    },
+  });
+}
 
   // Check if user is logged in
   isLoggedIn(): boolean {
