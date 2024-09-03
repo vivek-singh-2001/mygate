@@ -2,15 +2,15 @@
   <div class="user-nav-card">
     <p>chat application</p>
   </div>
-    <div class="user-list-container">
-      <ul class="user-list">
-        <li
-          *ngFor="let user of SocietyUsers"
-          (click)="selectUser(user)"
-          class="user-card"
-        >
-          {{ user.firstname }}
-        </li>
-      </ul>
-    </div>
+  <div class="user-list-container">
+    <ul class="user-list">
+      <li
+        *ngFor="let user of SocietyUsers"
+        (click)="selectUser(user)"
+        class="user-card"
+      >
+        {{ user.firstname }}
+      </li>
+    </ul>
+  </div>
 </div>

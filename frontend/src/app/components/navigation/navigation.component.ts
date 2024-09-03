@@ -94,9 +94,7 @@ export class NavigationComponent implements OnInit {
 
   private loadUserData(): void {
     this.usersubscription = this.userService.getUserData().subscribe({
-      next: (data) => {
-        // console.log(data);
-        
+      next: (data) => {  
         this.user = data;
         this.houses = data.Houses;
         this.houseService.selectedHouse$.subscribe({

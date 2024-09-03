@@ -1,39 +1,33 @@
-/* src/app/components/user-list/user-list.component.css */
+
 
 .user-list-box {
   background-color: #3c3c3c;
   height: 100%;
-  color:white;
+  color: white;
+  display: flex;
+  flex-direction: column;
 }
-
 
 
 .user-list-container {
+  flex-grow: 1;
+  overflow-y: auto; 
   padding-right: 10px;
-  overflow-y: auto !important;
   background-color: inherit;
 }
-
 .user-nav-card {
   height: 10%;
   display: flex;
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid #ccc;
+  flex-shrink: 0;
 }
 
-/* .user-list {
-  list-style: none;
-  padding: 10px;
-} */
-
-/* .user-list li {
-  padding: 10px;
-  cursor: pointer;
-} */
-
-.user-list li:hover {
-   background-color: rgb(133,150,160);
+.user-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 
 .user-card {
@@ -43,4 +37,9 @@
   padding: 10px;
   border-bottom: 1px solid #ccc;
   height: 60px;
+  cursor: pointer;
+}
+
+.user-card:hover {
+  background-color: rgb(133, 150, 160);
 }
