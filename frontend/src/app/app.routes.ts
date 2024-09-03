@@ -21,7 +21,7 @@ export const routes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: '', redirectTo: 'messages', pathMatch: 'full' },
+      // { path: '', redirectTo: 'messages', pathMatch: 'full' },
       { path: 'messages', loadComponent: () => import('./components/chats/chats.component').then((chat) => chat.ChatsComponent) },
       { path: 'profile', component: UserDetailComponent}
     ]

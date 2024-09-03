@@ -84,10 +84,12 @@ export class NavigationComponent implements OnInit {
 
   private loadUserData(): void {
     if(this.authService.isLoggedIn()){
-       this.userService.getCurrentUser().subscribe({
+       this.userService.getUserData().subscribe({
          next: (data) => {
-           this.user = data.data.user;
-           this.userSocietyId = data.data.user.Houses[0]['Wing']['SocietyId'];
+           // console.log(data);
+        
+        this.user = data;
+           this.userSocietyId = data.Houses[0]['Wing']['SocietyId'];
          },
          error: (error) => {
            console.error('Failed to fetch user details', error);

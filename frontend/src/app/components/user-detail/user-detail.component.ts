@@ -52,6 +52,7 @@ interface Gender {
 })
 export class UserDetailComponent implements OnInit {
   today: Date = new Date();
+  familyData: any[] = []
   genders: Gender[] = [];
   userProfileForm!: FormGroup;
   userDetails: any = {};
@@ -100,6 +101,10 @@ export class UserDetailComponent implements OnInit {
             this.getAddress(userData.Houses[0].Wing.Society.address) || '',
         });
       }
+    });
+
+    this.userService.getFamilyMembers().subscribe(response => {
+      this.familyData = response.users
     });
   }
 

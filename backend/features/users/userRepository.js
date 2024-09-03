@@ -4,6 +4,9 @@ const { User, HouseUser, House, Wing, Society } = db;
 exports.getUserById = (id) => {
   return User.findOne({
     where: { id },
+    attributes: {
+      exclude: ['password'],
+    },
     include: [
       {
         model: House,

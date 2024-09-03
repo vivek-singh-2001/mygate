@@ -3,10 +3,20 @@ const CustomError = require("../../utils/CustomError");
 
 exports.getUserById = async (id) => {
   const user = await userRepository.getUserById(id);
-  if (!user) {
+  const userData = user.toJSON();
+  if (!userData) {
     throw new CustomError(`User with ID ${id} not found`, 404);
   }
-  return user;
+  if (userData.isAdmin) {
+    userData.role = 'Society Admin'
+  } else if(userData.isWingAdmin) {
+    userData.role = 'Wing Admin'
+  } else if(userData.isOwner) {
+    userData.role = 'Society Member'
+  } else {
+    userData.role = 'Member'
+  }
+  return userData;
 };
 
 exports.updateUser = async (userId, updateData) => {
