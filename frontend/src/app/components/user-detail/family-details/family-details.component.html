@@ -1,0 +1,56 @@
+<div class="main-container">
+  @if (familyData?.length) { @for (member of familyData; track member.id) {
+  <div class="top-profile flex flex-wrap mb-6">
+    <div class="card flex-initial">
+      <p-image
+        class="flex align-items-center justify-content-center p-4"
+        src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg"
+        alt="Image"
+        width="auto"
+        height="150"
+        [preview]="true"
+      />
+    </div>
+    <div class="card flex">
+      <div
+        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2"
+      >
+        <p><b>Name</b></p>
+        <p><b>Email</b></p>
+        <p><b>Phone</b></p>
+        <p><b>Gender</b></p>
+        <p><b>Date of Birth</b></p>
+      </div>
+      <div
+        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
+      >
+        <p>{{ member.firstname }}</p>
+        <p>{{ member.email }}</p>
+        <p>{{ member.number }}</p>
+        <p>{{ member.gender }}</p>
+        <p>{{ member.dateofbirth }}</p>
+      </div>
+    </div>
+    <div class="card flex">
+      <div
+        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-8"
+      >
+        <p><b>Passcode</b></p>
+        <p><b>Role</b></p>
+        <p><b>Room No</b></p>
+        <p><b>Wing name</b></p>
+        <p><b>Wing Admin</b></p>
+      </div>
+      <div
+        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
+      >
+        <p>{{ member.passcode }}</p>
+        <p>Member</p>
+        <p>fdvfv</p>
+        <p>Wing</p>
+        <p>Wing</p>
+      </div>
+    </div>
+  </div>
+  } }
+</div>

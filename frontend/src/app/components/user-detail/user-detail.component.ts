@@ -22,6 +22,8 @@ import {
 import { lettersOnlyValidator } from '../../utils/lettersOnlyValidator';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user/user.service';
+import { PersonalDetailsComponent } from './personal-details/personal-details.component';
+import { FamilyDetailsComponent } from "./family-details/family-details.component";
 
 interface Gender {
   label: string;
@@ -46,13 +48,15 @@ interface Gender {
     InputTextareaModule,
     ReactiveFormsModule,
     CommonModule,
-  ],
+    PersonalDetailsComponent,
+    FamilyDetailsComponent
+],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.css',
 })
 export class UserDetailComponent implements OnInit {
   today: Date = new Date();
-  familyData: any[] = []
+  familyData: any[] = [];
   genders: Gender[] = [];
   userProfileForm!: FormGroup;
   userDetails: any = {};
@@ -103,14 +107,9 @@ export class UserDetailComponent implements OnInit {
       }
     });
 
-    this.userService.getFamilyMembers().subscribe(response => {
-      this.familyData = response.users
+    this.userService.getFamilyMembers().subscribe((response) => {
+      this.familyData = response.users;
     });
-  }
-
-  onUserFormSubmit() {
-    console.log('hiii');
-    console.log(this.userProfileForm.value);
   }
 
   getAddress(obj: any) {
