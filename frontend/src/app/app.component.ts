@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AppInitializationService } from './services/AppInitialization';
 import { UserService } from './services/user/user.service';
 import { AuthService } from './services/auth/auth.service';
+import { ThemeService } from './services/theme/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -11,15 +12,28 @@ import { AuthService } from './services/auth/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'], // Fixed: `styleUrl` should be `styleUrls`
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'frontend';
 
-  constructor(private appInitializationService: AppInitializationService,
-    private authService: AuthService
+  constructor(
+    private appInitializationService: AppInitializationService,
+    private authService: AuthService,
+    private themeService: ThemeService
   ) {
-    // Ensure that initialization logic is appropriate
     if (this.authService.isLoggedIn()) {
       this.appInitializationService.initialize().subscribe();
     }
   }
+
+  ngOnInit() {
+    // this.themeService.setTheme(this.themeService.getActiveTheme());
+  }
+
+  // toggleTheme() {
+  //   this.themeService.toggleTheme();
+  // }
+
+  // getCurrentTheme() {
+  //   return this.themeService.getActiveTheme();
+  // }
 }

@@ -1,5 +1,12 @@
 ::ng-deep  .mat-typography p {
     margin: 0 !important
+   
 }
+
+
+::ng-deep p-menubar p-component {
+    background:red !important
+}
+
 
 
