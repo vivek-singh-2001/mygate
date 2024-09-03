@@ -13,11 +13,8 @@
   flex: 1;
   overflow: hidden;
   min-width: 100%;
-  /* padding-top: 80px; */
-
 }
 .content-shifted {
-  /* margin-left: 10px; */
   transition: margin-left 0.3s;
   max-width: 100%;
 }

@@ -3,7 +3,7 @@ import { UserService } from '../../../services/user/user.service';
 import { CommonModule } from '@angular/common';
 import { switchMap } from 'rxjs/operators';
 import { HouseService } from '../../../services/houses/houseService';
-import { BehaviorSubject, EMPTY } from 'rxjs';
+import { BehaviorSubject, EMPTY, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-list',
@@ -17,18 +17,16 @@ export class UserListComponent implements OnInit {
   SocietyUsers: any;
   societyId: string = '';
   @Output() userSelected = new EventEmitter<any>();
+  private subscription!: Subscription;
 
   constructor(private userService: UserService, private houseService:HouseService) {
   }
 
   ngOnInit() {
 
-    this.houseService.selectedHouse$.pipe(
+    this.subscription = this.houseService.selectedHouse$.pipe(
       switchMap(selectedHouse => {
-        // this.selectedHouse$ = selectedHouse.house;
         if (selectedHouse) {
-          console.log("selected house ", selectedHouse);
-          
           const societyId = selectedHouse.Wing.SocietyId;
           const wingId = selectedHouse.WingId;
           return this.userService.getUsersBySocietyIdAndWingId(societyId, wingId);
@@ -45,13 +43,16 @@ export class UserListComponent implements OnInit {
       error: (error) => {
         console.error('Failed to fetch society users', error);
       },
+      complete: () => {
+        if (this.subscription) {
+          this.subscription.unsubscribe(); 
+        }
+      }
     });
 
   }
   selectUser(user: any) {
+    console.log('Selected user:from the user-list', user);
     this.userSelected.emit(user);
   }
-
-
-
 }

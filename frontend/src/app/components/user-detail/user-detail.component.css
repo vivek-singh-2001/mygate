@@ -1,6 +1,6 @@
 ::ng-deep .tabview-custom{
 /* overflow-y: scroll; */
-overflow-y: auto;
+/* overflow-y: auto; */
 
 }
 ::ng-deep .p-tabview-nav{

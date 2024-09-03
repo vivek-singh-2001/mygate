@@ -11,7 +11,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ChatService } from './chat.service';
+import { ChatService } from '../../../services/chats/chat.service';
 import { UserService } from '../../../services/user/user.service';
 import { UserListComponent } from '../user-list/user-list.component';
 import { Subscription, BehaviorSubject } from 'rxjs';

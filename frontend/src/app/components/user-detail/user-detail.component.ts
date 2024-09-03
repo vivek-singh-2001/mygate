@@ -22,6 +22,8 @@ import {
 import { lettersOnlyValidator } from '../../utils/lettersOnlyValidator';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user/user.service';
+import { HouseService } from '../../services/houses/houseService';
+import { EMPTY, Subscription, switchMap } from 'rxjs';
 
 interface Gender {
   label: string;
@@ -56,8 +58,16 @@ export class UserDetailComponent implements OnInit {
   genders: Gender[] = [];
   userProfileForm!: FormGroup;
   userDetails: any = {};
+  selectedHouse: any = [];
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  private userSubscription!: Subscription;
+  private houseSubscription!: Subscription;
+
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private houseService: HouseService
+  ) {
     this.genders = [
       { label: 'Male', value: 'male' },
       { label: 'Female', value: 'female' },
@@ -67,49 +77,73 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.userProfileForm = this.fb.group({
-      firstname: ['wffq', [lettersOnlyValidator()]],
-      lastname: ['fefew'],
-      email: [{ value: 'ef', disabled: true }, [Validators.email]],
-      gender: ['Male'],
-      number: ['5698656569', Validators.required],
+      firstname: ['', [lettersOnlyValidator()]],
+      lastname: [''],
+      email: [{ value: '', disabled: true }, [Validators.email]],
+      gender: [''],
+      number: ['', Validators.required],
       dob: ['', Validators.required],
-      passcode: [{ value: '123456', disabled: true }],
-      roomno: [{ value: 'dwd', disabled: true }],
-      wingname: [{ value: 'wdw', disabled: true }],
-      societyname: [{ value: 'dwdw', disabled: true }],
-      societyaddress: [{ value: 'dwdwdwdwdw', disabled: true }],
+      passcode: [{ value: '', disabled: true }],
+      roomno: [{ value: '', disabled: true }],
+      wingname: [{ value: '', disabled: true }],
+      societyname: [{ value: '', disabled: true }],
+      societyaddress: [{ value: '', disabled: true }],
     });
-
-    // Subscribe to user data and populate the form
-    this.userService.getUserData().subscribe((userData) => {
-      if (userData) {
-        this.userDetails = userData;
-        console.log(this.userDetails);
-
-        this.userProfileForm.patchValue({
-          firstname: userData.firstname || 'apple',
-          lastname: userData.lastname || '',
-          email: userData.email || '',
-          gender: userData.gender || 'male',
-          number: userData.number || '',
-          dob: userData.dateofbirth ? new Date(userData.dateofbirth) : '',
-          passcode: userData.passcode || '',
-          roomno: userData.Houses[0].house_no || '',
-          wingname: userData.Houses[0].Wing.name || '',
-          societyname: userData.Houses[0].Wing.Society.name || '',
-          societyaddress:
-            this.getAddress(userData.Houses[0].Wing.Society.address) || '',
-        });
-      }
+  
+    // Fetch user data first
+    this.userSubscription = this.userService.getUserData().pipe(
+      switchMap(userData => {
+        if (userData) {
+          this.userDetails = userData;
+          this.userProfileForm.patchValue({
+            firstname: userData.firstname || 'apple',
+            lastname: userData.lastname || '',
+            email: userData.email || '',
+            gender: userData.gender || 'male',
+            number: userData.number || '',
+            dob: userData.dateofbirth ? new Date(userData.dateofbirth) : '',
+            passcode: userData.passcode || '',
+          });
+          
+          // Wait for house details to be set and then subscribe to selectedHouse$
+          return this.houseService.houses$.pipe(
+            switchMap(() => this.houseService.selectedHouse$)
+          );
+        }
+        return EMPTY;
+      })
+    ).subscribe({
+      next: (house) => {
+        this.selectedHouse = house;
+        if (house) {
+          this.userProfileForm.patchValue({
+            roomno: house.house_no || '',
+            wingname: house.Wing?.name || '',
+            societyname: house.Wing?.Society?.name || '',
+            societyaddress: this.getAddress(house.Wing?.Society?.address) || '',
+          });
+        } else {
+          console.log('Selected house is null or undefined');
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching house details', err);
+      },
+      complete: () => {
+        if (this.userSubscription) {
+          this.userSubscription.unsubscribe();
+        }
+      },
     });
 
     this.userService.getFamilyMembers().subscribe(response => {
       this.familyData = response.users
     });
   }
+  
+  
 
   onUserFormSubmit() {
-    console.log('hiii');
     console.log(this.userProfileForm.value);
   }
 
