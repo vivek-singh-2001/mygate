@@ -1,8 +1,6 @@
-import { RouterModule, Routes } from '@angular/router';
+import {  Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './views/home/home.component';
-import { UserDetailComponent } from './components/user-detail/user-detail.component';
-
 import { AuthGuard } from './gaurds/auth.guard';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
