@@ -23,7 +23,7 @@
         <div
           class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
         >
-          <p>{{ userDetails.firstname }} {{ userDetails }}</p>
+          <p>{{ userDetails.firstname }} {{ userDetails.lastname }}</p>
           <p>{{ userDetails.email }}</p>
           <p>{{ userDetails.number }}</p>
           <p>{{ userDetails.name }}</p>
@@ -45,9 +45,9 @@
         >
           <p>{{ userDetails.passcode }}</p>
           <p>{{ userDetails.role }}</p>
-          <p></p>
-          <p></p>
-          <p></p>
+          <p>{{userDetails.house?.house_no}}</p>
+          <p>{{userDetails.house?.Wing?.name}}</p>
+          <p>w-admin name</p>
         </div>
       </div>
     </div>
@@ -217,7 +217,7 @@
           [raised]="true"
           severity="contrast"
           type="submit"
-          [disabled]="userProfileForm?.invalid"
+          [disabled]="userProfileForm.invalid"
         />
       </div>
     </form>

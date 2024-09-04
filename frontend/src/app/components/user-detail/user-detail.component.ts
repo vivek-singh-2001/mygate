@@ -123,6 +123,7 @@ export class UserDetailComponent implements OnInit {
         next: (house) => {
           this.selectedHouse = house;
           if (house) {
+            this.userDetails.house = house
             this.userProfileForm.patchValue({
               roomno: house.house_no || '',
               wingname: house.Wing?.name || '',
@@ -145,7 +146,7 @@ export class UserDetailComponent implements OnInit {
       });
 
     this.userService.getFamilyMembers().subscribe((response) => {
-      this.familyData = response.users;
+      this.familyData = response.users.filter((data:any)=> data.id !==this.userDetails.id)
     });
   }
 

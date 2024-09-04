@@ -36,13 +36,17 @@ import { CommonModule } from '@angular/common';
   templateUrl: './personal-details.component.html',
   styleUrls: ['../user-detail.component.css'],
 })
-export class PersonalDetailsComponent {
+export class PersonalDetailsComponent implements OnInit {
   @Input() userDetails: any;
-  @Input() userProfileForm?: FormGroup;
+  @Input() userProfileForm!: FormGroup;
   @Input() genders?: any[];
   @Input() today?: Date;
+  
 
+  ngOnInit(): void {
+    
+  }
   onUserFormSubmit() {
-    console.log('Personal Details Submitted:', this.userProfileForm?.value);
+    console.log('Personal Details Submitted:', this.userProfileForm.value);
   }
 }

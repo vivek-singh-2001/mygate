@@ -14,7 +14,7 @@ exports.login = async (email, password) => {
     throw new CustomError("Invalid email or password", 401);
   }
   if(!user.isOwner){
-    throw new CustomError("you are not the head of the family ",401)
+    throw new CustomError("you are not the head of the family ",403)
   }
   return signToken(user.id, user.email);
 };

@@ -23,7 +23,7 @@ export const routes: Routes = [
     children: [
       // { path: '', redirectTo: 'messages', pathMatch: 'full' },
       { path: 'messages', loadComponent: () => import('./components/chats/chats.component').then((chat) => chat.ChatsComponent) },
-      { path: 'profile', component: UserDetailComponent}
+      { path: 'profile', loadComponent:()=>import('./components/user-detail/user-detail.component').then((user) => user.UserDetailComponent)}
     ]
   },
   {

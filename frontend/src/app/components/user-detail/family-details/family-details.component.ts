@@ -10,4 +10,5 @@ import { ImageModule } from 'primeng/image';
 })
 export class FamilyDetailsComponent {
   @Input() familyData?: any[];
+  @Input() userDetails: any;
 }
