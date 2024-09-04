@@ -7,12 +7,16 @@
   position: sticky;
   top:0;
   z-index: 1000;
+  min-height: 10vh;
 }
 .content-wrapper {
   display: flex;
   flex: 1;
   overflow: hidden;
   min-width: 100%;
+  min-height: 90vh;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .content-shifted {
   transition: margin-left 0.3s;

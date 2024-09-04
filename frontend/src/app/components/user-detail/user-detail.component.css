@@ -1,9 +1,4 @@
-::ng-deep .tabview-custom{
 
-/* max-height: calc(100vh-80px); */
-max-height: 92.8vh;
-overflow-y: auto;
-}
 ::ng-deep .p-tabview-nav{
   display: flex;
   justify-content: center;
@@ -24,6 +19,7 @@ min-height: 85.8vh;
 .main-container{
   background-color: var(--gray-200);
   overflow-y: auto;
+  height: 100% !important;
 
 }
 
