@@ -1,5 +1,16 @@
 ::ng-deep  .mat-typography p {
     margin: 0 !important
+   
 }
+::ng-deep  .p-menubar {
+    padding: 0.5rem;
+    background-color: var(--gray-300);
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+
+
 
 

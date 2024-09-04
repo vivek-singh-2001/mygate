@@ -9,7 +9,7 @@ import { Observable,BehaviorSubject } from 'rxjs';
 })
 export class ChatService {
   private socket: Socket;
-  private apiUrl = 'http://localhost:7500/api/v1/chats/'; // Update with your API URL
+  private apiUrl = 'http://localhost:7500/api/v1/chats';
   private messageSubject = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) {

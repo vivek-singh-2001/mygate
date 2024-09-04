@@ -34,6 +34,7 @@ export class AuthService {
       switchMap(() => this.userService.getCurrentUser()),
       tap((user) => {
         this.houseService.setHouses(user.data.user.Houses);
+        console.log("from auth service ",user.data.user.Houses );
       }),
       tap(() => {
         this.router.navigate(['/home']);

@@ -60,8 +60,16 @@ export class UserDetailComponent implements OnInit {
   genders: Gender[] = [];
   userProfileForm!: FormGroup;
   userDetails: any = {};
+  selectedHouse: any = [];
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  private userSubscription!: Subscription;
+  private houseSubscription!: Subscription;
+
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService,
+    private houseService: HouseService
+  ) {
     this.genders = [
       { label: 'Male', value: 'male' },
       { label: 'Female', value: 'female' },
@@ -71,17 +79,17 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.userProfileForm = this.fb.group({
-      firstname: ['wffq', [lettersOnlyValidator()]],
-      lastname: ['fefew'],
-      email: [{ value: 'ef', disabled: true }, [Validators.email]],
-      gender: ['Male'],
-      number: ['5698656569', Validators.required],
+      firstname: ['', [lettersOnlyValidator()]],
+      lastname: [''],
+      email: [{ value: '', disabled: true }, [Validators.email]],
+      gender: [''],
+      number: ['', Validators.required],
       dob: ['', Validators.required],
-      passcode: [{ value: '123456', disabled: true }],
-      roomno: [{ value: 'dwd', disabled: true }],
-      wingname: [{ value: 'wdw', disabled: true }],
-      societyname: [{ value: 'dwdw', disabled: true }],
-      societyaddress: [{ value: 'dwdwdwdwdw', disabled: true }],
+      passcode: [{ value: '', disabled: true }],
+      roomno: [{ value: '', disabled: true }],
+      wingname: [{ value: '', disabled: true }],
+      societyname: [{ value: '', disabled: true }],
+      societyaddress: [{ value: '', disabled: true }],
     });
 
     // Subscribe to user data and populate the form

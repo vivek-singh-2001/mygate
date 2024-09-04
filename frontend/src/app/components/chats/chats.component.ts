@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserChatComponent } from './user-chat/user-chat.component';
-import { ChatService } from './user-chat/chat.service';
+import { ChatService } from '../../services/chats/chat.service';
 import { UserService } from '../../services/user/user.service';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chats',
@@ -12,35 +13,39 @@ import { CommonModule } from '@angular/common';
   templateUrl: './chats.component.html',
   styleUrl: './chats.component.css',
 })
-export class ChatsComponent  {
+export class ChatsComponent implements OnInit {
   messages: { text: string; isSender: boolean }[] = [];
   newMessage: string = '';
-  selectedUser: any = null; // Adjust type according to your user model
+  selectedUser: any = null;
   roomId: string = '';
   currentUserId: number = 0;
+  private historySubscription!: Subscription;
+  private userSubscription!: Subscription;
 
   constructor(
     private ChatService: ChatService,
+    private userService: UserService
   ) {}
 
-
-  onUserSelected(user: any) {
-    this.selectedUser = user;
-    this.roomId = `${user.id}-${this.currentUserId}`; // Create a unique room ID
-    this.messages = []; // Clear previous messages or fetch messages for the selected user
-    // Fetch chat history from the backend
-    this.ChatService.getChatHistory(this.currentUserId, user.id).subscribe({
-      next: (response: any) => {
-        this.messages = response.chats.map((chat: any) => ({
-          text: chat.message,
-          isSender: chat.senderId === this.currentUserId,
-        }));
+  ngOnInit(): void {
+    this.userSubscription = this.userService.getUserData().subscribe({
+      next: (userData) => {
+        this.currentUserId = userData.id;
       },
       error: (error) => {
-        console.error('Failed to fetch chat history', error);
+        console.error('Failed to fetch user data', error);
+      },
+      complete: () => {
+        if (this.userSubscription) {
+          this.userSubscription.unsubscribe();
+        }
       },
     });
-
-    this.ChatService.joinRoom(`${user.id}`); // Join the chat room for the selected user
+  }
+  onUserSelected(user: any) {
+    this.selectedUser = user;
+    this.roomId = `${user.id}-${this.currentUserId}`;
+    this.messages = [];
+    this.ChatService.joinRoom(`${user.id}`);
   }
 }

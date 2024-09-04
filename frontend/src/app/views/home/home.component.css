@@ -7,17 +7,22 @@
   position: sticky;
   top:0;
   z-index: 1000;
+  min-height: 10vh;
+  background-color: var(--gray-700);
 }
 .content-wrapper {
   display: flex;
   flex: 1;
   overflow: hidden;
   min-width: 100%;
-  /* padding-top: 80px; */
-
+  min-height: 90vh;
+  max-height: 90vh;
+  /* overflow-y: auto; */
 }
+
+
+
 .content-shifted {
-  /* margin-left: 10px; */
   transition: margin-left 0.3s;
   max-width: 100%;
 }

@@ -10,6 +10,8 @@ import { MenuModule } from 'primeng/menu';
 import { AuthService } from '../../services/auth/auth.service';
 import { UserService } from '../../services/user/user.service';
 import { Router } from '@angular/router';
+import { HouseService } from '../../services/houses/houseService';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navigation',
@@ -27,20 +29,23 @@ import { Router } from '@angular/router';
   styleUrl: './navigation.component.css',
 })
 export class NavigationComponent implements OnInit {
-  items: MenuItem[] | undefined;
+  items: MenuItem[] = [];
   item: MenuItem[] | undefined;
   user: any;
-  userSocietyId: any;
+  houses: any[] = [];
+  selectedHouse: string = '';
+  private usersubscription!: Subscription;
+  private housesubscription!: Subscription;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private router: Router
+    private router: Router,
+    private houseService: HouseService
   ) {}
 
   ngOnInit(): void {
     this.loadUserData();
-    this.initializeMenu();
   }
 
   private initializeMenu(): void {
@@ -50,8 +55,13 @@ export class NavigationComponent implements OnInit {
         icon: 'pi pi-home',
       },
       {
-        label: 'Features',
-        icon: 'pi pi-star',
+        label: this.selectedHouse,
+        icon: 'pi pi-home',
+        items: this.houses.map((house) => ({
+          label: house.house_no,
+          icon: 'pi pi-home',
+          command: () => this.goToHouse(house),
+        })),
       },
       {
         label: 'Projects',
@@ -83,29 +93,31 @@ export class NavigationComponent implements OnInit {
   }
 
   private loadUserData(): void {
-    if(this.authService.isLoggedIn()){
-       this.userService.getUserData().subscribe({
-         next: (data) => {
-           // console.log(data);
-        
+    this.usersubscription = this.userService.getUserData().subscribe({
+      next: (data) => {  
         this.user = data;
-           this.userSocietyId = data.Houses[0]['Wing']['SocietyId'];
-         },
-         error: (error) => {
-           console.error('Failed to fetch user details', error);
-         },
-       });
-    } else{
-      console.log('user is not login');
-      
-    }
-   
+        this.houses = data.Houses;
+        this.houseService.selectedHouse$.subscribe({
+          next: (house) => {
+            this.selectedHouse = house.house_no;
+          },
+        });
+        this.initializeMenu();
+      },
+      error: (error) => {
+        console.error('Failed to fetch user details', error);
+      },
+      complete: () => {
+        if (this.usersubscription) {
+          this.usersubscription.unsubscribe();
+        }
+      },
+    });
   }
 
   goToProfile() {
     console.log('Navigate to profile');
     this.router.navigate(['/home/profile']);
-
   }
 
   goToSettings() {
@@ -114,5 +126,12 @@ export class NavigationComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+  }
+
+  goToHouse(house: any) {
+    this.houseService.setSelectedHouse(house);
+    this.selectedHouse = house.house_no;
+    this.initializeMenu();
+    
   }
 }

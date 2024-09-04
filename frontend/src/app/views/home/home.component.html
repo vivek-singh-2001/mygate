@@ -3,9 +3,12 @@
   <app-navigation></app-navigation>
   </header>
   <div class="content-wrapper">
-    <app-side-nav
+    <div class="side-nav">
+      <app-side-nav
       (expansionChanged)="onSidebarExpansionChanged($event)"
     ></app-side-nav>
+    </div>
+    
     <div class="main-display" [ngClass]="{ 'content-shifted': isSidebarExpanded }">
       <router-outlet> </router-outlet>
     </div>
