@@ -22,9 +22,10 @@ exports.getUserById = asyncErrorHandler(async (req, res, next) => {
 exports.updateUser = asyncErrorHandler(async (req, res, next) => {
   const userId = req.params.id;
   const updateData = req.body;
+  console.log(updateData);
   try {
     const updatedUser = await userService.updateUser(userId, updateData);
-    res.status(200).json({ status: "success", data: { user: updatedUser } });
+    res.status(200).json({ status: "success", data:  updatedUser  });
   } catch (error) {
     next(error);
   }

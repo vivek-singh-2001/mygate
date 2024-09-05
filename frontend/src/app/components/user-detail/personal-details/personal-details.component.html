@@ -10,9 +10,9 @@
           [preview]="true"
         />
       </div>
-      <div class="card flex">
+      <div class="card flex pr-8">
         <div
-          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2"
+          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 pr-8"
         >
           <p><b>Name</b></p>
           <p><b>Email</b></p>
@@ -32,7 +32,7 @@
       </div>
       <div class="card flex">
         <div
-          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-8"
+          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 "
         >
           <p><b>Passcode</b></p>
           <p><b>Role</b></p>
@@ -41,7 +41,7 @@
           <p><b>Wing Admin</b></p>
         </div>
         <div
-          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
+          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml -6"
         >
           <p>{{ userDetails.passcode }}</p>
           <p>{{ userDetails.role }}</p>
@@ -52,13 +52,16 @@
       </div>
     </div>
     <p-divider type="solid"></p-divider>
+    <div class="card">
+      <p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{'height': '6px'}" />
+  </div>
     <form
       [formGroup]="userProfileForm!"
       class="bottom-profile flex flex-column mt-6"
       (ngSubmit)="onUserFormSubmit()"
     >
       <div class="user-form flex flex-wrap w-full p-4">
-        <div class="left-form flex flex-column flex-1">
+        <div class="left-form flex flex-column flex-1 ">
           <div class="field flex justify-content-between">
             <label for="firstname" class="left-label flex align-items-center"
               ><b>First Name</b></label
@@ -94,13 +97,13 @@
             />
           </div>
           <div class="field flex justify-content-between">
-            <label for="dob" class="left-label flex align-items-center"
+            <label for="dateofbirth" class="left-label flex align-items-center"
               ><b>Date of Birth</b></label
             >
             <p-calendar
               [iconDisplay]="'input'"
               [showIcon]="true"
-              formControlName="dob"
+              formControlName="dateofbirth"
               inputId="icondisplay"
               [style]="{ width: '100%' }"
               [maxDate]="today"
@@ -143,7 +146,7 @@
             />
           </div>
         </div>
-        <div class="right-form flex flex-wrap flex-column flex-1">
+        <div class="right-form flex flex-wrap flex-column flex-1 ">
           <div class="field flex justify-content-between">
             <label for="lastname" class="right-label flex align-items-center"
               ><b>Last Name</b></label

@@ -86,7 +86,7 @@ export class UserDetailComponent implements OnInit {
       email: [{ value: '', disabled: true }, [Validators.email]],
       gender: [''],
       number: ['', Validators.required],
-      dob: ['', Validators.required],
+      dateofbirth: ['', Validators.required],
       passcode: [{ value: '', disabled: true }],
       roomno: [{ value: '', disabled: true }],
       wingname: [{ value: '', disabled: true }],
@@ -107,7 +107,7 @@ export class UserDetailComponent implements OnInit {
               email: userData.email || '',
               gender: userData.gender || 'male',
               number: userData.number || '',
-              dob: userData.dateofbirth ? new Date(userData.dateofbirth) : '',
+              dateofbirth: userData.dateofbirth ? new Date(userData.dateofbirth) : '',
               passcode: userData.passcode || '',
             });
 

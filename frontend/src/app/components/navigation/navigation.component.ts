@@ -96,10 +96,10 @@ export class NavigationComponent implements OnInit {
     this.usersubscription = this.userService.getUserData().subscribe({
       next: (data) => {  
         this.user = data;
-        this.houses = data.Houses;
+        this.houses = data.Houses || [];
         this.houseService.selectedHouse$.subscribe({
           next: (house) => {
-            this.selectedHouse = house.house_no;
+            this.selectedHouse = house.house_no || 'Default House';
           },
         });
         this.initializeMenu();

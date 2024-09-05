@@ -52,7 +52,6 @@ export class UserListComponent implements OnInit {
 
   }
   selectUser(user: any) {
-    console.log('Selected user:from the user-list', user);
     this.userSelected.emit(user);
   }
 }
