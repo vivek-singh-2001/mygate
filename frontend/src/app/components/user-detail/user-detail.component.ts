@@ -12,9 +12,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import {
-  FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
@@ -24,8 +22,8 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../services/user/user.service';
 import { HouseService } from '../../services/houses/houseService';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
-import { PersonalDetailsComponent } from "./personal-details/personal-details.component";
 import { FamilyDetailsComponent } from "./family-details/family-details.component";
+import { PersonalDetailsComponent } from './personal-details/personal-details.component';
 
 interface Gender {
   label: string;

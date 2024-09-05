@@ -6,6 +6,9 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('./config/passport');
+const path = require('path');
+
+
 
 // import routes here 
 const user_route = require('./features/users/userApis');
@@ -20,6 +23,18 @@ const app = express();
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
+
+// Serve static files from the 'dist' directory (or wherever Angular builds your files)
+app.use('/static', express.static(path.join(__dirname, 'dist'), {
+    maxAge: '1y',  // Cache static assets for 1 year
+    setHeaders: function (res, path) {
+        if (path.endsWith('.html')) {
+            res.setHeader('Cache-Control', 'no-cache');
+        } else {
+            res.setHeader('Cache-Control', 'public, max-age=31536000');
+        }
+    }
+}));
 
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));
 app.use(express.json());

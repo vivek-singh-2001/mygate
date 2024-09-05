@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter,Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SidebarModule } from 'primeng/sidebar';
 import { CommonModule } from '@angular/common';
@@ -7,8 +7,6 @@ import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-
 
 @Component({
   selector: 'app-side-nav',
@@ -29,13 +27,28 @@ export class SideNavComponent implements OnInit {
   isExpanded: boolean = false;
   items!: MenuItem[string];
 
-  constructor(private router: Router,private snackBar: MatSnackBar){}
-
+  constructor(private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.items = [
-      { label: 'Dashboard', icon: 'pi pi-home', iconSize: 'large', command: () => this.navigateTo('/home/dashboard') },
-      { label: 'Messages', icon: 'pi pi-envelope', iconSize: 'large', command: () => this.navigateTo('/home/messages') },
+      {
+        label: 'Dashboard',
+        icon: 'pi pi-home',
+        iconSize: 'large',
+        command: () => this.navigateTo('/home/dashboard'),
+      },
+      {
+        label: 'Messages',
+        icon: 'pi pi-envelope',
+        iconSize: 'large',
+        command: () => this.navigateTo('/home/messages'),
+      },
+      {
+        label: 'Apartments',
+        icon: 'pi pi-warehouse',
+        iconSize: 'large',
+        command: () => this.navigateTo('/home/apartments'),
+      },
     ];
   }
 
