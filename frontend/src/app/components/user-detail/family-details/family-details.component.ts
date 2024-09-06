@@ -28,6 +28,7 @@ import { ToastModule } from 'primeng/toast';
 })
 export class FamilyDetailsComponent {
   @Input() familyData?: any[];
+  @Input() userDetails: any;
   @Output() addFamilyMember = new EventEmitter<any>();
 
   familyMemberForm: FormGroup;

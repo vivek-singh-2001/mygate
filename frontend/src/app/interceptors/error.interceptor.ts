@@ -32,7 +32,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           } else if (error.status === 400) {
             errorMessage = `Bad Request: ${error.message}`;
           } else if (error.status === 403) {
-            errorMessage = `Forbidden: ${error.message}`;
+            errorMessage = `forbidden: you are not the head of the family `
           } else if (error.status === 404) {
             errorMessage = `Not Found: ${error.message}`;
           } else if (error.status === 500) {

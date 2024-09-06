@@ -89,7 +89,7 @@ export class UserDetailComponent implements OnInit {
       email: [{ value: '', disabled: true }, [Validators.email]],
       gender: [''],
       number: ['', Validators.required],
-      dob: ['', Validators.required],
+      dateofbirth: ['', Validators.required],
       passcode: [{ value: '', disabled: true }],
       roomno: [{ value: '', disabled: true }],
       wingname: [{ value: '', disabled: true }],
@@ -110,7 +110,7 @@ export class UserDetailComponent implements OnInit {
               email: userData.email || '',
               gender: userData.gender || 'male',
               number: userData.number || '',
-              dob: userData.dateofbirth ? new Date(userData.dateofbirth) : '',
+              dateofbirth: userData.dateofbirth ? new Date(userData.dateofbirth) : '',
               passcode: userData.passcode || '',
             });
 
@@ -126,6 +126,7 @@ export class UserDetailComponent implements OnInit {
         next: (house) => {
           this.selectedHouse = house;
           if (house) {
+            this.userDetails.house = house
             this.userProfileForm.patchValue({
               roomno: house.house_no || '',
               wingname: house.Wing?.name || '',
@@ -148,7 +149,7 @@ export class UserDetailComponent implements OnInit {
       });
 
     this.userService.getFamilyMembers().subscribe((response) => {
-      this.familyData = response.users;
+      this.familyData = response.users.filter((data:any)=> data.id !==this.userDetails.id)
     });
   }
 

@@ -88,6 +88,23 @@ export class UserService {
     );
   }
 
+
+   // Inside userService.ts
+
+updateUser(userId: number, userData: any): Observable<any> {
+  return this.http.patch(`${this.userApiUrl}/updateUser/${userId}`, userData).pipe(
+    tap(response => {
+      console.log('User updated successfully:', response);
+    }),
+    catchError((error) => {
+      console.error('Failed to update user', error);
+      return of(null); // Handle error
+    })
+  );
+}
+
+
+
   addFamilyMember(member: any): Observable<any> {
     return this.http.post(`${this.userApiUrl}/addFamilyMember`, member)
   }
