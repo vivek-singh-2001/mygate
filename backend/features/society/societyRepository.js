@@ -24,3 +24,15 @@ exports.findUsersBySocietyAndWing = (societyId, wingId) => {
   });
 };
 
+exports.findSocietyAdminsDetails = (societyId) => {
+  const query = `
+        SELECT * FROM GetAdminsAndWingAdminsBySociety($1);
+    `;
+  const values = [societyId];
+
+  return db.connectDB.query(query, {
+    bind: values,
+    type: db.Sequelize.QueryTypes.SELECT,
+  });
+};
+

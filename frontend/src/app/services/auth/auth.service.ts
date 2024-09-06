@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, tap, switchMap, Subscription, map, finalize, throwError, catchError} from 'rxjs';
+import { Observable, tap, switchMap, Subscription, map, throwError, catchError} from 'rxjs';
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
 
@@ -38,7 +38,7 @@ export class AuthService {
         this.houseService.setHouses(user.data.user.Houses);
         return user;
       }),
-      tap(() => {
+      tap((user) => {
         // Navigate only after a successful login
         this.router.navigate(['/home']);
       }),
@@ -50,11 +50,6 @@ export class AuthService {
       })
     );
   }
-
-  
-  
-  
-  
 
   loginWithGoogle(): void {
     window.location.href = `${this.apiUrl}/google`;

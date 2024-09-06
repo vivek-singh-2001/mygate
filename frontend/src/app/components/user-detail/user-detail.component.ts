@@ -24,6 +24,8 @@ import { HouseService } from '../../services/houses/houseService';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { FamilyDetailsComponent } from "./family-details/family-details.component";
 import { PersonalDetailsComponent } from './personal-details/personal-details.component';
+import { ProgressBarModule } from 'primeng/progressbar';
+
 
 interface Gender {
   label: string;
@@ -49,7 +51,9 @@ interface Gender {
     ReactiveFormsModule,
     CommonModule,
     PersonalDetailsComponent,
-    FamilyDetailsComponent
+    FamilyDetailsComponent,
+    ProgressBarModule
+    
 ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.css',
@@ -61,9 +65,9 @@ export class UserDetailComponent implements OnInit {
   userProfileForm!: FormGroup;
   userDetails: any = {};
   selectedHouse: any = [];
+  isLoading: boolean = true;
 
   private userSubscription!: Subscription;
-  private houseSubscription!: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -108,7 +112,6 @@ export class UserDetailComponent implements OnInit {
               dateofbirth: userData.dateofbirth ? new Date(userData.dateofbirth) : '',
               passcode: userData.passcode || '',
             });
-
             // Wait for house details to be set and then subscribe to selectedHouse$
             return this.houseService.houses$.pipe(
               switchMap(() => this.houseService.selectedHouse$)
@@ -132,9 +135,11 @@ export class UserDetailComponent implements OnInit {
           } else {
             console.log('Selected house is null or undefined');
           }
+          this.isLoading = false;
         },
         error: (err) => {
           console.error('Error fetching house details', err);
+          this.isLoading = false;
         },
         complete: () => {
           if (this.userSubscription) {
@@ -142,10 +147,6 @@ export class UserDetailComponent implements OnInit {
           }
         },
       });
-
-    this.userService.getFamilyMembers().subscribe((response) => {
-      this.familyData = response.users.filter((data:any)=> data.id !==this.userDetails.id)
-    });
   }
 
   getAddress(obj: any) {

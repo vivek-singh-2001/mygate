@@ -35,7 +35,7 @@ export class NavigationComponent implements OnInit {
   houses: any[] = [];
   selectedHouse: string = '';
   private usersubscription!: Subscription;
-  private housesubscription!: Subscription;
+
 
   constructor(
     private authService: AuthService,
