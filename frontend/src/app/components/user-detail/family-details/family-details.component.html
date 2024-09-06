@@ -1,4 +1,46 @@
+<p-toast></p-toast>
+
 <div class="main-container">
+  <div class="button-container">
+    <p-button class="btn" label="Add Family Member" icon="pi pi-plus" (click)="toggleForm()" />
+  </div>
+
+  <p-dialog draggable="false" header="Add Family Member" [(visible)]="showForm" [modal]="true" [style]="{width: '500px'}" >
+    <form [formGroup]="familyMemberForm" (ngSubmit)="onSubmit()">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="firstname">First Name</label>
+          <input id="firstname" type="text" formControlName="firstname" pInputText />
+        </div>
+        <div class="p-field">
+          <label for="lastname">Last Name</label>
+          <input id="lastname" type="text" formControlName="lastname" pInputText />
+        </div>
+        <div class="p-field">
+          <label for="email">Email</label>
+          <input id="email" type="text" formControlName="email" pInputText />
+        </div>
+        <!-- <div class="p-field">
+          <label for="gender">Gender</label>
+          <p-dropdown [options]="genderOptions" formControlName="gender" optionLabel="label"></p-dropdown>
+        </div> -->
+        <div class="p-field">
+          <label for="number">Contact Number</label>
+          <input id="number" type="text" formControlName="number" pInputText />
+        </div>
+        <div class="p-field">
+          <label for="dateofbirth">Date of Birth</label>
+          <p-calendar formControlName="dateofbirth" dateFormat="mm/dd/yy" appendTo="body" />
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <p-button label="Cancel" icon="pi pi-times" (click)="toggleForm()" class="p-button-text"></p-button>
+        <p-button label="Submit" icon="pi pi-check" type="submit" class="p-button-text"></p-button>
+      </div>
+    </form>
+  </p-dialog>
+
+
   @if (familyData?.length) { @for (member of familyData; track member.id) {
   <div class="top-profile flex flex-wrap mb-6">
     <div class="card flex-initial">

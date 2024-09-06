@@ -34,7 +34,7 @@ import { CommonModule } from '@angular/common';
     CommonModule
   ],
   templateUrl: './personal-details.component.html',
-  styleUrls: ['../user-detail.component.css'],
+  styleUrls: ['../user-detail.component.css', './personal-details.component.css'],
 })
 export class PersonalDetailsComponent {
   @Input() userDetails: any;

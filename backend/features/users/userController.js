@@ -1,6 +1,6 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const userService = require("./userService");
-const util = require('util');
+const util = require("util");
 const jwt = require("jsonwebtoken");
 
 exports.getUserById = asyncErrorHandler(async (req, res, next) => {
@@ -10,7 +10,7 @@ exports.getUserById = asyncErrorHandler(async (req, res, next) => {
     process.env.JWT_SECRET
   );
 
-  const id = decodedToken.id
+  const id = decodedToken.id;
   try {
     const user = await userService.getUserById(id);
     res.status(200).json({ status: "success", data: { user } });
@@ -42,19 +42,15 @@ exports.getFamilyMembers = asyncErrorHandler(async (req, res, next) => {
 
 exports.addFamilyMember = asyncErrorHandler(async (req, res, next) => {
   const { firstname, lastname, number, email, dateofbirth, houseId } = req.body;
-  try {
-    const newUser = await userService.addFamilyMember({
-      firstname,
-      lastname,
-      number,
-      email,
-      dateofbirth,
-      houseId,
-    });
-    res.status(201).json({ status: "success", data: { user: newUser } });
-  } catch (error) {
-    next(error);
-  }
+  const newUser = await userService.addFamilyMember({
+    firstname,
+    lastname,
+    number,
+    email,
+    dateofbirth,
+    houseId,
+  });
+  res.status(201).json({ status: "success", data: { user: newUser } });
 });
 
 exports.updatePassword = asyncErrorHandler(async (req, res, next) => {

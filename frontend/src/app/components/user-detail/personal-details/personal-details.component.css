@@ -1,0 +1,16 @@
+.bottom-profile {
+  background-color: var(--offwhite);
+  box-shadow: 0 4px 13px #e1e1e1;
+  border: none;
+  border-radius: 7px;
+  align-items: center;
+}
+
+.left-label {
+  min-width: 220px;
+}
+
+.right-label {
+  min-width: 150px;
+  margin-left: 70px;
+}

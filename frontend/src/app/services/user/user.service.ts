@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable,  BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private userApiUrl = 'http://localhost:7500/api/v1/users';  
+  private userApiUrl = 'http://localhost:7500/api/v1/users';
   private societyApiUrl = 'http://localhost:7500/api/v1/society';
 
   // BehaviorSubject to hold the current user data
@@ -86,5 +86,9 @@ export class UserService {
         return of(null);
       })
     );
+  }
+
+  addFamilyMember(member: any): Observable<any> {
+    return this.http.post(`${this.userApiUrl}/addFamilyMember`, member)
   }
 }

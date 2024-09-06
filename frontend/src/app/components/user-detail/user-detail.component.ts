@@ -26,6 +26,7 @@ import { HouseService } from '../../services/houses/houseService';
 import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { PersonalDetailsComponent } from "./personal-details/personal-details.component";
 import { FamilyDetailsComponent } from "./family-details/family-details.component";
+import { MessageService } from 'primeng/api';
 
 interface Gender {
   label: string;
@@ -55,6 +56,7 @@ interface Gender {
 ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.css',
+  providers: [MessageService]
 })
 export class UserDetailComponent implements OnInit {
   today: Date = new Date();
@@ -70,7 +72,8 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private houseService: HouseService
+    private houseService: HouseService,
+    private messageService: MessageService 
   ) {
     this.genders = [
       { label: 'Male', value: 'male' },
@@ -152,5 +155,28 @@ export class UserDetailComponent implements OnInit {
   getAddress(obj: any) {
     const { street, city, state, zip } = obj;
     return `${street}, ${city}, ${state}, ${zip}`;
+  }
+
+  addFamilyMember(member: any) {
+    member.houseId = this.selectedHouse.id;
+    this.userService.addFamilyMember(member).subscribe({
+      next: (response) => {
+        console.log("ress",response);
+        this.familyData.push(response.data.user);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Family member added successfully!',
+        });
+      },
+      error: (error) => {
+        console.log('Error adding family member', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Could not add family member. Please try again.'
+        })
+      }
+    })
   }
 }
