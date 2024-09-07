@@ -9,7 +9,7 @@ exports.getUserById = (id) => {
     },
     include: [
       {
-        model: House,
+        model: House, 
         as: "Houses",
         include: [
           {

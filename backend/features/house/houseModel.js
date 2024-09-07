@@ -15,6 +15,7 @@ module.exports = (connectDB, DataTypes) => {
     },
     {
       timestamps: true,
+      tableName:'houses'
     }
   );
   return House;

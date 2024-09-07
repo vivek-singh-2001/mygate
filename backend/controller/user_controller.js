@@ -54,10 +54,10 @@ exports.updateUser = asyncErrorHandler(async (req, res, next) => {
 
 
  //  Allowed fields for update
-    const allowedUpdateFields = ['firstname', 'lastname', 'email', 'number', 'dateofbirth'];
+    const allowedUpdateFields = ['firstname', 'lastname', 'email', 'number', 'dateofbirth', 'isOwner'];
     
  // Disallowed fields for update
-    const disallowedUpdateFields = ['isAdmin', 'isWingAdmin', 'isMember', 'createdAt', 'updatedAt','isowner'];
+    const disallowedUpdateFields = [  , 'createdAt', 'updatedAt'];
 
   const userId = req.params.id;
   const updateData = req.body;

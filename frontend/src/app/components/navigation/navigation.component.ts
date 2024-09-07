@@ -127,11 +127,10 @@ export class NavigationComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
-
   goToHouse(house: any) {
     this.houseService.setSelectedHouse(house);
     this.selectedHouse = house.house_no;
     this.initializeMenu();
-    
+    console.log("from the house navigation",house);
   }
 }

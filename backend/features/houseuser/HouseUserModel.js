@@ -8,6 +8,9 @@ module.exports = (connectDB,DataTypes)=>{
                 autoIncrement: true,
                 allowNull: false
             }
+        },{
+            timestamps: true,
+            tableName: 'houseUsers' 
         }
     )
 return HouseUser

@@ -24,6 +24,8 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
 
+    
+
     this.subscription = this.houseService.selectedHouse$.pipe(
       switchMap(selectedHouse => {
         if (selectedHouse) {
@@ -36,9 +38,7 @@ export class UserListComponent implements OnInit {
       })
     ).subscribe({
       next: (societyUsers: any) => {
-        this.SocietyUsers = societyUsers.data.users.filter(
-          (user: any) => user.isowner === true
-        );
+        this.SocietyUsers = societyUsers.data.users;
       },
       error: (error) => {
         console.error('Failed to fetch society users', error);

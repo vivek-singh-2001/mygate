@@ -31,19 +31,14 @@ export class AppInitializationService {
       return this.isInitialized$.asObservable();
     }
   }
-
   private fetchUserData(): Observable<boolean> {
     return this.userService.getCurrentUser().pipe(
       tap((user) => {
-        console.log('from initializer user', user );
-
         this.houseService.setHouses(user.data.user.Houses);
-        console.log('from initializer', user.data.user.Houses );
       }),
       map(() => true)
     );
   }
-
   get isInitialized(): Observable<boolean> {
     return this.isInitialized$.asObservable();
   }

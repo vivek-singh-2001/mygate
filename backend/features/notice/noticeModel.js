@@ -27,6 +27,7 @@ module.exports = (connectDB, DataTypes) => {
     },
     {
       timestamps: true,
+      tableName:'notifications'
     }
   );
   return Notice

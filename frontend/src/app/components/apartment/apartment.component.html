@@ -1,27 +1,94 @@
 <div class="page-container">
+  @if(societyData){ @for( user of societyData; track user.id){
   <div class="card flex flex-wrap mb-6">
     <div class="flex flex-wrap justify-content-center align-item-center p-4">
-        <div class="w-full h-full p-6 bg-cyan-600 align-item-center "><h4>Wing-A</h4></div>
+      <div class="w-full h-full p-6 bg-cyan-600 align-item-center">
+        <h4>{{ user.name }}</h4>
+      </div>
     </div>
 
-    <div class="flex-1  flex justify-content-between">
-        <div class="bg-red-300">
-            <p>society society</p>
-            <p>society society</p>
-            <p>society society</p>
-            <p>society society</p>
-            <p>society society</p>
-            <p>society society</p>
-        </div>
-        <div class="bg-blue-300">
-            <p>society society</p>
-            <p>society society</p>
-            <p>society society</p>
-            <p>society society</p>
-            <p>society society</p>
-            <p>society society</p>
-        </div>
+    <div class="flex-1 flex justify-content-between">
+      <div class="bg-red-300">
+        <p>society society</p>
+        <p>society society</p>
+        <p>society society</p>
+        <p>society society</p>
+        <p>society society</p>
+        <p>society society</p>
+      </div>
+      <div class="bg-blue-300">
+        <p>society society</p>
+        <p>society society</p>
+        <p>society society</p>
+        <p>society society</p>
+        <p>society society</p>
+        <p>society society</p>
+      </div>
     </div>
     <div class="flex-1">1</div>
   </div>
+
+
+  <div class="top-profile flex flex-wrap mb-6">
+    <div class="card flex-initial">
+      <p-image
+        class="flex align-items-center justify-content-center p-4"
+        src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg"
+        alt="Image"
+        width="auto"
+        height="150"
+        [preview]="true"
+      />
+    </div>
+    <div class="card flex pr-8">
+      <div
+        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 pr-8"
+      >
+        <p><b>Name</b></p>
+        <p><b>Email</b></p>
+        <p><b>Phone</b></p>
+        <p><b>Gender</b></p>
+        <p><b>Date of Birth</b></p>
+      </div>
+      <div
+        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
+      >
+      <p>society society</p>
+      <p>society society</p>
+      <p>society society</p>
+      <p>society society</p>
+      <p>society society</p>
+      <p>society society</p>
+     
+      </div>
+    </div>
+    <div class="card flex">
+      <div
+        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 "
+      >
+        <p><b>Passcode</b></p>
+        <p><b>Role</b></p>
+        <p><b>Room No</b></p>
+        <p><b>Wing name</b></p>
+        <p><b>Wing Admin</b></p>
+      </div>
+      <div
+        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml -6"
+      >
+      <p>society society</p>
+      <p>society society</p>
+      <p>society society</p>
+      <p>society society</p>
+      <p>society society</p>
+      <p>society society</p>
+        
+      </div>
+    </div>
+  </div>
+
+  } } @else(){
+  <div class="flex w-full h-full justify-content-center align-items-center">
+    wait data is loading...
+  </div>
+  }
 </div>

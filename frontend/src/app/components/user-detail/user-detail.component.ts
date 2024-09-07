@@ -25,6 +25,7 @@ import { EMPTY, Subscription, switchMap } from 'rxjs';
 import { FamilyDetailsComponent } from "./family-details/family-details.component";
 import { PersonalDetailsComponent } from './personal-details/personal-details.component';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { WingService } from '../../services/wings/wing.service';
 
 
 interface Gender {
@@ -72,7 +73,8 @@ export class UserDetailComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private houseService: HouseService
+    private houseService: HouseService,
+    private wingService:WingService
   ) {
     this.genders = [
       { label: 'Male', value: 'male' },
@@ -124,6 +126,7 @@ export class UserDetailComponent implements OnInit {
         next: (house) => {
           this.selectedHouse = house;
           if (house) {
+            console.log("house from userdetails", house);
             this.userDetails.house = house
             this.userProfileForm.patchValue({
               roomno: house.house_no || '',
@@ -132,6 +135,9 @@ export class UserDetailComponent implements OnInit {
               societyaddress:
                 this.getAddress(house.Wing?.Society?.address) || '',
             });
+
+             // Fetch wing details here
+             this.fetchWingDetails(house.Wing?.id);
           } else {
             console.log('Selected house is null or undefined');
           }
@@ -147,6 +153,22 @@ export class UserDetailComponent implements OnInit {
           }
         },
       });
+  }
+
+  // Fetch wing details after getting house info
+  fetchWingDetails(wingId: number) {
+    if (wingId) {
+      this.wingService.fetchWingDetails(wingId).subscribe({
+        next: (wingDetails) => {
+          console.log('Fetched wing details:', wingDetails);
+          // Add wing details to userDetails
+          this.userDetails.wingDetails = wingDetails?.data?.wingDetails?.wingAdminDetails || {};
+        },
+        error: (error) => {
+          console.error('Error fetching wing details:', error);
+        }
+      });
+    }
   }
 
   getAddress(obj: any) {

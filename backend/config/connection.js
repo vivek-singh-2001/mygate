@@ -45,6 +45,16 @@ db.House.belongsTo(db.Wing);
 db.Wing.hasMany(db.Notice);
 db.Notice.belongsTo(db.Wing);
 
+// =============wing-user (: One to many)============================
+
+db.User.hasMany(db.Wing, { foreignKey: 'wingAdminId' });
+db.Wing.belongsTo(db.User, { foreignKey: 'wingAdminId' });
+
+
+// =============society-user (: One to many)============================
+db.User.hasMany(db.Society, { foreignKey: 'societyAdminId' });
+db.Society.belongsTo(db.User, { foreignKey: 'societyAdminId' });
+
 
 // =============user-notice (: One to many)============================
 
@@ -56,8 +66,6 @@ db.Notice.belongsTo(db.User);
 
 db.User.hasMany(db.Blog);
 db.Blog.belongsTo(db.User);
-
-
 
 // ==============house-user (: Many to many)=========================
 

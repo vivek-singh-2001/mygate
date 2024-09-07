@@ -1,4 +1,6 @@
-const { db } = require('../../config/connection');
+const { IncomingClientScope } = require("twilio/lib/jwt/ClientCapability");
+const { db } = require("../../config/connection");
+const { User, HouseUser, House, Wing, Society } = db;
 
 exports.findUsersBySociety = (societyId) => {
   const query = `
@@ -24,15 +26,16 @@ exports.findUsersBySocietyAndWing = (societyId, wingId) => {
   });
 };
 
-exports.findSocietyAdminsDetails = (societyId) => {
-  const query = `
-        SELECT * FROM GetAdminsAndWingAdminsBySociety($1);
-    `;
-  const values = [societyId];
-
-  return db.connectDB.query(query, {
-    bind: values,
-    type: db.Sequelize.QueryTypes.SELECT,
+exports.findSocietyAdminsDetails = async (societyId) => {
+  return await Wing.findAll({
+    where: { SocietyId: societyId },
+    attribute: [],
+    include: [
+      {
+        model: User,
+        as: "User",
+        attributes: ["firstname", "lastname", "email", "number"],
+      },
+    ],
   });
 };
-

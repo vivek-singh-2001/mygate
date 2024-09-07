@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit,ChangeDetectorRef } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
@@ -14,8 +14,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user/user.service';
-import { finalize, switchMap } from 'rxjs';
+import { BehaviorSubject, finalize, switchMap } from 'rxjs';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { WingService } from '../../../services/wings/wing.service';
 
 @Component({
   selector: 'app-personal-details',
@@ -40,39 +41,27 @@ import { ProgressBarModule } from 'primeng/progressbar';
   templateUrl: './personal-details.component.html',
   styleUrls: ['../user-detail.component.css'],
 })
-export class PersonalDetailsComponent implements OnInit {
+export class PersonalDetailsComponent {
   @Input() userDetails: any;
   @Input() userProfileForm!: FormGroup;
   @Input() genders?: any[];
   @Input() today?: Date;
   isLoading: boolean = false;
+  wingDetailsSubject = new BehaviorSubject<any>(null);
 
-  constructor(private userService: UserService) {}
-
-  ngOnInit(): void {
-    // append the userId in the userprofileform
-  }
-  onUserFormSubmit() {
-    this.isLoading = true; // Set loading to true before starting the HTTP request
+  constructor(private userService: UserService ) {}
   
+  onUserFormSubmit() {
+    this.isLoading = true; 
     this.userService
       .updateUser(this.userDetails.id, this.userProfileForm.value)
       .pipe(
         switchMap(() => this.userService.getCurrentUser()),
         finalize(() => {
-          // Stop the loader when the request completes (whether success or error)
+         
           this.isLoading = false;
         })
       )
-      .subscribe({
-        next: (user) => {
-          // Handle successful response here
-          console.log('User data updated and fetched:', user);
-        },
-        error: (err) => {
-          // Handle error here
-          console.error('Error updating user:', err);
-        },
-      });
+      .subscribe()
   }
 }

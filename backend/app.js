@@ -13,6 +13,7 @@ const path = require('path');
 // import routes here 
 const user_route = require('./features/users/userApis');
 const society_route = require('./features/society/societyApis');
+const wing_route = require('./features/wing/wingApis');
 const auth_route = require('./features/authentication/authApi');
 const sms_route = require('./features/sms/smsApis')
 const chatRoutes = require('./features/chat/chatApi');
@@ -58,6 +59,7 @@ app.use(passport.session());
 // USE ROUTES HERE
 app.use('/api/v1/users', user_route);
 app.use('/api/v1/society', society_route);
+app.use('/api/v1/wing', wing_route);
 app.use('/api/v1/auth', auth_route);
 app.use('/api/v1/sms', sms_route);
 app.use('/api/v1/chats', chatRoutes);

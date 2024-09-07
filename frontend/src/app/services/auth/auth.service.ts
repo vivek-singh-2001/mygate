@@ -35,6 +35,8 @@ export class AuthService {
       }),
       map((user) => {
         // Set houses after getting the user
+        console.log("user after login", user);
+        
         this.houseService.setHouses(user.data.user.Houses);
         return user;
       }),

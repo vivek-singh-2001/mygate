@@ -1,4 +1,13 @@
 <div class="main-container">
+  <!-- Loading indicator -->
+  <ng-container *ngIf="isLoading; else profileContent">
+    <div class="card">
+      <p-progressBar mode="indeterminate" [style]="{ 'height': '6px' }"></p-progressBar>
+    </div>
+  </ng-container>
+
+  <!-- Profile content -->
+  <ng-template #profileContent>
     <div class="top-profile flex flex-wrap mb-6">
       <div class="card flex-initial">
         <p-image
@@ -47,14 +56,14 @@
           <p>{{ userDetails.role }}</p>
           <p>{{userDetails.house?.house_no}}</p>
           <p>{{userDetails.house?.Wing?.name}}</p>
-          <p>w-admin name</p>
+          <p>{{userDetails.wingDetails?.firstname}} {{userDetails.wingDetails?.lastname}}</p>
         </div>
       </div>
     </div>
     <p-divider type="solid"></p-divider>
     <div class="card">
       <p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{'height': '6px'}" />
-  </div>
+    </div>
     <form
       [formGroup]="userProfileForm!"
       class="bottom-profile flex flex-column mt-6"
@@ -224,5 +233,6 @@
         />
       </div>
     </form>
-  </div>
+  </ng-template>
+</div>
   

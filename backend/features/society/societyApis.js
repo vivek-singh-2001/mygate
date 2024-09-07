@@ -11,5 +11,5 @@ const { getUsersBySociety, getUsersBySocietyAndWing ,getSocietyAdminsDetails} = 
 // Define routes
 router.get("/:societyId", protect, getUsersBySociety);
 router.get("/:societyId/wing/:wingId", protect, getUsersBySocietyAndWing);
-router.get("/SocietyAdminsDetails/:societyId",protect,getSocietyAdminsDetails)
+router.get("/SocietyAdminsDetails/:societyId",getSocietyAdminsDetails);
 module.exports = router;

@@ -19,6 +19,7 @@ module.exports = (connectDB, DataTypes) => {
         },
         {
             timestamps: true,
+            tableName:'blogs'
         }
     );
     return Blog;
