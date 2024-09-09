@@ -1,15 +1,15 @@
 const express = require("express");
 const authController = require('../../features/authentication/authController')
-const wingController = require('../../features/wing/wingController')
+const houseController = require('../../features/house/houseController')
 
 const {protect} = authController
 
-const { getWingDetils} = wingController
+const { getWingHouseDetails} = houseController
 
 const router = express.Router();
 
 // Define routes
-router.route("/wingDetails/:wingId").get(protect,getWingDetils)
+router.route("/wingHouseDetails/:wingId").get(protect,getWingHouseDetails)
 
 
 module.exports = router;

@@ -19,6 +19,8 @@ exports.getUsersBySocietyAndWing = async (societyId, wingId) => {
 
 exports.getSocietyAdminsDetails = async (societyId) => {
   const users = await societyRepository.findSocietyAdminsDetails(societyId);
+ 
+  
   if (users.length === 0) {
     throw new CustomError(`No users found for Society ID ${societyId} `, 404);
   }
