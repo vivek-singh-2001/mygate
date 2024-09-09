@@ -52,11 +52,13 @@ exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) =>{
   }
 
   try {
-    const users = await societyService.getSocietyAdminsDetails(societyId);
+    const societyDetails = await societyService.getSocietyAdminsDetails(societyId);
     res.status(200).json({
       status: "success",
-      length:users.length,
-      data: users
+      length:societyDetails.length,
+      data: {
+      societyDetails,
+      },
     });
   } catch (error) {
     next(error);

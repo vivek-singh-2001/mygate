@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError,  tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +19,7 @@ export class SocietyService {
   fetchSocietyData(societyId:number): Observable<any> {
     return this.http.get(`${this.societyApiUrl}/SocietyAdminsDetails/${societyId}`).pipe(
       tap((response: any) => {
-        this.societyDataSubject.next(response.data.users);
+        this.societyDataSubject.next(response.data.societyDetails);
       }),
       catchError((error) => {
         console.error('Failed to load society data', error);

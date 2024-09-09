@@ -1,0 +1,46 @@
+<div class="page-container">
+  <div *ngIf="isLoading" class="flex w-full h-full justify-content-center align-items-center">
+    wait, data is loading...
+  </div>
+
+  <div *ngIf="houses?.length">
+    <div *ngFor="let house of houses" class="card flex gap-8 flex-wrap mb-6">
+      <div class="flex flex-wrap justify-content-center align-item-center p-4">
+        <div class="w-full h-full p-6 bg-green-600 align-item-center">
+          <h4>{{ house.house_no }}</h4>
+        </div>
+      </div>
+
+      <div class="flex justify-content-between">
+        <div class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column gap-2 p-2 pr-8">
+          <p><b>Room Number</b></p>
+          <p><b>Owner Name</b></p>
+          <p><b>Owner Number</b></p>
+          <p><b>Total Members</b></p>
+        </div>
+        <div class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column gap-2 p-2 ml-6">
+          <p>{{ house.house_no }} </p>
+          <p>{{ house.id }}</p>
+          <p>Phone</p>
+          <p>Gender</p>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <p-sidebar [(visible)]="sidebarVisible" position="right" [modal]="false" dismissible="true">
+        <h3>House Details</h3>
+        <div *ngIf="selectedHouse" class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column gap-2 p-2 pr-8">
+          <p><b>Room Number: {{ selectedHouse.house_no }}</b></p>
+          <p><b>House ID: {{ selectedHouse.id }}</b></p>
+          <p><b>Owner Name: {{ selectedHouse.ownerName || 'N/A' }}</b></p>
+          <p><b>Total Members: {{ selectedHouse.totalMembers || 'N/A' }}</b></p>
+        </div>
+      </p-sidebar>
+
+      <!-- Button to trigger the sidebar -->
+      <div class="flex-1 pr-4">
+        <button type="button" (click)="onViewHouse(house)">View House</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -41,6 +41,13 @@ export const routes: Routes = [
             (aprtment) => aprtment.ApartmentComponent
           ),
       },
+      {
+        path: 'apartments/wingDetails/:name/:id',
+        loadComponent: () =>
+          import(
+            './components/apartment/wing-details/wing-details.component'
+          ).then((w) => w.WingDetailsComponent),
+      },
     ],
   },
   {
