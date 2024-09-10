@@ -14,6 +14,8 @@ const path = require('path');
 const user_route = require('./features/users/userApis');
 const society_route = require('./features/society/societyApis');
 const wing_route = require('./features/wing/wingApis');
+const house_route = require('./features/house/houseApi');
+const houseuser_route = require('./features/houseuser/houseuserApis');
 const auth_route = require('./features/authentication/authApi');
 const sms_route = require('./features/sms/smsApis')
 const chatRoutes = require('./features/chat/chatApi');
@@ -60,6 +62,8 @@ app.use(passport.session());
 app.use('/api/v1/users', user_route);
 app.use('/api/v1/society', society_route);
 app.use('/api/v1/wing', wing_route);
+app.use('/api/v1/house', house_route);
+app.use('/api/v1/houseuser', houseuser_route);
 app.use('/api/v1/auth', auth_route);
 app.use('/api/v1/sms', sms_route);
 app.use('/api/v1/chats', chatRoutes);

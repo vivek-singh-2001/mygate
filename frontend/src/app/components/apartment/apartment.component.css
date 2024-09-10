@@ -12,3 +12,19 @@
   border-radius: 7px;
   align-items: center;
 }
+
+.personal-details{
+  line-height: 1.5;
+font-weight: 500;
+}
+.personal-details p{
+height: 35px;
+color: #4b5563;
+font:16px;
+letter-spacing: 1px;
+letter-spacing: 1.5;
+display: flex;
+align-items: center;
+white-space: nowrap;
+}
+

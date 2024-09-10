@@ -26,7 +26,7 @@ exports.findUsersBySocietyAndWing = (societyId, wingId) => {
     type: db.Sequelize.QueryTypes.SELECT,
   });
 };
-
+  
 exports.findSocietyAdminsDetails = async (societyId) => {
   return await Wing.findAll({
     where: { SocietyId: societyId },
@@ -40,7 +40,7 @@ exports.findSocietyAdminsDetails = async (societyId) => {
       {
         model: User,
         as: "User",
-        attributes: ["firstname", "lastname", "email", "number"],
+        attributes: ["firstname", "lastname", "email", "number","id"],
       },
       {
         model: House,
