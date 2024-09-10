@@ -20,7 +20,7 @@ exports.getWingDetailsById = async (wingId) => {
           model: Society,
           as: "Society",
           include: [
-            {
+            { 
               model: User,
               as: "User",
               attributes: {
