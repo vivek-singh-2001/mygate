@@ -64,17 +64,15 @@ db.User.hasMany(db.Blog);
 db.Blog.belongsTo(db.User);
 // ==============house-user (: Many to many)=========================
 
-db.User.belongsToMany(db.House, {
-  through: db.HouseUser,
-});
-db.House.belongsToMany(db.User, {
-  through: db.HouseUser,
-});
+db.User.belongsToMany(db.House, { through: db.HouseUser });
+db.House.belongsToMany(db.User, { through: db.HouseUser });
 
-db.House.hasMany(db.HouseUser, { foreignKey: "HouseId" });
-db.HouseUser.belongsTo(db.House, { foreignKey: "HouseId" });
-db.User.hasMany(db.HouseUser, { foreignKey: "UserId" });
-db.HouseUser.belongsTo(db.User, { foreignKey: "UserId" });
+db.House.hasMany(db.HouseUser, { foreignKey: 'HouseId' });
+db.HouseUser.belongsTo(db.House, { foreignKey: 'HouseId' });
+
+
+db.HouseUser.belongsTo(db.User, { foreignKey: 'UserId' });
+db.User.hasMany(db.HouseUser, { foreignKey: 'UserId' });
 
 // ==============user-chat ========================================
 
