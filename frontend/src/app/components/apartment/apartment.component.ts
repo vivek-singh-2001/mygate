@@ -35,6 +35,8 @@ export class ApartmentComponent implements OnInit {
       }),
       map((data) => {
         this.societyData = data.sort((a:any,b:any)=>a.id-b.id);
+        console.log(this.societyData);
+        
         this.isLoading = false;  
         return data;
       })

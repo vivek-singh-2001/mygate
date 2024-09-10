@@ -27,7 +27,6 @@ exports.getWingHouseDetailsById = async (wingId) => {
         const owner = await HouseUser.findOne({
           where: {
             HouseId: house.id,
-        
           },
           include: [
             {

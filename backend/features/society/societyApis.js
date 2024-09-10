@@ -6,10 +6,11 @@ const { protect } = authController;
 
 const router = express.Router();
 
-const { getUsersBySociety, getUsersBySocietyAndWing ,getSocietyAdminsDetails} = societyController;
+const { getUsersBySociety, getUsersBySocietyAndWing ,getSocietyAdminsDetails, checkIsAdmin} = societyController;
 
 // Define routes
 router.get("/:societyId", protect, getUsersBySociety);
 router.get("/:societyId/wing/:wingId", protect, getUsersBySocietyAndWing);
 router.get("/SocietyAdminsDetails/:societyId",getSocietyAdminsDetails);
+router.get("/checkAdmin/isAdmin",protect,checkIsAdmin);
 module.exports = router;

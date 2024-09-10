@@ -4,6 +4,7 @@ import { HomeComponent } from './views/home/home.component';
 import { AuthGuard } from './gaurds/auth.guard';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
+import { AdminGuard } from './services/admin/admin.gaurd';
 export const routes: Routes = [
   {
     path: 'login',
@@ -40,6 +41,7 @@ export const routes: Routes = [
           import('./components/apartment/apartment.component').then(
             (aprtment) => aprtment.ApartmentComponent
           ),
+          canActivate:[AdminGuard]
       },
       {
         path: 'apartments/wingDetails/:name/:id',
@@ -47,6 +49,8 @@ export const routes: Routes = [
           import(
             './components/apartment/wing-details/wing-details.component'
           ).then((w) => w.WingDetailsComponent),
+          canActivate:[AdminGuard]
+
       },
     ],
   },

@@ -61,11 +61,11 @@
           >
             <li *ngFor="let user of selectedHouse.familyDetails" class="card list-none mb-4 ">
               <p>
-                <b>Name:</b> {{ user.User.firstname }} {{ user.User.lastname }}
-                <span *ngIf="user.User.isOwner" class="badge badge-primary">(Owner)</span>
+                <b>Name:</b> {{ user.User?.firstname }} {{ user.User?.lastname }}
+                <span *ngIf="user.User?.isOwner" class="badge badge-primary">(Owner)</span>
               </p>
-              <p><b>Email:</b> {{ user.User.email }}</p>
-              <p><b>Phone:</b> {{ user.User.number || "N/A" }}</p>
+              <p><b>Email:</b> {{ user.User?.email }}</p>
+              <p><b>Phone:</b> {{ user.User?.number || "N/A" }}</p>
 
             </li>
           </ul>

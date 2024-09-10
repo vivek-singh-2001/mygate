@@ -7,6 +7,7 @@ import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AdminService } from '../../services/admin/admin.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -26,10 +27,30 @@ export class SideNavComponent implements OnInit {
 
   isExpanded: boolean = false;
   items!: MenuItem[string];
+  isAdmin: boolean = false;
 
-  constructor(private router: Router, private snackBar: MatSnackBar) {}
+  constructor(
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private adminService: AdminService
+  ) {}
 
   ngOnInit() {
+    this.checkAdminStatus();
+  }
+
+  checkAdminStatus() {
+    this.adminService.isUserAdmin().subscribe({
+      next: (response) => {
+        this.isAdmin = response;
+        this.initializeMenuItems();
+
+        this.router.navigate(['/home']);
+      },
+    });
+  }
+
+  initializeMenuItems() {
     this.items = [
       {
         label: 'Dashboard',
@@ -43,12 +64,16 @@ export class SideNavComponent implements OnInit {
         iconSize: 'large',
         command: () => this.navigateTo('/home/messages'),
       },
-      {
-        label: 'Apartments',
-        icon: 'pi pi-warehouse',
-        iconSize: 'large',
-        command: () => this.navigateTo('/home/apartments'),
-      },
+      ...(this.isAdmin
+        ? [
+            {
+              label: 'Apartments',
+              icon: 'pi pi-warehouse',
+              iconSize: 'large',
+              command: () => this.navigateTo('/home/apartments'),
+            },
+          ]
+        : []),
     ];
   }
 

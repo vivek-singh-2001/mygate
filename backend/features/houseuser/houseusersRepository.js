@@ -10,7 +10,7 @@ exports.getHouseDetailsById = async (houseId) => {
       include:[
         {
           model:User,
-          attributes:['id', 'firstname','lastname','number','email','isOwner']
+          attributes:['id', 'firstname','lastname','number','email','isOwner'],
         },
         
       ]

@@ -1,8 +1,9 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
-const societyService = require('./societyService');
+const societyService = require("./societyService");
 const CustomError = require("../../utils/CustomError");
-const util = require('util');
+const util = require("util");
 const jwt = require("jsonwebtoken");
+const { log } = require("console");
 
 exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
   const { societyId } = req.params;
@@ -32,10 +33,13 @@ exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
   }
 
   try {
-    const users = await societyService.getUsersBySocietyAndWing(societyId, wingId);
+    const users = await societyService.getUsersBySocietyAndWing(
+      societyId,
+      wingId
+    );
     res.status(200).json({
       status: "success",
-      length:users.length,
+      length: users.length,
       data: {
         users,
       },
@@ -45,24 +49,37 @@ exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
   }
 });
 
-exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) =>{
-  const {societyId} =  req.params;
-  if (!societyId ) {
+exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) => {
+  const { societyId } = req.params;
+  if (!societyId) {
     return next(new CustomError("Society ID is required", 400));
   }
 
   try {
-    const societyDetails = await societyService.getSocietyAdminsDetails(societyId);
+    const societyDetails = await societyService.getSocietyAdminsDetails(
+      societyId
+    );
     res.status(200).json({
       status: "success",
-      length:societyDetails.length,
+      length: societyDetails.length,
       data: {
-      societyDetails,
+        societyDetails,
       },
     });
   } catch (error) {
     next(error);
   }
+});
 
-})
-
+exports.checkIsAdmin = asyncErrorHandler(async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    console.log(req.user.id);
+    
+    const isAdmin = await societyService.isUserAdmin(userId);
+    res.json({ isAdmin });
+  } catch (error) {
+    next(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});

@@ -53,6 +53,8 @@ export class WingDetailsComponent implements OnInit {
   }
   onViewHouse(house: any) {
     this.selectedHouse = house;
+    console.log(house);
+    
     this.sidebarVisible = true;
     this.isLoading = true;
     this.http
@@ -61,9 +63,11 @@ export class WingDetailsComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
+          console.log('response',response);
+          
           if (response.data.HouseDetails.length > 0) {
             this.selectedHouse.familyDetails = response.data.HouseDetails.sort(
-              (a: any, b: any) => (b.User.isOwner ? 1 : 0) - (a.User.isOwner ? 1 : 0)
+              (a: any, b: any) => (b.User?.isOwner ? 1 : 0) - (a.User?.isOwner ? 1 : 0)
             );
             this.isLoading = false;
           } else {
