@@ -5,11 +5,10 @@ import { CommonModule } from '@angular/common';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 
-
 @Component({
   selector: 'app-wing-details',
   standalone: true,
-  imports:[CommonModule,SidebarModule,ButtonModule],
+  imports: [CommonModule, SidebarModule, ButtonModule],
   templateUrl: './wing-details.component.html',
   styleUrl: './wing-details.component.css',
 })
@@ -44,8 +43,6 @@ export class WingDetailsComponent implements OnInit {
     this.http.get<any>(apiUrl).subscribe({
       next: (response) => {
         this.houses = response.data.wingHouseDetails;
-        console.log(this.houses);
-        
         this.isLoading = false;
       },
       error: (error) => {
@@ -54,9 +51,31 @@ export class WingDetailsComponent implements OnInit {
       },
     });
   }
-  onViewHouse(house:any){
-    console.log(house.id);
-    this.selectedHouse = house
-    this.sidebarVisible = true
+  onViewHouse(house: any) {
+    this.selectedHouse = house;
+    this.sidebarVisible = true;
+    this.isLoading = true;
+    this.http
+      .get<any>(
+        `http://localhost:7500/api/v1/houseuser/houseDetails/${house.id}`
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.data.HouseDetails.length > 0) {
+            this.selectedHouse.familyDetails = response.data.HouseDetails.sort(
+              (a: any, b: any) => (b.User.isOwner ? 1 : 0) - (a.User.isOwner ? 1 : 0)
+            );
+            this.isLoading = false;
+          } else {
+            this.selectedHouse.familyDetails = null;
+            this.isLoading = false;
+          }
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error fetching house user data:', error);
+          this.isLoading = false;
+        },
+      });
   }
 }

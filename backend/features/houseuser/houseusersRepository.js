@@ -1,3 +1,4 @@
+const { Model } = require("sequelize");
 const { db } = require("../../config/connection");
 const { User, Wing, Society, HouseUser, House } = db;
 
@@ -6,9 +7,14 @@ exports.getHouseDetailsById = async (houseId) => {
     const houseDetails = await HouseUser.findAll({
       where: { HouseId: houseId },
       attributes: ["UserId", "id"],
+      include:[
+        {
+          model:User,
+          attributes:['id', 'firstname','lastname','number','email','isOwner']
+        },
+        
+      ]
     });
-    console.log(houseId);
-    console.log(houseDetails);
     
 
     return houseDetails;

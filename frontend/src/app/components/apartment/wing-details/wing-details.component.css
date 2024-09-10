@@ -27,5 +27,19 @@
   align-items: center;
   white-space: nowrap;
   }
+
+
+  .owner {
+    background-color: #1779ce; /* light highlight for the owner */
+    font-weight: bold;
+  }
+  
+  .badge-primary {
+    background-color: #007bff;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.8em;
+  }
   
   
