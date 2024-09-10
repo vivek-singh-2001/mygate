@@ -10,7 +10,7 @@ module.exports = {
         id: 1,
         name: 'Green Park Society',
         address: JSON.stringify({ street: '123 Green St', city: 'Green City', zip: '12345' }),
-        societyAdminId: 1001,
+        societyAdminId: 1,
         createdAt: new Date(),
         updatedAt: new Date()
       },

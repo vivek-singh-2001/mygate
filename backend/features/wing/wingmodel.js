@@ -1,7 +1,3 @@
-// Update the Wing model
-
-
-
 module.exports = (connectDB, DataTypes) => {
     const Wing = connectDB.define(
         'Wing',
@@ -29,5 +25,12 @@ module.exports = (connectDB, DataTypes) => {
            timestamps: false,
         }
     );
+
+    Wing.associate = function(models) {
+        Wing.hasMany(models.House, {
+          foreignKey: "WingId",
+          as: "Houses",  // Alias for joining in queries
+        });
+      };
     return Wing;
 };

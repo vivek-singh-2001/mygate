@@ -71,6 +71,10 @@ db.Blog.belongsTo(db.User);
 
 db.User.belongsToMany(db.House, { through: db.HouseUser });
 db.House.belongsToMany(db.User, { through: db.HouseUser });
+db.House.hasMany(db.HouseUser, {foreignKey: 'HouseId'});
+db.HouseUser.belongsTo(db.House, {foreignKey: 'HouseId'})
+db.User.hasMany(db.HouseUser, {foreignKey: 'UserId'})
+db.HouseUser.belongsTo(db.User, {foreignKey: 'HouseId'})
 
 
 // ==============user-chat ========================================

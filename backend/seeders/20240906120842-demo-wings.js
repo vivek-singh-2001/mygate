@@ -6,30 +6,22 @@ module.exports = {
       {
         id: 1,
         name: 'A Wing',
-        wingAdminId: 1001,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        wingAdminId: 1
       },
       {
         id: 2,
         name: 'B Wing',
-        wingAdminId: 1002,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        wingAdminId: 2
       },
       {
         id: 3,
         name: 'C Wing',
-        wingAdminId: 1003,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        wingAdminId: 3
       } ,
       {
         id: 4,
         name: 'D Wing',
-        wingAdminId: 1004,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        wingAdminId: 4
       }
     ], {});
   },

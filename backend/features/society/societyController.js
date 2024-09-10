@@ -56,9 +56,7 @@ exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) =>{
     res.status(200).json({
       status: "success",
       length:users.length,
-      data: {
-        users,
-      },
+      data: users
     });
   } catch (error) {
     next(error);
