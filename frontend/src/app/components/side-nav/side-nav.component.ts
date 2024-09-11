@@ -60,7 +60,7 @@ export class SideNavComponent implements OnInit {
       },
       {
         label: 'Messages',
-        icon: 'pi pi-envelope',
+        icon: 'pi pi-comments',
         iconSize: 'large',
         command: () => this.navigateTo('/home/messages'),
       },

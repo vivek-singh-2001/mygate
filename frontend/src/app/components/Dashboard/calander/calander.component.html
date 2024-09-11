@@ -1,0 +1,53 @@
+<div class="calendar flex flex-column">
+  <div
+    class="calander-navigation flex align-items-center justify-content-center gap-4"
+  >
+    <p-button pRipple (onClick)="changeMonth(-1)">&#8249;</p-button>
+    <span>{{ currentMonth | date : "MMMM yyyy" }}</span>
+    <p-button pRipple (onClick)="changeMonth(1)">&#8250;</p-button>
+  </div>
+
+  <div class="calendar-container">
+    <table class="calendar-table">
+      <thead>
+        <tr>
+          <th *ngFor="let day of daysOfWeek">{{ day }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let week of weeks">
+          <td
+            *ngFor="let day of week"
+            [ngClass]="{
+              disabled: day.isDisabled,
+              highlighted: isToday(day.date)
+            }"
+            [ngStyle]="{
+              'background-color': isToday(day.date)
+                ? 'var(--gray-300)'
+                : day.isDisabled
+                ? '#f0f0f0'
+                : day.events.length > 0
+                ? day.events[0].color
+                : 'transparent'
+            }"
+          >
+            {{ day.date.getDate() }}
+
+            <!-- Display events, if any -->
+            <div *ngIf="day.events.length > 0" class="events">
+              <div *ngFor="let event of day.events" class="event" (mouseenter)="showTooltip($event, event)" (mouseleave)="hideTooltip()" >
+                {{ event.title }}
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Tooltip Popup -->
+<div *ngIf="tooltipVisible" class="tooltip" [ngStyle]="{ top: tooltipPosition.top, left: tooltipPosition.left }">
+  <p>{{ tooltipContent }}</p>
+</div>

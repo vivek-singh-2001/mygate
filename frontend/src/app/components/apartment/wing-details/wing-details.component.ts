@@ -53,7 +53,7 @@ export class WingDetailsComponent implements OnInit {
   }
   onViewHouse(house: any) {
     this.selectedHouse = house;
-    console.log(house);
+
     
     this.sidebarVisible = true;
     this.isLoading = true;

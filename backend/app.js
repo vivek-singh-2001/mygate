@@ -18,6 +18,7 @@ const house_route = require('./features/house/houseApi');
 const houseuser_route = require('./features/houseuser/houseuserApis');
 const auth_route = require('./features/authentication/authApi');
 const sms_route = require('./features/sms/smsApis')
+const event_route = require('./features/events/eventRoute')
 const chatRoutes = require('./features/chat/chatApi');
 
 // USE MODULES HERE
@@ -66,6 +67,7 @@ app.use('/api/v1/house', house_route);
 app.use('/api/v1/houseuser', houseuser_route);
 app.use('/api/v1/auth', auth_route);
 app.use('/api/v1/sms', sms_route);
+app.use('/api/v1/events', event_route);
 app.use('/api/v1/chats', chatRoutes);
 app.use('*', (req, res, next) => {
     const err = new CustomError(`can't find ${req.originalUrl} on the server`, 404);

@@ -28,6 +28,7 @@ db.HouseUser = require("../features/houseuser/HouseUserModel.js")(
   DataTypes
 );
 db.Chat = require("../features/chat/chatModel.js")(connectDB, DataTypes);
+db.Event = require("../features/events/eventModel.js")(connectDB,DataTypes);
 
 // =============society-wing (: One to many)============================
 

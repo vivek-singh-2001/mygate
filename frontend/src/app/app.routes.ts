@@ -5,6 +5,7 @@ import { AuthGuard } from './gaurds/auth.guard';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { AdminGuard } from './services/admin/admin.gaurd';
+import { DashboardComponent } from './components/Dashboard/dashboard.component';
 export const routes: Routes = [
   {
     path: 'login',
@@ -20,7 +21,11 @@ export const routes: Routes = [
     component: HomeComponent,
     canActivate: [AuthGuard],
     children: [
-      // { path: '', redirectTo: 'messages', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+       component:DashboardComponent
+      },
       {
         path: 'messages',
         loadComponent: () =>
