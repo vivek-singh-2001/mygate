@@ -17,10 +17,13 @@
     text-align: center;
     vertical-align: middle;
   }
+
+
   
   .calendar-table th {
     background-color: #f4f4f4;
     font-weight: bold;
+    height: 40px;
   }
   
   .calendar-table td.disabled {
