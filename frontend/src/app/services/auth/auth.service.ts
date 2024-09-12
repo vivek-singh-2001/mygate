@@ -95,7 +95,26 @@ export class AuthService {
     });
   }
 
+  isTokenValid(): boolean {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      const decodedToken = this.decodeToken(token);
+      return decodedToken.exp * 1000 > Date.now(); // Check if token is still valid
+    }
+    
+    return false;
+  }
+  
+  private decodeToken(token: string): any {
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (error) {
+      return null;
+    }
+  }
+
   isLoggedIn(): boolean {
-    return localStorage.getItem('isLoggedIn') === 'true';
+    const token = localStorage.getItem('authToken');
+  return !!token && this.isTokenValid();
   }
 }

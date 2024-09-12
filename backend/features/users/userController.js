@@ -4,20 +4,29 @@ const util = require('util');
 const jwt = require("jsonwebtoken");
 
 exports.getUserById = asyncErrorHandler(async (req, res, next) => {
-  const { jwtToken } = req.cookies;
-  const decodedToken = await util.promisify(jwt.verify)(
-    jwtToken,
-    process.env.JWT_SECRET
-  );
+  const authHeader = req.headers.authorization;
 
-  const id = decodedToken.id
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return next(new CustomError('Authorization token missing or invalid', 401));
+  }
+
+  const token = authHeader.split(' ')[1]; // Extract the token from "Bearer <token>"
+
   try {
+    const decodedToken = await util.promisify(jwt.verify)(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    const id = decodedToken.id;
     const user = await userService.getUserById(id);
+
     res.status(200).json({ status: "success", data: { user } });
   } catch (error) {
-    next(error);
+    next(new CustomError('Invalid or expired token', 401));
   }
 });
+
 
 exports.updateUser = asyncErrorHandler(async (req, res, next) => {
   const userId = req.params.id;

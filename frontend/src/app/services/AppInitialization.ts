@@ -27,7 +27,7 @@ export class AppInitializationService {
       );
     } else {
       this.isInitialized$.next(true);
-      this.router.navigate(['/login']);
+  this.authService.logout()
       return this.isInitialized$.asObservable();
     }
   }

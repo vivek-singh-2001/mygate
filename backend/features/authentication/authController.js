@@ -12,12 +12,6 @@ exports.login = asyncErrorHandler(async (req, res, next) => {
 
   const token = await authService.login(email, password);
 
-  res.cookie("jwtToken", token, {
-    maxAge: 24 * 60 * 60 * 1000, 
-    httpOnly: true, 
-    secure: process.env.NODE_ENV === "production", 
-    sameSite: "Strict",
-  });
   res.status(200).json({ status: "success", token });
 });
 
@@ -32,7 +26,15 @@ exports.logout = asyncErrorHandler(async (req, res, next) => {
 
 // Protect routes
 exports.protect = asyncErrorHandler(async (req, res, next) => {
-  const token = req.cookies.jwtToken;
+
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return next(new CustomError('Authorization token missing or invalid', 401));
+  }
+
+  const token = authHeader.split(' ')[1];
+
   if (!token && !req.isAuthenticated()) {
     return next(new CustomError("You are not logged in!", 401));
   }
@@ -51,13 +53,8 @@ exports.googleAuthCallback = passport.authenticate("google", {
 
 exports.googleAuthSuccess = (req, res) => {
   const token = authService.signToken(req.user.id, req.user.email);
-  res.cookie("jwtToken", token, {
-    expiresIn: "1d",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  });
   res.redirect(`http://localhost:4200/google/success?token=${token}`);
+  res.status(200).json({ status: "success", token });
 };
 
 exports.forgotPassword = asyncErrorHandler(async (req, res, next) => {
