@@ -1,43 +1,42 @@
+@if (isLoading) {
 <p-progressBar
-  *ngIf="isLoading"
   mode="indeterminate"
   [style]="{ height: '6px' }"
   class="flex justify-content-center align-items-center"
->Loading...</p-progressBar>
-<div *ngIf="!isLoading">
-  <p-tabView styleClass="tabview-custom">
-    <p-tabPanel>
-      <ng-template pTemplate="header">
-        <div class="flex align-items-center gap-2">
-          <p-avatar>
-            <span class="pi pi-info-circle"></span>
-          </p-avatar>
-          <span class="font-bold white-space-nowrap m-0">
-            Personal Details
-          </span>
-        </div>
-      </ng-template>
-      <app-personal-details
-        [userDetails]="userDetails"
-        [userProfileForm]="userProfileForm"
-        [genders]="genders"
-        [today]="today"
-      ></app-personal-details>
-    </p-tabPanel>
+  >Loading...</p-progressBar
+>
+} @else {
+<p-tabView styleClass="tabview-custom">
+  <p-tabPanel>
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center gap-2">
+        <p-avatar>
+          <span class="pi pi-info-circle"></span>
+        </p-avatar>
+        <span class="font-bold white-space-nowrap m-0"> Personal Details </span>
+      </div>
+    </ng-template>
+    <app-personal-details
+      [userDetails]="userDetails"
+      [userProfileForm]="userProfileForm"
+      [genders]="genders"
+      [today]="today"
+    ></app-personal-details>
+  </p-tabPanel>
 
-    <p-tabPanel>
-      <ng-template pTemplate="header">
-        <div class="flex align-items-center gap-2">
-          <p-avatar>
-            <span class="pi pi-info-circle"></span>
-          </p-avatar>
-          <span class="font-bold white-space-nowrap m-0"> Family Details </span>
-        </div>
-      </ng-template>
-      <app-family-details
-        [familyData]="familyData"
-        [userDetails]="userDetails"
-      ></app-family-details>
-    </p-tabPanel>
-  </p-tabView>
-</div>
+  <p-tabPanel>
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center gap-2">
+        <p-avatar>
+          <span class="pi pi-info-circle"></span>
+        </p-avatar>
+        <span class="font-bold white-space-nowrap m-0"> Family Details </span>
+      </div>
+    </ng-template>
+    <app-family-details
+      [familyData]="familyData"
+      [userDetails]="userDetails"
+    ></app-family-details>
+  </p-tabPanel>
+</p-tabView>
+}

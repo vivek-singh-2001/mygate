@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import {
   Component,
   Input,
@@ -16,8 +16,6 @@ import { UserService } from '../../../services/user/user.service';
 import { UserListComponent } from '../user-list/user-list.component';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { filter, withLatestFrom } from 'rxjs/operators';
-import { getTimeFromTimestamp } from '../../../utils/getTimeFromTimestamp';
-import { DatePipe } from '@angular/common';
 
 interface Message {
   id?: string;
