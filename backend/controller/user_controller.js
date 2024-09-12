@@ -1,13 +1,12 @@
-const {db,sequelize} = require('../config/connection');
-const asyncErrorHandler = require('../utils/asyncErrorHandler');
-const CustomError = require('../utils/CustomError');
+const { db, sequelize } = require("../config/connection");
+const asyncErrorHandler = require("../utils/asyncErrorHandler");
+const CustomError = require("../utils/CustomError");
 const { Sequelize, DataTypes } = require("sequelize");
 const checkRecordExists = require("../utils/checkRecordExists");
-const {Op} = Sequelize
+const { Op } = Sequelize;
 
 // getting the user model instance
 const { User, House, HouseUser, Wing, Society } = db;
-
 
 exports.getUserById = asyncErrorHandler(async (req, res, next) => {
   const { id } = req.params;
@@ -18,15 +17,15 @@ exports.getUserById = asyncErrorHandler(async (req, res, next) => {
     include: [
       {
         model: House,
-        as: 'Houses',
+        as: "Houses",
         include: [
           {
             model: Wing,
-            as: 'Wing',
+            as: "Wing",
             include: [
               {
                 model: Society,
-                as: 'Society',
+                as: "Society",
               },
             ],
           },
@@ -40,40 +39,51 @@ exports.getUserById = asyncErrorHandler(async (req, res, next) => {
   }
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     data: {
       user,
     },
   });
 });
 
-
-
-
 exports.updateUser = asyncErrorHandler(async (req, res, next) => {
+  //  Allowed fields for update
+  const allowedUpdateFields = [
+    "firstname",
+    "lastname",
+    "email",
+    "number",
+    "dateofbirth",
+    "isOwner",
+  ];
 
-
- //  Allowed fields for update
-    const allowedUpdateFields = ['firstname', 'lastname', 'email', 'number', 'dateofbirth', 'isOwner'];
-    
- // Disallowed fields for update
-    const disallowedUpdateFields = [  , 'createdAt', 'updatedAt'];
+  // Disallowed fields for update
+  const disallowedUpdateFields = ["createdAt", "updatedAt"];
 
   const userId = req.params.id;
   const updateData = req.body;
 
   // Check for disallowed fields in the request
   const attemptedUpdates = Object.keys(updateData);
-  const disallowedFieldsAttempted = attemptedUpdates.filter(field => disallowedUpdateFields.includes(field));
+  const disallowedFieldsAttempted = attemptedUpdates.filter((field) =>
+    disallowedUpdateFields.includes(field)
+  );
 
   if (disallowedFieldsAttempted.length > 0) {
     // If any disallowed fields are attempted to be updated, return an error
-    return next(new CustomError(`You cannot update the following fields: ${disallowedFieldsAttempted.join(', ')}`, 400));
+    return next(
+      new CustomError(
+        `You cannot update the following fields: ${disallowedFieldsAttempted.join(
+          ", "
+        )}`,
+        400
+      )
+    );
   }
 
   // Filter only allowed fields
   const updateFields = {};
-  allowedUpdateFields.forEach(field => {
+  allowedUpdateFields.forEach((field) => {
     if (updateData[field] !== undefined) {
       updateFields[field] = updateData[field];
     }
@@ -85,13 +95,13 @@ exports.updateUser = asyncErrorHandler(async (req, res, next) => {
   if (updated) {
     const updatedUser = await User.findOne({ where: { id: userId } });
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         user: updatedUser,
       },
     });
   } else {
-    next(new CustomError('User not found', 404));
+    next(new CustomError("User not found", 404));
   }
 });
 
@@ -120,7 +130,17 @@ exports.getFamilyMembers = asyncErrorHandler(async (req, res, next) => {
         where: {
           id: houseId,
         },
-        attributes: [],
+        attributes: [
+          "dateofbirth",
+          "email",
+          "firstname",
+          "lastname",
+          "number",
+          "id",
+          "passcode",
+          "isMember",
+          "isOwner",
+        ],
         through: { attributes: [] },
       },
     ],
@@ -166,32 +186,42 @@ exports.addFamilyMember = asyncErrorHandler(async (req, res, next) => {
 });
 
 exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
-    const { userId, currentPassword, newPassword } = req.body;
+  const { userId, currentPassword, newPassword } = req.body;
 
-    if (!userId || !currentPassword || !newPassword) {
-        return next(new CustomError('User ID, current password, and new password are required', 400))
-    }
+  if (!userId || !currentPassword || !newPassword) {
+    return next(
+      new CustomError(
+        "User ID, current password, and new password are required",
+        400
+      )
+    );
+  }
 
-    const user = await User.findByPk(userId);
+  const user = await User.findByPk(userId);
 
-    if (!user) {
-        return next(new CustomError('User not found', 404))
-    }
+  if (!user) {
+    return next(new CustomError("User not found", 404));
+  }
 
-    if (!(await user.validPassword(currentPassword))) {
-        return next(new CustomError("Current password is incorrect", 401));
-    }
+  if (!(await user.validPassword(currentPassword))) {
+    return next(new CustomError("Current password is incorrect", 401));
+  }
 
-    if (currentPassword === newPassword) {
-        return next(new CustomError("New password cannot be the same as the current password", 400));
-    }
+  if (currentPassword === newPassword) {
+    return next(
+      new CustomError(
+        "New password cannot be the same as the current password",
+        400
+      )
+    );
+  }
 
-    user.password = newPassword;
+  user.password = newPassword;
 
-    await user.save();
+  await user.save();
 
-    res.status(200).json({
-        status: 'success',
-        message: 'Password updated successfully'
-    });
-})
+  res.status(200).json({
+    status: "success",
+    message: "Password updated successfully",
+  });
+});

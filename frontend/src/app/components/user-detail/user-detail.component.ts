@@ -27,6 +27,7 @@ import { PersonalDetailsComponent } from './personal-details/personal-details.co
 import { ProgressBarModule } from 'primeng/progressbar';
 import { WingService } from '../../services/wings/wing.service';
 import { MessageService } from 'primeng/api';
+import { User } from '../../interfaces/user.interface';
 
 interface Gender {
   label: string;
@@ -59,10 +60,9 @@ interface Gender {
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.css',
 })
-
 export class UserDetailComponent implements OnInit {
   today: Date = new Date();
-  familyData: any[] = [];
+  familyData: User[] = [];
   genders: Gender[] = [];
   userProfileForm!: FormGroup;
   userDetails: any = {};
@@ -76,7 +76,7 @@ export class UserDetailComponent implements OnInit {
     private userService: UserService,
     private houseService: HouseService,
     private wingService: WingService,
-    private messageService: MessageService 
+    private messageService: MessageService
   ) {
     this.genders = [
       { label: 'Male', value: 'male' },
@@ -158,10 +158,10 @@ export class UserDetailComponent implements OnInit {
         },
       });
 
-      // Fetch family details
+    // Fetch family details
     this.userService.getFamilyMembers().subscribe((response) => {
       this.familyData = response.users.filter(
-        (data: any) => data.id !== this.userDetails.id
+        (data: User) => data.id !== this.userDetails.id
       );
     });
   }
@@ -183,7 +183,12 @@ export class UserDetailComponent implements OnInit {
     }
   }
 
-  getAddress(obj: any) {
+  getAddress(obj: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+  }) {
     const { street, city, state, zip } = obj;
     return `${street}, ${city}, ${state}, ${zip}`;
   }
@@ -204,9 +209,9 @@ export class UserDetailComponent implements OnInit {
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: 'Could not add family member. Please try again.'
-        })
-      }
-    })
+          detail: 'Could not add family member. Please try again.',
+        });
+      },
+    });
   }
 }

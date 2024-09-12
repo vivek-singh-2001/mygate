@@ -60,35 +60,34 @@ export class UserService {
     return this.http.get(`${this.societyApiUrl}/${societyId}/wing/${wingId}`);
   }
 
-  // Fetch family members data
   getFamilyMembers(): Observable<any> {
-    // If familyData is already available, return it
+    
     if (this.familyData.getValue()) {
+      console.log("data haiiii0", this.familyData.getValue());
+      
       return this.familyData.asObservable();
     }
 
-    // If user data is not available, first fetch the user and then family members
     if (!this.userData.getValue()) {
       return this.getCurrentUser().pipe(
-        switchMap(() => this.fetchFamilyMembers()) // Fetch family members after user data
+        switchMap(() => this.fetchFamilyMembers())
       );
     } else {
-      // Fetch family members if user data is already available
       return this.fetchFamilyMembers();
     }
   }
 
   private fetchFamilyMembers(): Observable<any> {
-    const userId = this.userData.getValue()?.id; // Extract user ID from userData
+    const userId = this.userData.getValue()?.id;
     if (!userId) {
       console.error('User ID is not available, cannot fetch family members.');
-      return of(null); // If no user ID, return null
+      return of(null);
     }
 
     return this.http.get(`${this.userApiUrl}/familyMembers/${userId}`).pipe(
       tap((response: any) => {
-        console.log('Fetched family members data:', response);
-        this.familyData.next(response.users); // Set familyData on success
+        console.log('Fetched family members data:', response.users);
+        this.familyData.next(response); // Set familyData on success
       }),
       catchError((error) => {
         console.error('Failed to load family members data', error);

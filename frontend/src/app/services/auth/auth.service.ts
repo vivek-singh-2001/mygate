@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, tap, switchMap, Subscription, map, throwError, catchError} from 'rxjs';
+import { Observable, tap, switchMap, Subscription, map, throwError, catchError, finalize} from 'rxjs';
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
 
@@ -33,14 +33,13 @@ export class AuthService {
         // Return new observable to fetch user data
         return this.userService.getCurrentUser();
       }),
-      map((user) => {
+      tap((user) => {
         // Set houses after getting the user
         console.log("user after login", user);
         
         this.houseService.setHouses(user.data.user.Houses);
-        return user;
       }),
-      tap((user) => {
+      finalize(() => {
         // Navigate only after a successful login
         this.router.navigate(['/home']);
       }),
