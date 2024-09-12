@@ -14,4 +14,10 @@ export class EventService {
   getEvents(): Observable<any> {
     return this.http.get(this.apiUrl);
   }
-}
+
+  addEvents(eventData:any):Observable<any>
+{
+  console.log(eventData);
+  
+  return this.http.post(this.apiUrl, eventData);
+}}

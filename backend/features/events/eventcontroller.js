@@ -13,8 +13,10 @@ const eventController = {
   createEvent: async (req, res, next) => {
     try {
       const eventData = req.body;
-      const userRole = req.user.role;  
-      const newEvent = await eventService.createEvent(eventData, userRole);
+      console.log(eventData);
+      
+      // const userRole = req.user.role;  
+      const newEvent = await eventService.createEvent(eventData);
       res.status(201).json(newEvent);
     } catch (error) {
       next(error);

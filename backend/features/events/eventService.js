@@ -6,11 +6,8 @@ const eventService = {
     return await eventRepository.getAllEvents();
   },
 
-  createEvent: async (eventData, userRole) => {
-    // Only admins can create events
-    if (userRole !== 'admin') {
-      throw new CustomError('Only admins can create events', 403);
-    }
+  createEvent: async (eventData) => {
+  
     return await eventRepository.createEvent(eventData);
   },
 
