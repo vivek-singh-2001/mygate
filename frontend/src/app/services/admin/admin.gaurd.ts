@@ -15,8 +15,10 @@ export class AdminGuard implements CanActivate {
   ) {}
 
   canActivate(): Observable<boolean> {
-    return this.adminService.isUserAdmin().pipe(
-      map(isAdmin => {        
+    return this.adminService.isAdmin$.pipe(
+      map(isAdmin => {     
+        console.log(isAdmin);
+           
         if (isAdmin) {
           return true;
         } else {

@@ -73,6 +73,10 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: true,
       },
+      photo:{
+        type: DataTypes.STRING,
+        allowNull: true,
+      }
     },
     {
       tableName:'Users',

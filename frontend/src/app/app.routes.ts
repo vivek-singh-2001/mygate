@@ -43,8 +43,8 @@ export const routes: Routes = [
       {
         path: 'apartments',
         loadComponent: () =>
-          import('./components/apartment/apartment.component').then(
-            (aprtment) => aprtment.ApartmentComponent
+          import('./components/admin/admin.component').then(
+            (admin) =>admin.AdminComponent 
           ),
           canActivate:[AdminGuard]
       },
@@ -55,7 +55,6 @@ export const routes: Routes = [
             './components/apartment/wing-details/wing-details.component'
           ).then((w) => w.WingDetailsComponent),
           canActivate:[AdminGuard]
-
       },
     ],
   },

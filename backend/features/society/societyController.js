@@ -7,15 +7,17 @@ const { log } = require("console");
 
 exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
   const { societyId } = req.params;
+  const { limits = 10, offsets = 0,searchQuery ='' } = req.query;
 
   if (!societyId) {
     return next(new CustomError("Society ID is required", 400));
   }
 
   try {
-    const users = await societyService.getUsersBySociety(societyId);
+    const users = await societyService.getUsersBySociety(societyId,limits,offsets,searchQuery);
     res.status(200).json({
       status: "success",
+      totalRecords:users[0].total_count,
       data: {
         users,
       },
@@ -74,8 +76,6 @@ exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) => {
 exports.checkIsAdmin = asyncErrorHandler(async (req, res, next) => {
   try {
     const userId = req.user.id;
-    console.log(req.user.id);
-    
     const isAdmin = await societyService.isUserAdmin(userId);
     res.json({ isAdmin });
   } catch (error) {

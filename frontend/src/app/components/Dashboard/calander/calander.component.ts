@@ -42,7 +42,7 @@ export class CalanderComponent implements OnInit {
       this.generateCalendar(this.currentMonth);
     });
 
-    this.adminService.isUserAdmin().subscribe((isAdmin) => {
+    this.adminService.isAdmin$.subscribe((isAdmin) => {
       if(isAdmin){
         this.isAdmin = isAdmin
       }

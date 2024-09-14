@@ -1,11 +1,13 @@
 const societyRepository = require('./societyRepository');
 const CustomError = require("../../utils/CustomError");
 
-exports.getUsersBySociety = async (societyId) => {
-  const users = await societyRepository.findUsersBySociety(societyId);
+exports.getUsersBySociety = async (societyId,limits,offsets,searchQuery ) => {
+  const users = await societyRepository.findUsersBySociety(societyId,limits,offsets,searchQuery );
   if (users.length === 0) {
     throw new CustomError(`No users found for Society ID ${societyId}`, 404);
   }
+  console.log(users);
+  
   return users;
 };
 
@@ -29,7 +31,8 @@ exports.getSocietyAdminsDetails = async (societyId) => {
 
 exports.isUserAdmin = async(userId)=>{
   const society = await societyRepository.findSocietyByUserId(userId);
-  return !!society;
+
+  return society;
 
 }
 
