@@ -71,13 +71,11 @@ export class SocietyUsersComponent implements OnInit {
       switchMap(society =>
         this.userService.getUsersBySocietyId(society.id, limit, offset, search).pipe(
           tap(data => {
-            console.log('Data:', data);
             this.users = data.data.users; // Update users array
             this.totalRecords = data.totalRecords; // Set total records for paginator
             this.noUsersFound = this.users.length === 0; // Update "No users found" state
           }),
           catchError((error) => {
-            console.log('Error during user fetch', error);
             this.users = [];
             this.totalRecords = 0;
             this.noUsersFound = true;
@@ -96,7 +94,6 @@ export class SocietyUsersComponent implements OnInit {
   onSearch(query: string): void {
     this.searchQuery = query; // Update local search query
     this.searchSubject.next(query); // Emit the search query to the subject
-    console.log('Search triggered with query:', this.searchQuery);
   }
 
   onPageChange(event: PageEvent): void {
@@ -104,6 +101,5 @@ export class SocietyUsersComponent implements OnInit {
     this.rows = event.rows ?? 20; 
     this.searchSubject.next(this.searchQuery); 
     this.loadUsers(this.first,this.rows,this.searchQuery).subscribe()
-    console.log('Page changed:', this.first, this.rows);
   }
 }
