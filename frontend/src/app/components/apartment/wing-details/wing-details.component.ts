@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { SidebarModule } from 'primeng/sidebar';
@@ -20,7 +20,7 @@ export class WingDetailsComponent implements OnInit {
   sidebarVisible: boolean = false;
   selectedHouse: any = null;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient,private router:Router) {}
 
   ngOnInit(): void {
     // Get the wingId from the URL
@@ -81,5 +81,8 @@ export class WingDetailsComponent implements OnInit {
           this.isLoading = false;
         },
       });
+  }
+  goBack(){
+    this.router.navigate(['/home/apartments/'])
   }
 }

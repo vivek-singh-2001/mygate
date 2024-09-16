@@ -1,7 +1,11 @@
 <div class="page-container">
+<div class="flex justify-content-between align-item-center mt-4 px-4">
+  <button (click)="goBack()">
+    <i class="pi pi-arrow-left"></i>
+  </button>
+  <p >{{wingName || "N/A"}}</p>
 
-  <p>{{wingName || "N/A"}}</p>
-
+</div>
 
   <div
     *ngIf="isLoading"
@@ -83,8 +87,11 @@
 
       <!-- Button to trigger the sidebar -->
       <div class="flex-1 pr-4">
-        <button type="button" (click)="onViewHouse(house)">View House</button>
+        <button type="button" (click)="onViewHouse(house)" pButton class="p-button-text">
+          <i class="pi pi-eye" style="font-size: 2rem"></i>
+        </button>
       </div>
+      
     </div>
   </div>
 </div>

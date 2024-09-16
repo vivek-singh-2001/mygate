@@ -6,8 +6,7 @@ exports.getUsersBySociety = async (societyId,limits,offsets,searchQuery ) => {
   if (users.length === 0) {
     throw new CustomError(`No users found for Society ID ${societyId}`, 404);
   }
-  console.log(users);
-  
+
   return users;
 };
 

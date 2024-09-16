@@ -114,6 +114,8 @@ export class UserDetailComponent implements OnInit {
       .pipe(
         switchMap((userData) => {
           if (userData) {
+            console.log("from the userdetails",userData);
+            
             this.userDetails = userData;
             this.userProfileForm.patchValue({
               firstname: userData.firstname || 'apple',

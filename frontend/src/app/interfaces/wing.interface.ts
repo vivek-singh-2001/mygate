@@ -6,4 +6,6 @@ export interface Wing {
   wingAdminId: number;
   SocietyId: number;
   Society: Society;
+  firstname?: string;
+  lastname?: string;
 }

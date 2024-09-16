@@ -26,7 +26,7 @@ import { Subscription } from 'rxjs';
     MenuModule,
   ],
   templateUrl: './navigation.component.html',
-  styleUrl: './navigation.component.css',
+  styleUrls: ['./navigation.component.css'], // Corrected to styleUrls
 })
 export class NavigationComponent implements OnInit {
   items: MenuItem[] = [];
@@ -35,7 +35,7 @@ export class NavigationComponent implements OnInit {
   houses: any[] = [];
   selectedHouse: string = '';
   private usersubscription!: Subscription;
-
+  isDropdownVisible: boolean = true;  // Control dropdown visibility
 
   constructor(
     private authService: AuthService,
@@ -55,13 +55,17 @@ export class NavigationComponent implements OnInit {
         icon: 'pi pi-home',
       },
       {
-        label: this.selectedHouse || "N/A",
+        label: this.selectedHouse || 'N/A',
         icon: 'pi pi-home',
-        items: this.houses.map((house) => ({
+        expanded: this.houses.length >1 ,  // Manually control dropdown visibility
+        items: this.isDropdownVisible && this.houses.length > 1 ? this.houses.map((house) => ({
           label: house.house_no,
           icon: 'pi pi-home',
           command: () => this.goToHouse(house),
-        })),
+        })) : [],
+        // Attach hover events
+        onMouseEnter: () => this.showDropdown(),
+        onMouseLeave: () => this.hideDropdown(),
       },
       {
         label: 'Projects',
@@ -94,13 +98,14 @@ export class NavigationComponent implements OnInit {
 
   private loadUserData(): void {
     this.usersubscription = this.userService.getUserData().subscribe({
-      next: (data) => {  
+      next: (data) => {
         this.user = data;
         this.houses = data.Houses || [];
         this.houseService.selectedHouse$.subscribe({
           next: (house) => {
             this.selectedHouse = house.house_no || 'Default House';
-          },
+            this.initializeMenu();  // Ensure menu is updated when house changes
+          }
         });
         this.initializeMenu();
       },
@@ -127,11 +132,30 @@ export class NavigationComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
+
   goToHouse(house: any) {
     this.houseService.setSelectedHouse(house);
     this.selectedHouse = house.house_no;
     this.initializeMenu();
-    console.log("from the house navigation",house);
+    console.log("House selected:", house);
   }
 
+  showDropdown() {
+    if (this.houses.length > 1) {
+      this.isDropdownVisible = true;
+    }
+  }
+
+  hideDropdown() {
+    this.isDropdownVisible = false;
+  }
+
+  // To keep dropdown open when hovering over dropdown
+  onDropdownMouseEnter() {
+    this.isDropdownVisible = true;
+  }
+
+  onDropdownMouseLeave() {
+    this.hideDropdown();
+  }
 }
