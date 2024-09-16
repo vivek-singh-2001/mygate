@@ -5,12 +5,25 @@ exports.getUserById = (id) => {
   return User.findOne({
     where: { id },
     attributes: {
-      exclude: ['password'],
+      include: [
+        "id",
+        "email",
+        "firstname",
+        "lastname",
+        "number",
+        "passcode",
+        "isMember",
+        "isOwner",
+        'dateofbirth'
+      ],
     },
     include: [
       {
-        model: House, 
+        model: House,
         as: "Houses",
+        attributes: {
+          exclude: ['createdAt', 'updatedAt']
+        },
         include: [
           {
             model: Wing,
@@ -19,6 +32,12 @@ exports.getUserById = (id) => {
               {
                 model: Society,
                 as: "Society",
+                attributes: {
+                  exclude: [
+                    'createdAt',
+                    'updatedAt'
+                  ]
+                }
               },
             ],
           },

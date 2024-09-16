@@ -1,4 +1,4 @@
-import { Component, Input, OnInit,ChangeDetectorRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
@@ -16,7 +16,8 @@ import { CommonModule } from '@angular/common';
 import { UserService } from '../../../services/user/user.service';
 import { BehaviorSubject, finalize, switchMap } from 'rxjs';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { WingService } from '../../../services/wings/wing.service';
+import { Gender, User } from '../../../interfaces/user.interface';
+import { Wing } from '../../../interfaces/wing.interface';
 
 @Component({
   selector: 'app-personal-details',
@@ -36,32 +37,31 @@ import { WingService } from '../../../services/wings/wing.service';
     InputTextareaModule,
     ReactiveFormsModule,
     CommonModule,
-    ProgressBarModule
+    ProgressBarModule,
   ],
   templateUrl: './personal-details.component.html',
-  styleUrls: ['../user-detail.component.css'],
+  styleUrls: ['../user-detail.component.css', './personal-details.component.css'],
 })
 export class PersonalDetailsComponent {
-  @Input() userDetails: any;
+  @Input() userDetails!: User;
   @Input() userProfileForm!: FormGroup;
-  @Input() genders?: any[];
+  @Input() genders?: Gender[];
   @Input() today?: Date;
   isLoading: boolean = false;
-  wingDetailsSubject = new BehaviorSubject<any>(null);
+  wingDetailsSubject = new BehaviorSubject<Wing | null>(null);
 
-  constructor(private userService: UserService ) {}
-  
+  constructor(private userService: UserService) {}
+
   onUserFormSubmit() {
-    this.isLoading = true; 
+    this.isLoading = true;
     this.userService
       .updateUser(this.userDetails.id, this.userProfileForm.value)
       .pipe(
         switchMap(() => this.userService.getCurrentUser()),
         finalize(() => {
-         
           this.isLoading = false;
         })
       )
-      .subscribe()
+      .subscribe();
   }
 }

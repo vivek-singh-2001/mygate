@@ -15,8 +15,6 @@ export class HouseService {
   selectedHouse$ = this.selectedHouseSubject.asObservable();
   societyAdminDetails$ = this.societyAdminDetailsSubject.asObservable();
 
-
-
   setHouses(houses: any[]) {
     this.housesSubject.next(houses);
     if (houses.length > 0) {
@@ -35,11 +33,4 @@ export class HouseService {
   getSelectedHouse() {
     return this.selectedHouseSubject.asObservable();
   }
-
- 
-  
-  
-  
-  
-  
 }

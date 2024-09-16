@@ -27,12 +27,8 @@ import { PersonalDetailsComponent } from './personal-details/personal-details.co
 import { ProgressBarModule } from 'primeng/progressbar';
 import { WingService } from '../../services/wings/wing.service';
 import { MessageService } from 'primeng/api';
-import { User } from '../../interfaces/user.interface';
-
-interface Gender {
-  label: string;
-  value: string;
-}
+import { Gender, User } from '../../interfaces/user.interface';
+import { House } from '../../interfaces/house.interface';
 
 @Component({
   selector: 'app-user-detail',
@@ -65,8 +61,20 @@ export class UserDetailComponent implements OnInit {
   familyData: User[] = [];
   genders: Gender[] = [];
   userProfileForm!: FormGroup;
-  userDetails: any = {};
-  selectedHouse: any = [];
+  userDetails: User = {
+    id: 0,
+    isMember: true,
+    isOwner: true,
+    firstname: '',
+    lastname: '',
+    email: '',
+    gender: '',
+    number: '',
+    dateofbirth: new Date(),
+    passcode: '',
+    house: undefined,
+  };
+  selectedHouse: Partial<House> = {};
   isLoading: boolean = true;
 
   private userSubscription!: Subscription;
@@ -128,6 +136,8 @@ export class UserDetailComponent implements OnInit {
       )
       .subscribe({
         next: (house) => {
+          console.log('houseee', house);
+
           this.selectedHouse = house;
           if (house) {
             console.log('house from userdetails', house);
@@ -193,7 +203,7 @@ export class UserDetailComponent implements OnInit {
     return `${street}, ${city}, ${state}, ${zip}`;
   }
 
-  addFamilyMember(member: any) {
+  addFamilyMember(member: User) {
     member.houseId = this.selectedHouse.id;
     this.userService.addFamilyMember(member).subscribe({
       next: (response) => {

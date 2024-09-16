@@ -1,3 +1,6 @@
+import { House } from "./house.interface";
+import { Wing } from "./wing.interface";
+
 export interface User {
   dateofbirth: Date;
   email: string;
@@ -8,4 +11,14 @@ export interface User {
   passcode: string;
   isMember: boolean;
   isOwner: boolean;
+  houseId?: number
+  gender?: string
+  house?: House
+  wingDetails?: Wing
+  role?: string
+}
+
+export interface Gender {
+  label: string;
+  value: string;
 }

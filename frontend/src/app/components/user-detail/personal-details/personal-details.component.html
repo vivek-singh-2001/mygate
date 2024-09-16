@@ -2,7 +2,10 @@
   <!-- Loading indicator -->
   <ng-container *ngIf="isLoading; else profileContent">
     <div class="card">
-      <p-progressBar mode="indeterminate" [style]="{ 'height': '6px' }"></p-progressBar>
+      <p-progressBar
+        mode="indeterminate"
+        [style]="{ height: '6px' }"
+      ></p-progressBar>
     </div>
   </ng-container>
 
@@ -35,13 +38,13 @@
           <p>{{ userDetails.firstname }} {{ userDetails.lastname }}</p>
           <p>{{ userDetails.email }}</p>
           <p>{{ userDetails.number }}</p>
-          <p>{{ userDetails.name }}</p>
+          <p>{{ userDetails.gender }}</p>
           <p>{{ userDetails.dateofbirth }}</p>
         </div>
       </div>
       <div class="card flex">
         <div
-          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 "
+          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2"
         >
           <p><b>Passcode</b></p>
           <p><b>Role</b></p>
@@ -54,15 +57,22 @@
         >
           <p>{{ userDetails.passcode }}</p>
           <p>{{ userDetails.role }}</p>
-          <p>{{userDetails.house?.house_no}}</p>
-          <p>{{userDetails.house?.Wing?.name}}</p>
-          <p>{{userDetails.wingDetails?.firstname}} {{userDetails.wingDetails?.lastname}}</p>
+          <p>{{ userDetails.house?.house_no }}</p>
+          <p>{{ userDetails.house?.Wing?.name }}</p>
+          <!-- <p>
+            {{ userDetails.wingDetails?.firstname }}
+            {{ userDetails.wingDetails?.lastname }}
+          </p> -->
         </div>
       </div>
     </div>
     <p-divider type="solid"></p-divider>
     <div class="card">
-      <p-progressBar *ngIf="isLoading" mode="indeterminate" [style]="{'height': '6px'}" />
+      <p-progressBar
+        *ngIf="isLoading"
+        mode="indeterminate"
+        [style]="{ height: '6px' }"
+      />
     </div>
     <form
       [formGroup]="userProfileForm!"
@@ -70,7 +80,7 @@
       (ngSubmit)="onUserFormSubmit()"
     >
       <div class="user-form flex flex-wrap w-full p-4">
-        <div class="left-form flex flex-column flex-1 ">
+        <div class="left-form flex flex-column flex-1">
           <div class="field flex justify-content-between">
             <label for="firstname" class="left-label flex align-items-center"
               ><b>First Name</b></label
@@ -155,7 +165,7 @@
             />
           </div>
         </div>
-        <div class="right-form flex flex-wrap flex-column flex-1 ">
+        <div class="right-form flex flex-wrap flex-column flex-1">
           <div class="field flex justify-content-between">
             <label for="lastname" class="right-label flex align-items-center"
               ><b>Last Name</b></label
@@ -206,7 +216,9 @@
             </p-dropdown>
           </div>
           <div class="field flex justify-content-between">
-            <label for="societyaddress" class="right-label flex align-items-start"
+            <label
+              for="societyaddress"
+              class="right-label flex align-items-start"
               ><b>Society Address </b></label
             >
             <textarea
@@ -235,4 +247,3 @@
     </form>
   </ng-template>
 </div>
-  
