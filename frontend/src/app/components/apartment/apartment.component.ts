@@ -47,7 +47,6 @@ export class ApartmentComponent implements OnInit {
   }
 
   goToWingDetails(name: string, id: number) {
-    console.log(`Navigating to: /home/apartments/wingDetails/${name}`);
     this.router.navigate([`/home/apartments/wingDetails/${name}/${id}`])
       .then(success => console.log('Navigation successful:', success))
       .catch(err => console.error('Navigation error:', err));

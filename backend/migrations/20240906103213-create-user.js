@@ -67,6 +67,11 @@ module.exports = {
       passwordResetTokenExpires: {
         type: Sequelize.DATE,
         allowNull: true,
+      },
+      photo:{
+        type: Sequelize.STRING,
+        allowNull: true,
+      
       }
     });
   },

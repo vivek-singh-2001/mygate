@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Observable, tap, switchMap, Subscription, map, throwError, catchError, finalize} from 'rxjs';
+import {
+  Observable,
+  tap,
+  switchMap,
+  Subscription,
+  throwError,
+  catchError, finalize,
+} from 'rxjs';
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
 
@@ -35,8 +42,8 @@ export class AuthService {
       }),
       tap((user) => {
         // Set houses after getting the user
-        console.log("user after login", user);
-        
+        console.log('user after login', user);
+
         this.houseService.setHouses(user.data.user.Houses);
       }),
       finalize(() => {
@@ -100,10 +107,10 @@ export class AuthService {
       const decodedToken = this.decodeToken(token);
       return decodedToken.exp * 1000 > Date.now(); // Check if token is still valid
     }
-    
+
     return false;
   }
-  
+
   private decodeToken(token: string): any {
     try {
       return JSON.parse(atob(token.split('.')[1]));
@@ -114,6 +121,6 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     const token = localStorage.getItem('authToken');
-  return !!token && this.isTokenValid();
+    return !!token && this.isTokenValid();
   }
 }

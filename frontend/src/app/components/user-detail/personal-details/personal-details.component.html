@@ -15,7 +15,7 @@
       <div class="card flex-initial">
         <p-image
           class="flex align-items-center justify-content-center p-4"
-          src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg"
+          [src]="userDetails.photo"
           alt="Image"
           width="auto"
           height="150"
@@ -35,7 +35,7 @@
         <div
           class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
         >
-          <p>{{ userDetails.firstname }} {{ userDetails.lastname }}</p>
+          <p>{{ userDetails.firstname || "N/A" }} {{ userDetails.lastname }}</p>
           <p>{{ userDetails.email }}</p>
           <p>{{ userDetails.number }}</p>
           <p>{{ userDetails.gender }}</p>
@@ -55,14 +55,11 @@
         <div
           class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml -6"
         >
-          <p>{{ userDetails.passcode }}</p>
-          <p>{{ userDetails.role }}</p>
-          <p>{{ userDetails.house?.house_no }}</p>
-          <p>{{ userDetails.house?.Wing?.name }}</p>
-          <!-- <p>
-            {{ userDetails.wingDetails?.firstname }}
-            {{ userDetails.wingDetails?.lastname }}
-          </p> -->
+          <p>{{ userDetails.passcode || "N/A" }}</p>
+          <p>{{ userDetails.role  || "N/A" }}</p>
+          <p>{{userDetails.house?.house_no || "N/A"}}</p>
+          <p>{{userDetails.house?.Wing?.name || "N/A"}}</p>
+          <p>{{userDetails.wingDetails?.firstname || "N/A"}} {{userDetails.wingDetails?.lastname || "N/A"}}</p>
         </div>
       </div>
     </div>

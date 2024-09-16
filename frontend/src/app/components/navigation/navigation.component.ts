@@ -55,7 +55,7 @@ export class NavigationComponent implements OnInit {
         icon: 'pi pi-home',
       },
       {
-        label: this.selectedHouse,
+        label: this.selectedHouse || "N/A",
         icon: 'pi pi-home',
         items: this.houses.map((house) => ({
           label: house.house_no,
@@ -133,4 +133,5 @@ export class NavigationComponent implements OnInit {
     this.initializeMenu();
     console.log("from the house navigation",house);
   }
+
 }

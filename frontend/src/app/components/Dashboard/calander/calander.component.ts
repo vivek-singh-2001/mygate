@@ -2,12 +2,17 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { EventService } from '../../../services/events/event.service';
+import { EventService } from './services/event.service';
+import { DialogModule } from 'primeng/dialog';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CalendarModule } from 'primeng/calendar';
+import { FormsModule } from '@angular/forms';
+import { AdminService } from '../../../services/admin/admin.service';
 
 @Component({
   selector: 'app-calander',
   standalone: true,
-  imports: [CommonModule, ButtonModule,TooltipModule],
+  imports: [CommonModule, ButtonModule,TooltipModule,DialogModule,InputTextareaModule,CalendarModule,FormsModule],
   templateUrl: './calander.component.html',
   styleUrl: './calander.component.css',
 })
@@ -17,15 +22,30 @@ export class CalanderComponent implements OnInit {
   weeks: any[] = [];
   events:any[] = [];
   tooltipVisible = false;
+  addevent : boolean = false;
   tooltipContent: string = '';
   tooltipPosition = { top: '0px', left: '0px' };
+ isAdmin: boolean = false;
 
-  constructor(private eventService:EventService){}
+  eventData = {
+    title: '',
+    description: '',
+    start_date:null
+  }
+
+
+  constructor(private eventService:EventService, private adminService:AdminService){}
 
   ngOnInit() {
     this.eventService.getEvents().subscribe((events) => {
       this.events = events; // Fetch events from the backend
       this.generateCalendar(this.currentMonth);
+    });
+
+    this.adminService.isAdmin$.subscribe((isAdmin) => {
+      if(isAdmin){
+        this.isAdmin = isAdmin
+      }
     });
   }
 
@@ -93,5 +113,18 @@ export class CalanderComponent implements OnInit {
 
   hideTooltip(){
     this.tooltipVisible = false;
+  }
+
+  addEvent(){
+    this.addevent = true;
+  }
+
+  onEventSubmit(){
+    this.addevent = false
+    console.log(this.eventData)
+    this.eventService.addEvents(this.eventData).subscribe();
+    this.eventData.title = ''
+    this.eventData.description = ''
+    this.eventData.start_date = null
   }
 }

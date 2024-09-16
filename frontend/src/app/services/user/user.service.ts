@@ -49,8 +49,16 @@ export class UserService {
   }
 
   // Fetch users by society ID
-  getUsersBySocietyId(societyId: string): Observable<any> {
-    return this.http.get(`${this.societyApiUrl}/${societyId}`);
+  getUsersBySocietyId(
+    societyId: string,
+    limits: number,
+    offset: number,
+    searchQuery: string
+  ): Observable<any> {
+    console.log(limits, offset);
+    return this.http.get(
+      `${this.societyApiUrl}/${societyId}?limits=${limits}&offsets=${offset}&searchQuery=${searchQuery}`
+    );
   }
 
   getUsersBySocietyIdAndWingId(
@@ -61,10 +69,9 @@ export class UserService {
   }
 
   getFamilyMembers(): Observable<any> {
-    
     if (this.familyData.getValue()) {
-      console.log("data haiiii0", this.familyData.getValue());
-      
+      console.log('data haiiii0', this.familyData.getValue());
+
       return this.familyData.asObservable();
     }
 
