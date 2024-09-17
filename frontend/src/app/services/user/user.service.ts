@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, switchMap, tap } from 'rxjs/operators';
+import { User } from '../../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class UserService {
   }
 
   // Manually set user data
-  setUserData(data: any): void {
+  setUserData(data: User): void {
     this.userData.next(data);
   }
 
@@ -103,7 +104,7 @@ export class UserService {
     );
   }
 
-  updateUser(userId: number, userData: any): Observable<any> {
+  updateUser(userId: number, userData: User): Observable<any> {
     return this.http
       .patch(`${this.userApiUrl}/updateUser/${userId}`, userData)
       .pipe(
@@ -117,7 +118,7 @@ export class UserService {
       );
   }
 
-  addFamilyMember(member: any): Observable<any> {
+  addFamilyMember(member: User): Observable<any> {
     return this.http.post(`${this.userApiUrl}/addFamilyMember`, member);
   }
 }

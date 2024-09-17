@@ -2,94 +2,207 @@
 
 <div class="main-container">
   <div class="button-container"></div>
-    <p-button class="btn" label="Add Family Member" icon="pi pi-plus" (click)="showForm()" />
-  </div>
+  <p-button
+    id="addFamilyMemberButton"
+    class="btn"
+    label="Add Family Member"
+    icon="pi pi-plus"
+    (click)="showForm()"
+    tabindex="0"
+    (keydown)="onButtonKeyDown($event)"
+  />
+</div>
 
-  <p-dialog draggable="false" header="Add Family Member" [(visible)]="isFormVisible" [modal]="true" [style]="{width: '500px'}" (onHide)="onCancel()">
-    <form [formGroup]="familyMemberForm" (ngSubmit)="onSubmit()">
-      <div class="p-fluid">
-        <div class="p-field">
+<p-dialog
+  draggable="false"
+  header="Add Family Member"
+  [(visible)]="isFormVisible"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  (onHide)="onCancel()"
+>
+  <form [formGroup]="familyMemberForm" (ngSubmit)="onSubmit()">
+    <div class="p-fluid">
+      <div class="p-field">
+        <div>
           <label for="firstname">First Name</label>
-          <input id="firstname" type="text" formControlName="firstname" pInputText />
         </div>
-        <div class="p-field">
-          <label for="lastname">Last Name</label>
-          <input id="lastname" type="text" formControlName="lastname" pInputText />
-        </div>
-        <div class="p-field">
-          <label for="email">Email</label>
-          <input id="email" type="text" formControlName="email" pInputText />
-        </div>
-        <div class="p-field">
-          <label for="gender">Gender</label>
-          <p-dropdown [options]="genders" formControlName="gender" placeholder="Select Gender" optionLabel="label"></p-dropdown>
-        </div>
-        <div class="p-field">
-          <label for="number">Contact Number</label>
-          <input id="number" type="text" formControlName="number" pInputText />
-        </div>
-        <div class="p-field">
-          <label for="dateofbirth">Date of Birth</label>
-          <p-calendar formControlName="dateofbirth" dateFormat="mm/dd/yy" appendTo="body" />
+        <div class="input-side">
+          <input
+            id="firstname"
+            type="text"
+            formControlName="firstname"
+            pInputText
+            placeholder="First Name"
+          />
+          <small
+            *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)"
+            class="p-error"
+          >
+            <div *ngIf="firstname.errors?.['required']">
+              First Name is required
+            </div>
+          </small>
         </div>
       </div>
-      <div class="dialog-footer">
-        <p-button label="Cancel" icon="pi pi-times" (click)="onCancel()" class="p-button-text"></p-button>
-        <p-button label="Submit" icon="pi pi-check" type="submit" class="p-button-text"></p-button>
+      <div class="p-field">
+        <label for="lastname">Last Name</label>
+        <input
+          id="lastname"
+          type="text"
+          formControlName="lastname"
+          pInputText
+          placeholder="Last Name"
+        />
+        <small
+          *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)"
+          class="p-error"
+        >
+          <div *ngIf="lastname.errors?.['required']">Last Name is required</div>
+        </small>
       </div>
-    </form>
-  </p-dialog>
-  @if (familyData?.length) { @for (member of familyData; track member.id) {
-  <div class="top-profile flex flex-wrap mb-6">
-    <div class="card flex-initial">
-      <p-image
-        class="flex align-items-center justify-content-center p-4"
-        [src]="member.photo"
-        alt="Image"
-        width="auto"
-        height="150"
-        [preview]="true"
-      />
+      <div class="p-field">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="text"
+          formControlName="email"
+          pInputText
+          placeholder="Email"
+        />
+        <small
+          *ngIf="email.invalid && (email.touched || email.dirty)"
+          class="p-error"
+        >
+          <div *ngIf="email.errors?.['required']">Email is required</div>
+          <div *ngIf="email.errors?.['email']">Enter a valid email</div>
+        </small>
+      </div>
+      <div class="p-field">
+        <label for="gender">Gender</label>
+        <p-dropdown
+          [options]="genders"
+          formControlName="gender"
+          placeholder="Select Gender"
+          optionLabel="label"
+        ></p-dropdown>
+        <small
+          *ngIf="gender.invalid && (gender.touched || gender.dirty)"
+          class="p-error"
+        >
+          <div *ngIf="gender.errors?.['required']">Gender is required</div>
+        </small>
+      </div>
+      <div class="p-field">
+        <label for="number">Contact Number</label>
+        <input
+          id="number"
+          type="text"
+          formControlName="number"
+          pInputText
+          placeholder="Contact Number"
+        />
+        <small
+          *ngIf="number.invalid && (number.touched || number.dirty)"
+          class="p-error"
+        >
+          <div *ngIf="number.errors?.['required']">
+            Contact number is required
+          </div>
+        </small>
+      </div>
+      <div class="p-field">
+        <label for="dateofbirth">Date of Birth</label>
+        <p-calendar
+          formControlName="dateofbirth"
+          dateFormat="mm/dd/yy"
+          appendTo="body"
+        ></p-calendar>
+        <small
+          *ngIf="
+            dateofbirth.invalid && (dateofbirth.touched || dateofbirth.dirty)
+          "
+          class="p-error"
+        >
+          <div *ngIf="dateofbirth.errors?.['required']">
+            Date of Birth is required
+          </div>
+        </small>
+      </div>
     </div>
-    <div class="card flex">
-      <div
-        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2"
-      >
-        <p><b>Name</b></p>
-        <p><b>Email</b></p>
-        <p><b>Phone</b></p>
-        <p><b>Gender</b></p>
-        <p><b>Date of Birth</b></p>
-      </div>
-      <div
-        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
-      >
-        <p>{{ member.firstname }}</p>
-        <p>{{ member.email }}</p>
-        <p>{{ member.number }}</p>
-        <p>{{ member.gender }}</p>
-        <p>{{ member.dateofbirth }}</p>
-      </div>
+    <div class="dialog-footer">
+      <p-button
+        id="cancelButton"
+        label="Cancel"
+        icon="pi pi-times"
+        (click)="onCancel()"
+        class="p-button-text"
+        tabindex="0"
+        (keydown)="onButtonKeyDown($event)"
+      ></p-button>
+      <p-button
+        label="Submit"
+        icon="pi pi-check"
+        type="submit"
+        class="p-button-text"
+      ></p-button>
     </div>
-    <div class="card flex">
-      <div
-        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-8"
-      >
-        <p><b>Passcode</b></p>
-        <p><b>Role</b></p>
-        <p><b>Room No</b></p>
-        <p><b>Wing name</b></p>
-        <p><b>Wing Admin</b></p>
-      </div>
-      <div
-        class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
-      >
-        <p>{{ member.passcode }}</p>
-        <p>{{ userDetails?.role }}</p>
-        <p>{{ userDetails?.house?.house_no }}</p>
-        <p>{{ userDetails?.house?.Wing?.name }}</p>
-        <p>w-admin name</p>
-      </div>
+  </form>
+</p-dialog>
+@if (familyData?.length) { @for (member of familyData; track member.id) {
+<div class="top-profile flex flex-wrap mb-6">
+  <div class="card flex-initial">
+    <p-image
+      class="flex align-items-center justify-content-center p-4"
+      [src]="
+        member.photo ||
+        'https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg'
+      "
+      alt="Image"
+      width="auto"
+      height="150"
+      [preview]="true"
+    />
+  </div>
+  <div class="card flex">
+    <div
+      class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2"
+    >
+      <p><b>Name</b></p>
+      <p><b>Email</b></p>
+      <p><b>Phone</b></p>
+      <p><b>Gender</b></p>
+      <p><b>Date of Birth</b></p>
+    </div>
+    <div
+      class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
+    >
+      <p>{{ member.firstname }}</p>
+      <p>{{ member.email }}</p>
+      <p>{{ member.number }}</p>
+      <p>{{ member.gender }}</p>
+      <p>{{ member.dateofbirth }}</p>
     </div>
   </div>
-  } }
+  <div class="card flex">
+    <div
+      class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-8"
+    >
+      <p><b>Passcode</b></p>
+      <p><b>Role</b></p>
+      <p><b>Room No</b></p>
+      <p><b>Wing name</b></p>
+      <p><b>Wing Admin</b></p>
+    </div>
+    <div
+      class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
+    >
+      <p>{{ member.passcode }}</p>
+      <p>{{ userDetails?.role }}</p>
+      <p>{{ userDetails?.house?.house_no }}</p>
+      <p>{{ userDetails?.house?.Wing?.name }}</p>
+      <p>w-admin name</p>
+    </div>
+  </div>
+</div>
+} }

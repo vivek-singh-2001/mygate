@@ -13,11 +13,13 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
 import { Gender, User } from '../../../interfaces/user.interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-family-details',
   standalone: true,
   imports: [
+    CommonModule,
     ImageModule,
     ReactiveFormsModule,
     ButtonModule,
@@ -43,10 +45,22 @@ export class FamilyDetailsComponent {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       email: ['', [Validators.email, Validators.required]],
-      // gender: ['', Validators.required],
+      gender: ['', Validators.required],
       number: ['', Validators.required],
       dateofbirth: ['', Validators.required],
     });
+  }
+
+  onButtonKeyDown(event: KeyboardEvent) {
+    const target = event.target as HTMLElement;
+    if (event.key === 'Enter' || event.key === ' ') {
+      if (target.id === 'addFamilyMemberButton') {
+        this.showForm();
+      }
+      if (target.id === 'cancelButton') {
+        this.onCancel();
+      }
+    }
   }
 
   showForm() {
@@ -61,12 +75,37 @@ export class FamilyDetailsComponent {
     this.familyMemberForm.reset();
   }
 
+  get firstname() {
+    return this.familyMemberForm.controls['firstname'];
+  }
+
+  get lastname() {
+    return this.familyMemberForm.controls['lastname'];
+  }
+
+  get email() {
+    return this.familyMemberForm.controls['email'];
+  }
+
+  get gender() {
+    return this.familyMemberForm.controls['gender'];
+  }
+
+  get number() {
+    return this.familyMemberForm.controls['number'];
+  }
+
+  get dateofbirth() {
+    return this.familyMemberForm.controls['dateofbirth'];
+  }
+
   onSubmit() {
     if (this.familyMemberForm.valid) {
       this.addFamilyMember.emit(this.familyMemberForm.value);
       this.familyMemberForm.reset();
       this.isFormVisible = false;
     } else {
+      console.log(this.familyMemberForm.value);
       this.messageService.add({
         severity: 'info',
         summary: 'Warning',
