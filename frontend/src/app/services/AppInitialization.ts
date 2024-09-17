@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { BehaviorSubject, map, Observable, take, tap } from 'rxjs';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './user/user.service';
 import { HouseService } from './houses/houseService';
-
+import { AdminService } from './admin/admin.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +15,7 @@ export class AppInitializationService {
     private authService: AuthService,
     private userService: UserService,
     private houseService: HouseService,
-    private router: Router
+    private adminService: AdminService,
   ) {}
 
   initialize(): Observable<boolean> {
@@ -27,14 +26,15 @@ export class AppInitializationService {
       );
     } else {
       this.isInitialized$.next(true);
-  this.authService.logout()
+      this.authService.logout();
       return this.isInitialized$.asObservable();
     }
   }
   private fetchUserData(): Observable<boolean> {
     return this.userService.getCurrentUser().pipe(
       tap((user) => {
-        this.houseService.setHouses(user.data.user.Houses);
+        this.houseService.setHouses(user.data.user.Houses)
+        this.adminService.societydetails().subscribe()
       }),
       map(() => true)
     );

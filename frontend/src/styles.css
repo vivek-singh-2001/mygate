@@ -7,7 +7,6 @@ body{
     margin: 0;
     padding: 0;
     overflow: hidden;
-    /* font-family: Arial, sans-serif; */
  font-family: 'Algerian', sans-serif;   
  }
 
@@ -29,6 +28,4 @@ body{
     --gray-700: #424242;
     --gray-750: #2f2f2f;
     --gray-800: #212121;
-    
-  
 }

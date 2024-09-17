@@ -19,7 +19,6 @@ export class AuthInterceptor implements HttpInterceptor {
 
      // Get the token from localStorage
      const token = localStorage.getItem('authToken');
-
      // Clone the request to add the Authorization header
     let authReq = req;
     if (token) {
@@ -28,7 +27,6 @@ export class AuthInterceptor implements HttpInterceptor {
         setHeaders: {
           Authorization: `Bearer ${token}`
         },
-
       });
     }
     return next.handle(authReq).pipe(

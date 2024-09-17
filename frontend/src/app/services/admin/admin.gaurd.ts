@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AdminService } from './admin.service';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +15,14 @@ export class AdminGuard implements CanActivate {
   ) {}
 
   canActivate(): Observable<boolean> {
-    return this.adminService.isAdmin$.pipe(
-      map(isAdmin => {     
-        console.log(isAdmin);
-           
+    // Fetch admin status before proceeding
+    return this.adminService.societydetails().pipe(
+      take(1), // Ensure it only checks once
+      map(isAdmin => {
         if (isAdmin) {
           return true;
         } else {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home']); // Redirect if not admin
           return false;
         }
       })

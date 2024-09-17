@@ -7,10 +7,12 @@ import {
   switchMap,
   Subscription,
   throwError,
-  catchError, finalize,
+  catchError,
+  finalize,
 } from 'rxjs';
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
+import { AdminService } from '../admin/admin.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +26,8 @@ export class AuthService {
     private router: Router,
     private route: ActivatedRoute,
     private userService: UserService,
-    private houseService: HouseService
+    private houseService: HouseService,
+    private adminService: AdminService
   ) {}
 
   // Login with email and password
@@ -45,6 +48,7 @@ export class AuthService {
         console.log('user after login', user);
 
         this.houseService.setHouses(user.data.user.Houses);
+        this.adminService.societydetails().subscribe();
       }),
       finalize(() => {
         // Navigate only after a successful login
@@ -74,6 +78,7 @@ export class AuthService {
         this.userService.getCurrentUser().subscribe({
           next: (user) => {
             this.houseService.setHouses(user.data.user.Houses);
+            this.adminService.societydetails().subscribe(); //to set the admin status
             this.router.navigate(['/home'], { replaceUrl: true });
           },
           error: (error) => console.error('Error fetching user data:', error),

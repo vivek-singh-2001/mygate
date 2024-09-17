@@ -40,17 +40,12 @@ export class SideNavComponent implements OnInit {
   }
 
   checkAdminStatus() {
-    this.adminService.societydetails().subscribe({
-      next:()=>{
-        this.adminService.isAdmin$.subscribe({
-          next: (response) => {
-            this.isAdmin = response;
-            this.initializeMenuItems();
-          },
-        });
-      }
-    })
-    
+    this.adminService.isAdmin$.subscribe({
+      next: (response) => {
+        this.isAdmin = response;
+        this.initializeMenuItems();
+      },
+    });
   }
 
   initializeMenuItems() {

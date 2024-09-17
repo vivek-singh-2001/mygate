@@ -63,7 +63,6 @@ export class FamilyDetailsComponent {
 
   onSubmit() {
     if (this.familyMemberForm.valid) {
-      console.log(this.familyMemberForm.value);
       this.addFamilyMember.emit(this.familyMemberForm.value);
       this.familyMemberForm.reset();
       this.isFormVisible = false;
