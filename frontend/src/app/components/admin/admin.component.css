@@ -10,4 +10,35 @@
     border-radius: 4px;
     width: 200px; /* Adjust width as needed */
   }
+
+
+
+  .full-height {
+    height: 100%;
+    background-color: var(--gray-200)
+  }
+  
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .p-tabview {
+    flex: 1;
+  }
+  
+  ::ng-deep .p-tabview .p-tabview-panels {
+    background: #ffffff;
+    padding: 0;
+    border: 0 none;
+    color: #4b5563;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
   
