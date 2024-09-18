@@ -61,7 +61,6 @@ exports.findSocietyAdminsDetails = async (societyId) => {
 
 exports.findSocietyByUserId = async(userId)=>{
   return await Society.findOne({ where: { societyAdminId:userId } });
-
 }
 
 

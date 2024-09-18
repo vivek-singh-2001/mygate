@@ -1,29 +1,17 @@
-<div>
-  <div class="top-profile flex justify-content-center align-item-center">
-    <div class="card">
-      <h4 class="flex justify-content-center">Add Apartment</h4>
-      <div>
-        <div
-          class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap"
-        >
-          <p><b>Select number of Wings</b></p>
-          <p-dropdown
-            [options]="wingOptions"
-            [(ngModel)]="numberOfWings"
-            optionLabel="name"
-            placeholder="Select number of wings"
-            (ngModelChange)="onWingSelection()"
-          />
-        </div>
-        <div
-          class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap"
-        >
-          <div *ngFor="let field of wings; let i = index">
-            <label>Wing {{ i + 1 }} Name:</label>
-            <input type="text" placeholder="Enter wing name" />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap">
+  <p><b>Select a wing</b></p>
+  <p-dropdown
+    [options]="wingOptions"
+    [(ngModel)]="numberOfWings"
+    optionLabel="name"
+    placeholder="Select Wing"
+    (ngModelChange)="onWingSelection()"
+  ></p-dropdown>
 </div>
+
+<!-- <div class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap">
+  <div *ngFor="let wing of wingOptions; let i = index">
+    <label>Wing {{ i + 1 }} Name:</label>
+    <input type="text" placeholder="Enter wing name" />
+  </div>
+</div> -->
