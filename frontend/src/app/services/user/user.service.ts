@@ -13,6 +13,9 @@ export class UserService {
   // BehaviorSubject to hold the current user data
   private userData = new BehaviorSubject<any>(null);
   private familyData = new BehaviorSubject<any>(null);
+  private userSocietyIdSubject = new BehaviorSubject<any>(null);
+
+  userSocietyId$ = this.userSocietyIdSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -30,6 +33,9 @@ export class UserService {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {
         this.userData.next(response.data.user);
+        this.userSocietyIdSubject.next(
+          response.data.user.Houses[0].Wing.SocietyId
+        );
       }),
       catchError((error) => {
         console.error('Failed to load user data', error);
@@ -90,7 +96,8 @@ export class UserService {
       console.error('User ID is not available, cannot fetch family members.');
       return of(null);
     }
-
+    console.log(userId,"from userservice.......");
+    
     return this.http.get(`${this.userApiUrl}/familyMembers/${userId}`).pipe(
       tap((response: any) => {
         console.log('Fetched family members data:', response.users);
@@ -117,7 +124,7 @@ export class UserService {
       );
   }
 
-  addFamilyMember(member: any): Observable<any> {
+  addFamilyMember(member: any): Observable<any> {    
     return this.http.post(`${this.userApiUrl}/addFamilyMember`, member);
   }
 }

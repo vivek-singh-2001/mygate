@@ -14,7 +14,8 @@ exports.getUserById = (id) => {
         "passcode",
         "isMember",
         "isOwner",
-        'dateofbirth'
+        "dateofbirth",
+        "gender",
       ],
     },
     include: [
@@ -22,7 +23,7 @@ exports.getUserById = (id) => {
         model: House,
         as: "Houses",
         attributes: {
-          exclude: ['createdAt', 'updatedAt']
+          exclude: ["createdAt", "updatedAt"],
         },
         include: [
           {
@@ -33,11 +34,8 @@ exports.getUserById = (id) => {
                 model: Society,
                 as: "Society",
                 attributes: {
-                  exclude: [
-                    'createdAt',
-                    'updatedAt'
-                  ]
-                }
+                  exclude: ["createdAt", "updatedAt"],
+                },
               },
             ],
           },
@@ -83,16 +81,35 @@ exports.findFamilyMembers = async (userId) => {
 };
 
 exports.createFamilyMember = async (userData) => {
-  const { firstname, lastname, number, email, dateofbirth, houseId } = userData;
-  const newUser = await User.create({
+  const {
     firstname,
     lastname,
     number,
     email,
+    gender,
+    isOwner,
     dateofbirth,
-  });
-  await HouseUser.create({ UserId: newUser.id, HouseId: houseId });
-  return newUser;
+    houseId,
+  } = userData;
+  console.log(userData);
+  try {
+    const newUser = await User.create({
+      firstname,
+      lastname,
+      number,
+      email,
+      gender,
+      isOwner,
+      dateofbirth,
+    });
+
+    await HouseUser.create({ UserId: newUser.id, HouseId: houseId });
+    console.log('New user created:', newUser);
+    return newUser
+  } catch (error) {
+    console.error('Error in createFamilyMember:', error);
+    throw new Error(error);
+  }
 };
 
 exports.saveUser = (user) => {

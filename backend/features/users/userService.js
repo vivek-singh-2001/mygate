@@ -25,6 +25,7 @@ exports.updateUser = async (userId, updateData) => {
     "email",
     "number",
     "dateofbirth",
+    'gender'
   ];
 
   // Filter only allowed fields
@@ -56,11 +57,21 @@ exports.getFamilyMembers = async (userId) => {
 };
 
 exports.addFamilyMember = async (userData) => {
-  const newUser = await userRepository.createFamilyMember(userData);
-  if (!newUser) {
-    throw new CustomError("Error adding family member", 500);
+  console.log('Starting addFamilyMember');
+
+  try {
+    const newUser = await userRepository.createFamilyMember(userData);
+    console.log('User created:', newUser);
+
+    if (!newUser) {
+      throw new CustomError('Error adding member', 500);
+    }
+
+    return newUser;
+  } catch (error) {
+    console.error('Error in addFamilyMember:', error); // Log the error here
+    throw error; // Re-throw the error so that the caller can handle it
   }
-  return newUser;
 };
 
 exports.updatePassword = async ({ userId, currentPassword, newPassword }) => {

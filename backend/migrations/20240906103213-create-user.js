@@ -72,6 +72,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       
+      },
+      gender:{
+        type: Sequelize.ENUM(['male', 'female', 'Other']),
+        defaultValue: 'Other',
+        allowNull: true,
       }
     });
   },

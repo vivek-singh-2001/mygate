@@ -42,7 +42,8 @@ module.exports = {
         dateofbirth,
         isOwner: false,
         isMember: true,
-        photo, // Include the random photo here
+        photo, // Include the random photo here,
+        gender,
         createdAt: new Date(),
         updatedAt: new Date(),
       });

@@ -76,6 +76,12 @@ module.exports = (connectDB, DataTypes) => {
       photo:{
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue:"https://picsum.photos/seed/59b6a5a9-609d-4f15-90cf-04e11da3147b/200"
+      },
+      gender:{
+        type: DataTypes.ENUM(['male', 'female', 'Other']),
+        defaultValue: 'Other',
+        allowNull: true,
       }
     },
     {

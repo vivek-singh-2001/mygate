@@ -43,7 +43,7 @@ export class FamilyDetailsComponent {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       email: ['', [Validators.email, Validators.required]],
-      // gender: ['', Validators.required],
+      gender: ['', Validators.required],
       number: ['', Validators.required],
       dateofbirth: ['', Validators.required],
     });

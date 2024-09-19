@@ -16,8 +16,8 @@
     border: 1px solid #ccc;
     border-radius: 8px;
   }
-
   ::ng-deep .p-inputtext{
     padding: 5px;
     width: 200px;
-  }
+  } 
+

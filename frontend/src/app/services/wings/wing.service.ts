@@ -22,4 +22,6 @@ export class WingService {
   clearWingDetails() {
     this.wingDetailsSubject.next(null);
   }
+
+ 
 }

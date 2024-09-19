@@ -13,3 +13,15 @@ exports.getWingDetils = asyncErrorHandler(async (req, res, next) => {
         next(error);
       }
   });
+
+
+  // exports.getAllWing = asyncErrorHandler(async (req, res, next) => {
+  //   const {societyId} = req.body;
+
+  //   try{
+  //       const allWingDetails = await wingService.getAllWing(societyId);
+  //       res.status(200).json({ status: "success",  allWingDetails });
+  //   }catch (error) {
+  //     next(error);
+  //   }
+  // })

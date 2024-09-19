@@ -40,7 +40,7 @@ exports.findSocietyAdminsDetails = async (societyId) => {
       {
         model: User,
         as: "User",
-        attributes: ["firstname", "lastname", "email", "number","id"],
+        attributes: ["firstname", "lastname", "email", "number","id","gender"],
       },
       {
         model: House,

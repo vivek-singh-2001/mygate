@@ -89,7 +89,7 @@ export class UserDetailComponent implements OnInit {
     this.genders = [
       { label: 'Male', value: 'male' },
       { label: 'Female', value: 'female' },
-      { label: 'Other', value: 'other' },
+      { label: 'Other', value: 'Other' },
     ];
   }
 
@@ -121,7 +121,7 @@ export class UserDetailComponent implements OnInit {
               firstname: userData.firstname || 'apple',
               lastname: userData.lastname || '',
               email: userData.email || '',
-              gender: userData.gender || 'male',
+              gender: userData.gender || 'Other',
               number: userData.number || '',
               dateofbirth: userData.dateofbirth
                 ? new Date(userData.dateofbirth)
@@ -207,6 +207,7 @@ export class UserDetailComponent implements OnInit {
 
   addFamilyMember(member: User) {
     member.houseId = this.selectedHouse.id;
+    member.id = this.userDetails.id
     this.userService.addFamilyMember(member).subscribe({
       next: (response) => {
         this.familyData.push(response.data.user);

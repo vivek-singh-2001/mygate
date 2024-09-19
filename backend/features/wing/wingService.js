@@ -11,3 +11,13 @@ exports.getWingDetils = async (wingId) => {
 
     return wingDetails;
   };
+
+  // exports.getAllWing = async (societyId) => {
+  //   const allWingDetails = await wingRepository.getAllWing(societyId);
+    
+  //   if (!allWingDetails) {
+  //     throw new CustomError(`Wings with ID ${id} not found`, 404);
+  //   }
+
+  //   return allWingDetails;
+  // }

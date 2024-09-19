@@ -51,16 +51,22 @@ exports.getFamilyMembers = asyncErrorHandler(async (req, res, next) => {
 });
 
 exports.addFamilyMember = asyncErrorHandler(async (req, res, next) => {
-  const { firstname, lastname, number, email, dateofbirth, houseId } = req.body;
+  const { firstname, lastname, number, email, gender,dateofbirth, houseId,isOwner } = req.body;
   try {
     const newUser = await userService.addFamilyMember({
       firstname,
       lastname,
       number,
+      gender,
       email,
       dateofbirth,
       houseId,
+      isOwner
+      
     });
+    console.log("ddwdwq",newUser);
+    
+
     res.status(201).json({ status: "success", data: { user: newUser } });
   } catch (error) {
     next(error);
@@ -75,6 +81,8 @@ exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
       .status(200)
       .json({ status: "success", message: "Password updated successfully" });
   } catch (error) {
+    console.log();
+    
     next(error);
   }
 });

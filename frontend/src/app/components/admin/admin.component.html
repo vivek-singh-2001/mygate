@@ -1,8 +1,8 @@
 <div class="card min-h-full bg-black full-height">
   <p-tabView class="min-h-full full-height">
-    <p-tabPanel header="Add Apartment" >
+    <p-tabPanel header="Allocate Users" >
       <ng-template pTemplate="content">
-        <app-add-property></app-add-property>
+        <app-allocate-house></app-allocate-house>
       </ng-template>
     </p-tabPanel>
     <p-tabPanel header="Users">
@@ -18,6 +18,11 @@
     <p-tabPanel header="Events">
       <ng-template pTemplate="content">
         Event list of a society to display here.....
+      </ng-template>
+    </p-tabPanel>
+    <p-tabPanel header="Add Apartment" >
+      <ng-template pTemplate="content">
+        <app-add-property></app-add-property>
       </ng-template>
     </p-tabPanel>
   </p-tabView>

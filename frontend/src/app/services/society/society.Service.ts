@@ -13,7 +13,6 @@ export class SocietyService {
   private societyDataSubject = new BehaviorSubject<any>(null);
   societyData$ = this.societyDataSubject.asObservable();
 
-
   constructor(private http: HttpClient) {}
 
   fetchSocietyData(societyId:number): Observable<any> {
@@ -27,7 +26,5 @@ export class SocietyService {
       })
     );
   }
-  
-
   
 }

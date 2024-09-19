@@ -31,7 +31,7 @@ exports.getWingHouseDetailsById = async (wingId) => {
           include: [
             {
               model: User,
-              attributes: ["firstname", "lastname", "email", "number", "id"],
+              attributes: ["firstname", "lastname", "email", "number", "id","gender"],
               where:{
                 isOwner:true
               }
