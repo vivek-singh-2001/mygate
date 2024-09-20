@@ -72,7 +72,6 @@ export class UserService {
   getFamilyMembers(): Observable<any> {
     if (this.familyData.getValue()) {
       console.log('data haiiii0', this.familyData.getValue());
-
       return this.familyData.asObservable();
     }
 
@@ -85,7 +84,7 @@ export class UserService {
     }
   }
 
-  private fetchFamilyMembers(): Observable<any> {
+  fetchFamilyMembers(): Observable<any> {
     const userId = this.userData.getValue()?.id;
     if (!userId) {
       console.error('User ID is not available, cannot fetch family members.');

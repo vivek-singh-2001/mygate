@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
@@ -56,7 +56,7 @@ import { House } from '../../interfaces/house.interface';
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.css',
 })
-export class UserDetailComponent implements OnInit {
+export class UserDetailComponent implements OnInit, OnDestroy {
   today: Date = new Date();
   familyData: User[] = [];
   genders: Gender[] = [];
@@ -77,7 +77,9 @@ export class UserDetailComponent implements OnInit {
   selectedHouse: Partial<House> = {};
   isLoading: boolean = true;
 
+  private wingSubscription!: Subscription;
   private userSubscription!: Subscription;
+  private familySubscription!: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -114,8 +116,6 @@ export class UserDetailComponent implements OnInit {
       .pipe(
         switchMap((userData) => {
           if (userData) {
-            console.log("from the userdetails",userData);
-            
             this.userDetails = userData;
             this.userProfileForm.patchValue({
               firstname: userData.firstname || 'apple',
@@ -163,25 +163,22 @@ export class UserDetailComponent implements OnInit {
           console.error('Error fetching house details', err);
           this.isLoading = false;
         },
-        complete: () => {
-          if (this.userSubscription) {
-            this.userSubscription.unsubscribe();
-          }
-        },
       });
 
     // Fetch family details
-    this.userService.getFamilyMembers().subscribe((response) => {
-      this.familyData = response.users.filter(
-        (data: User) => data.id !== this.userDetails.id
-      );
-    });
+    this.familySubscription = this.userService
+      .getFamilyMembers()
+      .subscribe((response) => {
+        this.familyData = response.users.filter(
+          (data: User) => data.id !== this.userDetails.id
+        );
+      });
   }
 
   // Fetch wing details after getting house info
   fetchWingDetails(wingId: number) {
     if (wingId) {
-      this.wingService.fetchWingDetails(wingId).subscribe({
+      this.wingService.getWingDetails(wingId).subscribe({
         next: (wingDetails) => {
           console.log('Fetched wing details:', wingDetails);
           // Add wing details to userDetails
@@ -191,7 +188,7 @@ export class UserDetailComponent implements OnInit {
         error: (error) => {
           console.error('Error fetching wing details:', error);
         },
-      });
+        });
     }
   }
 
@@ -225,5 +222,12 @@ export class UserDetailComponent implements OnInit {
         });
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions at once
+    this.wingSubscription.unsubscribe();
+    this.userSubscription.unsubscribe();
+    this.familySubscription.unsubscribe();
   }
 }

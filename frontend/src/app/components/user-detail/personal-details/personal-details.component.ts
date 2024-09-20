@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
@@ -42,7 +42,7 @@ import { Wing } from '../../../interfaces/wing.interface';
   templateUrl: './personal-details.component.html',
   styleUrls: ['../user-detail.component.css', './personal-details.component.css'],
 })
-export class PersonalDetailsComponent implements OnInit {
+export class PersonalDetailsComponent {
   @Input() userDetails!: User;
   @Input() userProfileForm!: FormGroup;
   @Input() genders?: Gender[];
@@ -51,11 +51,6 @@ export class PersonalDetailsComponent implements OnInit {
   wingDetailsSubject = new BehaviorSubject<Wing | null>(null);
 
   constructor(private userService: UserService) {}
-
-  ngOnInit(): void {
-    console.log(this.userDetails);
-    
-  }
 
   onUserFormSubmit() {
     this.isLoading = true;

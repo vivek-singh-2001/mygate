@@ -12,6 +12,7 @@ import { UserService } from '../../services/user/user.service';
 import { Router } from '@angular/router';
 import { HouseService } from '../../services/houses/houseService';
 import { Subscription } from 'rxjs';
+import { WingService } from '../../services/wings/wing.service';
 
 @Component({
   selector: 'app-navigation',
@@ -41,7 +42,8 @@ export class NavigationComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private router: Router,
-    private houseService: HouseService
+    private houseService: HouseService,
+    private wingService: WingService
   ) {}
 
   ngOnInit(): void {
@@ -134,6 +136,7 @@ export class NavigationComponent implements OnInit {
   }
 
   goToHouse(house: any) {
+    this.wingService.clearWingDetails()
     this.houseService.setSelectedHouse(house);
     this.selectedHouse = house.house_no;
     this.initializeMenu();

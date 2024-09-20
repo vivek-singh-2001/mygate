@@ -71,7 +71,6 @@ db.House.belongsToMany(db.User, { through: db.HouseUser });
 db.House.hasMany(db.HouseUser, { foreignKey: 'HouseId' });
 db.HouseUser.belongsTo(db.House, { foreignKey: 'HouseId' });
 
-
 db.HouseUser.belongsTo(db.User, { foreignKey: 'UserId' });
 db.User.hasMany(db.HouseUser, { foreignKey: 'UserId' });
 
