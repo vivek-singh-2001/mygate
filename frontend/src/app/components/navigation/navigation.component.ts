@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { HouseService } from '../../services/houses/houseService';
 import { Subscription } from 'rxjs';
 import { WingService } from '../../services/wings/wing.service';
+import { House } from '../../interfaces/house.interface';
 
 @Component({
   selector: 'app-navigation',
@@ -137,6 +138,7 @@ export class NavigationComponent implements OnInit {
 
   goToHouse(house: any) {
     this.wingService.clearWingDetails()
+    this.userService.clearfamilyData();
     this.houseService.setSelectedHouse(house);
     this.selectedHouse = house.house_no;
     this.initializeMenu();
@@ -160,5 +162,12 @@ export class NavigationComponent implements OnInit {
 
   onDropdownMouseLeave() {
     this.hideDropdown();
+  }
+
+  handleKeyDown(event: KeyboardEvent, house: House) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.goToHouse(house);
+    }
   }
 }

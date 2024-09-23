@@ -13,7 +13,7 @@ export class UserService {
 
   // BehaviorSubject to hold the current user data
   private userData = new BehaviorSubject<any>(null);
-  private familyData = new BehaviorSubject<any>(null);
+  private familyDataSubject = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -37,6 +37,20 @@ export class UserService {
         return of(null);
       })
     );
+  }
+
+  updateUser(userId: number, userData: User): Observable<any> {
+    return this.http
+      .patch(`${this.userApiUrl}/updateUser/${userId}`, userData)
+      .pipe(
+        tap((response) => {
+          console.log('User updated successfully:', response);
+        }),
+        catchError((error) => {
+          console.error('Failed to update user', error);
+          return of(null); // Handle error
+        })
+      );
   }
 
   // Manually set user data
@@ -69,32 +83,24 @@ export class UserService {
     return this.http.get(`${this.societyApiUrl}/${societyId}/wing/${wingId}`);
   }
 
-  getFamilyMembers(): Observable<any> {
-    if (this.familyData.getValue()) {
-      console.log('data haiiii0', this.familyData.getValue());
-      return this.familyData.asObservable();
-    }
-
-    if (!this.userData.getValue()) {
-      return this.getCurrentUser().pipe(
-        switchMap(() => this.fetchFamilyMembers())
-      );
+  getFamilyMembers(userId: number, houseId: number): Observable<any> {
+    if (this.familyDataSubject.getValue()) {
+      return this.familyDataSubject.asObservable();
     } else {
-      return this.fetchFamilyMembers();
+      return this.fetchFamilyMembers(userId, houseId);
     }
   }
 
-  fetchFamilyMembers(): Observable<any> {
-    const userId = this.userData.getValue()?.id;
-    if (!userId) {
-      console.error('User ID is not available, cannot fetch family members.');
+  fetchFamilyMembers(userId: number, houseId: number): Observable<any> {
+    if (!userId || !houseId) {
+      console.error('User Id and House Id is not available, cannot fetch family members.');
       return of(null);
     }
 
-    return this.http.get(`${this.userApiUrl}/familyMembers/${userId}`).pipe(
+    return this.http.get(`${this.userApiUrl}/familyMembers/${userId}/${houseId}`).pipe(
       tap((response: any) => {
         console.log('Fetched family members data:', response.users);
-        this.familyData.next(response); // Set familyData on success
+        this.familyDataSubject.next(response); // Set familyDataSubject on success
       }),
       catchError((error) => {
         console.error('Failed to load family members data', error);
@@ -103,21 +109,11 @@ export class UserService {
     );
   }
 
-  updateUser(userId: number, userData: User): Observable<any> {
-    return this.http
-      .patch(`${this.userApiUrl}/updateUser/${userId}`, userData)
-      .pipe(
-        tap((response) => {
-          console.log('User updated successfully:', response);
-        }),
-        catchError((error) => {
-          console.error('Failed to update user', error);
-          return of(null); // Handle error
-        })
-      );
-  }
-
   addFamilyMember(member: User): Observable<any> {
     return this.http.post(`${this.userApiUrl}/addFamilyMember`, member);
+  }
+
+  clearfamilyData() {
+    this.familyDataSubject.next(null)
   }
 }

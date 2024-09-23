@@ -6,10 +6,6 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
-
-
-
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -17,6 +13,5 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideAnimationsAsync(),
-   
   ],
 };

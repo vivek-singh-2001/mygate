@@ -3,7 +3,10 @@
     <div class="flex align-items-center gap-4 mr-4">
       <p-menu #menu [model]="item" popup="true"></p-menu>
       <p-avatar
-        [image]="user?.photo || 'https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg'"
+        [image]="
+          user?.photo ||
+          'https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg'
+        "
         shape="circle"
         [style]="{ width: '50px', height: '50px' }"
         (click)="menu.toggle($event)"
@@ -18,18 +21,28 @@
       </div>
     </div>
   </ng-template>
-  
+
   <!-- Dropdown for houses -->
+  @if (isDropdownVisible) {
   <div
-    *ngIf="isDropdownVisible"
     class="house-dropdown"
     (mouseenter)="onDropdownMouseEnter()"
     (mouseleave)="onDropdownMouseLeave()"
   >
     <ul>
-      <li *ngFor="let house of houses" (click)="goToHouse(house)">
-        {{ house.house_no }}
+      @for (house of houses; track $index) {
+      <li>
+        <button
+          (click)="goToHouse(house)"
+          (keydown)="handleKeyDown($event, house)"
+          class="house-button"
+          [disabled]="true"
+        >
+          {{ house.house_no }}
+        </button>
       </li>
+      }
     </ul>
   </div>
+  }
 </p-menubar>

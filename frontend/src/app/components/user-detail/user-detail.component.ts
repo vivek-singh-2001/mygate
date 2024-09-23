@@ -154,6 +154,9 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
             // Fetch wing details here
             this.fetchWingDetails(house.Wing?.id);
+
+            // Fetch family details
+            this.getFamilyMembers(this.userDetails.id, house.id)
           } else {
             console.log('Selected house is null or undefined');
           }
@@ -164,10 +167,12 @@ export class UserDetailComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
       });
+  }
 
-    // Fetch family details
+  //Get Family Members
+  getFamilyMembers(userId: number, houseId: number) {
     this.familySubscription = this.userService
-      .getFamilyMembers()
+      .getFamilyMembers(userId, houseId)
       .subscribe((response) => {
         this.familyData = response.users.filter(
           (data: User) => data.id !== this.userDetails.id
@@ -178,7 +183,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   // Fetch wing details after getting house info
   fetchWingDetails(wingId: number) {
     if (wingId) {
-      this.wingService.getWingDetails(wingId).subscribe({
+      this.wingSubscription = this.wingService.getWingDetails(wingId).subscribe({
         next: (wingDetails) => {
           console.log('Fetched wing details:', wingDetails);
           // Add wing details to userDetails
@@ -188,7 +193,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         error: (error) => {
           console.error('Error fetching wing details:', error);
         },
-        });
+      });
     }
   }
 

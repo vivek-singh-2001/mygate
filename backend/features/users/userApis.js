@@ -11,7 +11,7 @@ const router = express.Router();
 // Define routes
 router.route("/getUser/me").get(protect,getUserById);
 router.route("/updateUser/:id").patch(protect,updateUser);
-router.get("/familyMembers/:userId", protect,getFamilyMembers);
+router.get("/familyMembers/:userId/:houseId", protect,getFamilyMembers);
 router.post("/addFamilyMember", protect,addFamilyMember);
 router.patch("/updatePassword",protect, updatePassword);
 

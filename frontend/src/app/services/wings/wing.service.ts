@@ -7,7 +7,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class WingService {
   private wingDetailsSubject = new BehaviorSubject<any>(null);
-  wingDetails$ = this.wingDetailsSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
