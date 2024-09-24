@@ -38,7 +38,11 @@
 
 ::ng-deep .large .p-button-icon { font-size: 1.5rem;}
 
-
+::ng-deep .menuwraper .p-menubar .p-submenu-list {
+  position: absolute;
+  z-index: 2;
+  max-width: fit-content;
+}
 
 
 .p-button.p-button-text {

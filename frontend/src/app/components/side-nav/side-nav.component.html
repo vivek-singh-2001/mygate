@@ -7,7 +7,7 @@
   ></button>
   <div class="menu-container">
     <ng-container *ngIf="isExpanded; else iconOnly">
-      <p-menu [model]="items" [style]="{ width: '100%' }" ></p-menu>
+      <p-menubar [model]="items" [style]="{ width: '100%' }" class="menuwraper" ></p-menubar>
     </ng-container>
     <ng-template #iconOnly>
       <div class="icon-menu">
