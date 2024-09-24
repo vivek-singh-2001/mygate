@@ -43,8 +43,8 @@ export const routes: Routes = [
       {
         path: 'apartments',
         loadComponent: () =>
-          import('./components/admin/admin.component').then(
-            (admin) =>admin.AdminComponent 
+          import('./components/apartment/apartment.component').then(
+            (apartment) => apartment.ApartmentComponent 
           ),
           canActivate:[AdminGuard]
       },
@@ -56,6 +56,22 @@ export const routes: Routes = [
           ).then((w) => w.WingDetailsComponent),
           canActivate:[AdminGuard]
       },
+      {
+        path:'apartments/users',
+        loadComponent: () =>
+          import(
+            './components/admin/society-users/society-users.component'
+          ).then((s) => s.SocietyUsersComponent),
+          canActivate:[AdminGuard]
+      },
+      // {
+      //   path:'apartments/events',
+      //   loadComponent: () =>
+      //     import(
+      //       './components/'
+      //     ).then((a) => a.AddPropertyComponent),
+      //     canActivate:[AdminGuard]
+      // }
     ],
   },
   {

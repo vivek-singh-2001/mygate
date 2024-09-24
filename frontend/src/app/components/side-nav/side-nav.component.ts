@@ -64,7 +64,7 @@ export class SideNavComponent implements OnInit {
       ...(this.isAdmin
         ? [
             {
-              label: 'Apartments',
+              label: 'Admin',
               icon: 'pi pi-warehouse',
               iconSize: 'large',
               items:[
@@ -80,7 +80,7 @@ export class SideNavComponent implements OnInit {
                 },{
                   label: 'Users',
                   icon: 'pi pi-home',
-                  command: () => this.navigateTo('/home/apartments/all'),
+                  command: () => this.navigateTo('/home/apartments/users'),
                 },
               ]
               // command: () => this.navigateTo('/home/apartments'),
