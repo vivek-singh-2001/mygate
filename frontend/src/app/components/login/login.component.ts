@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
         new FormControl(null),
         new FormControl(null),
         new FormControl(null),
-      ])
+      ]),
     });
     this.authService.handleGoogleLoginCallback();
   }
@@ -74,10 +74,13 @@ export class LoginComponent implements OnInit {
         },
       });
     }
-    console.log(this.loginForm.controls);
   }
 
   onGoogleLogin(): void {
     this.authService.loginWithGoogle();
+  }
+
+  goToRegisterPage(){
+    this.router.navigate(['/register']);
   }
 }
