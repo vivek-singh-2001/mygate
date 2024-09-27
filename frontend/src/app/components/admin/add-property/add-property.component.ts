@@ -33,8 +33,7 @@ export class AddPropertyComponent implements OnInit {
     this.societyService
       .fetchSocietyData(societyId)
       .subscribe((responseData: any) => {
-        console.log("socccc", responseData);
-        
+        console.log('socccc', responseData);
         this.wingOptions = responseData.societyDetails.map((wing: Wing) => ({
           name: wing.name,
           id: wing.id,

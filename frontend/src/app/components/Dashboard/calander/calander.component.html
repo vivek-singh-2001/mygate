@@ -72,7 +72,7 @@
   <p-dialog
     header="Add Event to Calander"
     [modal]="true"
-    [(visible)]="addevent"
+    [(visible)]="addEventFlag"
     [style]="{ width: '25rem' }"
     [contentStyle]="{ 'background-color': '#333' , color:'white'}"
   >
@@ -107,7 +107,7 @@
       <p-button
         label="Cancel"
         severity="secondary"
-        (onClick)="addevent = false"
+        (onClick)="addEventFlag = false"
       />
       <p-button label="Add" (onClick)="onEventSubmit()" />
     </div>

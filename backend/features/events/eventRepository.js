@@ -1,8 +1,13 @@
+const { where } = require("sequelize");
 const { db } = require("../../config/connection");
 const { Event } = db;
 
-exports.getAllEvents = async (eventId) => {
-  return await Event.findAll();
+exports.getAllEvents = async (societyId) => {
+  return await Event.findAll({
+    where: {
+      SocietyId: societyId
+    }
+  });
 };
 
 exports.getEventById = async (id) => {

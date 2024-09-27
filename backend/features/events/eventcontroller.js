@@ -3,8 +3,8 @@ const eventService = require("./eventService");
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 
 exports.getAllEvents = asyncErrorHandler(async (req, res) => {
-  const { id: eventId } = req.params;
-  const events = await eventService.getAllEvents(eventId);
+  const { id: societyId } = req.params;
+  const events = await eventService.getAllEvents(societyId);
   res.json(events);
 });
 

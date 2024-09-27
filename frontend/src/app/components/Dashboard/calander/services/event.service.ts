@@ -14,17 +14,16 @@ export class EventService {
 
   constructor(private http: HttpClient) {}
 
-  getEvents(): Observable<any> {
+  getEvents(societyId: number): Observable<any> {
     if (this.eventsSubject.getValue()) {
-      console.log("hello", this.eventsSubject.getValue());
       return this.events$
     } else {
-      return this.fetchEvents()
+      return this.fetchEvents(societyId)
     }
   }
 
-  fetchEvents(): Observable<any> {
-    return this.http.get<any[]>(this.apiUrl).pipe(
+  fetchEvents(societyId: number): Observable<any> {
+    return this.http.get<any[]>(`${this.apiUrl}/${societyId}`).pipe(
       tap((response) => {
         this.eventsSubject.next(response);
       })
