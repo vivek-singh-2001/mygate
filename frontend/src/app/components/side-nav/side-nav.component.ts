@@ -4,7 +4,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { CommonModule } from '@angular/common';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
-import { MenuModule } from 'primeng/menu';
+
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from '../../services/admin/admin.service';
@@ -17,7 +17,6 @@ import { AdminService } from '../../services/admin/admin.service';
     ButtonModule,
     CommonModule,
     MenubarModule,
-    MenuModule,
   ],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.css',
@@ -68,7 +67,23 @@ export class SideNavComponent implements OnInit {
               label: 'Apartments',
               icon: 'pi pi-warehouse',
               iconSize: 'large',
-              command: () => this.navigateTo('/home/apartments'),
+              items:[
+                {
+                  label: 'Apartments',
+                  icon: 'pi pi-home',
+                  command: () => this.navigateTo('/home/apartments'),
+                },
+                {
+                  label: 'Assign Houses',
+                  icon: 'pi pi-home',
+                  command: () => this.navigateTo('/home/apartments/all'),
+                },{
+                  label: 'Users',
+                  icon: 'pi pi-home',
+                  command: () => this.navigateTo('/home/apartments/all'),
+                },
+              ]
+              // command: () => this.navigateTo('/home/apartments'),
             },
           ]
         : []),
