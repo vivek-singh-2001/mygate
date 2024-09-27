@@ -1,15 +1,10 @@
 .container {
   position: relative;
-  width: 100%;
-  background: #fff;
-  /* height: 100vh; */
+  height: 100vh;
   width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-size: cover;
-  background-position: center;
-  flex-direction:column;
 }
 
 .container header {
@@ -17,7 +12,7 @@
   color: #333;
   font-weight: 500;
   text-align: center;
-  margin-top: 100px;
+  /* margin-top: 100px; */
 }
 .form {
   width: 100%;
@@ -27,8 +22,8 @@
 }
 .input-box {
   position: relative;
-  margin-bottom: 20px; 
-  min-height: 70px; 
+  margin-bottom: 10px; 
+  min-height: 50px; 
 }
 
 .input-box small {
@@ -108,10 +103,7 @@ input.ng-invalid.ng-touched {
   border: red 2px solid;
 }
 
-small {
-  color: red;
-  font-weight: bold;
-}
+
 
 .btn-gen-username {
   margin: 10px 0px;
