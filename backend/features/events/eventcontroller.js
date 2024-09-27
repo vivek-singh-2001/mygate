@@ -1,50 +1,31 @@
-const eventService = require('./eventService');
+const { param, validationResult } = require("express-validator");
+const eventService = require("./eventService");
+const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 
-const eventController = {
-  getAllEvents: async (req, res, next) => {
-    try {
-      const events = await eventService.getAllEvents();
-      res.json(events);
-    } catch (error) {
-      next(error);
-    }
-  },
+exports.getAllEvents = asyncErrorHandler(async (req, res) => {
+  const { id: eventId } = req.params;
+  const events = await eventService.getAllEvents(eventId);
+  res.json(events);
+});
 
-  createEvent: async (req, res, next) => {
-    try {
-      const eventData = req.body;
-      console.log(eventData);
-      
-      // const userRole = req.user.role;  
-      const newEvent = await eventService.createEvent(eventData);
-      res.status(201).json(newEvent);
-    } catch (error) {
-      next(error);
-    }
-  },
+exports.createEvent = asyncErrorHandler(async (req, res) => {
+  const eventData = req.body;
+  console.log(eventData);
+  const newEvent = await eventService.createEvent(eventData);
+  res.status(201).json(newEvent);
+});
 
-  updateEvent: async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const eventData = req.body;
-      const userRole = req.user.role;
-      const updatedEvent = await eventService.updateEvent(id, eventData, userRole);
-      res.json(updatedEvent);
-    } catch (error) {
-      next(error);
-    }
-  },
+exports.updateEvent = asyncErrorHandler(async (req, res) => {
+  const { id } = req.params;
+  const eventData = req.body;
+  const userRole = req.user.role;
+  const updatedEvent = await eventService.updateEvent(id, eventData, userRole);
+  res.json(updatedEvent);
+});
 
-  deleteEvent: async (req, res, next) => {
-    try {
-      const { id } = req.params;
-      const userRole = req.user.role;
-      await eventService.deleteEvent(id, userRole);
-      res.status(204).send();
-    } catch (error) {
-      next(error);
-    }
-  },
-};
-
-module.exports = eventController;
+exports.deleteEvent = asyncErrorHandler(async (req, res) => {
+  const { id } = req.params;
+  const userRole = req.user.role;
+  await eventService.deleteEvent(id, userRole);
+  res.status(204).send();
+});
