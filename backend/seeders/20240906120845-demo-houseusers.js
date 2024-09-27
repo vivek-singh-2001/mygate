@@ -36,8 +36,6 @@ module.exports = {
       houseUsers.push({
         UserId,
         HouseId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
 
       // Stop if all users are allotted

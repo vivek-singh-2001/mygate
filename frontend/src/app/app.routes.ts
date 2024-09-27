@@ -6,11 +6,16 @@ import { GoogleCallbackComponent } from './services/auth/googleCallback.componen
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { AdminGuard } from './services/admin/admin.gaurd';
 import { DashboardComponent } from './components/Dashboard/dashboard.component';
+import { RegisterComponent } from './components/register/register.component';
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
     canActivate: [RedirectIfLoggedInGuard],
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
   },
   {
     path: 'google/success',
@@ -24,7 +29,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
-       component:DashboardComponent
+        component: DashboardComponent,
       },
       {
         path: 'messages',
@@ -44,9 +49,9 @@ export const routes: Routes = [
         path: 'apartments',
         loadComponent: () =>
           import('./components/admin/admin.component').then(
-            (admin) =>admin.AdminComponent 
+            (admin) => admin.AdminComponent
           ),
-          canActivate:[AdminGuard]
+        canActivate: [AdminGuard],
       },
       {
         path: 'apartments/wingDetails/:name/:id',
@@ -54,7 +59,7 @@ export const routes: Routes = [
           import(
             './components/apartment/wing-details/wing-details.component'
           ).then((w) => w.WingDetailsComponent),
-          canActivate:[AdminGuard]
+        canActivate: [AdminGuard],
       },
     ],
   },
