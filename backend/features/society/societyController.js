@@ -6,18 +6,23 @@ const jwt = require("jsonwebtoken");
 const { log } = require("console");
 
 exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
-  const { societyId } = req.params;
-  const { limits = 10, offsets = 0,searchQuery ='' } = req.query;
+  const { id: societyId } = req.params;
+  const { limits = 10, offsets = 0, searchQuery = "" } = req.query;
 
   if (!societyId) {
     return next(new CustomError("Society ID is required", 400));
   }
 
   try {
-    const users = await societyService.getUsersBySociety(societyId,limits,offsets,searchQuery);
+    const users = await societyService.getUsersBySociety(
+      societyId,
+      limits,
+      offsets,
+      searchQuery
+    );
     res.status(200).json({
       status: "success",
-      totalRecords:users[0].total_count,
+      totalRecords: users[0].total_count,
       data: {
         users,
       },
@@ -52,7 +57,7 @@ exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
 });
 
 exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) => {
-  const { societyId } = req.params;
+  const { id: societyId } = req.params;
   if (!societyId) {
     return next(new CustomError("Society ID is required", 400));
   }
@@ -64,7 +69,7 @@ exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) => {
     res.status(200).json({
       status: "success",
       length: societyDetails.length,
-      societyDetails
+      societyDetails,
     });
   } catch (error) {
     next(error);

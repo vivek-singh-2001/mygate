@@ -9,5 +9,4 @@ router.get('/google/callback', authController.googleAuthCallback, authController
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
-
 module.exports = router;

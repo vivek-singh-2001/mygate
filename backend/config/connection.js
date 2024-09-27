@@ -63,6 +63,12 @@ db.Notice.belongsTo(db.User);
 
 db.User.hasMany(db.Blog);
 db.Blog.belongsTo(db.User);
+
+// =============event-society (: One to many)============================
+
+db.Society.hasMany(db.Event);
+db.Event.belongsTo(db.Society);
+
 // ==============house-user (: Many to many)=========================
 
 db.User.belongsToMany(db.House, { through: db.HouseUser });

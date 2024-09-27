@@ -2,9 +2,9 @@ const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const wingService = require("./wingService");
 
 
-exports.getWingDetils = asyncErrorHandler(async (req, res, next) => {
+exports.getWingDetails = asyncErrorHandler(async (req, res, next) => {
     
-    const { wingId } = req.params;
+    const { id: wingId } = req.params;
   
     try {
         const wingDetails= await wingService.getWingDetils(wingId);

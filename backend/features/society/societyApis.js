@@ -9,8 +9,8 @@ const router = express.Router();
 const { getUsersBySociety, getUsersBySocietyAndWing ,getSocietyAdminsDetails, checkIsAdmin} = societyController;
 
 // Define routes
-router.get("/:societyId", protect, getUsersBySociety);
+router.get("/:id", protect, getUsersBySociety);
 router.get("/:societyId/wing/:wingId", protect, getUsersBySocietyAndWing);
-router.get("/societyAdminsDetails/:societyId",getSocietyAdminsDetails);
+router.get("/societyAdminsDetails/:id",getSocietyAdminsDetails);
 router.get("/checkAdmin/isAdmin",protect,checkIsAdmin);
 module.exports = router;

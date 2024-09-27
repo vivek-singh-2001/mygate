@@ -9,7 +9,7 @@ const { getWingHouseDetails} = houseController
 const router = express.Router();
 
 // Define routes
-router.route("/wingHouseDetails/:wingId").get(protect,getWingHouseDetails)
+router.route("/wingHouseDetails/:id").get(protect,getWingHouseDetails)
 
 
 module.exports = router;

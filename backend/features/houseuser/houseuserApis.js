@@ -9,7 +9,6 @@ const { getHouseDetails} = houseuserController
 const router = express.Router();
 
 // Define routes
-router.route("/houseDetails/:houseId").get(protect,getHouseDetails)
-
+router.route("/houseDetails/:id").get(protect,getHouseDetails)
 
 module.exports = router;

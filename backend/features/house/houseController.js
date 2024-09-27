@@ -4,7 +4,7 @@ const houseService = require("./houseService");
 
 exports.getWingHouseDetails = asyncErrorHandler(async (req, res, next) => {
     
-    const { wingId } = req.params;
+    const { id: wingId } = req.params;
   
     try {
         const wingHouseDetails= await houseService.getWingHouseDetails(wingId);
