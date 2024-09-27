@@ -57,14 +57,6 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
-      isAdmin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
-      isWingAdmin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
       isMember: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
@@ -81,8 +73,13 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: true,
       },
+      photo:{
+        type: DataTypes.STRING,
+        allowNull: true,
+      }
     },
     {
+      tableName:'Users',
       hooks: {
         beforeCreate: async (user) => {
           if (!user.password) {

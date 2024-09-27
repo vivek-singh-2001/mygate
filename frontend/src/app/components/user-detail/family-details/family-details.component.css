@@ -1,0 +1,15 @@
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button-container .btn {
+  margin-top: 0;
+}
+
+.p-error {
+    display: block;
+    margin-top: 5px;
+    color: red; /* Optional: you can set the error text color */
+  }
+  

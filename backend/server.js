@@ -31,21 +31,23 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
   console.log('New client connected:', socket.id);
 
-  socket.on('sendMessage', async ({senderId, receiverId, message }) => {
+  socket.on('sendMessage', async ({senderId, receiverId, message,id }) => {
     try {
       // Create chat entry in the database
-      console.log( senderId,receiverId,message);
+   
+      const createdAt = new Date().toISOString();
       
       await sendMessage(senderId, receiverId, message);
       console.log("send message succesfully stored in db");
-
        const roomId = `${senderId} - ${receiverId}`;
       
       // Emit the message to the receiver
-      io.to(roomId).emit('receiveMessage', {
+      io.emit('receiveMessage', {
+        id,
         senderId,
         receiverId,
-        message
+        message,
+        createdAt
       });
     } catch (error) {
       console.error('Error sending message:', error);

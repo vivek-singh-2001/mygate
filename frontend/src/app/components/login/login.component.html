@@ -1,5 +1,4 @@
-<div class="main-container"  >
-
+<div class="main-container">
   <div class="login-container">
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
       <p-card header="login " [style]="{ width: '360px' }">
@@ -20,7 +19,7 @@
             <div *ngIf="email.errors?.['required']">Email is required</div>
             <div *ngIf="email.errors?.['email']">Email should be valid</div>
           </small>
-        </div> 
+        </div>
         <div class="field">
           <label for="password">password</label>
           <input
@@ -36,7 +35,7 @@
             class="p-error"
           >
             <div *ngIf="password.errors?.['required']">
-              password is required
+              Password is required
             </div>
           </small>
         </div>
@@ -73,8 +72,10 @@
             <b>Login In with Number</b>
           </span>
         </p-button>
+        <button type="button" class="btn-submit" (click)="goToRegisterPage()">
+          go to register page
+        </button>
       </p-card>
     </form>
   </div>
 </div>
-

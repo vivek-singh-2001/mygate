@@ -4,10 +4,26 @@ const { User, HouseUser, House, Wing, Society } = db;
 exports.getUserById = (id) => {
   return User.findOne({
     where: { id },
+    attributes: {
+      include: [
+        "id",
+        "email",
+        "firstname",
+        "lastname",
+        "number",
+        "passcode",
+        "isMember",
+        "isOwner",
+        'dateofbirth'
+      ],
+    },
     include: [
       {
         model: House,
         as: "Houses",
+        attributes: {
+          exclude: ['createdAt', 'updatedAt']
+        },
         include: [
           {
             model: Wing,
@@ -16,6 +32,12 @@ exports.getUserById = (id) => {
               {
                 model: Society,
                 as: "Society",
+                attributes: {
+                  exclude: [
+                    'createdAt',
+                    'updatedAt'
+                  ]
+                }
               },
             ],
           },
@@ -36,9 +58,9 @@ exports.updateUser = (userId, updateData) => {
   );
 };
 
-exports.findFamilyMembers = async (userId) => {
+exports.findFamilyMembers = async (userId, houseId) => {
   const houseUser = await HouseUser.findOne({
-    where: { UserId: userId },
+    where: { UserId: userId, HouseId: houseId },
     attributes: ["HouseId"],
   });
 
@@ -46,13 +68,13 @@ exports.findFamilyMembers = async (userId) => {
     return [];
   }
 
-  const houseId = houseUser.HouseId;
+  const userHouseId = houseUser.HouseId;
 
   return User.findAll({
     include: [
       {
         model: House,
-        where: { id: houseId },
+        where: { id: userHouseId },
         attributes: [],
         through: { attributes: [] },
       },

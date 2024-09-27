@@ -1,0 +1,9 @@
+.dashboardd {
+  background-color: var(--offwhite);
+  box-shadow: 0 4px 13px #e1e1e1;
+  border: none;
+  border-radius: 7px;
+  align-items: center;
+  padding: 10px;
+  margin: 20px;
+}

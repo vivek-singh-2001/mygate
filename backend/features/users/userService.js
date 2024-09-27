@@ -3,10 +3,13 @@ const CustomError = require("../../utils/CustomError");
 
 exports.getUserById = async (id) => {
   const user = await userRepository.getUserById(id);
-  if (!user) {
+  const userData = user.toJSON();
+  if (!userData) {
     throw new CustomError(`User with ID ${id} not found`, 404);
   }
-  return user;
+  
+  userData.role = 'Member';
+  return userData;
 };
 
 exports.updateUser = async (userId, updateData) => {
@@ -44,8 +47,11 @@ exports.updateUser = async (userId, updateData) => {
   return updatedUser;
 };
 
-exports.getFamilyMembers = async (userId) => {
-  const users = await userRepository.findFamilyMembers(userId);
+exports.getFamilyMembers = async (userId, houseId) => {
+  if (!userId || !houseId) {
+    throw new CustomError("UserId and houseId are required", 400);
+  }
+  const users = await userRepository.findFamilyMembers(userId, houseId);
   if (users.length === 0) {
     throw new CustomError("No family members found", 404);
   }

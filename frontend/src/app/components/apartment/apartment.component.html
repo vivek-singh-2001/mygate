@@ -1,0 +1,36 @@
+<div class="page-container">
+  <div *ngIf="isLoading" class="flex w-full h-full justify-content-center align-items-center">
+    wait, data is loading...
+  </div>
+
+  <div *ngIf="societyData?.length">
+    <div *ngFor="let user of societyData; " class="card flex gap-8 flex-wrap mb-6">
+      <div class="flex flex-wrap justify-content-center align-item-center p-4">
+        <div class="w-full h-full p-6 bg-cyan-600 align-item-center">
+          <h4>{{ user.name || "N/A" }}</h4>
+        </div>
+      </div>
+      
+      <div class="flex justify-content-between">
+        <div class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column gap-2 p-2 pr-8">
+          <p><b>Admin</b></p>
+          <p><b>Admin Number</b></p>
+          <p><b>Total Rooms</b></p>
+          <p><b>Total Members</b></p>
+        </div>
+        <div class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column gap-2 p-2 ml-6">
+          <p>{{ user.User.firstname  || "N/A"}} {{ user.User.lastname }}</p>
+          <p>{{ user.User.number || "N/A"}}</p>
+          <p>{{user.numberOfHouses || "N/A"}}</p>
+          <p>{{user.numberOfUsers || "N/A"}}</p>
+        </div>
+      </div>
+
+      <div class="flex-1">
+        <button (click)="goToWingDetails(user.name, user.id)">
+          <i class="pi pi-arrow-right" style="font-size: 2rem"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

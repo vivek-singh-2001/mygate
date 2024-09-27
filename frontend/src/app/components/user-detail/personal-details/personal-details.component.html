@@ -1,0 +1,246 @@
+<div class="main-container">
+  <!-- Loading indicator -->
+  <ng-container *ngIf="isLoading; else profileContent">
+    <div class="card">
+      <p-progressBar
+        mode="indeterminate"
+        [style]="{ height: '6px' }"
+      ></p-progressBar>
+    </div>
+  </ng-container>
+
+  <!-- Profile content -->
+  <ng-template #profileContent>
+    <div class="top-profile flex flex-wrap mb-6">
+      <div class="card flex-initial">
+        <p-image
+          class="flex align-items-center justify-content-center p-4"
+          [src]="userDetails.photo || 'https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg'"
+          alt="Image"
+          width="auto"
+          height="150"
+          [preview]="true"
+        />
+      </div>
+      <div class="card flex pr-8">
+        <div
+          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 pr-8"
+        >
+          <p><b>Name</b></p>
+          <p><b>Email</b></p>
+          <p><b>Phone</b></p>
+          <p><b>Gender</b></p>
+          <p><b>Date of Birth</b></p>
+        </div>
+        <div
+          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
+        >
+          <p>{{ userDetails.firstname || "N/A" }} {{ userDetails.lastname }}</p>
+          <p>{{ userDetails.email }}</p>
+          <p>{{ userDetails.number }}</p>
+          <p>{{ userDetails.gender }}</p>
+          <p>{{ userDetails.dateofbirth }}</p>
+        </div>
+      </div>
+      <div class="card flex">
+        <div
+          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2"
+        >
+          <p><b>Passcode</b></p>
+          <p><b>Role</b></p>
+          <p><b>Room No</b></p>
+          <p><b>Wing name</b></p>
+          <p><b>Wing Admin</b></p>
+        </div>
+        <div
+          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml -6"
+        >
+          <p>{{ userDetails.passcode || "N/A" }}</p>
+          <p>{{ userDetails.role  || "N/A" }}</p>
+          <p>{{userDetails.house?.house_no || "N/A"}}</p>
+          <p>{{userDetails.house?.Wing?.name || "N/A"}}</p>
+          <p>{{userDetails.wingDetails?.firstname || "N/A"}} {{userDetails.wingDetails?.lastname || "N/A"}}</p>
+        </div>
+      </div>
+    </div>
+    <p-divider type="solid"></p-divider>
+    <div class="card">
+      <p-progressBar
+        *ngIf="isLoading"
+        mode="indeterminate"
+        [style]="{ height: '6px' }"
+      />
+    </div>
+    <form
+      [formGroup]="userProfileForm!"
+      class="bottom-profile flex flex-column mt-6"
+      (ngSubmit)="onUserFormSubmit()"
+    >
+      <div class="user-form flex flex-wrap w-full p-4">
+        <div class="left-form flex flex-column flex-1">
+          <div class="field flex justify-content-between">
+            <label for="firstname" class="left-label flex align-items-center"
+              ><b>First Name</b></label
+            >
+            <div class="felx flex-column w-full">
+              <input
+                id="firstname"
+                type="text"
+                formControlName="firstname"
+                pInputText
+                [style]="{ width: '100%' }"
+              />
+              <small
+                *ngIf="
+                  userProfileForm?.get('firstname')?.hasError('lettersOnly') &&
+                  userProfileForm?.get('firstname')?.touched
+                "
+                class="p-error"
+                >Only letters allowed.</small
+              >
+            </div>
+          </div>
+          <div class="field flex justify-content-between">
+            <label for="email" class="left-label flex align-items-center"
+              ><b>Email Id</b>
+            </label>
+            <input
+              id="firstname"
+              type="text"
+              formControlName="email"
+              pInputText
+              [style]="{ width: '100%' }"
+            />
+          </div>
+          <div class="field flex justify-content-between">
+            <label for="dateofbirth" class="left-label flex align-items-center"
+              ><b>Date of Birth</b></label
+            >
+            <p-calendar
+              [iconDisplay]="'input'"
+              [showIcon]="true"
+              formControlName="dateofbirth"
+              inputId="icondisplay"
+              [style]="{ width: '100%' }"
+              [maxDate]="today"
+            />
+          </div>
+          <div class="field flex justify-content-between">
+            <label for="roomno" class="left-label flex align-items-center"
+              ><b>Room No</b></label
+            >
+            <input
+              id="roomno"
+              type="text"
+              pInputText
+              formControlName="roomno"
+              [style]="{ width: '100%' }"
+            />
+          </div>
+          <div class="field flex justify-content-between">
+            <label for="wingname" class="left-label flex align-items-center"
+              ><b>Wing name</b></label
+            >
+            <input
+              id="wingname"
+              type="text"
+              pInputText
+              formControlName="wingname"
+              [style]="{ width: '100%' }"
+            />
+          </div>
+          <div class="field flex justify-content-between">
+            <label for="societyname" class="left-label flex align-items-center"
+              ><b>Society Name</b></label
+            >
+            <input
+              id="societyname"
+              type="text"
+              pInputText
+              formControlName="societyname"
+              [style]="{ width: '100%' }"
+            />
+          </div>
+        </div>
+        <div class="right-form flex flex-wrap flex-column flex-1">
+          <div class="field flex justify-content-between">
+            <label for="lastname" class="right-label flex align-items-center"
+              ><b>Last Name</b></label
+            >
+            <input
+              id="lastname"
+              type="lastname"
+              formControlName="lastname"
+              pInputText
+              [style]="{ width: '100%' }"
+            />
+          </div>
+          <div class="field flex justify-content-between">
+            <label for="number" class="right-label flex align-items-center"
+              ><b>Number</b></label
+            >
+            <p-inputNumber
+              id="number"
+              [style]="{ width: '100%' }"
+              maxlength="10"
+              formControlName="number"
+              [useGrouping]="false"
+            ></p-inputNumber>
+          </div>
+          <div class="field flex justify-content-between">
+            <label for="passcode" class="right-label flex align-items-center"
+              ><b>Passcode</b></label
+            >
+            <p-inputNumber
+              id="passcode"
+              [style]="{ width: '100%' }"
+              maxlength="6"
+              formControlName="passcode"
+              [useGrouping]="false"
+              placeholder="123456"
+            ></p-inputNumber>
+          </div>
+          <div class="field flex justify-content-between">
+            <label for="gender" class="right-label flex align-items-center"
+              ><b>Gender</b></label
+            >
+            <p-dropdown
+              [options]="genders"
+              formControlName="gender"
+              placeholder="Select Gender"
+              [style]="{ width: '100%' }"
+            >
+            </p-dropdown>
+          </div>
+          <div class="field flex justify-content-between">
+            <label
+              for="societyaddress"
+              class="right-label flex align-items-start"
+              ><b>Society Address </b></label
+            >
+            <textarea
+              id="societyaddress"
+              rows="4"
+              type="text"
+              pInputText
+              formControlName="societyaddress"
+              [style]="{ width: '100%' }"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div
+        class="button-profile flex align-items-center justify-content-center gap-6 mb-4"
+      >
+        <p-button label="Cancel" [raised]="true" severity="contrast" />
+        <p-button
+          label="Submit"
+          [raised]="true"
+          severity="contrast"
+          type="submit"
+          [disabled]="userProfileForm.invalid"
+        />
+      </div>
+    </form>
+  </ng-template>
+</div>

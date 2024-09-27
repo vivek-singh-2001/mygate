@@ -1,0 +1,17 @@
+<div class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap">
+  <p><b>Select a wing</b></p>
+  <p-dropdown
+    [options]="wingOptions"
+    [(ngModel)]="numberOfWings"
+    optionLabel="name"
+    placeholder="Select Wing"
+    (ngModelChange)="onWingSelection()"
+  ></p-dropdown>
+</div>
+
+<!-- <div class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap">
+  <div *ngFor="let wing of wingOptions; let i = index">
+    <label>Wing {{ i + 1 }} Name:</label>
+    <input type="text" placeholder="Enter wing name" />
+  </div>
+</div> -->

@@ -26,9 +26,7 @@ module.exports = (connectDB, DataTypes) => {
     {
       timestamps: true,
       tableName: 'chats',
-      hooks: {
-        // You can add hooks here if needed
-      },
+      
     }
   );
 
