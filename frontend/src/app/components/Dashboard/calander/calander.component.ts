@@ -33,7 +33,6 @@ export class CalanderComponent implements OnInit {
     start_date:null
   }
 
-
   constructor(private eventService:EventService, private adminService:AdminService){}
 
   ngOnInit() {
@@ -51,18 +50,15 @@ export class CalanderComponent implements OnInit {
 
   generateCalendar(date: Date) {
     const startDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-  
-
     const lastDate = new Date(
       date.getFullYear(),
       date.getMonth() + 1,
       0
     ).getDate();
 
-
-    let days = [];
+    const days = [];
     for (let i = 1 - startDay; i <= lastDate; i++) {
-      let day = new Date(date.getFullYear(), date.getMonth(), i);
+      const day = new Date(date.getFullYear(), date.getMonth(), i);
 
       // Find any event(s) on this day
       const dayEvents = this.events
@@ -122,7 +118,7 @@ export class CalanderComponent implements OnInit {
   onEventSubmit(){
     this.addevent = false
     console.log(this.eventData)
-    this.eventService.addEvents(this.eventData).subscribe();
+    this.eventService.addEvent(this.eventData).subscribe();
     this.eventData.title = ''
     this.eventData.description = ''
     this.eventData.start_date = null

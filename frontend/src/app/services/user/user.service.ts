@@ -99,12 +99,11 @@ export class UserService {
 
     return this.http.get(`${this.userApiUrl}/familyMembers/${userId}/${houseId}`).pipe(
       tap((response: any) => {
-        console.log('Fetched family members data:', response.users);
-        this.familyDataSubject.next(response); // Set familyDataSubject on success
+        this.familyDataSubject.next(response);
       }),
       catchError((error) => {
         console.error('Failed to load family members data', error);
-        return of(null); // Return null in case of error
+        return of(null);
       })
     );
   }

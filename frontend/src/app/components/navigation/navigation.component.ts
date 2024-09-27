@@ -14,6 +14,7 @@ import { HouseService } from '../../services/houses/houseService';
 import { Subscription } from 'rxjs';
 import { WingService } from '../../services/wings/wing.service';
 import { House } from '../../interfaces/house.interface';
+import { EventService } from '../Dashboard/calander/services/event.service';
 
 @Component({
   selector: 'app-navigation',
@@ -37,14 +38,15 @@ export class NavigationComponent implements OnInit {
   houses: any[] = [];
   selectedHouse: string = '';
   private usersubscription!: Subscription;
-  isDropdownVisible: boolean = true;  // Control dropdown visibility
+  isDropdownVisible: boolean = true; // Control dropdown visibility
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private router: Router,
     private houseService: HouseService,
-    private wingService: WingService
+    private wingService: WingService,
+    private eventService: EventService
   ) {}
 
   ngOnInit(): void {
@@ -60,12 +62,15 @@ export class NavigationComponent implements OnInit {
       {
         label: this.selectedHouse || 'N/A',
         icon: 'pi pi-home',
-        expanded: this.houses.length >1 ,  // Manually control dropdown visibility
-        items: this.isDropdownVisible && this.houses.length > 1 ? this.houses.map((house) => ({
-          label: house.house_no,
-          icon: 'pi pi-home',
-          command: () => this.goToHouse(house),
-        })) : [],
+        expanded: this.houses.length > 1, // Manually control dropdown visibility
+        items:
+          this.isDropdownVisible && this.houses.length > 1
+            ? this.houses.map((house) => ({
+                label: house.house_no,
+                icon: 'pi pi-home',
+                command: () => this.goToHouse(house),
+              }))
+            : [],
         // Attach hover events
         onMouseEnter: () => this.showDropdown(),
         onMouseLeave: () => this.hideDropdown(),
@@ -107,8 +112,8 @@ export class NavigationComponent implements OnInit {
         this.houseService.selectedHouse$.subscribe({
           next: (house) => {
             this.selectedHouse = house.house_no || 'Default House';
-            this.initializeMenu();  // Ensure menu is updated when house changes
-          }
+            this.initializeMenu(); // Ensure menu is updated when house changes
+          },
         });
         this.initializeMenu();
       },
@@ -137,12 +142,13 @@ export class NavigationComponent implements OnInit {
   }
 
   goToHouse(house: any) {
-    this.wingService.clearWingDetails()
+    this.wingService.clearWingDetails();
     this.userService.clearfamilyData();
+    this.eventService.clearEvents();
     this.houseService.setSelectedHouse(house);
     this.selectedHouse = house.house_no;
     this.initializeMenu();
-    console.log("House selected:", house);
+    console.log('House selected:', house);
   }
 
   showDropdown() {

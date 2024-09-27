@@ -17,8 +17,6 @@ export interface User {
   wingDetails?: Wing
   role?: string
   photo?: string
-
-  
 }
 
 export interface Gender {

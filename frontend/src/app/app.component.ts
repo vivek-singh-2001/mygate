@@ -23,5 +23,4 @@ export class AppComponent  {
      this.appInitializationService.initialize().subscribe();
     }
   }
-
 }
