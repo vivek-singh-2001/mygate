@@ -3,11 +3,11 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormArray,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CardModule } from 'primeng/card';
+import { InputTextModule } from 'primeng/inputtext';
 
 import { CustomValidators } from '../../utils/noSpaceAllowed.validator'; // Assuming you have custom validators here
 import { CommonModule } from '@angular/common';
@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, CardModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CardModule,InputTextModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -35,8 +35,6 @@ export class RegisterComponent implements OnInit {
       firstname: ['', [Validators.required, CustomValidators.noSpaceAllowed]],
       lastname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      dob: [''],
-      gender: ['male'],
       address: this.formBuilder.group({
         street: ['', Validators.required],
         country: ['India', Validators.required],

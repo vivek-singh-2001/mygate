@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   background: #fff;
-  height: 100vh;
+  /* height: 100vh; */
   width: 100vw;
   display: flex;
   justify-content: center;
@@ -17,26 +17,40 @@
   color: #333;
   font-weight: 500;
   text-align: center;
+  margin-top: 100px;
 }
-.container .form {
-  margin-top: 20px;
-}
-.form .input-box {
+.form {
   width: 100%;
-  margin-top: 5px;
+  max-width: 500px; 
+  margin: 0 auto;
+
 }
+.input-box {
+  position: relative;
+  margin-bottom: 20px; 
+  min-height: 70px; 
+}
+
+.input-box small {
+  position: absolute;
+  bottom: -20px; 
+  left: 0;
+  color: red;
+  font-size: 0.8em;
+}
+
 .input-box label {
   color: #333;
 }
 .form :where(.input-box input, .select-box) {
-  position: relative;
+  /* position: relative; */
   height: 50px;
   width: 100%;
   outline: none;
   font-size: 1rem;
   color: #707070;
   margin-top: 8px;
-  /* border: 1px solid #ddd; */
+  border: 1px solid #ddd;
   border-radius: 6px;
   padding: 0 15px;
 }
@@ -47,46 +61,12 @@
   display: flex;
   column-gap: 15px;
 }
-.form .gender-box {
-  margin-top: 20px;
-}
-.gender-box h3 {
-  color: #333;
-  font-size: 1rem;
-  font-weight: 400;
-  margin-bottom: 8px;
-}
-.form :where(.gender-option, .gender) {
-  display: flex;
-  align-items: center;
-  column-gap: 50px;
-  flex-wrap: wrap;
-}
-.form .gender {
-  column-gap: 5px;
-}
-.gender input {
-  accent-color: rgb(130, 106, 251);
-}
-.form :where(.gender input, .gender label) {
-  cursor: pointer;
-}
-.gender label {
-  color: #707070;
-}
+
 .address :where(input, .select-box) {
   margin-top: 15px;
 }
 
-.experience :where(input, .select-box) {
-  margin-top: 15px;
-}
-.experience {
-  padding: 20px 10px;
-  border-radius: 5px;
-  border: #bcbcbc 2px solid;
-  margin-top: 10px;
-}
+
 .select-box select {
   height: 100%;
   width: 100%;
@@ -185,25 +165,5 @@ small {
   width: 100%;
   margin-top: 10px;
 }
-span {
-  padding: 5px 5px;
-  font-weight: bold;
-}
 
-input.ng-invalid.ng-touched {
-  border: red 2px solid;
-}
 
-input.ng-pending {
-  border: yellow 2px solid;
-}
-
-.container.VALID {
-  border: green 3px solid;
-}
-.container.INVALID {
-  border: red 3px solid;
-}
-.container.PENDING {
-  border: orange 3px solid;
-}
