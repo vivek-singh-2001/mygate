@@ -7,7 +7,7 @@
   ></button>
   <div class="menu-container">
     <ng-container *ngIf="isExpanded; else iconOnly">
-      <p-menubar [model]="items" [style]="{ width: '100%' }" class="menuwraper" ></p-menubar>
+      <p-panelMenu [model]="items" [style]="{ width: '100%' }" class="menuwraper" ></p-panelMenu>
     </ng-container>
     <ng-template #iconOnly>
       <div class="icon-menu">
@@ -18,8 +18,6 @@
           class="p-button-text icon-btn"
           [ngClass]="item.iconSize" 
           pTooltip="{{ item.label }}"
-          tooltipPosition="right"
-          (click)="item.command && item.command()"
         ></button>
       </div>
     </ng-template>

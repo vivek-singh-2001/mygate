@@ -156,7 +156,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             this.fetchWingDetails(house.Wing?.id);
 
             // Fetch family details
-            this.getFamilyMembers(this.userDetails.id, house.id)
+            this.getFamilyMembers(this.userDetails.id , house.id )
           } else {
             console.log('Selected house is null or undefined');
           }
@@ -209,6 +209,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
   addFamilyMember(member: User) {
     member.houseId = this.selectedHouse.id;
+    member.isOwner = false;
     this.userService.addFamilyMember(member).subscribe({
       next: (response) => {
         this.familyData.push(response.data.user);
