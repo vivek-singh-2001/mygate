@@ -7,24 +7,23 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class EventService {
-  private apiUrl = 'http://localhost:7500/api/v1/events/';
+  private apiUrl = 'http://localhost:7500/api/v1/events';
 
   private eventsSubject = new BehaviorSubject<any>(null);
   events$ = this.eventsSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
-  getEvents(): Observable<any> {
+  getEvents(societyId: number): Observable<any> {
     if (this.eventsSubject.getValue()) {
-      console.log("hello", this.eventsSubject.getValue());
       return this.events$
     } else {
-      return this.fetchEvents()
+      return this.fetchEvents(societyId)
     }
   }
 
-  fetchEvents(): Observable<any> {
-    return this.http.get<any[]>(this.apiUrl).pipe(
+  fetchEvents(societyId: number): Observable<any> {
+    return this.http.get<any[]>(`${this.apiUrl}/${societyId}`).pipe(
       tap((response) => {
         this.eventsSubject.next(response);
       })

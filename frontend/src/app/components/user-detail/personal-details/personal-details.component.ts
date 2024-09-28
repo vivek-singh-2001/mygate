@@ -55,7 +55,7 @@ export class PersonalDetailsComponent {
   onUserFormSubmit() {
     this.isLoading = true;
     this.userService
-      .updateUser(this.userDetails.id, this.userProfileForm.value)
+      .updateUser(this.userDetails.id , this.userProfileForm.value)
       .pipe(
         switchMap(() => this.userService.getCurrentUser()),
         finalize(() => {

@@ -16,6 +16,7 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+
   },
   {
     path: 'google/success',
@@ -48,17 +49,34 @@ export const routes: Routes = [
       {
         path: 'apartments',
         loadComponent: () =>
-          import('./components/admin/admin.component').then(
-            (admin) => admin.AdminComponent
+          import('./components/apartment/apartment.component').then(
+            (a) =>a.ApartmentComponent 
           ),
         canActivate: [AdminGuard],
       },
       {
         path: 'apartments/wingDetails/:name/:id',
         loadComponent: () =>
+          import('./components/apartment/wing-details/wing-details.component').then(
+            (w) =>w.WingDetailsComponent 
+          ),
+        canActivate: [AdminGuard],
+      },
+      
+      {
+        path: 'apartments/allocate-house',
+        loadComponent: () =>
           import(
-            './components/apartment/wing-details/wing-details.component'
-          ).then((w) => w.WingDetailsComponent),
+            './components/admin/allocate-house/allocate-house.component'
+          ).then((a) =>a.AllocateHouseComponent ),
+        canActivate: [AdminGuard],
+      },
+      {
+        path: 'apartments/users',
+        loadComponent: () =>
+          import(
+            './components/admin/society-users/society-users.component'
+          ).then((w) => w.SocietyUsersComponent),
         canActivate: [AdminGuard],
       },
     ],

@@ -1,8 +1,8 @@
 const eventRepository = require("./eventRepository");
 const CustomError = require("../../utils/CustomError");
 
-exports.getAllEvents = async (eventId) => {
-  return await eventRepository.getAllEvents(eventId);
+exports.getAllEvents = async (societyId) => {
+  return await eventRepository.getAllEvents(societyId);
 };
 
 exports.createEvent = async (eventData) => {

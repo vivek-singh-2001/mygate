@@ -8,8 +8,8 @@ export interface User {
   lastname: string;
   number: string;
   id: number;
-  passcode: string;
-  isMember: boolean;
+  passcode?: string;
+  isMember?: boolean;
   isOwner: boolean;
   houseId?: number
   gender?: string

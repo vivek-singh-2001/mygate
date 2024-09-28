@@ -46,7 +46,7 @@ exports.getFamilyMembers = asyncErrorHandler(async (req, res, next) => {
 });
 
 exports.addFamilyMember = asyncErrorHandler(async (req, res, next) => {
-  const { firstname, lastname, number, email, dateofbirth, houseId } = req.body;
+  const { firstname, lastname, number, email, dateofbirth, houseId ,isOwner} = req.body;
   try {
     const newUser = await userService.addFamilyMember({
       firstname,
@@ -55,6 +55,7 @@ exports.addFamilyMember = asyncErrorHandler(async (req, res, next) => {
       email,
       dateofbirth,
       houseId,
+      isOwner
     });
     res.status(201).json({ status: "success", data: { user: newUser } });
   } catch (error) {

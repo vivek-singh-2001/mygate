@@ -1,0 +1,23 @@
+.top-profile {
+    /* background-color: var(--gray-200); */
+    box-shadow: 0 4px 13px #e1e1e1;
+    align-items: center;
+    padding: 1rem;
+    /* border-radius: 8px; */
+
+  }
+
+  .card{
+    
+    height: 600px;
+    width: 50%;
+    background-color: var(--gray-200);
+    box-shadow: 0 4px 13px #e1e1e1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  ::ng-deep .p-inputtext{
+    padding: 5px;
+    width: 200px;
+  } 
+
