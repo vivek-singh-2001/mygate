@@ -83,13 +83,14 @@ exports.findFamilyMembers = async (userId, houseId) => {
 };
 
 exports.createFamilyMember = async (userData) => {
-  const { firstname, lastname, number, email, dateofbirth, houseId } = userData;
+  const { firstname, lastname, number, email, dateofbirth, houseId ,isOwner} = userData;
   const newUser = await User.create({
     firstname,
     lastname,
     number,
     email,
     dateofbirth,
+    isOwner
   });
   await HouseUser.create({ UserId: newUser.id, HouseId: houseId });
   return newUser;
