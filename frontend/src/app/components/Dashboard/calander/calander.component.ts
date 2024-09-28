@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
-import { EventService } from './services/event.service';
+import { EventService } from '../../../services/events/event.service';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
@@ -42,7 +42,7 @@ export class CalanderComponent implements OnInit {
     title: '',
     description: '',
     start_date: null,
-    SocietyId: 0
+    SocietyId: 0,
   };
 
   constructor(
@@ -90,22 +90,24 @@ export class CalanderComponent implements OnInit {
     for (let i = 1 - startDay; i <= lastDate; i++) {
       const day = new Date(date.getFullYear(), date.getMonth(), i);
 
-      // Find any event(s) on this day
-      const dayEvents = this.events
-        .filter(
-          (event) =>
-            new Date(event.start_date).toDateString() === day.toDateString()
-        )
-        .map((event) => ({
-          ...event,
-          color: 'var(--gray-500)',
-        }));
+      if (this.events) {
+        // Find any event(s) on this day
+        const dayEvents = this.events
+          .filter(
+            (event) =>
+              new Date(event.start_date).toDateString() === day.toDateString()
+          )
+          .map((event) => ({
+            ...event,
+            color: 'var(--gray-500)',
+          }));
 
-      days.push({
-        date: day,
-        isDisabled: i < 1,
-        events: dayEvents, // Attach events to the day
-      });
+        days.push({
+          date: day,
+          isDisabled: i < 1,
+          events: dayEvents, // Attach events to the day
+        });
+      }
     }
 
     this.weeks = [];
@@ -152,7 +154,7 @@ export class CalanderComponent implements OnInit {
 
   onEventSubmit() {
     this.addEventFlag = false;
-    this.eventData.SocietyId = this.societyId
+    this.eventData.SocietyId = this.societyId;
     console.log('eventData', this.eventData);
     this.eventService.addEvent(this.eventData).subscribe();
     this.eventData.title = '';

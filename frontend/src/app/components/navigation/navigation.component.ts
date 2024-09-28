@@ -14,7 +14,7 @@ import { HouseService } from '../../services/houses/houseService';
 import { Subscription } from 'rxjs';
 import { WingService } from '../../services/wings/wing.service';
 import { House } from '../../interfaces/house.interface';
-import { EventService } from '../Dashboard/calander/services/event.service';
+import { EventService } from '../../services/events/event.service';
 
 @Component({
   selector: 'app-navigation',

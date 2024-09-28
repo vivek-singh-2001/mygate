@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class EventService {
-  private apiUrl = 'http://localhost:7500/api/v1/events/';
+  private apiUrl = 'http://localhost:7500/api/v1/events';
 
   private eventsSubject = new BehaviorSubject<any>(null);
   events$ = this.eventsSubject.asObservable();

@@ -18,7 +18,7 @@ export class RedirectIfLoggedInGuard implements CanActivate {
     state: RouterStateSnapshot
   ): boolean {
     const currentUrl = state.url;
-    if (this.authService.isLoggedIn() && currentUrl === '/login') {  
+    if (this.authService.isLoggedIn() && currentUrl === '/login' ) {  
       if (currentUrl !== this.router.url) {
         this.router.navigate(['/home']);
       }
