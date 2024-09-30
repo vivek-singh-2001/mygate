@@ -3,11 +3,11 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('users', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
       },
       firstname: {
@@ -26,6 +26,9 @@ module.exports = {
         type: Sequelize.STRING(255),
         unique: true,
         allowNull: false,
+        validate: {
+          isEmail: true,
+        }
       },
       password: {
         type: Sequelize.STRING,
@@ -48,14 +51,6 @@ module.exports = {
         type: Sequelize.DATEONLY,
         allowNull: false,
       },
-      isOwner: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
-      isMember: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: true,
-      },
       passwordChangedAt: {
         type: Sequelize.DATE,
         allowNull: true,
@@ -71,12 +66,21 @@ module.exports = {
       photo:{
         type: Sequelize.STRING,
         allowNull: true,
-      
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       }
     });
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('users');
   }
 };

@@ -5,9 +5,9 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("wings", {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
       },
       name: {
@@ -15,14 +15,15 @@ module.exports = {
         allowNull: false,
       },
       wingAdminId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         references: {
-          model: "Users",
+          model: "users",
           key: "id",
         },
-        allowNull: true, // Allow null if a wing doesn't have an admin
+        allowNull: true,
+        onUpdate: 'CASCADE',
       },
-    },{
+    }, {
       timestamps: false,
     });
   },

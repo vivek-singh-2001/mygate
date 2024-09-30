@@ -22,28 +22,28 @@ db.House = require("../features/house/houseModel.js")(connectDB, DataTypes);
 db.Blog = require("../features/blog/blogModel.js")(connectDB, DataTypes);
 db.Notice = require("../features/notice/noticeModel.js")(connectDB, DataTypes);
 db.Society = require("../features/society/societyModel")(connectDB, DataTypes);
-db.Wing = require("../features/wing/wingmodel.js")(connectDB, DataTypes);
+db.Wing = require("../features/wing/wingModel.js")(connectDB, DataTypes);
 db.HouseUser = require("../features/houseuser/HouseUserModel.js")(
   connectDB,
   DataTypes
 );
 db.Chat = require("../features/chat/chatModel.js")(connectDB, DataTypes);
-db.Event = require("../features/events/eventModel.js")(connectDB,DataTypes);
+db.Event = require("../features/events/eventModel.js")(connectDB, DataTypes);
 
 // =============society-wing (: One to many)============================
 
-db.Society.hasMany(db.Wing);
-db.Wing.belongsTo(db.Society);
+db.Society.hasMany(db.Wing, { foreignKey: "societyId" });
+db.Wing.belongsTo(db.Society, { foreignKey: "societyId" });
 
 // =============wing-house (: One to many)============================
 
-db.Wing.hasMany(db.House);
-db.House.belongsTo(db.Wing);
+db.Wing.hasMany(db.House, { foreignKey: "wingId" });
+db.House.belongsTo(db.Wing, { foreignKey: "wingId" });
 
 // =============wing-notice (: One to many)============================
 
-db.Wing.hasMany(db.Notice);
-db.Notice.belongsTo(db.Wing);
+db.Wing.hasMany(db.Notice , { foreignKey: "wingId" });
+db.Notice.belongsTo(db.Wing, { foreignKey: "wingId" });
 
 // =============wing-user (: One to many)============================
 
@@ -56,29 +56,29 @@ db.Society.belongsTo(db.User, { foreignKey: "societyAdminId" });
 
 // =============user-notice (: One to many)============================
 
-db.User.hasMany(db.Notice);
-db.Notice.belongsTo(db.User);
+db.User.hasMany(db.Notice, { foreignKey: "userId" });
+db.Notice.belongsTo(db.User, { foreignKey: "userId" });
 
 // =============blog-user (: One to many)============================
 
-db.User.hasMany(db.Blog);
-db.Blog.belongsTo(db.User);
+db.User.hasMany(db.Blog, { foreignKey: "userId" });
+db.Blog.belongsTo(db.User, { foreignKey: "userId" });
 
 // =============event-society (: One to many)============================
 
-db.Society.hasMany(db.Event);
-db.Event.belongsTo(db.Society);
+db.Society.hasMany(db.Event, { foreignKey: "societyId" });
+db.Event.belongsTo(db.Society, { foreignKey: "societyId" });
 
 // ==============house-user (: Many to many)=========================
 
 db.User.belongsToMany(db.House, { through: db.HouseUser });
 db.House.belongsToMany(db.User, { through: db.HouseUser });
 
-db.House.hasMany(db.HouseUser, { foreignKey: 'HouseId' });
-db.HouseUser.belongsTo(db.House, { foreignKey: 'HouseId' });
+db.House.hasMany(db.HouseUser, { foreignKey: "houseId" });
+db.HouseUser.belongsTo(db.House, { foreignKey: "houseId" });
 
-db.HouseUser.belongsTo(db.User, { foreignKey: 'UserId' });
-db.User.hasMany(db.HouseUser, { foreignKey: 'UserId' });
+db.HouseUser.belongsTo(db.User, { foreignKey: "userId" });
+db.User.hasMany(db.HouseUser, { foreignKey: "userId" });
 
 // ==============user-chat ========================================
 

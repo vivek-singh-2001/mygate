@@ -1,4 +1,4 @@
-const chatRepository = require('./chatReposetory');
+const chatRepository = require('./chatRepository');
 
 exports.sendMessage = async (senderId, receiverId, message) => {
   return await chatRepository.createChat(senderId, receiverId, message);

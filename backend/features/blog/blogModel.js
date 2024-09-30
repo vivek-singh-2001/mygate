@@ -3,9 +3,9 @@ module.exports = (connectDB, DataTypes) => {
     "Blog",
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
       },
       text: {

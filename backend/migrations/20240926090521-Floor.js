@@ -2,19 +2,19 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Floors', {
-      floor_id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
+    await queryInterface.createTable('floors', {
+      id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
         allowNull: false
       },
-      wing_id: {
-        type: Sequelize.INTEGER,
+      wingId: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: 'Wings', // Name of the table you have for Wing
-          key: 'wing_id'
+          model: 'wings',
+          key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
@@ -22,20 +22,6 @@ module.exports = {
       floor_number: {
         type: Sequelize.INTEGER,
         allowNull: false
-      },
-      number_of_houses: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.fn('NOW')
-      },
-      updatedAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.fn('NOW')
       }
     });
   },

@@ -3,9 +3,9 @@ module.exports = (connectDB, DataTypes) => {
     "Society",
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
       },
       name: {
@@ -18,17 +18,18 @@ module.exports = (connectDB, DataTypes) => {
         allowNull: false,
       },
       societyAdminId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id'
         },
-        allowNull: true // Allow null if a society doesn't have an admin
+        allowNull: false,
+        onUpdate: 'CASCADE',
       }
     },
     {
       timestamps: true,
-      tableName:'Societies'
+      tableName:'societies'
     }
   );
 
