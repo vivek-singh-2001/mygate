@@ -5,6 +5,10 @@ const util = require("util");
 const jwt = require("jsonwebtoken");
 const { log } = require("console");
 
+exports.registerSociety = asyncErrorHandler(async(req, res, next) => {
+  // const {userDetails, societyDetails, }
+})
+
 exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
   const { id: societyId } = req.params;
   const { limits = 10, offsets = 0, searchQuery = "" } = req.query;

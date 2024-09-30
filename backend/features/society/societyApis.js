@@ -6,11 +6,19 @@ const { protect } = authController;
 
 const router = express.Router();
 
-const { getUsersBySociety, getUsersBySocietyAndWing ,getSocietyAdminsDetails, checkIsAdmin} = societyController;
+const {
+  getUsersBySociety,
+  getUsersBySocietyAndWing,
+  getSocietyAdminsDetails,
+  checkIsAdmin,
+  registerSociety,
+} = societyController;
 
 // Define routes
 router.get("/:id", protect, getUsersBySociety);
 router.get("/:societyId/wing/:wingId", protect, getUsersBySocietyAndWing);
-router.get("/societyAdminsDetails/:id",getSocietyAdminsDetails);
-router.get("/checkAdmin/isAdmin",protect,checkIsAdmin);
+router.get("/societyAdminsDetails/:id", getSocietyAdminsDetails);
+router.get("/checkAdmin/isAdmin", protect, checkIsAdmin);
+router.post("/societyRegistration", registerSociety);
+
 module.exports = router;
