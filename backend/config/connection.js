@@ -23,12 +23,17 @@ db.Blog = require("../features/blog/blogModel.js")(connectDB, DataTypes);
 db.Notice = require("../features/notice/noticeModel.js")(connectDB, DataTypes);
 db.Society = require("../features/society/societyModel")(connectDB, DataTypes);
 db.Wing = require("../features/wing/wingModel.js")(connectDB, DataTypes);
-db.HouseUser = require("../features/houseuser/HouseUserModel.js")(
+db.HouseUser = require("../features/houseuser/houseUserModel.js")(
   connectDB,
   DataTypes
 );
 db.Chat = require("../features/chat/chatModel.js")(connectDB, DataTypes);
 db.Event = require("../features/events/eventModel.js")(connectDB, DataTypes);
+db.Role = require("../features/users/roleModel")(connectDB, DataTypes);
+db.UserRole = require("../features/users/userRoleModel")(
+  connectDB,
+  DataTypes
+);
 
 // =============society-wing (: One to many)============================
 
@@ -42,7 +47,7 @@ db.House.belongsTo(db.Wing, { foreignKey: "wingId" });
 
 // =============wing-notice (: One to many)============================
 
-db.Wing.hasMany(db.Notice , { foreignKey: "wingId" });
+db.Wing.hasMany(db.Notice, { foreignKey: "wingId" });
 db.Notice.belongsTo(db.Wing, { foreignKey: "wingId" });
 
 // =============wing-user (: One to many)============================
@@ -71,14 +76,29 @@ db.Event.belongsTo(db.Society, { foreignKey: "societyId" });
 
 // ==============house-user (: Many to many)=========================
 
-db.User.belongsToMany(db.House, { through: db.HouseUser });
-db.House.belongsToMany(db.User, { through: db.HouseUser });
+db.User.belongsToMany(db.House, {
+  through: db.HouseUser,
+  foreignKey: "userId",
+  otherKey: "houseId",
+});
+db.House.belongsToMany(db.User, {
+  through: db.HouseUser,
+  foreignKey: "houseId",
+  otherKey: "userId",
+});
 
-db.House.hasMany(db.HouseUser, { foreignKey: "houseId" });
-db.HouseUser.belongsTo(db.House, { foreignKey: "houseId" });
+// ==============user-role (: Many to many)=========================
 
-db.HouseUser.belongsTo(db.User, { foreignKey: "userId" });
-db.User.hasMany(db.HouseUser, { foreignKey: "userId" });
+db.User.belongsToMany(db.Role, {
+  through: db.UserRole,
+  foreignKey: "userId",
+  otherKey: "roleId",
+});
+db.Role.belongsToMany(db.User, {
+  through: db.UserRole,
+  foreignKey: "roleId",
+  otherKey: "userId",
+});
 
 // ==============user-chat ========================================
 

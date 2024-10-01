@@ -1,6 +1,6 @@
 module.exports = (connectDB, DataTypes) => {
-  const HouseUser = connectDB.define(
-    "HouseUser",
+  const Role = connectDB.define(
+    "Role",
     {
       id: {
         type: DataTypes.UUID,
@@ -8,11 +8,17 @@ module.exports = (connectDB, DataTypes) => {
         primaryKey: true,
         allowNull: false,
       },
+      name: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+        unique: true,
+      },
     },
     {
-      timestamps: false,
-      tableName: "houseUsers",
+      timestamps: true,
+      tableName: "roles",
     }
   );
-  return HouseUser;
+
+  return Role;
 };

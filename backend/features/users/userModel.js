@@ -52,14 +52,6 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      isOwner: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
-      isMember: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
       passwordChangedAt: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -83,7 +75,6 @@ module.exports = (connectDB, DataTypes) => {
         beforeCreate: async (user) => {
           if (!user.password) {
             const generatedPassword = user.generatePassword();
-            console.log(generatedPassword);
             user.password = await encryptPassword(generatedPassword);
           } else {
             validatePassword(user.password);

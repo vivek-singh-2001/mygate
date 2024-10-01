@@ -26,17 +26,15 @@ exports.logout = asyncErrorHandler(async (req, res, next) => {
 
 // Protect routes
 exports.protect = asyncErrorHandler(async (req, res, next) => {
-
-  const token = req.headers?.authorization?.split(' ')[1];
+  const token = req.headers?.authorization?.split(" ")[1];
 
   if (!token && !req.isAuthenticated?.()) {
-    return next(new CustomError('Authorization token missing or invalid', 401));
+    return next(new CustomError("Authorization token missing or invalid", 401));
   }
 
   req.user = await authService.protect(token, req);
   next();
 });
-
 
 // Google OAuth routes
 exports.googleAuth = passport.authenticate("google", {

@@ -9,21 +9,15 @@ exports.getUserById = asyncErrorHandler(async (req, res, next) => {
   if (!token) {
     return next(new CustomError("Authorization token missing or invalid", 401));
   }
+  const decodedToken = await util.promisify(jwt.verify)(
+    token,
+    process.env.JWT_SECRET
+  );
 
-  try {
-    const decodedToken = await util.promisify(jwt.verify)(
-      token,
-      process.env.JWT_SECRET
-    );
+  const user = await userService.getUserById(decodedToken?.id);
 
-    const user = await userService.getUserById(decodedToken?.id);
-
-    res.status(200).json({ status: "success", data: { user } });
-  } catch (error) {
-    next(new CustomError("Invalid or expired token", 401));
-  }
+  res.status(200).json({ status: "success", data: { user } });
 });
-
 
 exports.updateUser = asyncErrorHandler(async (req, res, next) => {
   const userId = req.params.id;
@@ -44,7 +38,8 @@ exports.getFamilyMembers = asyncErrorHandler(async (req, res, next) => {
 });
 
 exports.addFamilyMember = asyncErrorHandler(async (req, res, next) => {
-  const { firstname, lastname, number, email, dateofbirth, houseId ,isOwner} = req.body;
+  const { firstname, lastname, number, email, dateofbirth, houseId, isOwner } =
+    req.body;
   try {
     const newUser = await userService.addFamilyMember({
       firstname,
@@ -53,7 +48,7 @@ exports.addFamilyMember = asyncErrorHandler(async (req, res, next) => {
       email,
       dateofbirth,
       houseId,
-      isOwner
+      isOwner,
     });
     res.status(201).json({ status: "success", data: { user: newUser } });
   } catch (error) {
