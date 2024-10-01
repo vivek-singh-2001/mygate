@@ -6,14 +6,19 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { StepperModule } from 'primeng/stepper';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
-
 import { CustomValidators } from '../../utils/noSpaceAllowed.validator';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AddressService } from '../../services/address/address.service';
 import { ButtonModule } from 'primeng/button';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SocietyService } from '../../services/society/society.Service';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-register',
@@ -24,21 +29,31 @@ import { ButtonModule } from 'primeng/button';
     ReactiveFormsModule,
     CardModule,
     InputTextModule,
-    ButtonModule
+    ButtonModule,
+    StepperModule,
+    IconFieldModule,
+    InputIconModule,
+    RadioButtonModule,
+    CalendarModule
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
+  active: number | undefined = 0;
+  today: Date = new Date();
+
   reactiveForm!: FormGroup;
-  formdata: any = {};
   states: { name: string; code: string }[] = [];
   districts: string[] = [];
+  fileError: string | null = null;
+  selectedFile: File | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private addressService: AddressService
+    private addressService: AddressService,
+    private societyService: SocietyService
   ) {}
 
   ngOnInit(): void {
@@ -48,26 +63,78 @@ export class RegisterComponent implements OnInit {
   initializeForm() {
     this.reactiveForm = this.formBuilder.group({
       firstname: ['', [Validators.required, CustomValidators.noSpaceAllowed]],
-      lastname: ['', Validators.required],
+      lastname: ['', [Validators.required, CustomValidators.noSpaceAllowed]],
       email: ['', [Validators.required, Validators.email]],
+      number: ['', [Validators.required]],
+      dateofbirth: ['', [Validators.required]],
       address: this.formBuilder.group({
-        street1: ['', Validators.required],
-        street2: ['', Validators.required],
+        s_name: ['', Validators.required],
+        street: ['', Validators.required],
         postal: ['', Validators.required],
         city: ['', Validators.required],
         state: ['', Validators.required],
-        country: ['India', Validators.required],
+        country: ['', Validators.required],
       }),
+      house_option: ['A-101', Validators.required],
     });
+  }
+
+  downloadSampleCSV() {
+    const sampleCsvData = `Wing Name, Floors,Number of Houses \nA,1,10\nA,2,10 \nA,3,8 \nB,1,12 \nB,1,12\nB,2,12\nB,3,10`;
+    const blob = new Blob([sampleCsvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'sample_society_details.csv';
+    anchor.click();
+  }
+
+  // Method to handle file selection
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (
+      file &&
+      (file.type === 'text/csv' ||
+        file.type ===
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    ) {
+      this.selectedFile = file;
+      this.fileError = null;
+    } else {
+      this.fileError = 'Please upload a valid CSV file';
+    }
+  }
+  uploadFile() {
+    if (!this.selectedFile) {
+      this.fileError = 'No file selected. Please upload a CSV/Excel file.';
+      return;
+    }
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
   }
 
   // Form submission
   OnFormSubmitted() {
-    console.log('wdaf');
+    // Initialize formdata as a new FormData object
+    const formdata = new FormData();
 
     if (this.reactiveForm.valid) {
-      this.formdata = this.reactiveForm.value;
-      console.log(this.formdata);
+      // Append the society data
+      formdata.append('society', JSON.stringify(this.reactiveForm.value));
+
+      // Append the selected file if it exists
+      if (this.selectedFile) {
+        formdata.append('file', this.selectedFile);
+      }
+      // Make the API call to register the society
+      this.societyService.registerSociety(formdata).subscribe({
+        next: (response) => {
+          console.log('Society registered successfully:', response);
+        },
+        error: (error) => {
+          console.log('Error in registering society:', error.message);
+        },
+      });
     } else {
       this.reactiveForm.markAllAsTouched();
     }
@@ -77,12 +144,11 @@ export class RegisterComponent implements OnInit {
     const pincode = this.reactiveForm.get('address.postal')?.value.toString();
 
     if (pincode && pincode.length === 6) {
-
       this.addressService.getStateByPincode(pincode).subscribe({
         next: (response) => {
           if (response && response[0].Status === 'Success') {
             const postOffice = response[0].PostOffice[0];
-            
+
             this.reactiveForm.patchValue({
               address: {
                 city: postOffice.District,
@@ -90,7 +156,6 @@ export class RegisterComponent implements OnInit {
                 country: postOffice.Country,
               },
             });
-          
           } else {
             console.error('Invalid PIN code or no data found.');
           }

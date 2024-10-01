@@ -14,7 +14,9 @@ exports.getUserById = (id) => {
         "passcode",
         "isMember",
         "isOwner",
-        'dateofbirth'
+        'dateofbirth',
+        
+      
       ],
     },
     include: [

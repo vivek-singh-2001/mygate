@@ -13,6 +13,10 @@ export class SocietyService {
 
   constructor(private http: HttpClient) {}
 
+  registerSociety(formData:FormData):Observable<any[]> {
+    return this.http.post<any[]>(`${this.societyApiUrl}/registerSociety`, formData);
+  }
+
   // Fetch society data by societyId
   fetchSocietyData(societyId: number): Observable<any[]> {
     return this.societyData$.pipe(
