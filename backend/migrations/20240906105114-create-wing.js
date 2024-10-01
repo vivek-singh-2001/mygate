@@ -14,6 +14,15 @@ module.exports = {
         type: Sequelize.STRING(10),
         allowNull: false,
       },
+      societyId: {
+        type: Sequelize.UUID,
+        references: {
+          model: "societies",
+          key: "id",
+        },
+        allowNull: false,
+        onUpdate: 'CASCADE',
+      },
       wingAdminId: {
         type: Sequelize.UUID,
         references: {
