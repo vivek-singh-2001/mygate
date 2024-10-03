@@ -142,14 +142,15 @@ export class UserDetailComponent implements OnInit, OnDestroy {
 
           this.selectedHouse = house;
           if (house) {
+
             console.log('house from userdetails', house);
             this.userDetails.house = house;
             this.userProfileForm.patchValue({
               roomno: house.house_no || '',
-              wingname: house.Wing?.name || '',
-              societyname: house.Wing?.Society?.name || '',
+              wingname: house.Floor?.Wing?.name || '',
+              societyname: house.Floor?.Wing?.Society?.name || '',
               societyaddress:
-                this.getAddress(house.Wing?.Society?.address) || '',
+                this.getAddress(house.Floor?.Wing?.Society?.address) || '',
             });
 
             // Fetch wing details here

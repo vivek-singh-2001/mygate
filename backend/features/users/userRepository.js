@@ -1,5 +1,5 @@
 const { db } = require("../../config/connection");
-const { User, HouseUser, House, Wing, Society } = db;
+const { User, HouseUser, House, Wing, Society, Floor } = db;
 
 exports.getUserById = (id) => {
   return User.findOne({
@@ -12,9 +12,7 @@ exports.getUserById = (id) => {
         "lastname",
         "number",
         "passcode",
-        "isMember",
-        "isOwner",
-        'dateofbirth'
+        "dateofbirth",
       ],
     },
     include: [
@@ -22,22 +20,25 @@ exports.getUserById = (id) => {
         model: House,
         as: "Houses",
         attributes: {
-          exclude: ['createdAt', 'updatedAt']
+          exclude: ["createdAt", "updatedAt"],
         },
         include: [
           {
-            model: Wing,
-            as: "Wing",
+            model: Floor,
+            as: "Floor",
             include: [
               {
-                model: Society,
-                as: "Society",
-                attributes: {
-                  exclude: [
-                    'createdAt',
-                    'updatedAt'
-                  ]
-                }
+                model: Wing,
+                as: "Wing",
+                include: [
+                  {
+                    model: Society,
+                    as: "Society",
+                    attributes: {
+                      exclude: ["createdAt", "updatedAt"],
+                    },
+                  },
+                ],
               },
             ],
           },
@@ -83,14 +84,15 @@ exports.findFamilyMembers = async (userId, houseId) => {
 };
 
 exports.createFamilyMember = async (userData) => {
-  const { firstname, lastname, number, email, dateofbirth, houseId ,isOwner} = userData;
+  const { firstname, lastname, number, email, dateofbirth, houseId, isOwner } =
+    userData;
   const newUser = await User.create({
     firstname,
     lastname,
     number,
     email,
     dateofbirth,
-    isOwner
+    isOwner,
   });
   await HouseUser.create({ UserId: newUser.id, HouseId: houseId });
   return newUser;

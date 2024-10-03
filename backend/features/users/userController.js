@@ -16,7 +16,7 @@ exports.getUserById = asyncErrorHandler(async (req, res, next) => {
 
   const user = await userService.getUserById(decodedToken?.id);
 
-  res.status(200).json({ status: "success", data: { user } });
+  res.status(200).json({ status: "success", data: user });
 });
 
 exports.updateUser = asyncErrorHandler(async (req, res, next) => {

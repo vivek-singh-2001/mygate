@@ -10,7 +10,6 @@ import { User } from '../../interfaces/user.interface';
 export class UserService {
   private userApiUrl = 'http://localhost:7500/api/v1/users';
   private societyApiUrl = 'http://localhost:7500/api/v1/society';
-  
 
   // BehaviorSubject to hold the current user data
   private userData = new BehaviorSubject<any>(null);
@@ -34,10 +33,10 @@ export class UserService {
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {
+        console.log("ressss", response);
         
-        this.userData.next(response.data.user);
-        this.userSocietyIdSubject.next(response.data.user.Houses[0].Wing.SocietyId);
-        
+        this.userData.next(response.data);
+        this.userSocietyIdSubject.next(response.data.Houses[0].Floor.Wing.SocietyId);
       }),
       catchError((error) => {
         console.error('Failed to load user data', error);

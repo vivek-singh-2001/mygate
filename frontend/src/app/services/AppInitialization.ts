@@ -33,7 +33,7 @@ export class AppInitializationService {
   private fetchUserData(): Observable<boolean> {
     return this.userService.getCurrentUser().pipe(
       tap((user) => {
-        this.houseService.setHouses(user.data.user.Houses)
+        this.houseService.setHouses(user.data.Houses)
         this.adminService.societydetails().subscribe()
       }),
       map(() => true)

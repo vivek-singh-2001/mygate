@@ -77,7 +77,7 @@ export class AuthService {
         // Fetch user data and navigate after token is set
         this.userService.getCurrentUser().subscribe({
           next: (user) => {
-            this.houseService.setHouses(user.data.user.Houses);
+            this.houseService.setHouses(user.data.Houses);
             this.adminService.societydetails().subscribe(); //to set the admin status
             this.router.navigate(['/home'], { replaceUrl: true });
           },

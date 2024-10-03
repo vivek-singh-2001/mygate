@@ -53,8 +53,7 @@ export class CalanderComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getUserData().subscribe((userData) => {
-      const houses = userData?.Houses;
-      this.societyId = houses?.[0]?.Wing?.SocietyId;
+      this.societyId = userData?.Houses?.[0]?.Floor?.Wing?.societyId;
 
       if (!this.societyId) {
         throw new Error('User data is incomplete or societyId is missing');
