@@ -10,6 +10,10 @@ module.exports = {
         primaryKey: true,
         allowNull: false,
       },
+      house_no: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       floorId: {
         type: Sequelize.UUID,
         allowNull: false,
@@ -19,10 +23,6 @@ module.exports = {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
-      },
-      house_no: {
-        type: Sequelize.STRING(10),
-        allowNull: false,
       },
     });
   },

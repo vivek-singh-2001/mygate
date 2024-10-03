@@ -23,6 +23,7 @@ db.Blog = require("../features/blog/blogModel.js")(connectDB, DataTypes);
 db.Notice = require("../features/notice/noticeModel.js")(connectDB, DataTypes);
 db.Society = require("../features/society/societyModel")(connectDB, DataTypes);
 db.Wing = require("../features/wing/wingModel.js")(connectDB, DataTypes);
+db.Floor = require("../features/floor/floorModel.js")(connectDB, DataTypes);
 db.HouseUser = require("../features/houseuser/houseUserModel.js")(
   connectDB,
   DataTypes
@@ -30,20 +31,17 @@ db.HouseUser = require("../features/houseuser/houseUserModel.js")(
 db.Chat = require("../features/chat/chatModel.js")(connectDB, DataTypes);
 db.Event = require("../features/events/eventModel.js")(connectDB, DataTypes);
 db.Role = require("../features/users/roleModel")(connectDB, DataTypes);
-db.UserRole = require("../features/users/userRoleModel")(
-  connectDB,
-  DataTypes
-);
+db.UserRole = require("../features/users/userRoleModel")(connectDB, DataTypes);
 
 // =============society-wing (: One to many)============================
 
 db.Society.hasMany(db.Wing, { foreignKey: "societyId" });
 db.Wing.belongsTo(db.Society, { foreignKey: "societyId" });
 
-// =============wing-house (: One to many)============================
+// // =============wing-house (: One to many)============================
 
-db.Wing.hasMany(db.House, { foreignKey: "wingId" });
-db.House.belongsTo(db.Wing, { foreignKey: "wingId" });
+// db.Wing.hasMany(db.House, { foreignKey: "wingId" });
+// db.House.belongsTo(db.Wing, { foreignKey: "wingId" });
 
 // =============wing-notice (: One to many)============================
 
@@ -73,6 +71,11 @@ db.Blog.belongsTo(db.User, { foreignKey: "userId" });
 
 db.Society.hasMany(db.Event, { foreignKey: "societyId" });
 db.Event.belongsTo(db.Society, { foreignKey: "societyId" });
+
+// =============house-floor (: One to many)============================
+
+db.Floor.hasMany(db.House, { foreignKey: "floorId" });
+db.House.belongsTo(db.Floor, { foreignKey: "floorId" });
 
 // ==============house-user (: Many to many)=========================
 

@@ -110,9 +110,8 @@ export class AuthService {
     const token = localStorage.getItem('authToken');
     if (token) {
       const decodedToken = this.decodeToken(token);
-      return decodedToken.exp * 1000 > Date.now(); // Check if token is still valid
+      return decodedToken.exp * 1000 > Date.now();
     }
-
     return false;
   }
 

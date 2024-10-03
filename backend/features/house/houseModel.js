@@ -9,12 +9,12 @@ module.exports = (connectDB, DataTypes) => {
         allowNull: false,
       },
       house_no: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.INTEGER,
         allowNull: false,
       }
     },
     {
-      timestamps: true,
+      timestamps: false,
       tableName:'houses'
     }
   );

@@ -2,6 +2,7 @@
 
 const { faker } = require('@faker-js/faker');
 const crypto = require('crypto');
+const { v4: uuidv4 } = require('uuid');
 
 const encryptPassword = async (password) => {
   return crypto.createHash("sha256").update(password).digest("hex");
@@ -14,6 +15,10 @@ const generateIndianPhoneNumber = () => {
     remainingDigits += Math.floor(Math.random() * 10);
   }
   return startDigit + remainingDigits;
+};
+
+const generatePasscode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
 const generateRandomPhoto = () => {
@@ -31,27 +36,31 @@ module.exports = {
       const password = await encryptPassword('password123');
       const number = generateIndianPhoneNumber();
       const dateofbirth = faker.date.past(30, '2000-01-01');
+      const passcode = generatePasscode();
       const photo = generateRandomPhoto();
 
+      const createdAt = new Date();
+      const updatedAt = new Date();
+
       users.push({
+        id: uuidv4(),
         firstname,
         lastname,
         email,
         password,
         number,
         dateofbirth,
-        isOwner: false,
-        isMember: true,
-        photo, // Include the random photo here
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        passcode,
+        photo,
+        createdAt,
+        updatedAt,
       });
     }
 
-    await queryInterface.bulkInsert('Users', users, {});
+    await queryInterface.bulkInsert('users', users, {});
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Users', null, {});
+    await queryInterface.bulkDelete('users', null, {});
   },
 };
