@@ -38,10 +38,10 @@ db.UserRole = require("../features/users/userRoleModel")(connectDB, DataTypes);
 db.Society.hasMany(db.Wing, { foreignKey: "societyId" });
 db.Wing.belongsTo(db.Society, { foreignKey: "societyId" });
 
-// // =============wing-house (: One to many)============================
+// // =============floor-wing (: One to many)============================
 
-// db.Wing.hasMany(db.House, { foreignKey: "wingId" });
-// db.House.belongsTo(db.Wing, { foreignKey: "wingId" });
+db.Wing.hasMany(db.Floor, { foreignKey: "wingId" });
+db.Floor.belongsTo(db.Wing, { foreignKey: "wingId" });
 
 // =============wing-notice (: One to many)============================
 
