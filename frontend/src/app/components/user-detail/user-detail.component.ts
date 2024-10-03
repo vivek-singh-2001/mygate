@@ -154,7 +154,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             });
 
             // Fetch wing details here
-            this.fetchWingDetails(house.Wing?.id);
+            this.fetchWingDetails(house.Floor?.Wing?.id);
 
             // Fetch family details
             this.getFamilyMembers(this.userDetails.id , house.id )
@@ -189,7 +189,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
           console.log('Fetched wing details:', wingDetails);
           // Add wing details to userDetails
           this.userDetails.wingDetails =
-            wingDetails?.data?.wingDetails?.wingAdminDetails || {};
+            wingDetails?.data?.wingAdminDetails || {};
         },
         error: (error) => {
           console.error('Error fetching wing details:', error);

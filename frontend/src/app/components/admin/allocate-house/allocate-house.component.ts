@@ -93,6 +93,7 @@ export class AllocateHouseComponent implements OnInit {
       },
     });
   }
+  
   onWingSelection() {
     const houseApiUrl = `http://localhost:7500/api/v1/house/wingHouseDetails/${this.numberOfWings.value}`;
     this.http.get<any>(houseApiUrl).subscribe({

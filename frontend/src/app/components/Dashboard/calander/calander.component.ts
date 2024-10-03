@@ -53,6 +53,8 @@ export class CalanderComponent implements OnInit {
 
   ngOnInit() {
     this.userService.getUserData().subscribe((userData) => {
+      console.log("loglog", userData);
+      
       this.societyId = userData?.Houses?.[0]?.Floor?.Wing?.societyId;
 
       if (!this.societyId) {

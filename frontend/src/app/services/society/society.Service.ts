@@ -24,6 +24,8 @@ export class SocietyService {
             .get<any>(`${this.societyApiUrl}/societyAdminsDetails/${societyId}`)
             .pipe(
               tap((response) => {
+                console.log("soossssss", response);
+                
                 if (response?.data?.societyDetails) {
                   this.societyDataSubject.next(response.data.societyDetails); // Update BehaviorSubject
                 }

@@ -40,6 +40,5 @@ exports.getSocietyAdminsDetails = async (societyId) => {
 
 exports.isUserAdmin = async (userId) => {
   const society = await societyRepository.findSocietyByUserId(userId);
-
   return society;
 };

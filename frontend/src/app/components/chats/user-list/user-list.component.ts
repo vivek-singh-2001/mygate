@@ -19,37 +19,42 @@ export class UserListComponent implements OnInit {
   @Output() userSelected = new EventEmitter<any>();
   private subscription!: Subscription;
 
-  constructor(private userService: UserService, private houseService:HouseService) {
-  }
+  constructor(
+    private userService: UserService,
+    private houseService: HouseService
+  ) {}
 
   ngOnInit() {
-
-    
-
-    this.subscription = this.houseService.selectedHouse$.pipe(
-      switchMap(selectedHouse => {
-        if (selectedHouse) {
-          const societyId = selectedHouse.Wing.SocietyId;
-          const wingId = selectedHouse.WingId;
-          return this.userService.getUsersBySocietyIdAndWingId(societyId, wingId);
-        } else {
-          return EMPTY; 
-        }
-      })
-    ).subscribe({
-      next: (societyUsers: any) => {
-        this.SocietyUsers = societyUsers.data.users;
-      },
-      error: (error) => {
-        console.error('Failed to fetch society users', error);
-      },
-      complete: () => {
-        if (this.subscription) {
-          this.subscription.unsubscribe(); 
-        }
-      }
-    });
-
+    this.subscription = this.houseService.selectedHouse$
+      .pipe(
+        switchMap((selectedHouse) => {
+          if (selectedHouse) {
+            console.log("helooooooooooooooooooooooo", selectedHouse);
+            
+            // const societyId = selectedHouse.Floor.Wing.societyId;
+            // const wingId = selectedHouse.Floor.Wing.wingId;
+            return this.userService.getUsersBySocietyIdAndWingId(
+              selectedHouse.Floor.Wing.societyId,
+              selectedHouse.Floor.wingId
+            );
+          } else {
+            return EMPTY;
+          }
+        })
+      )
+      .subscribe({
+        next: (societyUsers: any) => {
+          this.SocietyUsers = societyUsers.data.users;
+        },
+        error: (error) => {
+          console.error('Failed to fetch society users', error);
+        },
+        complete: () => {
+          if (this.subscription) {
+            this.subscription.unsubscribe();
+          }
+        },
+      });
   }
   selectUser(user: any) {
     this.userSelected.emit(user);

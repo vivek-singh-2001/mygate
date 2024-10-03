@@ -35,29 +35,26 @@ export class AuthService {
     const loginData = { email, password };
     return this.http.post<any>(`${this.apiUrl}/login`, loginData).pipe(
       switchMap((response) => {
+        console.log("ress login", response);
+        
         const token = response.token;
         if (token) {
           localStorage.setItem('authToken', token);
           localStorage.setItem('isLoggedIn', 'true');
         }
-        // Return new observable to fetch user data
         return this.userService.getCurrentUser();
       }),
       tap((user) => {
-        // Set houses after getting the user
         console.log('user after login', user);
 
-        this.houseService.setHouses(user.data.user.Houses);
+        this.houseService.setHouses(user.data.Houses);
         this.adminService.societydetails().subscribe();
       }),
       finalize(() => {
-        // Navigate only after a successful login
         this.router.navigate(['/home']);
       }),
       catchError((error) => {
-        // Handle error (wrong credentials)
         console.error('Login failed: ', error);
-        // Optionally, you can show an error message here
         return throwError(() => new Error('Login failed'));
       })
     );

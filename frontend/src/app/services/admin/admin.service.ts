@@ -19,11 +19,11 @@ export class AdminService {
   societydetails(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}`).pipe(
       map((response) => {
+        console.log("response soccc", response);
+        
         if (response && response.isAdmin !== null) {
-          
           this.isAdminSubject.next(true); // Emit true if society details are present
         } else {
-          console.log('No Society Details Found');
           this.isAdminSubject.next(false); // Emit false if no society details
         }
         return response.isAdmin; // Return the response in case other parts of the app need it

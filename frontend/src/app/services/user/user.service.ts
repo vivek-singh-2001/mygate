@@ -36,7 +36,7 @@ export class UserService {
         console.log("ressss", response);
         
         this.userData.next(response.data);
-        this.userSocietyIdSubject.next(response.data.Houses[0].Floor.Wing.SocietyId);
+        this.userSocietyIdSubject.next(response.data.Houses[0]?.Floor?.Wing?.societyId);
       }),
       catchError((error) => {
         console.error('Failed to load user data', error);
