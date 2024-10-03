@@ -1,13 +1,10 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const societyService = require("./societyService");
 const CustomError = require("../../utils/CustomError");
-const util = require("util");
-const jwt = require("jsonwebtoken");
-const { log } = require("console");
+const path = require("path");
+const { db } = require("../../config/connection");
+const { User } = db;
 
-exports.registerSociety = asyncErrorHandler(async(req, res, next) => {
-  // const {userDetails, societyDetails, }
-})
 
 exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
   const { id: societyId } = req.params;
@@ -90,3 +87,30 @@ exports.checkIsAdmin = asyncErrorHandler(async (req, res, next) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+exports.registerSociety = asyncErrorHandler(async (req, res, next) => {
+    const societyDetails = req.body.society ? JSON.parse(req.body.society) : null;
+    const csvFile = req.file;
+
+    if (!societyDetails || !csvFile) {
+      return next(new CustomError("Society details or CSV file is missing.", 400))
+    }
+    
+    // Check if the user is already registered
+    const existingUser = await User.findOne({where:{email:societyDetails.email}});
+    if (existingUser) {
+      return next(new CustomError('User already registered with this email address',400))
+    }
+   
+    
+
+    const csvFilePath = path.join(__dirname, "../../uploads/", csvFile.filename);
+    societyDetails.filePath = csvFilePath;
+
+    // Register the society
+    const result = await societyService.registerSociety(societyDetails);
+
+    res.status(200).json({ status: "success", societyDetails: result });
+ 
+});
+

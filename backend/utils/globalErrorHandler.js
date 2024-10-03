@@ -5,7 +5,7 @@ const devErrors = (res, error) => {
         message: error.message,
         stackTrace: error.stack,
         error: error
-    });
+    }); 
 }
 
 const prodErrors = (res, error) => {

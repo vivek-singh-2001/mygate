@@ -23,7 +23,15 @@ module.exports = (connectDB, DataTypes) => {
           model: 'users',
           key: 'id'
         },
-        allowNull: false,
+        allowNull: true // Allow null if a society doesn't have an admin
+      },
+      status:{
+        type: DataTypes.ENUM('pending', 'approved','rejected'),
+        defaultValue: 'pending'  // Default status is active
+      },
+      csvData:{
+        type: DataTypes.TEXT,
+        allowNull: true ,
         onUpdate: 'CASCADE',
       }
     },
