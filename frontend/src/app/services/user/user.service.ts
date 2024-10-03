@@ -11,12 +11,14 @@ export class UserService {
   private userApiUrl = 'http://localhost:7500/api/v1/users';
   private societyApiUrl = 'http://localhost:7500/api/v1/society';
 
-  // BehaviorSubject to hold the current user data
+
   private userData = new BehaviorSubject<any>(null);
   private familyDataSubject = new BehaviorSubject<any>(null);
   private userSocietyIdSubject = new BehaviorSubject<number>(0);
+  private userRoleArraySubject = new BehaviorSubject<string[]>([]); 
+
   userSocietyId$ = this.userSocietyIdSubject.asObservable();
- 
+  userRoles$ = this.userRoleArraySubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -33,10 +35,11 @@ export class UserService {
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {
-        console.log("ressss", response);
-        
         this.userData.next(response.data);
         this.userSocietyIdSubject.next(response.data.Houses[0].Floor.Wing.SocietyId);
+        const rolesNames = response.data.Roles?.map((role: { name: any; })=>role.name) || [];
+        this.userRoleArraySubject.next(rolesNames);
+
       }),
       catchError((error) => {
         console.error('Failed to load user data', error);

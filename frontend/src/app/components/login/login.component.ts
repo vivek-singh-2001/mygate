@@ -60,19 +60,7 @@ export class LoginComponent implements OnInit {
   onLogin(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      console.log(email, password);
-      this.authService.login(email, password).subscribe({
-        next: () => {
-          this.router.navigate(['/home']);
-        },
-        error: (error) => {
-          console.error('Invalid email or password', error);
-          this.errorMessage = 'Invalid email or password';
-        },
-        complete: () => {
-          console.log('Login request completed.');
-        },
-      });
+      this.authService.login(email, password).subscribe();
     }
   }
 

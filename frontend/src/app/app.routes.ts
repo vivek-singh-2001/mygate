@@ -1,12 +1,13 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { HomeComponent } from './views/home/home.component';
+import { HomeComponent } from './layouts/user/home.component';
 import { AuthGuard } from './gaurds/auth.guard';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { AdminGuard } from './services/admin/admin.gaurd';
 import { DashboardComponent } from './components/Dashboard/dashboard.component';
 import { RegisterComponent } from './components/register/register.component';
+import { SystemAdminComponent } from './layouts/system-admin/system-admin.component';
 export const routes: Routes = [
   {
     path: 'login',
@@ -16,7 +17,6 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
-
   },
   {
     path: 'google/success',
@@ -62,7 +62,6 @@ export const routes: Routes = [
           ),
         canActivate: [AdminGuard],
       },
-      
       {
         path: 'apartments/allocate-house',
         loadComponent: () =>
@@ -80,6 +79,10 @@ export const routes: Routes = [
         canActivate: [AdminGuard],
       },
     ],
+  },
+  {
+    path:'systemAdmin',
+    component:SystemAdminComponent,
   },
   {
     path: '',

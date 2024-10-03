@@ -44,15 +44,22 @@ export class AuthService {
         return this.userService.getCurrentUser();
       }),
       tap((user) => {
-        // Set houses after getting the user
-        console.log('user after login', user);
-
+        this.userService.userRoles$.subscribe({
+          next: (roles) => {
+            console.log(roles);
+            if (roles.includes('systemAdmin')) {
+              this.router.navigate(['/systemAdmin']);
+            }
+            else{
+              this.router.navigate(['/home']);
+            }
+          },
+        });
         this.houseService.setHouses(user.data.user.Houses);
         this.adminService.societydetails().subscribe();
       }),
       finalize(() => {
         // Navigate only after a successful login
-        this.router.navigate(['/home']);
       }),
       catchError((error) => {
         // Handle error (wrong credentials)
