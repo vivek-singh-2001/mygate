@@ -1,15 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { catchError, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocietyService {
   private societyApiUrl = 'http://localhost:7500/api/v1/society';
-  private societyDataSubject = new BehaviorSubject<any[]>([]); // Default to empty array
+  private societyDataSubject = new BehaviorSubject<any[]>([]); 
+  private allSocietyDataSubject = new BehaviorSubject<any[]>([]);
   societyData$ = this.societyDataSubject.asObservable();
+  allSocietyData$ = this.allSocietyDataSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -41,4 +43,17 @@ export class SocietyService {
       })
     );
   }
+
+  fetchAllSociety(status:string): Observable<any[]> {
+    const url = status ? `${this.societyApiUrl}/a/b/c/d/allSocieties?status=${status}` : `${this.societyApiUrl}/a/b/c/d/allSocieties`;
+    return this.http.get<any>(url).pipe(
+      map((response) => response.society), // Extract the 'society' field
+      tap((societies) => {
+        console.log("Fetched societies:", societies);
+        this.allSocietyDataSubject.next(societies);  // Update BehaviorSubject with societies array
+      })
+    );
+  }
+  
+  
 }

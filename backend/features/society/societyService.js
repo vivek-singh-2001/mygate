@@ -48,3 +48,8 @@ exports.registerSociety = async (societyDetails) => {
   const result = await societyRepository.registerSociety({societyDetails,status:'pending'});  
   return result;
 };
+
+exports.getSocieties = async (status)=>{
+  const result = await societyRepository.getAllSocieties();
+  return result;
+}

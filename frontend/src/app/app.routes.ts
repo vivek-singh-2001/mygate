@@ -83,6 +83,15 @@ export const routes: Routes = [
   {
     path:'systemAdmin',
     component:SystemAdminComponent,
+    children:[
+      {
+        path:'societies',
+        loadComponent:()=>
+          import(
+            './components/society-list/society-list.component'
+          ).then((s)=>s.SocietyListComponent)
+      }
+    ]
   },
   {
     path: '',

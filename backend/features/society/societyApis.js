@@ -26,10 +26,14 @@ const {
   getSocietyAdminsDetails,
   checkIsAdmin,
   registerSociety,
+  getSocieties,
+  getCsvFile
 } = societyController;
 
 // Define routes
 router.get("/:id", protect, getUsersBySociety);
+router.get("/a/b/c/d/allSocieties",protect,getSocieties)
+router.get("/csv/:filename",protect,getCsvFile)
 router.post("/registerSociety", upload.single('file'),registerSociety);
 router.get("/:societyId/wing/:wingId", protect, getUsersBySocietyAndWing);
 router.get("/societyAdminsDetails/:id", getSocietyAdminsDetails);

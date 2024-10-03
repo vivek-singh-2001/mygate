@@ -122,3 +122,26 @@ exports.registerSociety = async (societyDetails, status) => {
     throw new CustomError(error.message || "Failed to register society", 500);
   }
 };
+
+
+exports.getAllSocieties = async (status) => {
+  const filter = {};
+
+  // If status is provided, add it to the filter object
+  if (status) {
+    filter.status = status;
+  }
+
+  try {
+    const societies = await Society.findAll({
+      where: filter,
+      include: [{
+        model: User, // Assuming the User model is associated with Society
+      }]
+    });
+    return societies;
+  } catch (error) {
+    console.error("Error fetching societies: ", error);
+    throw error;
+  }
+};
