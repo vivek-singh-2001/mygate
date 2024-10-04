@@ -8,34 +8,29 @@ import { User } from '../../interfaces/user.interface';
   providedIn: 'root',
 })
 export class UserService {
-  private userApiUrl = 'http://localhost:7500/api/v1/users';
-  private societyApiUrl = 'http://localhost:7500/api/v1/society';
+  private readonly userApiUrl = 'http://localhost:7500/api/v1/users';
+  private readonly societyApiUrl = 'http://localhost:7500/api/v1/society';
 
   // BehaviorSubject to hold the current user data
-  private userData = new BehaviorSubject<any>(null);
-  private familyDataSubject = new BehaviorSubject<any>(null);
-  private userSocietyIdSubject = new BehaviorSubject<number>(0);
+  private readonly userDataSubject = new BehaviorSubject<any>(null);
+  private readonly familyDataSubject = new BehaviorSubject<any>(null);
+  private readonly userSocietyIdSubject = new BehaviorSubject<number>(0);
   userSocietyId$ = this.userSocietyIdSubject.asObservable();
- 
-
-  constructor(private http: HttpClient) {}
+  userData$ = this.userDataSubject.asObservable()
+  constructor(private readonly http: HttpClient) {}
 
   getUserData(): Observable<any> {
-    if (this.userData.getValue()) {
-      return this.userData.asObservable();
+    if (this.userDataSubject.getValue()) {
+      return this.userDataSubject.asObservable();
     } else {
-      return this.getCurrentUser().pipe(
-        switchMap(() => this.userData.asObservable())
-      );
+      return this.getCurrentUser();
     }
   }
 
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {
-        console.log("ressss", response);
-        
-        this.userData.next(response.data);
+        this.userDataSubject.next(response);
         this.userSocietyIdSubject.next(response.data.Houses[0]?.Floor?.Wing?.societyId);
       }),
       catchError((error) => {
@@ -61,12 +56,12 @@ export class UserService {
 
   // Manually set user data
   setUserData(data: User): void {
-    this.userData.next(data);
+    this.userDataSubject.next(data);
   }
 
   // Clears the user data ( on logout)
   clearUserData(): void {
-    this.userData.next(null);
+    this.userDataSubject.next(null);
   }
 
   // Fetch users by society ID

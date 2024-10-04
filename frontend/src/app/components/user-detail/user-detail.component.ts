@@ -189,7 +189,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
           console.log('Fetched wing details:', wingDetails);
           // Add wing details to userDetails
           this.userDetails.wingDetails =
-            wingDetails?.data?.wingAdminDetails || {};
+            wingDetails?.data || {};
         },
         error: (error) => {
           console.error('Error fetching wing details:', error);

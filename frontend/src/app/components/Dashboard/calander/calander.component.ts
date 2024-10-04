@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin/admin.service';
 import { UserService } from '../../../services/user/user.service';
 import { Event } from '../../../interfaces/event.interface';
+import { AppInitializationService } from '../../../services/AppInitialization';
 
 @Component({
   selector: 'app-calander',
@@ -48,34 +49,63 @@ export class CalanderComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private adminService: AdminService,
-    private userService: UserService
+    private userService: UserService,
+    private appInitializationService: AppInitializationService
   ) {}
 
   ngOnInit() {
-    this.userService.getUserData().subscribe((userData) => {
-      console.log("loglog", userData);
-      
-      this.societyId = userData?.Houses?.[0]?.Floor?.Wing?.societyId;
+    this.appInitializationService.isInitialized.subscribe({
+      next: (isInitialized) => {
+        if (isInitialized) {
+          this.userService.userData$.subscribe({
+            next: (userData) => {
+              this.societyId =
+                userData?.data?.Houses?.[0]?.Floor?.Wing?.societyId;
 
-      if (!this.societyId) {
-        throw new Error('User data is incomplete or societyId is missing');
-      }
+              if (!this.societyId) {
+                console.error(
+                  'User data is incomplete or societyId is missing'
+                );
+              } else {
+                this.eventService.getEvents(this.societyId).subscribe({
+                  next: (events) => {
+                    this.events = events;
+                    this.generateCalendar(this.currentMonth); // Generate calendar after fetching events
+                  },
+                  error: (eventError) => {
+                    console.error('Failed to fetch events:', eventError);
+                  },
+                });
+              }
+            },
+            error: (userError) => {
+              console.error('Failed to fetch user data:', userError);
+            },
+          });
 
-      this.eventService.getEvents(this.societyId).subscribe((events) => {
-        this.events = events;
-        this.generateCalendar(this.currentMonth);
-      });
-    });
+          this.adminService.isAdmin$.subscribe({
+            next: (isAdmin) => {
+              this.isAdmin = isAdmin;
+            },
+            error: (adminError) => {
+              console.error('Failed to determine admin status:', adminError);
+            },
+          });
 
-    this.adminService.isAdmin$.subscribe((isAdmin) => {
-      if (isAdmin) {
-        this.isAdmin = isAdmin;
-      }
-    });
-
-    this.eventService.events$.subscribe((updatedEvents) => {
-      this.events = updatedEvents;
-      this.generateCalendar(this.currentMonth); // Regenerate calendar with new events
+          this.eventService.events$.subscribe({
+            next: (updatedEvents) => {
+              this.events = updatedEvents;
+              this.generateCalendar(this.currentMonth); // Regenerate calendar with updated events
+            },
+            error: (updateError) => {
+              console.error('Failed to fetch updated events:', updateError);
+            },
+          });
+        }
+      },
+      error: (initError) => {
+        console.error('App initialization failed:', initError);
+      },
     });
   }
 

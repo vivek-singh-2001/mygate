@@ -15,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { WingService } from '../../services/wings/wing.service';
 import { House } from '../../interfaces/house.interface';
 import { EventService } from '../../services/events/event.service';
+import { AppInitializationService } from '../../services/AppInitialization';
 
 @Component({
   selector: 'app-navigation',
@@ -46,7 +47,8 @@ export class NavigationComponent implements OnInit {
     private router: Router,
     private houseService: HouseService,
     private wingService: WingService,
-    private eventService: EventService
+    private eventService: EventService,
+    private appInitializationService: AppInitializationService
   ) {}
 
   ngOnInit(): void {
@@ -105,26 +107,30 @@ export class NavigationComponent implements OnInit {
   }
 
   private loadUserData(): void {
-    this.usersubscription = this.userService.getUserData().subscribe({
-      next: (data) => {
-        this.user = data;
-        this.houses = data.Houses || [];
-        this.houseService.selectedHouse$.subscribe({
-          next: (house) => {
-            this.selectedHouse = house.house_no || 'Default House';
-            this.initializeMenu(); // Ensure menu is updated when house changes
+    this.appInitializationService.isInitialized.subscribe((isInitialized) => {
+      if (isInitialized) {
+        this.userService.userData$.subscribe({
+          next: (data) => {
+            this.user = data;
+            this.houses = data?.Houses || [];
+
+            this.houseService.selectedHouse$.subscribe({
+              next: (house) => {
+                this.selectedHouse = house?.house_no || 'Default House';
+                this.initializeMenu(); // Ensure menu is updated when house changes
+              },
+              error: (houseError) => {
+                console.error('Failed to fetch selected house:', houseError);
+              },
+            });
+
+            this.initializeMenu();
+          },
+          error: (error) => {
+            console.error('Error fetching user data:', error);
           },
         });
-        this.initializeMenu();
-      },
-      error: (error) => {
-        console.error('Failed to fetch user details', error);
-      },
-      complete: () => {
-        if (this.usersubscription) {
-          this.usersubscription.unsubscribe();
-        }
-      },
+      }
     });
   }
 
