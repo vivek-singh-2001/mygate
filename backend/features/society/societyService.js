@@ -50,6 +50,6 @@ exports.registerSociety = async (societyDetails) => {
 };
 
 exports.getSocieties = async (status)=>{
-  const result = await societyRepository.getAllSocieties();
+  const result = await societyRepository.getAllSocieties(status);
   return result;
 }

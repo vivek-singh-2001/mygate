@@ -44,16 +44,19 @@ export class SocietyService {
     );
   }
 
-  fetchAllSociety(status:string): Observable<any[]> {
-    const url = status ? `${this.societyApiUrl}/a/b/c/d/allSocieties?status=${status}` : `${this.societyApiUrl}/a/b/c/d/allSocieties`;
+  fetchAllSociety(status: string): Observable<any[]> {
+    const url = status 
+      ? `${this.societyApiUrl}/a/b/c/d/allSocieties?status=${status}` 
+      : `${this.societyApiUrl}/a/b/c/d/allSocieties`;
+      
     return this.http.get<any>(url).pipe(
       map((response) => response.society), // Extract the 'society' field
       tap((societies) => {
         console.log("Fetched societies:", societies);
-        this.allSocietyDataSubject.next(societies);  // Update BehaviorSubject with societies array
+        this.allSocietyDataSubject.next(societies);  
       })
     );
   }
   
-  
+
 }

@@ -1,54 +1,57 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { AdminService } from '../../services/admin/admin.service';
-import { UserService } from '../../services/user/user.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { SocietyService } from '../../services/society/society.Service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-society-list',
   standalone: true,
-  imports: [TableModule, PaginatorModule, CommonModule],
+  imports: [TableModule, PaginatorModule, CommonModule,ButtonModule],
   templateUrl: './society-list.component.html',
   styleUrl: './society-list.component.css',
 })
 export class SocietyListComponent {
   societies: any[] = [];
-  status = 'pending';
-  first: number = 0; //offset
-  rows: number = 20; //limit
-  totalRecords: number = 0; //total records fetched
-  searchQuery: string = '';
+  selectedStatus: string | null = null;
+  statusOptions = [
+    { label: 'All', value: null },
+    { label: 'Pending', value: 'pending' },
+    { label: 'Approved', value: 'approved' },
+    { label: 'Rejected', value: 'rejected' },
+  ];
   noUsersFound: boolean = false;
 
-  private searchSubject = new Subject<string>();
-
   constructor(
-    private userService: UserService,
-    private adminService: AdminService,
     private societyService: SocietyService,
     private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    this.societyService.fetchAllSociety(this.status).subscribe({
-      next: () => {
-        this.societyService.allSocietyData$.subscribe({
-          next: (society) => {
-            console.log(society);
-            this.societies = society;
-          },
-        });
+    this.fetchSocieties();
+  }
+
+  fetchSocieties() {
+    const status = this.selectedStatus ? this.selectedStatus : '';
+    this.societyService.fetchAllSociety(status).subscribe({
+      next: (societies) => {
+        this.societies = societies;
+        this.noUsersFound = societies.length === 0;
       },
       error: (err) => {
-        console.log('errr', err.message);
-        console.log('error', err);
+        console.error('Error fetching societies:', err);
       },
     });
   }
+
+   // Triggered when the status filter dropdown is changed
+   onStatusFilterChange() {
+    this.fetchSocieties();
+  }
+
+  
 
   viewPdf(society: any) {
     const fullPath = society.csvData;
@@ -105,5 +108,15 @@ export class SocietyListComponent {
     anchor.download = `parsed_${filename}`; // Prefix with 'parsed_' for clarity
     anchor.click();
     window.URL.revokeObjectURL(url); // Clean up URL object
+  }
+
+
+  onCanel(){
+    console.log("wfiwfi");
+    
+  }
+
+  onApprove(){
+    console.log("wqifhufwi");
   }
 }

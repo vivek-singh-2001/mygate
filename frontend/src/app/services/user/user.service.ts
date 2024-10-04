@@ -39,7 +39,8 @@ export class UserService {
         this.userSocietyIdSubject.next(response.data.Houses[0].Floor.Wing.SocietyId);
         const rolesNames = response.data.Roles?.map((role: { name: any; })=>role.name) || [];
         this.userRoleArraySubject.next(rolesNames);
-
+        console.log("fom user service",rolesNames);
+        
       }),
       catchError((error) => {
         console.error('Failed to load user data', error);

@@ -6,9 +6,20 @@
       <th>Name</th>
       <th>Society Name</th>
       <th>Number</th>
-      <th>Status</th>
       <th>Email</th>
+      <th>
+        <p-dropdown
+          [options]="statusOptions"
+          [(ngModel)]="selectedStatus"
+          placeholder="Select Status"
+          (onChange)="onStatusFilterChange()"
+          [style]="{ width: '100px', border: 'none' }"
+          appendTo="body"
+        >
+        </p-dropdown>
+      </th>
       <th>pdf</th>
+      <th>Action</th>
     </tr>
   </ng-template>
 
@@ -30,18 +41,21 @@
       <td>{{ society.User.number || "N/A" }}</td>
       <td>{{ society.User.email }}</td>
       <td>{{ society.status }}</td>
+
       <td>
-        <button
-          pButton
-          type="button"
-          label="View"
-          icon="pi pi-eye"
-          class="p-button-outlined"
-          (click)="viewPdf(society)"
-        >
-          View
-        </button>
+        <p-button icon="pi pi-download" severity="secondary" (onClick)="viewPdf(society)"/>
       </td>
+      @if(society.status === 'pending'){
+      <td class="flex gap-4"> 
+        <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" (onClick)="onCanel()" />
+        <p-button icon="pi pi-check" [rounded]="true" [outlined]="true" (onClick)="onApprove()"/>
+      </td>
+      }
+      @else {
+        <td>
+         <p>Completed   </p>
+        </td>
+      }
     </tr>
   </ng-template>
 </p-table>
