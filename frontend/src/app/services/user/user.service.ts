@@ -15,7 +15,7 @@ export class UserService {
   private readonly userDataSubject = new BehaviorSubject<any>(null);
   private readonly familyDataSubject = new BehaviorSubject<any>(null);
   private readonly userSocietyIdSubject = new BehaviorSubject<number>(0);
-  private userRoleArraySubject = new BehaviorSubject<string[]>([]); 
+  private readonly userRoleArraySubject = new BehaviorSubject<string[]>([]); 
 
   userSocietyId$ = this.userSocietyIdSubject.asObservable();
   userRoles$ = this.userRoleArraySubject.asObservable(); userData$ = this.userDataSubject.asObservable()
@@ -32,8 +32,10 @@ export class UserService {
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {
+        console.log("ressss", response);
+        
         this.userDataSubject.next(response.data);
-        this.userSocietyIdSubject.next(response.data.Houses[0].Floor.Wing.SocietyId);
+        this.userSocietyIdSubject.next(response.data.Houses[0].Floor.Wing.societyId);
         const rolesNames = response.data.Roles?.map((role: { name: any; })=>role.name) || [];
         this.userRoleArraySubject.next(rolesNames);
         console.log("fom user service",rolesNames);

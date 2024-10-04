@@ -57,29 +57,20 @@ export class CalanderComponent implements OnInit {
     this.appInitializationService.isInitialized.subscribe({
       next: (isInitialized) => {
         if (isInitialized) {
-          this.userService.userData$.subscribe({
-            next: (userData) => {
-              this.societyId =
-                userData?.data?.Houses?.[0]?.Floor?.Wing?.societyId;
-
-              if (!this.societyId) {
-                console.error(
-                  'User data is incomplete or societyId is missing'
-                );
-              } else {
-                this.eventService.getEvents(this.societyId).subscribe({
-                  next: (events) => {
-                    this.events = events;
-                    this.generateCalendar(this.currentMonth); // Generate calendar after fetching events
-                  },
-                  error: (eventError) => {
-                    console.error('Failed to fetch events:', eventError);
-                  },
-                });
-              }
+          this.userService.userSocietyId$.subscribe({
+            next: (societyId) => {
+              this.eventService.getEvents(societyId).subscribe({
+                next: (events) => {
+                  this.events = events;
+                  this.generateCalendar(this.currentMonth); // Generate calendar after fetching events
+                },
+                error: (eventError) => {
+                  console.error('Failed to fetch events:', eventError);
+                },
+              });
             },
-            error: (userError) => {
-              console.error('Failed to fetch user data:', userError);
+            error: (societyIdError) => {
+              console.error('Failed to fetch society id:', societyIdError);
             },
           });
 
