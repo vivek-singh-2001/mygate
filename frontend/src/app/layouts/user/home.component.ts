@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationComponent } from "../../components/navigation/navigation.component";
 import { SideNavComponent } from "../../components/side-nav/side-nav.component";
-
 import { RouterOutlet } from '@angular/router';
 
 

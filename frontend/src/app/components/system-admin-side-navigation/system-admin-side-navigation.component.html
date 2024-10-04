@@ -1,0 +1,26 @@
+<div class="sidebar" [ngClass]="{ expanded: isExpanded }">
+    <button
+      pButton
+      icon="pi pi-bars"
+      (click)="toggleSidebar()"
+      class="toggle-btn p-button-text"
+    ></button>
+    <div class="menu-container">
+      <ng-container *ngIf="isExpanded; else iconOnly">
+        <p-panelMenu [model]="items" [style]="{ width: '100%' }" class="menuwraper" ></p-panelMenu>
+      </ng-container>
+      <ng-template #iconOnly>
+        <div class="icon-menu">
+          <button
+            pButton
+            *ngFor="let item of items"
+            [icon]="item.icon || ''"
+            class="p-button-text icon-btn"
+            [ngClass]="item.iconSize" 
+            pTooltip="{{ item.label }}"
+          ></button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  

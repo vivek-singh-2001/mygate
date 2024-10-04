@@ -115,6 +115,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       .getUserData()
       .pipe(
         switchMap((userData) => {
+          console.log(userData);
+          
           if (userData) {
             this.userDetails = userData;
             this.userProfileForm.patchValue({

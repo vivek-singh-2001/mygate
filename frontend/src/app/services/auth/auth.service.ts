@@ -8,7 +8,6 @@ import {
   Subscription,
   throwError,
   catchError,
-  finalize,
 } from 'rxjs';
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
@@ -45,13 +44,19 @@ export class AuthService {
         return this.userService.getCurrentUser();
       }),
       tap((user) => {
-        console.log('user after login', user);
-
-        this.houseService.setHouses(user.data.Houses);
+        this.userService.userRoles$.subscribe({
+          next: (roles) => {
+            console.log(roles);
+            if (roles.includes('systemAdmin')) {
+              this.router.navigate(['/systemAdmin']);
+            }
+            else{
+              this.router.navigate(['/home']);
+            }
+          },
+        });
+        this.houseService.setHouses(user.data.user.Houses);
         this.adminService.societydetails().subscribe();
-      }),
-      finalize(() => {
-        this.router.navigate(['/home']);
       }),
       catchError((error) => {
         console.error('Login failed: ', error);
@@ -116,6 +121,7 @@ export class AuthService {
     try {
       return JSON.parse(atob(token.split('.')[1]));
     } catch (error) {
+      console.error(error);
       return null;
     }
   }

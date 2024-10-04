@@ -1,6 +1,6 @@
-const { IncomingClientScope } = require("twilio/lib/jwt/ClientCapability");
 const { db } = require("../../config/connection");
 const { Sequelize } = require("sequelize");
+const CustomError = require("../../utils/CustomError");
 const { User, HouseUser, House, Wing, Society } = db;
 
 exports.findUsersBySociety = (societyId, limits, offsets, searchQuery) => {
@@ -72,7 +72,76 @@ exports.findSocietyAdminsDetails = async (societyId) => {
 };
 
 exports.findSocietyByUserId = async (userId) => {
-  console.log("oddd", userId);
-  
   return await Society.findOne({ where: { societyAdminId: userId } });
+};
+
+exports.registerSociety = async (societyDetails, status) => {
+  const transaction = await db.connectDB.transaction();
+  try {
+    // Create the user within the transaction
+    console.log({
+      firstname:societyDetails.societyDetails.firstname,
+      lastname:societyDetails.societyDetails.lastname,
+      email:societyDetails.societyDetails.email,
+      number:societyDetails.societyDetails.number,
+    });
+    
+    const user = await User.create({
+      firstname: societyDetails.societyDetails.firstname,
+      lastname: societyDetails.societyDetails.lastname,
+      email: societyDetails.societyDetails.email,
+      number: societyDetails.societyDetails.number,
+      dateofbirth:societyDetails.societyDetails.dateofbirth
+    }, { transaction });
+
+    console.log(user);
+    
+
+    const society = await Society.create({
+      name: societyDetails.societyDetails.address.s_name,
+      address: {
+        street: societyDetails.societyDetails.address.street,
+        city: societyDetails.societyDetails.address.city,
+        zip: societyDetails.societyDetails.address.postal,
+        state: societyDetails.societyDetails.address.state,
+        country: societyDetails.societyDetails.address.country,
+      },
+      societyAdminId: user.id,
+      status: societyDetails.status,
+      csvData: societyDetails.societyDetails.filePath,
+    }, { transaction });
+
+    // Commit the transaction if both operations were successful
+    await transaction.commit();
+
+    return society;
+  } catch (error) {
+    // Roll back the transaction in case of error
+    await transaction.rollback();
+    console.error("Error registering society:", error);
+    throw new CustomError(error.message || "Failed to register society", 500);
+  }
+};
+
+
+exports.getAllSocieties = async (status) => {
+  const filter = {};
+
+  // If status is provided, add it to the filter object
+  if (status) {
+    filter.status = status;
+  }
+
+  try {
+    const societies = await Society.findAll({
+      where: filter,
+      include: [{
+        model: User, // Assuming the User model is associated with Society
+      }]
+    });
+    return societies;
+  } catch (error) {
+    console.error("Error fetching societies: ", error);
+    throw error;
+  }
 };

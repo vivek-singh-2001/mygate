@@ -11,12 +11,14 @@ export class UserService {
   private readonly userApiUrl = 'http://localhost:7500/api/v1/users';
   private readonly societyApiUrl = 'http://localhost:7500/api/v1/society';
 
-  // BehaviorSubject to hold the current user data
+
   private readonly userDataSubject = new BehaviorSubject<any>(null);
   private readonly familyDataSubject = new BehaviorSubject<any>(null);
   private readonly userSocietyIdSubject = new BehaviorSubject<number>(0);
+  private userRoleArraySubject = new BehaviorSubject<string[]>([]); 
+
   userSocietyId$ = this.userSocietyIdSubject.asObservable();
-  userData$ = this.userDataSubject.asObservable()
+  userRoles$ = this.userRoleArraySubject.asObservable(); userData$ = this.userDataSubject.asObservable()
   constructor(private readonly http: HttpClient) {}
 
   getUserData(): Observable<any> {
@@ -30,8 +32,12 @@ export class UserService {
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {
-        this.userDataSubject.next(response);
-        this.userSocietyIdSubject.next(response.data.Houses[0]?.Floor?.Wing?.societyId);
+        this.userDataSubject.next(response.data);
+        this.userSocietyIdSubject.next(response.data.Houses[0].Floor.Wing.SocietyId);
+        const rolesNames = response.data.Roles?.map((role: { name: any; })=>role.name) || [];
+        this.userRoleArraySubject.next(rolesNames);
+        console.log("fom user service",rolesNames);
+        
       }),
       catchError((error) => {
         console.error('Failed to load user data', error);

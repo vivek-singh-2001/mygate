@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: auto;
 }
 
 .container header {
@@ -60,6 +61,7 @@
 .address :where(input, .select-box) {
   margin-top: 15px;
 }
+
 
 
 .select-box select {

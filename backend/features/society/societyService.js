@@ -42,3 +42,13 @@ exports.isUserAdmin = async (userId) => {
   const society = await societyRepository.findSocietyByUserId(userId);
   return society;
 };
+
+exports.registerSociety = async (societyDetails) => {
+  const result = await societyRepository.registerSociety({societyDetails,status:'pending'});  
+  return result;
+};
+
+exports.getSocieties = async (status)=>{
+  const result = await societyRepository.getAllSocieties(status);
+  return result;
+}

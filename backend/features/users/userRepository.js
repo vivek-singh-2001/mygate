@@ -1,5 +1,5 @@
 const { db } = require("../../config/connection");
-const { User, HouseUser, House, Wing, Society, Floor } = db;
+const { User, HouseUser, House, Wing, Society, Floor,Role,UserRole } = db;
 
 exports.getUserById = (id) => {
   return User.findOne({
@@ -46,9 +46,19 @@ exports.getUserById = (id) => {
           },
         ],
       },
+      {
+        model: Role, // Assuming Role model is defined and associated through userrole
+        as: "Roles", // Alias for role association, adjust it as per your association
+        through: {
+          model: UserRole, // The through table that connects User and Role
+          attributes: [],  // Exclude any unwanted attributes from UserRole table
+        },
+        attributes: ["id", "name"],  // Include only the role details you need
+      },
     ],
   });
 };
+
 
 exports.updateUser = (userId, updateData) => {
   return User.update(updateData, { where: { id: userId } }).then(
