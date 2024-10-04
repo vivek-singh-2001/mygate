@@ -28,6 +28,15 @@ module.exports = {
         allowNull: false,
         onUpdate: 'CASCADE',
       },
+      status:{
+        type: DataTypes.ENUM('pending', 'approved','rejected'),
+        defaultValue: 'pending' 
+      },
+      csvData:{
+        type: DataTypes.TEXT,
+        allowNull: true ,
+        onUpdate: 'CASCADE',
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
