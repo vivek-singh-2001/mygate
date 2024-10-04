@@ -28,22 +28,18 @@ export class ApartmentComponent implements OnInit {
 
     // Fetch user data and then society data based on house
     this.userService
-      .getUserData()
+      .userSocietyId$
       .pipe(
-        switchMap((userData) => {
-          const houses = userData?.Houses;
-          const societyId = houses?.[0]?.Wing?.SocietyId;
-
+        switchMap((societyId) => {
           if (!societyId) {
             throw new Error('User data is incomplete or societyId is missing');
           }
-
           return this.societyService.fetchSocietyData(societyId);
         }),
         map((responseData: any) => {
           console.log('soccc', responseData);
           this.isLoading = false;
-          return responseData.societyDetails.sort(
+          return responseData.sort(
             (a: any, b: any) => a.id - b.id
           );
         })

@@ -19,8 +19,8 @@
           <p><b>Total Members</b></p>
         </div>
         <div class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column gap-2 p-2 ml-6">
-          <p>{{ user.User.firstname  || "N/A"}} {{ user.User.lastname }}</p>
-          <p>{{ user.User.number || "N/A"}}</p>
+          <p>{{ user.User?.firstname  || "N/A"}} {{ user.User?.lastname }}</p>
+          <p>{{ user.User?.number || "N/A"}}</p>
           <p>{{user.numberOfHouses || "N/A"}}</p>
           <p>{{user.numberOfUsers || "N/A"}}</p>
         </div>

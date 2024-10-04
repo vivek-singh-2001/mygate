@@ -70,7 +70,7 @@ exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) => {
     res.status(200).json({
       status: "success",
       length: societyDetails.length,
-      societyDetails,
+      data: societyDetails,
     });
   } catch (error) {
     next(error);

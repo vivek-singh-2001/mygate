@@ -1,7 +1,7 @@
 const { db } = require("../../config/connection");
 const { Sequelize } = require("sequelize");
 const CustomError = require("../../utils/CustomError");
-const { User, HouseUser, House, Wing, Society } = db;
+const { User, HouseUser, House, Wing, Society, Floor } = db;
 
 exports.findUsersBySociety = (societyId, limits, offsets, searchQuery) => {
   const query = `
@@ -29,21 +29,21 @@ exports.findUsersBySocietyAndWing = (societyId, wingId) => {
 
 exports.findSocietyAdminsDetails = async (societyId) => {
   return await Wing.findAll({
-    where: { SocietyId: societyId },
+    where: { societyId },
     attributes: [
       "id",
       "name",
       [
         Sequelize.fn(
           "COUNT",
-          Sequelize.fn("DISTINCT", Sequelize.col("Houses.id"))
+          Sequelize.fn("DISTINCT", Sequelize.col("Floors->Houses.id"))
         ),
         "numberOfHouses",
       ],
       [
         Sequelize.fn(
           "COUNT",
-          Sequelize.fn("DISTINCT", Sequelize.col("Houses->HouseUsers.id"))
+          Sequelize.fn("DISTINCT", Sequelize.col("Floors->Houses->HouseUsers.id"))
         ),
         "numberOfUsers",
       ],
@@ -55,14 +55,21 @@ exports.findSocietyAdminsDetails = async (societyId) => {
         attributes: ["firstname", "lastname", "email", "number", "id"],
       },
       {
-        model: House,
-        as: "Houses",
+        model: Floor,
+        as: "Floors",
         attributes: [],
         include: [
           {
-            model: HouseUser,
-            as: "HouseUsers",
-            attributes: [], // Only counting users, no need to fetch data
+            model: House,
+            as: "Houses",
+            attributes: [],
+            include: [
+              {
+                model: HouseUser,
+                as: "HouseUsers",
+                attributes: [], // Only counting users, no need to fetch data
+              },
+            ],
           },
         ],
       },

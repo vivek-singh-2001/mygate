@@ -23,6 +23,8 @@ export class SocietyService {
   fetchSocietyData(societyId: number): Observable<any[]> {
     return this.societyData$.pipe(
       switchMap((societyData) => {
+        console.log("he;;;;;;;;", societyData);
+        
         if (societyData.length > 0) {
           return of(societyData); // Return cached data
         } else {
@@ -32,8 +34,8 @@ export class SocietyService {
               tap((response) => {
                 console.log("soossssss", response);
                 
-                if (response?.data?.societyDetails) {
-                  this.societyDataSubject.next(response.data.societyDetails); // Update BehaviorSubject
+                if (response?.data) {
+                  this.societyDataSubject.next(response.data); // Update BehaviorSubject
                 }
               }),
               catchError((error) => {
