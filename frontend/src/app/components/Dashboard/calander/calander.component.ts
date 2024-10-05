@@ -47,10 +47,10 @@ export class CalanderComponent implements OnInit {
   };
 
   constructor(
-    private eventService: EventService,
-    private adminService: AdminService,
-    private userService: UserService,
-    private appInitializationService: AppInitializationService
+    private readonly eventService: EventService,
+    private readonly adminService: AdminService,
+    private readonly userService: UserService,
+    private readonly appInitializationService: AppInitializationService
   ) {}
 
   ngOnInit() {

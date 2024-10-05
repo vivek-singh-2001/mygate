@@ -91,6 +91,10 @@ db.House.belongsToMany(db.User, {
   foreignKey: "houseId",
   otherKey: "userId",
 });
+db.House.hasMany(db.HouseUser, { foreignKey: 'houseId' });
+db.HouseUser.belongsTo(db.House, { foreignKey: 'houseId' });
+db.HouseUser.belongsTo(db.User, { foreignKey: 'UserId' });
+db.User.hasMany(db.HouseUser, { foreignKey: 'UserId' });
 
 // db.House.hasMany(db.HouseUser, { foreignKey: "houseId", as: "HouseUsers" });
 // db.User.hasMany(db.HouseUser, { foreignKey: "userId", as: "HouseUsers" });

@@ -47,13 +47,13 @@ exports.getUserById = (id) => {
         ],
       },
       {
-        model: Role, // Assuming Role model is defined and associated through userrole
-        as: "Roles", // Alias for role association, adjust it as per your association
+        model: Role,
+        as: "Roles",
         through: {
-          model: UserRole, // The through table that connects User and Role
-          attributes: [],  // Exclude any unwanted attributes from UserRole table
+          model: UserRole,
+          attributes: [],
         },
-        attributes: ["id", "name"],  // Include only the role details you need
+        attributes: ["id", "name"],
       },
     ],
   });

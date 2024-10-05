@@ -1,53 +1,65 @@
 const { db } = require("../../config/connection");
-const { User, Wing, Society, HouseUser, House } = db;
+const { User, Wing, Society, HouseUser, House, Floor, UserRole } = db;
 const { Op, fn, col } = db.Sequelize;
 
 exports.getWingHouseDetailsById = async (wingId) => {
   try {
-    // Get house details with user count
+    const floors = await Floor.findAll({
+      where: { wingId },
+      attributes: ["id"],
+    });
+
+    if (!floors.length) return [];
+
+    const floorIds = floors.map((floor) => floor.id);
+
     const winghouseDetails = await House.findAll({
-      where: { WingId: wingId },
+      where: { floorId: floorIds },
       attributes: [
         "house_no",
         "id",
-        [db.Sequelize.fn('COUNT', db.Sequelize.col('HouseUsers.UserId')), 'userCount']
+        [
+          db.Sequelize.fn("COUNT", db.Sequelize.col("HouseUsers.userId")),
+          "userCount",
+        ],
       ],
       include: [
         {
           model: HouseUser,
-          attributes: [], // We don't need to fetch HouseUser details
-        }
-      ],
-      group: ['House.id'], // Group by House ID to get the count of users for each house
-    });
-
-    // Get owners for each house
-    const housesWithOwners = await Promise.all(
-      winghouseDetails.map(async (house) => {
-        const owner = await HouseUser.findOne({
-          where: {
-            HouseId: house.id,
-          },
+          attributes: [],
           include: [
             {
               model: User,
               attributes: ["firstname", "lastname", "email", "number", "id"],
-              where:{
-                isOwner:true
-              }
-            }
-          ]
-        });
+              // through: {
+              //   model: UserRole,
+              //   attributes: [],
+              //   where: {
+              //     roleId: db.Sequelize.literal(
+              //       '(SELECT id FROM roles WHERE name = "owner")'
+              //     ),
+              //   },
+              // },
+            },
+          ],
+        },
+      ],
+      group: ["House.id", "HouseUsers->User.id"],
+    });
 
-        return {
-          ...house.toJSON(),
-          owner: owner ? owner.User : null,
-        };
-      })
-    );
+    const formattedResults = winghouseDetails.map((house) => ({
+      id: house.id,
+      house_no: house.house_no,
+      userCount: house.dataValues.userCount,
+      owner: null,
+    }));
 
-    return housesWithOwners;
+    console.log("loggg", formattedResults);
+
+    return formattedResults;
   } catch (e) {
+    console.log(e);
+
     throw new Error(e.message);
   }
 };

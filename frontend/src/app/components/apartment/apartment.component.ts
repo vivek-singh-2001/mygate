@@ -25,26 +25,23 @@ export class ApartmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-  
-    // Directly subscribe to userSocietyId$
-    this.userService.userSocietyId$
+
+    // Fetch user data and then society data based on house
+    this.userService
+      .userSocietyId$
       .pipe(
         switchMap((societyId) => {
-          
-          
           if (!societyId) {
             throw new Error('Society ID is missing');
           }
-  
-          // Fetch the society data using the societyId
           return this.societyService.fetchSocietyData(societyId);
         }),
         map((responseData: any) => {
           console.log('Fetched society data:', responseData);
           this.isLoading = false;
-  
-          // Sort the society data based on ID
-          return responseData.societyDetails.sort((a: any, b: any) => a.id - b.id);
+          return responseData.sort(
+            (a: any, b: any) => a.id - b.id
+          );
         })
       )
       .subscribe({
