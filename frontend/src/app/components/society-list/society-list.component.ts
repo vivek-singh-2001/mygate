@@ -5,6 +5,7 @@ import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { SocietyService } from '../../services/society/society.Service';
 import { ButtonModule } from 'primeng/button';
+import { Society } from '../../interfaces/society.interface';
 
 @Component({
   selector: 'app-society-list',
@@ -14,7 +15,7 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './society-list.component.css',
 })
 export class SocietyListComponent {
-  societies: any[] = [];
+  societies: Society[] = [];
   selectedStatus: string | null = null;
   statusOptions = [
     { label: 'All', value: null },
@@ -25,8 +26,8 @@ export class SocietyListComponent {
   noUsersFound: boolean = false;
 
   constructor(
-    private societyService: SocietyService,
-    private http: HttpClient
+    private readonly societyService: SocietyService,
+    private readonly http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -36,7 +37,7 @@ export class SocietyListComponent {
   fetchSocieties() {
     const status = this.selectedStatus ? this.selectedStatus : '';
     this.societyService.fetchAllSociety(status).subscribe({
-      next: (societies) => {
+      next: (societies:Society[]) => {
         this.societies = societies;
         this.noUsersFound = societies.length === 0;
       },
@@ -46,19 +47,18 @@ export class SocietyListComponent {
     });
   }
 
-   // Triggered when the status filter dropdown is changed
-   onStatusFilterChange() {
+   onStatusFilterChange():void {
     this.fetchSocieties();
   }
 
   
 
-  viewPdf(society: any) {
-    const fullPath = society.csvData;
+  viewPdf(society: Society) {
+    const fullPath: string | undefined = society.csvData;
     if (!fullPath) {
       return console.error('file not found');
     }
-    const filename = fullPath.split('/').pop(); // Get the filename from the path
+    const filename = fullPath.split('/').pop() ?? ''; 
 
     // Construct the URL to fetch the CSV
     const csvFileUrl = `http://localhost:7500/api/v1/society/csv/${filename}`;
@@ -79,24 +79,24 @@ export class SocietyListComponent {
     });
   }
 
-  private parseCsv(csvData: string): any[] {
-    const results: any[] = [];
+  private parseCsv(csvData: string): string[][] {
+    const results: string[][] = [];
 
-    // Using a simple parser for the CSV data
-    const rows = csvData.split('\n'); // Split by new lines
+   
+    const rows = csvData.split('\n'); 
     rows.forEach((row) => {
-      const parsedRow = row.split(',').map((item) => item.trim()); // Adjust based on your CSV format
+      const parsedRow = row.split(',').map((item) => item.trim()); 
       if (parsedRow.length > 1) {
-        // Ensure it's a valid row
+        
         results.push(parsedRow);
       }
     });
 
     console.log('Parsed CSV Data: ', results);
-    return results; // Return the parsed results
+    return results; 
   }
 
-  private convertArrayToCSV(data: any[]): string {
+  private convertArrayToCSV(data: string[][]): string {
     return data.map((row) => row.join(',')).join('\n');
   }
 
@@ -105,9 +105,9 @@ export class SocietyListComponent {
     const url = window.URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = `parsed_${filename}`; // Prefix with 'parsed_' for clarity
+    anchor.download = `parsed_${filename}`; 
     anchor.click();
-    window.URL.revokeObjectURL(url); // Clean up URL object
+    window.URL.revokeObjectURL(url); 
   }
 
 

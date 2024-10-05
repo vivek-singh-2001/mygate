@@ -2,25 +2,26 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { Society } from '../../interfaces/society.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocietyService {
-  private societyApiUrl = 'http://localhost:7500/api/v1/society';
-  private societyDataSubject = new BehaviorSubject<any[]>([]); 
-  private allSocietyDataSubject = new BehaviorSubject<any[]>([]);
+  private readonly societyApiUrl = 'http://localhost:7500/api/v1/society';
+  private readonly societyDataSubject = new BehaviorSubject<Society[]>([]); 
+  private readonly allSocietyDataSubject = new BehaviorSubject<Society[]>([]);
   societyData$ = this.societyDataSubject.asObservable();
   allSocietyData$ = this.allSocietyDataSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
-  registerSociety(formData:FormData):Observable<any[]> {
-    return this.http.post<any[]>(`${this.societyApiUrl}/registerSociety`, formData);
+  registerSociety(formData:FormData):Observable<Society[]> {
+    return this.http.post<Society[]>(`${this.societyApiUrl}/registerSociety`, formData);
   }
 
   // Fetch society data by societyId
-  fetchSocietyData(societyId: number): Observable<any[]> {
+  fetchSocietyData(societyId: number): Observable<Society[]> {
     return this.societyData$.pipe(
       switchMap((societyData) => {
         if (societyData.length > 0) {
@@ -30,10 +31,11 @@ export class SocietyService {
             .get<any>(`${this.societyApiUrl}/societyAdminsDetails/${societyId}`)
             .pipe(
               tap((response) => {
-                console.log("soossssss", response);
+                console.log("fafhwauifgwauvwaufwaufwugd",response);
+                
                 
                 if (response?.data?.societyDetails) {
-                  this.societyDataSubject.next(response.data.societyDetails); // Update BehaviorSubject
+                  this.societyDataSubject.next(response.data.societyDetails); 
                 }
               }),
               catchError((error) => {
@@ -46,12 +48,12 @@ export class SocietyService {
     );
   }
 
-  fetchAllSociety(status: string): Observable<any[]> {
+  fetchAllSociety(status: string): Observable<Society[]> {
     const url = status 
       ? `${this.societyApiUrl}/a/b/c/d/allSocieties?status=${status}` 
       : `${this.societyApiUrl}/a/b/c/d/allSocieties`;
       
-    return this.http.get<any>(url).pipe(
+    return this.http.get<{society:Society[]}>(url).pipe(
       map((response) => response.society), // Extract the 'society' field
       tap((societies) => {
         console.log("Fetched societies:", societies);
@@ -59,6 +61,5 @@ export class SocietyService {
       })
     );
   }
-  
 
 }

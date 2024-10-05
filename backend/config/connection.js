@@ -84,11 +84,16 @@ db.User.belongsToMany(db.House, {
   foreignKey: "userId",
   otherKey: "houseId",
 });
+
+
 db.House.belongsToMany(db.User, {
   through: db.HouseUser,
   foreignKey: "houseId",
   otherKey: "userId",
 });
+
+// db.House.hasMany(db.HouseUser, { foreignKey: "houseId", as: "HouseUsers" });
+// db.User.hasMany(db.HouseUser, { foreignKey: "userId", as: "HouseUsers" });
 
 // ==============user-role (: Many to many)=========================
 

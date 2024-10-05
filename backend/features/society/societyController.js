@@ -59,6 +59,8 @@ exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
 
 exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) => {
   const { id: societyId } = req.params;
+  console.log(societyId);
+  
   if (!societyId) {
     return next(new CustomError("Society ID is required", 400));
   }

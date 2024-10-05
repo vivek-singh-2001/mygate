@@ -25,27 +25,26 @@ export class ApartmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-
-    // Fetch user data and then society data based on house
-    this.userService
-      .getUserData()
+  
+    // Directly subscribe to userSocietyId$
+    this.userService.userSocietyId$
       .pipe(
-        switchMap((userData) => {
-          const houses = userData?.Houses;
-          const societyId = houses?.[0]?.Wing?.SocietyId;
-
+        switchMap((societyId) => {
+          
+          
           if (!societyId) {
-            throw new Error('User data is incomplete or societyId is missing');
+            throw new Error('Society ID is missing');
           }
-
+  
+          // Fetch the society data using the societyId
           return this.societyService.fetchSocietyData(societyId);
         }),
         map((responseData: any) => {
-          console.log('soccc', responseData);
+          console.log('Fetched society data:', responseData);
           this.isLoading = false;
-          return responseData.societyDetails.sort(
-            (a: any, b: any) => a.id - b.id
-          );
+  
+          // Sort the society data based on ID
+          return responseData.societyDetails.sort((a: any, b: any) => a.id - b.id);
         })
       )
       .subscribe({
@@ -58,6 +57,7 @@ export class ApartmentComponent implements OnInit {
         },
       });
   }
+  
   goToWingDetails(name: string, id: number) {
     this.router
       .navigate([`/home/apartments/wingDetails/${name}/${id}`])
