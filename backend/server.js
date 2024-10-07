@@ -6,7 +6,6 @@ const { sendMessage } = require("./features/chat/chatService");
 
 const app = require("./app");
 
-
 const connection = require("./config/connection");
 
 // connection to database
