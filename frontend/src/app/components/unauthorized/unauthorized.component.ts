@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-unauthorized',
@@ -8,9 +9,9 @@ import { Location } from '@angular/common';
 })
 export class UnauthorizedComponent {
 
-  constructor(private location: Location) {}
+  constructor(private readonly location: Location,private readonly router:Router) {}
 
   goBack() {
-    this.location.back();
+    this.location.back()
   }
 }

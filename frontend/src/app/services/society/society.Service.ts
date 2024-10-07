@@ -64,4 +64,9 @@ export class SocietyService {
     );
   }
 
+  createSociety(societyData: Society): Observable<Society> {
+    return this.http.post<Society>(`${this.societyApiUrl}/createSociety`, societyData);
+  }
+  
+
 }

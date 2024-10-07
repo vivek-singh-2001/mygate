@@ -34,7 +34,6 @@ export class AppInitializationService {
     return this.userService.getUserData().pipe(
       tap((user) => {
         this.houseService.setHouses(user.data.Houses)
-        this.adminService.societydetails().subscribe()
       }),
       map(() => true)
     );

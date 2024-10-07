@@ -1,5 +1,8 @@
 const societyRepository = require("./societyRepository");
 const CustomError = require("../../utils/CustomError");
+const csv = require("csv-parser");
+const fs = require("fs");
+const {parseCsvFile} = require("../../utils/csvFileParse");
 
 exports.getUsersBySociety = async (societyId, limits, offsets, searchQuery) => {
   const users = await societyRepository.findUsersBySociety(
@@ -52,3 +55,17 @@ exports.getSocieties = async (status)=>{
   const result = await societyRepository.getAllSocieties(status);
   return result;
 }
+
+
+
+exports.createSociety = async (csvData, societyId,next) => {
+
+  const wingsArray =  await parseCsvFile(csvData);
+  
+  const result = await societyRepository.createSociety(wingsArray,societyId);
+  return result;
+};
+
+
+
+

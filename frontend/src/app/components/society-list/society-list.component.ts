@@ -111,12 +111,20 @@ export class SocietyListComponent {
   }
 
 
-  onCanel(){
-    console.log("wfiwfi");
+  onCanel(society:Society){
+    console.log(society);
+    
     
   }
 
-  onApprove(){
-    console.log("wqifhufwi");
+  onApprove(society:Society){
+    console.log(society);
+    this.societyService.createSociety(society).subscribe({
+      next(value) {
+        console.log(value);
+        
+      },
+    })
+
   }
 }

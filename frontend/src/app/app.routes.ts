@@ -10,6 +10,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { SystemAdminComponent } from './layouts/system-admin/system-admin.component';
 import { SystemAdminGuard } from './gaurds/system-admin.guard';
 import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { NonSystemAdminGuard } from './gaurds/not-system-admin.gaurd';
 export const routes: Routes = [
   {
     path: 'login',
@@ -27,7 +28,7 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard,NonSystemAdminGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
@@ -87,8 +88,10 @@ export const routes: Routes = [
     component:SystemAdminComponent,
     canActivate:[AuthGuard,SystemAdminGuard],
     children:[
+      { path: '', redirectTo: 'societies', pathMatch: 'full' },
       {
         path:'societies',
+        canActivate:[SystemAdminGuard],
         loadComponent:()=>
           import(
             './components/society-list/society-list.component'

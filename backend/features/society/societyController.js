@@ -2,9 +2,6 @@ const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const societyService = require("./societyService");
 const CustomError = require("../../utils/CustomError");
 const path = require("path");
-const { db } = require("../../config/connection");
-const { log } = require("console");
-const { User } = db;
 
 exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
   const { id: societyId } = req.params;
@@ -60,7 +57,7 @@ exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
 exports.getSocietyAdminsDetails = asyncErrorHandler(async (req, res, next) => {
   const { id: societyId } = req.params;
   console.log(societyId);
-  
+
   if (!societyId) {
     return next(new CustomError("Society ID is required", 400));
   }
@@ -133,10 +130,10 @@ exports.getSocieties = asyncErrorHandler(async (req, res, next) => {
 exports.getCsvFile = asyncErrorHandler(async (req, res, next) => {
   const filename = req.params.filename;
   console.log(filename);
-  
+
   const filePath = path.join(__dirname, "../../uploads", filename);
   console.log(filePath);
-  
+
   if (!filePath) {
     return next(new CustomError("society Data not found", 404));
   }
@@ -147,4 +144,23 @@ exports.getCsvFile = asyncErrorHandler(async (req, res, next) => {
       res.status(404).send("File not found");
     }
   });
+});
+
+exports.createSociety = asyncErrorHandler(async (req, res, next) => {
+  const societyData = req.body;
+  const { csvData: csvFile, id: societyId } = societyData;
+  // Call the service to process CSV and create wings, floors, and houses
+  const response = await societyService.createSociety(csvFile, societyId, next);
+
+  // Update the society status to approved after processing
+  // await societyService.updateSocietyStatus(societyId, "approved");
+
+  res.status(200).json({
+    status: "success",
+    message: "Society approved and details created successfully.",
+    societyDetails: response,
+  });
+
+  console.error("Error approving society:", error);
+  next(new CustomError("Failed to approve society.", 500));
 });

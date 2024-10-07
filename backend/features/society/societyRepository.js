@@ -1,5 +1,5 @@
 const { db } = require("../../config/connection");
-const { Sequelize } = require("sequelize");
+const { Sequelize, JSON } = require("sequelize");
 const CustomError = require("../../utils/CustomError");
 const { User, HouseUser, House, Wing, Society, Floor } = db;
 
@@ -43,7 +43,10 @@ exports.findSocietyAdminsDetails = async (societyId) => {
       [
         Sequelize.fn(
           "COUNT",
-          Sequelize.fn("DISTINCT", Sequelize.col("Floors->Houses->HouseUsers.id"))
+          Sequelize.fn(
+            "DISTINCT",
+            Sequelize.col("Floors->Houses->HouseUsers.id")
+          )
         ),
         "numberOfUsers",
       ],
@@ -155,6 +158,85 @@ exports.getAllSocieties = async (status) => {
     return societies;
   } catch (error) {
     console.error("Error fetching societies: ", error);
+    throw error;
+  }
+};
+
+exports.createSociety = async (wingsArray, societyId) => {
+  const createdData = [];
+  let transaction;
+  try {
+    transaction = await db.connectDB.transaction();
+
+    for (let wing of wingsArray) {
+
+      const newWing = await Wing.create(
+        { name: wing.name, societyId: societyId },
+        { transaction }
+      );
+
+      const wingId = newWing.id;
+
+      const wingData = {
+        wingId: newWing.id,
+        wingName: newWing.name,
+        floors: [],
+      };
+
+      for (const floor of wing.floors) {
+        const newFloor = await Floor.create(
+          { floor_number: floor.number, wingId: wingId },
+          { transaction }
+        );
+
+        const floorId = newFloor.id;
+
+        console.log("floor created", floorId);
+
+        const floorData = {
+          floorId: newFloor.id,
+          floorNumber: newFloor.floor_number,
+          houses: [],
+        };
+
+        const startingHouseNumber = parseInt(floor.number) * 100 + 1;
+
+        for (let i = 0; i < floor.houses; i++) {
+          const houseNumber = startingHouseNumber + i;
+
+          const newHouse = await House.create(
+            { house_no: houseNumber, floorId: floorId },
+            { transaction }
+          );
+
+          floorData.houses.push({
+            houseId: newHouse.id,
+            houseNumber: newHouse.house_no,
+          });
+        }
+
+        wingData.floors.push(floorData);
+      }
+
+      createdData.push(wingData);
+    }
+
+    await transaction.commit();
+    console.log("Society, wings, floors, and houses successfully created");
+
+
+    await Society.update(
+      { status: 'approved' },  
+      { where: { id: societyId } } 
+    );
+
+    return {
+      societyId: societyId,
+      wings: createdData,
+    };
+  } catch (error) {
+    console.error("Error creating society and its related data:", error);
+    if (transaction) await transaction.rollback();
     throw error;
   }
 };

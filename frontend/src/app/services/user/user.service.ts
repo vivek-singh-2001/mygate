@@ -17,7 +17,8 @@ export class UserService {
   private readonly userRoleArraySubject = new BehaviorSubject<string[]>([]); 
 
   userSocietyId$ = this.userSocietyIdSubject.asObservable();
-  userRoles$ = this.userRoleArraySubject.asObservable(); userData$ = this.userDataSubject.asObservable()
+  userRoles$ = this.userRoleArraySubject.asObservable();
+  userData$ = this.userDataSubject.asObservable()
   
   constructor(private readonly http: HttpClient) {}
 

@@ -11,7 +11,6 @@ import {
 } from 'rxjs';
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
-import { AdminService } from '../admin/admin.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +25,6 @@ export class AuthService {
     private route: ActivatedRoute,
     private userService: UserService,
     private houseService: HouseService,
-    private adminService: AdminService
   ) {}
 
   // Login with email and password
@@ -56,7 +54,6 @@ export class AuthService {
           },
         });
         this.houseService.setHouses(user.data.user.Houses);
-        this.adminService.societydetails().subscribe();
       }),
       catchError((error) => {
         console.error('Login failed: ', error);
@@ -80,7 +77,6 @@ export class AuthService {
         this.userService.getCurrentUser().subscribe({
           next: (user) => {
             this.houseService.setHouses(user.data.Houses);
-            this.adminService.societydetails().subscribe(); //to set the admin status
             this.router.navigate(['/home'], { replaceUrl: true });
           },
           error: (error) => console.error('Error fetching user data:', error),

@@ -5,6 +5,7 @@ import { UserService } from '../../services/user/user.service';
 import { map, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { Society } from '../../interfaces/society.interface';
 
 @Component({
   selector: 'app-apartment',
@@ -15,12 +16,12 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class ApartmentComponent implements OnInit {
   constructor(
-    private societyService: SocietyService,
-    private userService: UserService,
-    private router: Router
+    private readonly societyService: SocietyService,
+    private readonly userService: UserService,
+    private readonly router: Router
   ) {}
 
-  societyData: any[] = [];
+  societyData: Society[] = [];
   isLoading = false;
 
   ngOnInit(): void {

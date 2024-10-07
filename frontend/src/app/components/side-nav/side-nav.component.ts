@@ -8,6 +8,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AdminService } from '../../services/admin/admin.service';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -17,8 +18,7 @@ import { AdminService } from '../../services/admin/admin.service';
     ButtonModule,
     CommonModule,
     MenubarModule,
-    PanelMenuModule
-    
+    PanelMenuModule,
   ],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.css',
@@ -31,9 +31,10 @@ export class SideNavComponent implements OnInit {
   isAdmin: boolean = false;
 
   constructor(
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private adminService: AdminService
+    private readonly router: Router,
+    private readonly snackBar: MatSnackBar,
+    private readonly adminService: AdminService,
+    private readonly userService: UserService
   ) {}
 
   ngOnInit() {
@@ -41,10 +42,15 @@ export class SideNavComponent implements OnInit {
   }
 
   checkAdminStatus() {
-    this.adminService.isAdmin$.subscribe({
-      next: (response) => {
-        this.isAdmin = response;
-        this.initializeMenuItems();
+    this.userService.userRoles$.subscribe({
+      next: (roles) => {
+        if (roles.includes('societyAdmin')) {
+          this.isAdmin = true;
+          this.initializeMenuItems();
+        } else {
+          this.isAdmin = false;
+          this.initializeMenuItems();
+        }
       },
     });
   }
@@ -68,8 +74,8 @@ export class SideNavComponent implements OnInit {
             {
               label: 'Admin Control',
               iconSize: 'large',
-              icon:'pi pi-briefcase',
-              items:[
+              icon: 'pi pi-briefcase',
+              items: [
                 {
                   label: 'Apartments',
                   icon: 'pi pi-warehouse',
@@ -78,13 +84,15 @@ export class SideNavComponent implements OnInit {
                 {
                   label: 'Assign Houses',
                   icon: 'pi pi-user-plus',
-                  command: () => this.navigateTo('/home/apartments/allocate-house'),
-                },{
+                  command: () =>
+                    this.navigateTo('/home/apartments/allocate-house'),
+                },
+                {
                   label: 'Users',
                   icon: 'pi pi-users',
                   command: () => this.navigateTo('/home/apartments/users'),
                 },
-              ]
+              ],
               // command: () => this.navigateTo('/home/apartments'),
             },
           ]

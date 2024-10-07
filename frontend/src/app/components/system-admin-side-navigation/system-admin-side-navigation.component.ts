@@ -34,17 +34,10 @@ export class SystemAdminSideNavigationComponent {
   ) {}
 
   ngOnInit() {
-    this.checkAdminStatus();
+    this.initializeMenuItems();
+
   }
 
-  checkAdminStatus() {
-    this.adminService.isAdmin$.subscribe({
-      next: (response) => {
-        this.isAdmin = response;
-        this.initializeMenuItems();
-      },
-    });
-  }
 
   initializeMenuItems() {
     this.items = [

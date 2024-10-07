@@ -7,41 +7,46 @@ import { UserService } from '../services/user/user.service';
 @Injectable({
   providedIn: 'root',
 })
-export class SystemAdminGuard implements CanActivate {
+export class NonSystemAdminGuard implements CanActivate {
   constructor(
     private readonly userService: UserService,
     private readonly router: Router
   ) {}
 
   canActivate(): Observable<boolean> {
+    // Define allowed roles explicitly
+    const allowedRoles = ['owner', 'wingAdmin','societyAdmin','familyMember'];
+
     return this.userService.userRoles$.pipe(
-      switchMap((roles: string[] | null) => {        
+      switchMap((roles: string[] | null) => {
         if (roles && roles.length > 0) {
+          // Check if user has any of the allowed roles
+          const hasAllowedRole = roles.some(role => allowedRoles.includes(role));
           const isSystemAdmin = roles.includes('systemAdmin');
-          console.log('Roles:', roles, 'Is systemAdmin:', isSystemAdmin);
-          if (isSystemAdmin) {
-            return of(true);
+          
+          if (hasAllowedRole && !isSystemAdmin) {
+            return of(true);  // Allow access
           } else {
+            // Redirect to unauthorized page if not allowed
             this.router.navigate(['/unauthorized']);
             return of(false);
           }
         } else {
+          // Fetch user data if roles are not available
           return this.userService.getCurrentUser().pipe(
             switchMap(() =>
               this.userService.userRoles$.pipe(
                 map((updatedRoles: string[]) => {
+                  console.log('Checking updated roles:', updatedRoles);
+
+                  const hasAllowedRole = updatedRoles.some(role => allowedRoles.includes(role));
                   const isSystemAdmin = updatedRoles.includes('systemAdmin');
-                  console.log(
-                    'Updated Roles:',
-                    updatedRoles,
-                    'Is systemAdmin:',
-                    isSystemAdmin
-                  );
-                  if (isSystemAdmin) {
-                    return true;
+
+                  if (hasAllowedRole && !isSystemAdmin) {
+                    return true;  // Allow access
                   } else {
                     this.router.navigate(['/unauthorized']);
-                    return false;
+                    return false;  // Restrict access
                   }
                 })
               )

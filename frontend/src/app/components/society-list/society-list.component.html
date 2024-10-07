@@ -43,18 +43,36 @@
       <td>{{ society.status }}</td>
 
       <td>
-        <p-button icon="pi pi-download" severity="secondary" (onClick)="viewPdf(society)"/>
+        <p-button
+          icon="pi pi-download"
+          severity="secondary"
+          (onClick)="viewPdf(society)"
+        />
       </td>
       @if(society.status === 'pending'){
-      <td class="flex gap-4"> 
-        <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" (onClick)="onCanel()" />
-        <p-button icon="pi pi-check" [rounded]="true" [outlined]="true" (onClick)="onApprove()"/>
+      <td class="flex gap-4">
+        <p-button
+          icon="pi pi-times"
+          [rounded]="true"
+          severity="danger"
+          [outlined]="true"
+          (onClick)="onCanel(society)"
+        />
+        <p-button
+          icon="pi pi-check"
+          [rounded]="true"
+          [outlined]="true"
+          (onClick)="onApprove(society)"
+        />
       </td>
-      }
-      @else {
-        <td>
-         <p>Completed   </p>
-        </td>
+      } @else if(society.status === 'approved') {
+      <td>
+        <p>Registered</p>
+      </td>
+      } @else {
+      <td>
+        <p>Rejected</p>
+      </td>
       }
     </tr>
   </ng-template>
