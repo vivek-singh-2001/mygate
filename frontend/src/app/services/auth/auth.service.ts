@@ -11,7 +11,6 @@ import {
 } from 'rxjs';
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
-import { AdminService } from '../admin/admin.service';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -19,14 +18,15 @@ import { environment } from '../../../environments/environment';
 })
 export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
+  
   private subscription: Subscription | undefined;
 
   constructor(
-    private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute,
-    private userService: UserService,
-    private houseService: HouseService,
+    private  readonly http: HttpClient,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly userService: UserService,
+    private readonly houseService: HouseService,
   ) {}
 
   // Login with email and password

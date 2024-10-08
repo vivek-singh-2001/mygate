@@ -26,6 +26,22 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+const allowedOrigins = [
+  'http://localhost:4200',   
+  'http://192.1.200.38:4200'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
 // Serve static files from the 'dist' directory
 app.use(
   "/static",
@@ -41,12 +57,6 @@ app.use(
   })
 );
 
-// Route all other requests to Angular
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/frontend/browser/index.html'));
-});
-
-app.use(cors({ origin: "http://192.1.200.38:4200", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -84,6 +94,12 @@ app.use("*", (req, res, next) => {
   );
   next(err);
 });
+
+// Route all other requests to Angular
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/frontend/browser/index.html'));
+});
+
 
 // ERROR HANDLER MUST BE DEFINED LAST
 app.use(globalErrorHandler);
