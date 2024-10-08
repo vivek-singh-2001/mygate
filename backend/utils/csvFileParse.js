@@ -20,11 +20,11 @@ const processCsvData = (csvData) => {
   const wings = [];
 
   csvData.forEach((row) => {
-    const wingName = row["Wing Name"].trim(); // Correctly getting wing name
+    const wingName = row["Wing Name"]; // Correctly getting wing name
 
-    const floorNumber = row[" Floors"].trim(); // Correctly getting floor number
+    const floorNumber = row["Floors"];
 
-    const numberOfHouses = parseInt(row["Number of Houses "].trim(), 10); // Correctly getting number of houses
+    const numberOfHouses = parseInt(row["Number of Houses"], 10); // Correctly getting number of houses
 
     // Correctly find the wing by its name
     const wing = wings.find((w) => w.name === wingName); // Use wingName to find
@@ -56,7 +56,5 @@ const processCsvData = (csvData) => {
     }
   });
 
-  
-  
-  return wings ;
+  return wings;
 };

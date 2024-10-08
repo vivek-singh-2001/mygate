@@ -1,7 +1,6 @@
 const societyRepository = require("./societyRepository");
 const CustomError = require("../../utils/CustomError");
-const csv = require("csv-parser");
-const fs = require("fs");
+const userRepository = require("../users/userRepository");
 const {parseCsvFile} = require("../../utils/csvFileParse");
 
 exports.getUsersBySociety = async (societyId, limits, offsets, searchQuery) => {
@@ -61,9 +60,27 @@ exports.getSocieties = async (status)=>{
 exports.createSociety = async (csvData, societyId,next) => {
 
   const wingsArray =  await parseCsvFile(csvData);
+  if(!wingsArray){
+    return next(new CustomError("somethng wrong with csvFile",400))
+  }
   
   const result = await societyRepository.createSociety(wingsArray,societyId);
   return result;
+};
+
+exports.rejectSociety = async (societyId, userId) => {
+  try {
+    // Step 1: Delete the user from the userRepository
+    await userRepository.deleteUser(userId);
+
+    // Step 2: Update the society status to 'Rejected' in the societyRepository
+    await societyRepository.updateSocietyStatus(societyId, 'rejected');
+
+    return { message: 'Society rejected and user deleted successfully' };
+  } catch (error) {
+    console.error('Error in rejecting society or deleting user:', error.message);
+    throw new Error('Failed to reject society and delete user. Please try again.');
+  }
 };
 
 

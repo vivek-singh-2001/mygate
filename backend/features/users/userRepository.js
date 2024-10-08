@@ -1,5 +1,5 @@
 const { db } = require("../../config/connection");
-const { User, HouseUser, House, Wing, Society, Floor,Role,UserRole } = db;
+const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole } = db;
 
 exports.getUserById = (id) => {
   return User.findOne({
@@ -59,9 +59,8 @@ exports.getUserById = (id) => {
   });
 };
 
-
-exports.updateUser = (userId, updateData) => {
-  return User.update(updateData, { where: { id: userId } }).then(
+exports.updateUser = async (userId, updateData) => {
+  return await User.update(updateData, { where: { id: userId } }).then(
     ([updated]) => {
       if (updated) {
         return User.findOne({ where: { id: userId } });
@@ -69,6 +68,24 @@ exports.updateUser = (userId, updateData) => {
       return null;
     }
   );
+};
+
+exports.deleteUser = async (userId) => {
+  try {
+    console.log(userId);
+    
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await User.destroy({ where: { id: userId } });
+    return { message: "User deleted successfully" };
+  } catch (error) {
+    console.error("Error deleting user:", error.message);
+    throw error;
+  }
 };
 
 exports.findFamilyMembers = async (userId, houseId) => {

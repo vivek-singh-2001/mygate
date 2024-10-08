@@ -1,5 +1,16 @@
+<ng-container *ngIf="isLoading">
+  <div class="card">
+    <p-progressBar
+      mode="indeterminate"
+      [style]="{ height: '6px' }"
+    ></p-progressBar>
+  </div>
+</ng-container>
+
+
+
 <!-- user-list.component.html -->
-<p-table [value]="societies" class="p-datatable-sm">
+<p-table [value]="societies" class="p-datatable-sm" >
   <ng-template pTemplate="header">
     <tr>
       <th>Photo</th>
@@ -28,20 +39,19 @@
       <td>
         <img
           [src]="
-            society.User.photo ||
+            society?.User?.photo ||
             'https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg'
           "
-          alt="{{ society.name }}"
+          alt="{{ society.name || 'N/A' }}"
           class="p-shadow-2"
           style="width: 50px; height: 50px; border-radius: 50%"
         />
       </td>
-      <td>{{ society.User.firstname }}</td>
-      <td>{{ society.name }}</td>
-      <td>{{ society.User.number || "N/A" }}</td>
-      <td>{{ society.User.email }}</td>
-      <td>{{ society.status }}</td>
-
+      <td>{{ society?.User?.firstname || 'N/A' }}</td>
+      <td>{{ society?.name || 'N/A' }}</td>
+      <td>{{ society?.User?.number || "N/A" }}</td>
+      <td>{{ society?.User?.email || 'N/A' }}</td>
+      <td>{{ society?.status }}</td>
       <td>
         <p-button
           icon="pi pi-download"
@@ -56,20 +66,20 @@
           [rounded]="true"
           severity="danger"
           [outlined]="true"
-          (onClick)="onCanel(society)"
+          (onClick)="onCancel($event,society)"
         />
         <p-button
           icon="pi pi-check"
           [rounded]="true"
           [outlined]="true"
-          (onClick)="onApprove(society)"
+          (onClick)="onConfirm($event,society)"
         />
       </td>
       } @else if(society.status === 'approved') {
       <td>
         <p>Registered</p>
       </td>
-      } @else {
+      } @else if(society.status === 'rejected') {
       <td>
         <p>Rejected</p>
       </td>
@@ -83,4 +93,11 @@
   class="flex justify-content-center align-items-center mt-6 mb-6"
 >
   <p><b>No users found for the search query.</b></p>
+</div>
+
+
+
+<div class="card flex justify-content-center gap-2">
+  <p-toast />
+  <p-confirmDialog />
 </div>

@@ -24,11 +24,11 @@ const {
   getUsersBySociety,
   getUsersBySocietyAndWing,
   getSocietyAdminsDetails,
-  checkIsAdmin,
   registerSociety,
   getSocieties,
   getCsvFile,
-  createSociety
+  createSociety,
+  rejectSociety
 } = societyController;
 
 // Define routes
@@ -39,4 +39,5 @@ router.post("/registerSociety", upload.single('file'),registerSociety);
 router.get("/:societyId/wing/:wingId", protect, getUsersBySocietyAndWing);
 router.get("/societyAdminsDetails/:id", getSocietyAdminsDetails);
 router.post("/createSociety",protect,createSociety)
+router.post("/rejectSociety",protect,rejectSociety)
 module.exports = router;

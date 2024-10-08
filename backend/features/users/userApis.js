@@ -4,7 +4,7 @@ const authController = require('../../features/authentication/authController')
 
 const {protect} = authController
 
-const { getUserById, updateUser, getFamilyMembers, addFamilyMember, updatePassword } = userController;
+const { getUserById, updateUser, getFamilyMembers, addFamilyMember, updatePassword,deleteUser } = userController;
 
 const router = express.Router();
 
@@ -14,5 +14,6 @@ router.route("/updateUser/:id").patch(protect,updateUser);
 router.get("/familyMembers/:userId/:houseId", protect,getFamilyMembers);
 router.post("/addFamilyMember", protect,addFamilyMember);
 router.patch("/updatePassword",protect, updatePassword);
+router.delete("/deleteuser",protect,deleteUser)
 
 module.exports = router;

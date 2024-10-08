@@ -1,4 +1,6 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
+const { db } = require("../../config/connection");
+const { User } = db;
 const societyService = require("./societyService");
 const CustomError = require("../../utils/CustomError");
 const path = require("path");
@@ -149,18 +151,45 @@ exports.getCsvFile = asyncErrorHandler(async (req, res, next) => {
 exports.createSociety = asyncErrorHandler(async (req, res, next) => {
   const societyData = req.body;
   const { csvData: csvFile, id: societyId } = societyData;
-  // Call the service to process CSV and create wings, floors, and houses
+
+  if (!csvFile) {
+    return next(new CustomError("csvFile not found!", 404));
+  }
+
+  if (!societyData.status == "pending") {
+    return next(new CustomError("society is not in pending state", 400));
+  }
+
   const response = await societyService.createSociety(csvFile, societyId, next);
 
-  // Update the society status to approved after processing
-  // await societyService.updateSocietyStatus(societyId, "approved");
+  if (!response) {
+    return next(new CustomError("unable to create society", 404));
+  }
 
   res.status(200).json({
     status: "success",
     message: "Society approved and details created successfully.",
     societyDetails: response,
   });
+});
 
-  console.error("Error approving society:", error);
-  next(new CustomError("Failed to approve society.", 500));
+exports.rejectSociety = asyncErrorHandler(async (req, res, next) => {
+  const societyData = req.body;
+  const { id: societyId, societyAdminId: userId } = societyData;
+
+  if (!societyData.status == "pending") {
+    return next(new CustomError("society is not in pending state", 400));
+  }
+  if (!(userId && societyId)) {
+    return next(new CustomError("society is not found", 400));
+  }
+
+  const response = await societyService.rejectSociety(societyId, userId);
+
+  // Send a success response to the client
+  res.status(200).json({
+    status: "success",
+    message: "Society rejected and society admin deleted successfully",
+    data: response,
+  });
 });

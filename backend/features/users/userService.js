@@ -1,5 +1,6 @@
 const userRepository = require("./userRepository");
 const CustomError = require("../../utils/CustomError");
+const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 
 exports.getUserById = async (id) => {
   const user = await userRepository.getUserById(id);
@@ -44,6 +45,16 @@ exports.updateUser = async (userId, updateData) => {
   }
   return updatedUser;
 };
+
+exports.deleteUser = async (userId)=> {
+
+  if (!userId) {
+    throw new CustomError("User not Found", 400);
+  }
+  const deleteUser = await userRepository.deleteUser(userId);
+
+  return deleteUser;
+}
 
 exports.getFamilyMembers = async (userId, houseId) => {
   if (!userId || !houseId) {

@@ -3,6 +3,14 @@ const { Sequelize, JSON } = require("sequelize");
 const CustomError = require("../../utils/CustomError");
 const { User, HouseUser, House, Wing, Society, Floor } = db;
 
+exports.getsocietyById = async (societyId) => {
+  const society = await Society.findByPk({ id: societyId });
+  if (!society) {
+    throw new CustomError("society not found", 404);
+  }
+  return society;
+};
+
 exports.findUsersBySociety = (societyId, limits, offsets, searchQuery) => {
   const query = `
         SELECT * FROM GetUsersBySociety($1,$2,$3,$4);
@@ -83,6 +91,26 @@ exports.findSocietyAdminsDetails = async (societyId) => {
 
 exports.findSocietyByUserId = async (userId) => {
   return await Society.findOne({ where: { societyAdminId: userId } });
+};
+
+
+exports.updateSocietyStatus = async (societyId, newStatus) => {
+  try {
+    // First, check if the society exists
+    const society = await Society.findByPk(societyId);
+
+    if (!society) {
+      throw new Error('Society not found');
+    }
+
+    // Update the society status
+    await society.update({ status: newStatus });
+
+    return { message: 'Society status updated successfully', society };
+  } catch (error) {
+    console.error('Error updating society status:', error.message);
+    throw error; 
+  }
 };
 
 exports.registerSociety = async (societyDetails, status) => {
@@ -169,7 +197,6 @@ exports.createSociety = async (wingsArray, societyId) => {
     transaction = await db.connectDB.transaction();
 
     for (let wing of wingsArray) {
-
       const newWing = await Wing.create(
         { name: wing.name, societyId: societyId },
         { transaction }
@@ -217,19 +244,12 @@ exports.createSociety = async (wingsArray, societyId) => {
 
         wingData.floors.push(floorData);
       }
-
       createdData.push(wingData);
     }
 
+    await Society.update({ status: "approved" }, { where: { id: societyId } },{transaction});
+
     await transaction.commit();
-    console.log("Society, wings, floors, and houses successfully created");
-
-
-    await Society.update(
-      { status: 'approved' },  
-      { where: { id: societyId } } 
-    );
-
     return {
       societyId: societyId,
       wings: createdData,

@@ -23,7 +23,7 @@ module.exports = (connectDB, DataTypes) => {
           model: 'users',
           key: 'id'
         },
-        allowNull: true // Allow null if a society doesn't have an admin
+        allowNull: true 
       },
       status:{
         type: DataTypes.ENUM('pending', 'approved','rejected'),

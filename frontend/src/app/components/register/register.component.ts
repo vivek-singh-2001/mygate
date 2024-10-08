@@ -50,10 +50,10 @@ export class RegisterComponent implements OnInit {
   selectedFile: File | null = null;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private addressService: AddressService,
-    private societyService: SocietyService
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
+    private readonly addressService: AddressService,
+    private readonly societyService: SocietyService
   ) {}
 
   ngOnInit(): void {
