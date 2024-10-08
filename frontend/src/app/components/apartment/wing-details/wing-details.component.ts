@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-wing-details',
@@ -38,7 +39,7 @@ export class WingDetailsComponent implements OnInit {
   // Method to call the API and fetch houses by wingId
   fetchHousesByWingId(wingId: string): void {
     this.isLoading = true;
-    const apiUrl = `http://localhost:7500/api/v1/house/wingHouseDetails/${wingId}`;
+    const apiUrl = `${environment.apiUrl}/house/wingHouseDetails/${wingId}`;
 
     this.http.get<any>(apiUrl).subscribe({
       next: (response) => {
@@ -59,7 +60,7 @@ export class WingDetailsComponent implements OnInit {
     this.isLoading = true;
     this.http
       .get<any>(
-        `http://localhost:7500/api/v1/houseuser/houseDetails/${house.id}`
+        `${environment.apiUrl}/houseuser/houseDetails/${house.id}`
       )
       .subscribe({
         next: (response) => {

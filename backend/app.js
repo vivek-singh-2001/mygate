@@ -26,11 +26,11 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// Serve static files from the 'dist' directory (or wherever Angular builds your files)
+// Serve static files from the 'dist' directory
 app.use(
   "/static",
   express.static(path.join(__dirname, "dist"), {
-    maxAge: "1y", // Cache static assets for 1 year
+    maxAge: "1y",
     setHeaders: function (res, path) {
       if (path.endsWith(".html")) {
         res.setHeader("Cache-Control", "no-cache");
@@ -41,7 +41,12 @@ app.use(
   })
 );
 
-app.use(cors({ origin: "http://localhost:4200", credentials: true }));
+// Route all other requests to Angular
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/frontend/browser/index.html'));
+});
+
+app.use(cors({ origin: "http://192.1.200.38:4200", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 

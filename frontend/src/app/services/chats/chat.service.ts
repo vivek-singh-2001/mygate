@@ -3,18 +3,19 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
 import { Observable,BehaviorSubject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  private socket: Socket;
-  private apiUrl = 'http://localhost:7500/api/v1/chats';
-  private messageSubject = new BehaviorSubject<any>(null);
+  private readonly socket: Socket;
+  private readonly apiUrl = `${environment.apiUrl}/chats`;
+  private readonly messageSubject = new BehaviorSubject<any>(null);
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     // Initialize WebSocket connection
-    this.socket = io('http://localhost:7500', {
+    this.socket = io('http://192.1.200.38:7500', {
       transports: ['websocket'],
       withCredentials: true,
     });

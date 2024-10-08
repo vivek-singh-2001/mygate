@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from '../../interfaces/user.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private readonly userApiUrl = 'http://localhost:7500/api/v1/users';
-  private readonly societyApiUrl = 'http://localhost:7500/api/v1/society';
+  private readonly userApiUrl = `${environment.apiUrl}/users`;
+  private readonly societyApiUrl = `${environment.apiUrl}/society`;
 
   private readonly userDataSubject = new BehaviorSubject<any>(null);
   private readonly familyDataSubject = new BehaviorSubject<any>(null);

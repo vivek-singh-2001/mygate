@@ -5,6 +5,7 @@ import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { SocietyService } from '../../services/society/society.Service';
 import { ButtonModule } from 'primeng/button';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-society-list',
@@ -61,7 +62,7 @@ export class SocietyListComponent {
     const filename = fullPath.split('/').pop(); // Get the filename from the path
 
     // Construct the URL to fetch the CSV
-    const csvFileUrl = `http://localhost:7500/api/v1/society/csv/${filename}`;
+    const csvFileUrl = `${environment.apiUrl}/society/csv/${filename}`;
 
     // Fetch the CSV file
     this.http.get(csvFileUrl, { responseType: 'text' }).subscribe({

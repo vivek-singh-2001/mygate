@@ -16,6 +16,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../../../environments/environment';
+import { Wing } from '../../../interfaces/wing.interface';
 
 @Component({
   selector: 'app-allocate-house',
@@ -79,9 +81,9 @@ export class AllocateHouseComponent implements OnInit {
             console.log(response);
             
             const sortedWings = response.societyDetails.sort(
-              (a: any, b: any) => a.name.localeCompare(b.name)
+              (a: Wing, b: Wing) => a.name.localeCompare(b.name)
             );
-            this.wingOptions = sortedWings.map((wing: any, index: number) => ({
+            this.wingOptions = sortedWings.map((wing: Wing) => ({
               name: wing.name, 
               value: wing.id, 
             }));
@@ -95,19 +97,19 @@ export class AllocateHouseComponent implements OnInit {
   }
   
   onWingSelection() {
-    const houseApiUrl = `http://localhost:7500/api/v1/house/wingHouseDetails/${this.numberOfWings.value}`;
+    const houseApiUrl = `${environment.apiUrl}/house/wingHouseDetails/${this.numberOfWings.value}`;
     this.http.get<any>(houseApiUrl).subscribe({
       next: (response: any) => {
         const sortedHouse = response.data.wingHouseDetails.sort(
           (a: any, b: any) => a.house_no - b.house_no
         );
 
-        this.houseOptions = sortedHouse.map((house: any, index: number) => ({
+        this.houseOptions = sortedHouse.map((house: any) => ({
           house_no: house.house_no, // Use the wing name from the response
           value: house.id, // Assign a value (index-based or from response)
         }));
       },
-      error: (error: any) => {
+      error: (error: Error) => {
         console.error('Error fetching house data:', error);
       },
     });

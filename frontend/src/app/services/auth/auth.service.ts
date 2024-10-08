@@ -12,12 +12,13 @@ import {
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
 import { AdminService } from '../admin/admin.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:7500/api/v1/auth';
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
   private subscription: Subscription | undefined;
 
   constructor(

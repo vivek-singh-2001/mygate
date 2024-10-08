@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocietyService {
-  private societyApiUrl = 'http://localhost:7500/api/v1/society';
+  private readonly societyApiUrl = `${environment.apiUrl}/society`;
   private societyDataSubject = new BehaviorSubject<any[]>([]); 
   private allSocietyDataSubject = new BehaviorSubject<any[]>([]);
   societyData$ = this.societyDataSubject.asObservable();

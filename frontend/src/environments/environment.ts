@@ -1,5 +1,5 @@
-// src/environments/environment.ts
 export const environment = {
   production: false,
-  // Add other environment-specific variables here
+  apiUrl: 'http://192.1.200.38:7500/api/v1',
+  enableDebug: true
 };
