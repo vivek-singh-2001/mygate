@@ -9,12 +9,12 @@ import { environment } from '../../../environments/environment';
 })
 export class SocietyService {
   private readonly societyApiUrl = `${environment.apiUrl}/society`;
-  private societyDataSubject = new BehaviorSubject<any[]>([]); 
-  private allSocietyDataSubject = new BehaviorSubject<any[]>([]);
+  private readonly societyDataSubject = new BehaviorSubject<any[]>([]); 
+  private readonly allSocietyDataSubject = new BehaviorSubject<any[]>([]);
   societyData$ = this.societyDataSubject.asObservable();
   allSocietyData$ = this.allSocietyDataSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   registerSociety(formData:FormData):Observable<any[]> {
     return this.http.post<any[]>(`${this.societyApiUrl}/registerSociety`, formData);
@@ -24,8 +24,6 @@ export class SocietyService {
   fetchSocietyData(societyId: number): Observable<any[]> {
     return this.societyData$.pipe(
       switchMap((societyData) => {
-        console.log("he;;;;;;;;", societyData);
-        
         if (societyData.length > 0) {
           return of(societyData); // Return cached data
         } else {
