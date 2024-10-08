@@ -1,84 +1,86 @@
 .calendar-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .calendar-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .calendar-table th, .calendar-table td {
-    border: 1px solid #ddd;
-    width: 14.28%;
-    height: 70px;
-    text-align: center;
-    vertical-align: middle;
-  }
-  .calendar-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-    height: 40px;
-  }
-  
-  .calendar-table td.disabled {
-    background-color: #e0e0e0;
-  }
-  
-  .calendar-table td.highlighted {
-    background-color: var(--gray-400)
-  }
-  
-  .event-labels {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
-  .label {
-    padding: 5px 10px;
-    margin-right: 10px;
-    border-radius: 4px;
-    color: white;
-    font-size: 14px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
 
-  td {
-    padding: 10px;
-    text-align: center;
-    vertical-align: top;
-    color:var(--gray-800); /* Ensure the text is visible on dark backgrounds */
-  }
-  
-  td.disabled {
-    background-color: #971111; /* Disabled days will have a default background */
-    color: #030303; /* Disabled day text color */
-  }
-  
+.calendar-table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-  .tooltip {
-    position: absolute;
-    z-index: 1000;
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 12px;
-    white-space: pre-line; /* To handle newlines in text */
-  }
+.calendar-table th,
+.calendar-table td {
+  border: 1px solid #ddd;
+  width: 14.28%;
+  height: 70px;
+  text-align: center;
+  vertical-align: middle;
+}
 
- ::ng-deep .event-calander .p-dialog-header{
+.calendar-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  height: 40px;
+}
+
+.calendar-table td.disabled {
+  background-color: #e0e0e0;
+}
+
+.calendar-table td.highlighted {
+  background-color: var(--gray-400);
+}
+
+.event-labels {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.label {
+  padding: 5px 10px;
+  margin-right: 10px;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+}
+
+td {
+  padding: 10px;
+  text-align: center;
+  vertical-align: top;
+  color: var(--gray-800); /* Ensure the text is visible on dark backgrounds */
+}
+
+td.disabled {
+  background-color: #971111; /* Disabled days will have a default background */
+  color: #030303; /* Disabled day text color */
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 1000;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: pre-line; /* To handle newlines in text */
+}
+
+::ng-deep .event-calander .p-dialog-header {
   background-color: #333;
   color: #ddd;
 }
-  
 
-  
+::ng-deep .add-event-btn .p-button {
+  padding: 6px 10px;
+}
 
-
-
-  
-  
-  
+::ng-deep .add-event-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
