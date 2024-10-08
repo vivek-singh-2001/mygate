@@ -1,6 +1,5 @@
 const { db } = require("../../config/connection");
-const { User, Wing, Society, HouseUser, House, Floor, UserRole } = db;
-const { Op, fn, col } = db.Sequelize;
+const { User, HouseUser, House, Floor, UserRole, Role } = db;
 
 exports.getWingHouseDetailsById = async (wingId) => {
   try {
@@ -13,53 +12,52 @@ exports.getWingHouseDetailsById = async (wingId) => {
 
     const floorIds = floors.map((floor) => floor.id);
 
+    const ownerRole = await Role.findOne({
+      where: { name: "owner" },
+    });
+
+    if (!ownerRole) throw new Error("Owner role not found");
+
     const winghouseDetails = await House.findAll({
       where: { floorId: floorIds },
       attributes: [
         "house_no",
         "id",
-        [
-          db.Sequelize.fn("COUNT", db.Sequelize.col("HouseUsers.userId")),
-          "userCount",
-        ],
       ],
       include: [
         {
           model: HouseUser,
-          attributes: [],
+          attributes: ["id", "userId", "houseId"],
           include: [
             {
               model: User,
-              attributes: ["firstname", "lastname", "email", "number", "id"],
-              // through: {
-              //   model: UserRole,
-              //   attributes: [],
-              //   where: {
-              //     roleId: db.Sequelize.literal(
-              //       '(SELECT id FROM roles WHERE name = "owner")'
-              //     ),
-              //   },
-              // },
+              attributes: ["firstname", "lastname","email", "number", "id"],
+              include: [
+                {
+                  model: UserRole,
+                  attributes: [],
+                  where: { roleId: ownerRole.id },
+                },
+              ],
             },
           ],
         },
       ],
-      group: ["House.id", "HouseUsers->User.id"],
     });
 
-    const formattedResults = winghouseDetails.map((house) => ({
-      id: house.id,
-      house_no: house.house_no,
-      userCount: house.dataValues.userCount,
-      owner: null,
-    }));
-
-    console.log("loggg", formattedResults);
+    const formattedResults = winghouseDetails.map((house) => {
+      const a = house.HouseUsers.find((houseUser) => houseUser.User)
+      return {
+        id: house.id,
+        house_no: house.house_no,
+        userCount: house.HouseUsers.length,
+        owner: a.User,
+      }
+    });
 
     return formattedResults;
   } catch (e) {
     console.log(e);
-
     throw new Error(e.message);
   }
 };

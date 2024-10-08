@@ -11,6 +11,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { tap } from 'rxjs';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-society-list',
@@ -80,7 +81,7 @@ export class SocietyListComponent {
     this.isLoading = true;
 
     // Construct the URL to fetch the CSV
-    const csvFileUrl = `http://localhost:7500/api/v1/society/csv/${filename}`;
+    const csvFileUrl = `${environment.apiUrl}/society/csv/${filename}`;
 
     // Fetch the CSV file
     this.http.get(csvFileUrl, { responseType: 'text' }).subscribe({

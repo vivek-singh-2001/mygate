@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Society } from '../../interfaces/society.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocietyService {
-  private readonly societyApiUrl = 'http://localhost:7500/api/v1/society';
-  private readonly societyDataSubject = new BehaviorSubject<Society[]>([]); 
-  private readonly allSocietyDataSubject = new BehaviorSubject<Society[]>([]);
+  private readonly societyApiUrl = `${environment.apiUrl}/society`;
+  private readonly societyDataSubject = new BehaviorSubject<any[]>([]); 
+  private readonly allSocietyDataSubject = new BehaviorSubject<any[]>([]);
   societyData$ = this.societyDataSubject.asObservable();
   allSocietyData$ = this.allSocietyDataSubject.asObservable();
 
@@ -24,8 +25,6 @@ export class SocietyService {
   fetchSocietyData(societyId: number): Observable<Society[]> {
     return this.societyData$.pipe(
       switchMap((societyData) => {
-        console.log("he;;;;;;;;", societyData);
-        
         if (societyData.length > 0) {
           return of(societyData); // Return cached data
         } else {

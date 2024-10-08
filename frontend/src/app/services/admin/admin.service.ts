@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminService {
-  private apiUrl = 'http://localhost:7500/api/v1/society/checkAdmin/isAdmin';
+  private readonly apiUrl = `${environment.apiUrl}/society/checkAdmin/isAdmin`;
 
   // BehaviorSubject to emit true/false based on the presence of society details
   private isAdminSubject: BehaviorSubject<boolean> =

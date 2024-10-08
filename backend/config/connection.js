@@ -93,8 +93,8 @@ db.House.belongsToMany(db.User, {
 });
 db.House.hasMany(db.HouseUser, { foreignKey: 'houseId' });
 db.HouseUser.belongsTo(db.House, { foreignKey: 'houseId' });
-db.HouseUser.belongsTo(db.User, { foreignKey: 'UserId' });
-db.User.hasMany(db.HouseUser, { foreignKey: 'UserId' });
+db.HouseUser.belongsTo(db.User, { foreignKey: 'userId' });
+db.User.hasMany(db.HouseUser, { foreignKey: 'userId' });
 
 // db.House.hasMany(db.HouseUser, { foreignKey: "houseId", as: "HouseUsers" });
 // db.User.hasMany(db.HouseUser, { foreignKey: "userId", as: "HouseUsers" });
@@ -111,6 +111,10 @@ db.Role.belongsToMany(db.User, {
   foreignKey: "roleId",
   otherKey: "userId",
 });
+db.User.hasMany(db.UserRole, { foreignKey: 'userId' });
+db.UserRole.belongsTo(db.User, { foreignKey: 'userId' });
+db.UserRole.belongsTo(db.Role, { foreignKey: 'roleId' });
+db.Role.hasMany(db.UserRole, { foreignKey: 'userId' });
 
 // ==============user-chat ========================================
 

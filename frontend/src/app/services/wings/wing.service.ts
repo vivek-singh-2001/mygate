@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class WingService {
   }
 
   fetchWingDetailsFromAPI(wingId: number): Observable<any> {
-    return this.http.get(`http://localhost:7500/api/v1/wing/wingDetails/${wingId}`).pipe(
+    return this.http.get(`${environment.apiUrl}/wing/wingDetails/${wingId}`).pipe(
       tap((response) => {
         this.wingDetailsSubject.next(response);
       })
