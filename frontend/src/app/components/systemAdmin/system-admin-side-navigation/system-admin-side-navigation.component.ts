@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { AdminService } from '../../../services/admin/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
@@ -28,9 +27,8 @@ export class SystemAdminSideNavigationComponent {
   isAdmin: boolean = false;
 
   constructor(
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private adminService: AdminService
+    private readonly router: Router,
+    private readonly snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
@@ -38,20 +36,19 @@ export class SystemAdminSideNavigationComponent {
 
   }
 
-
   initializeMenuItems() {
     this.items = [
       {
         label: 'Dashboard',
         icon: 'pi pi-home',
         iconSize: 'large',
-        command: () => this.navigateTo('/home/dashboard'),
+        command: () => this.navigateTo('/systemAdmin/dashboard'),
       },
       {
         label: 'Messages',
         icon: 'pi pi-comments',
         iconSize: 'large',
-        command: () => this.navigateTo('/home/messages'),
+        command: () => this.navigateTo('/systemAdmin/messages'),
       },
     ];
   }
