@@ -56,7 +56,7 @@ export class AuthService {
             }
           },
         });
-        this.houseService.setHouses(user.data.user.Houses);
+        this.houseService.setHouses(user.data.Houses);
         this.adminService.societydetails().subscribe();
       }),
       catchError((error) => {
