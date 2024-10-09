@@ -15,7 +15,7 @@ export class EventService {
 
   constructor(private http: HttpClient) {}
 
-  getEvents(societyId: number): Observable<any> {
+  getEvents(societyId: string): Observable<any> {
     if (this.eventsSubject.getValue()) {
       return this.events$
     } else {
@@ -23,7 +23,7 @@ export class EventService {
     }
   }
 
-  fetchEvents(societyId: number): Observable<any> {
+  fetchEvents(societyId: string): Observable<any> {
     return this.http.get<any[]>(`${this.apiUrl}/${societyId}`).pipe(
       tap((response) => {
         this.eventsSubject.next(response);

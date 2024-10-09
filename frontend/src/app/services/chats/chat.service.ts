@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
 export class ChatService {
   private readonly socket: Socket;
   private readonly apiUrl = `${environment.apiUrl}/chats`;
-  private readonly messageSubject = new BehaviorSubject<any>(null);
+  private readonly messageSubject = new BehaviorSubject<string>('');
 
   constructor(private readonly http: HttpClient) {
     // Initialize WebSocket connection
@@ -55,8 +55,8 @@ export class ChatService {
   }
 
   // Fetch chat history between two users
-  getChatHistory(userId1: number, userId2: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/history/${userId1}/${userId2}`);
+  getChatHistory(userId1: number, userId2: number): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}/history/${userId1}/${userId2}`);
   }
 }
 

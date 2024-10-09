@@ -11,21 +11,21 @@ export class AdminService {
   private readonly apiUrl = `${environment.apiUrl}/society/checkAdmin/isAdmin`;
 
   // BehaviorSubject to emit true/false based on the presence of society details
-  private isAdminSubject: BehaviorSubject<boolean> =
+  private readonly isAdminSubject: BehaviorSubject<boolean> =
     new BehaviorSubject<boolean>(false);
   public isAdmin$: Observable<boolean> = this.isAdminSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   societydetails(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}`).pipe(
       map((response) => {
         if (response && response.isAdmin !== null) {
-          this.isAdminSubject.next(true); // Emit true if society details are present
+          this.isAdminSubject.next(true); 
         } else {
-          this.isAdminSubject.next(false); // Emit false if no society details
+          this.isAdminSubject.next(false); 
         }
-        return response.isAdmin; // Return the response in case other parts of the app need it
+        return response.isAdmin; 
       })
     );
   }

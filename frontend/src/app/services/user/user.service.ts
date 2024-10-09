@@ -14,7 +14,7 @@ export class UserService {
 
   private readonly userDataSubject = new BehaviorSubject<any>(null);
   private readonly familyDataSubject = new BehaviorSubject<any>(null);
-  private readonly userSocietyIdSubject = new BehaviorSubject<number>(0);
+  private readonly userSocietyIdSubject = new BehaviorSubject<string>('');
   private readonly userRoleArraySubject = new BehaviorSubject<string[]>([]); 
 
   userSocietyId$ = this.userSocietyIdSubject.asObservable();

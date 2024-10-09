@@ -44,6 +44,8 @@ export class AuthService {
         return this.userService.getCurrentUser();
       }),
       tap((user) => {
+        console.log("dwdwdwdwdbwdbwbdwbdwudbwudbwubd",user);
+        
         this.userService.userRoles$.subscribe({
           next: (roles) => {
             console.log(roles);

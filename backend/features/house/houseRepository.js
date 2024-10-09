@@ -51,7 +51,7 @@ exports.getWingHouseDetailsById = async (wingId) => {
         id: house.id,
         house_no: house.house_no,
         userCount: house.HouseUsers.length,
-        owner: a.User,
+        owner: a ? a.User : null,
       }
     });
 
