@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { SystemAdminNavigationComponent } from "../../components/system-admin-navigation/system-admin-navigation.component";
-import { SystemAdminSideNavigationComponent } from "../../components/system-admin-side-navigation/system-admin-side-navigation.component";
+import { SystemAdminNavigationComponent } from "../../components/systemAdmin/system-admin-navigation/system-admin-navigation.component";
+import { SystemAdminSideNavigationComponent } from "../../components/systemAdmin/system-admin-side-navigation/system-admin-side-navigation.component";
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 

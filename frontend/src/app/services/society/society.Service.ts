@@ -22,7 +22,7 @@ export class SocietyService {
   }
 
   // Fetch society data by societyId
-  fetchSocietyData(societyId: number): Observable<Society[]> {
+  fetchSocietyData(societyId: string): Observable<Society[]> {
     return this.societyData$.pipe(
       switchMap((societyData) => {
         if (societyData.length > 0) {

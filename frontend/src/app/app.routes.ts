@@ -1,16 +1,16 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './layouts/user/home.component';
 import { AuthGuard } from './gaurds/auth.guard';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { AdminGuard } from './gaurds/admin.gaurd';
-import { DashboardComponent } from './components/Dashboard/dashboard.component';
-import { RegisterComponent } from './components/register/register.component';
 import { SystemAdminComponent } from './layouts/system-admin/system-admin.component';
 import { SystemAdminGuard } from './gaurds/system-admin.guard';
-import { UnauthorizedComponent } from './components/unauthorized/unauthorized.component';
+import { UnauthorizedComponent } from './components/shared/unauthorized/unauthorized.component';
 import { NonSystemAdminGuard } from './gaurds/not-system-admin.gaurd';
+import { RegisterComponent } from './components/shared/register/register.component';
+import { LoginComponent } from './components/shared/login/login.component';
+import { DashboardComponent } from './components/User/Dashboard/dashboard.component';
 export const routes: Routes = [
   {
     path: 'login',
@@ -38,21 +38,21 @@ export const routes: Routes = [
       {
         path: 'messages',
         loadComponent: () =>
-          import('./components/chats/chats.component').then(
+          import('./components/User/chats/chats.component').then(
             (chat) => chat.ChatsComponent
           ),
       },
       {
         path: 'profile',
         loadComponent: () =>
-          import('./components/user-detail/user-detail.component').then(
+          import('./components/User/user-detail/user-detail.component').then(
             (user) => user.UserDetailComponent
           ),
       },
       {
         path: 'apartments',
         loadComponent: () =>
-          import('./components/apartment/apartment.component').then(
+          import('./components/User/apartment/apartment.component').then(
             (a) =>a.ApartmentComponent 
           ),
         canActivate: [AdminGuard],
@@ -60,7 +60,7 @@ export const routes: Routes = [
       {
         path: 'apartments/wingDetails/:name/:id',
         loadComponent: () =>
-          import('./components/apartment/wing-details/wing-details.component').then(
+          import('./components/User/apartment/wing-details/wing-details.component').then(
             (w) =>w.WingDetailsComponent 
           ),
         canActivate: [AdminGuard],
@@ -69,7 +69,7 @@ export const routes: Routes = [
         path: 'apartments/allocate-house',
         loadComponent: () =>
           import(
-            './components/admin/allocate-house/allocate-house.component'
+            './components/User/admin/allocate-house/allocate-house.component'
           ).then((a) =>a.AllocateHouseComponent ),
         canActivate: [AdminGuard],
       },
@@ -77,7 +77,7 @@ export const routes: Routes = [
         path: 'apartments/users',
         loadComponent: () =>
           import(
-            './components/admin/society-users/society-users.component'
+            './components/User/admin/society-users/society-users.component'
           ).then((w) => w.SocietyUsersComponent),
         canActivate: [AdminGuard],
       },
@@ -94,7 +94,7 @@ export const routes: Routes = [
         canActivate:[SystemAdminGuard],
         loadComponent:()=>
           import(
-            './components/society-list/society-list.component'
+            './components/systemAdmin/society-list/society-list.component'
           ).then((s)=>s.SocietyListComponent)
       }
     ]

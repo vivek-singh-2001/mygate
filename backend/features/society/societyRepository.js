@@ -1,5 +1,5 @@
 const { db } = require("../../config/connection");
-const { Sequelize, JSON } = require("sequelize");
+const { Sequelize } = require("sequelize");
 const CustomError = require("../../utils/CustomError");
 const { User, HouseUser, House, Wing, Society, Floor } = db;
 
