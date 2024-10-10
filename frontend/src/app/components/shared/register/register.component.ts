@@ -15,10 +15,13 @@ import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ToastModule } from 'primeng/toast';
+
 import { CalendarModule } from 'primeng/calendar';
 import { AddressService } from '../../../services/address/address.service';
 import { SocietyService } from '../../../services/society/society.Service';
 import { CustomValidators } from '../../../utils/noSpaceAllowed.validator';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-register',
@@ -34,8 +37,10 @@ import { CustomValidators } from '../../../utils/noSpaceAllowed.validator';
     IconFieldModule,
     InputIconModule,
     RadioButtonModule,
-    CalendarModule
+    CalendarModule,
+    ToastModule
   ],
+  providers:[MessageService],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -53,7 +58,8 @@ export class RegisterComponent implements OnInit {
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
     private readonly addressService: AddressService,
-    private readonly societyService: SocietyService
+    private readonly societyService: SocietyService,
+    private readonly messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -128,11 +134,21 @@ export class RegisterComponent implements OnInit {
       }
       // Make the API call to register the society
       this.societyService.registerSociety(formdata).subscribe({
-        next: (response) => {
-          console.log('Society registered successfully:', response);
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Society has been registered',
+          });
+          this.reactiveForm.reset()
+          
         },
-        error: (error) => {
-          console.log('Error in registering society:', error.message);
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.message,
+          });
         },
       });
     } else {

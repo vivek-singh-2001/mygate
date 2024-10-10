@@ -3,7 +3,6 @@ import { BehaviorSubject, map, Observable, take, tap } from 'rxjs';
 import { AuthService } from './auth/auth.service';
 import { UserService } from './user/user.service';
 import { HouseService } from './houses/houseService';
-import { AdminService } from './admin/admin.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +14,6 @@ export class AppInitializationService {
     private readonly authService: AuthService,
     private readonly userService: UserService,
     private readonly houseService: HouseService,
-    private readonly adminService: AdminService,
   ) {}
 
   initialize(): Observable<boolean> {
