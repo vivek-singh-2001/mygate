@@ -107,7 +107,7 @@ export class NavigationComponent implements OnInit {
 
   private loadUserData(): void {
     this.appInitializationService.isInitialized.subscribe((isInitialized) => {
-      if (isInitialized) {
+      if (isInitialized || this.authService.isLoggedIn()) {
         this.userService.userData$.subscribe({
           next: (data) => {
             this.user = data;
