@@ -96,14 +96,12 @@ exports.findSocietyByUserId = async (userId) => {
 
 exports.updateSocietyStatus = async (societyId, newStatus) => {
   try {
-    // First, check if the society exists
     const society = await Society.findByPk(societyId);
 
     if (!society) {
       throw new Error('Society not found');
     }
 
-    // Update the society status
     await society.update({ status: newStatus });
 
     return { message: 'Society status updated successfully', society };

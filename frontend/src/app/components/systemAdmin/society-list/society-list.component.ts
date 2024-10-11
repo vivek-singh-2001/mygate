@@ -200,14 +200,6 @@ export class SocietyListComponent {
       accept: () => {
         this.onCanelSociety(society);
       },
-      reject: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Rejected',
-          detail: 'You have rejected',
-          life: 3000,
-        });
-      },
     });
   }
 
