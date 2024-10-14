@@ -5,6 +5,15 @@ import { catchError, tap } from 'rxjs/operators';
 import { User } from '../../interfaces/user.interface';
 import { environment } from '../../../environments/environment';
 
+const roleMappings: { [key: string]: string } = {
+  systemAdmin: 'System Admin',
+  familyMember: 'Family Member',
+  security: 'Security',
+  societyAdmin: 'Society Admin',
+  owner: 'Owner',
+  wingAdmin: 'Wing Admin',
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -15,12 +24,12 @@ export class UserService {
   private readonly userDataSubject = new BehaviorSubject<any>(null);
   private readonly familyDataSubject = new BehaviorSubject<any>(null);
   private readonly userSocietyIdSubject = new BehaviorSubject<string>('');
-  private readonly userRoleArraySubject = new BehaviorSubject<string[]>([]); 
+  private readonly userRoleArraySubject = new BehaviorSubject<string[]>([]);
 
   userSocietyId$ = this.userSocietyIdSubject.asObservable();
   userRoles$ = this.userRoleArraySubject.asObservable();
-  userData$ = this.userDataSubject.asObservable()
-  
+  userData$ = this.userDataSubject.asObservable();
+
   constructor(private readonly http: HttpClient) {}
 
   getUserData(): Observable<any> {
@@ -34,9 +43,13 @@ export class UserService {
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {
+        response.data.role = roleMappings[response.data.Roles[0].name];
         this.userDataSubject.next(response.data);
-        this.userSocietyIdSubject.next(response.data.Houses[0].Floor.Wing.societyId);
-        const rolesNames = response.data.Roles?.map((role: { name: string })=>role.name) || [];
+        this.userSocietyIdSubject.next(
+          response.data.Houses[0].Floor.Wing.societyId
+        );
+        const rolesNames =
+          response.data.Roles?.map((role: { name: string }) => role.name) || [];
         this.userRoleArraySubject.next(rolesNames);
       }),
       catchError((error) => {
@@ -100,19 +113,23 @@ export class UserService {
 
   fetchFamilyMembers(userId: number, houseId: number): Observable<any> {
     if (!userId || !houseId) {
-      console.error('User Id and House Id is not available, cannot fetch family members.');
+      console.error(
+        'User Id and House Id is not available, cannot fetch family members.'
+      );
       return of(null);
     }
 
-    return this.http.get(`${this.userApiUrl}/familyMembers/${userId}/${houseId}`).pipe(
-      tap((response: any) => {
-        this.familyDataSubject.next(response);
-      }),
-      catchError((error) => {
-        console.error('Failed to load family members data', error);
-        return of(null);
-      })
-    );
+    return this.http
+      .get(`${this.userApiUrl}/familyMembers/${userId}/${houseId}`)
+      .pipe(
+        tap((response: any) => {
+          this.familyDataSubject.next(response);
+        }),
+        catchError((error) => {
+          console.error('Failed to load family members data', error);
+          return of(null);
+        })
+      );
   }
 
   addFamilyMember(member: any): Observable<any> {
@@ -120,6 +137,6 @@ export class UserService {
   }
 
   clearfamilyData() {
-    this.familyDataSubject.next(null)
+    this.familyDataSubject.next(null);
   }
 }

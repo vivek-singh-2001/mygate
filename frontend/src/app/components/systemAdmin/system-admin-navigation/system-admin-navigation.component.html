@@ -16,8 +16,8 @@
       <div
         class="flex flex-column justify-content-center align-items-start gap-0"
       >
-        <!-- <p class="user-name">{{ user?.firstname }}</p> -->
-        <!-- <p class="user-role">{{ user?.role || 'N/A' }}</p> -->
+        <p class="user-name">{{ user.firstname + ' ' +(user.lastname || '') }}</p>
+        <p class="user-role">{{ user.role || 'N/A' }}</p>
       </div>
     </div>
   </ng-template>

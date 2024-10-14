@@ -84,10 +84,9 @@ export class SystemAdminNavigationComponent {
   private loadUserData(): void {
     this.userService.getUserData().subscribe({
       next: (data) => {
-        console.log(data);
+        console.log(data,"wkfhv");
         
         this.user = data;
-        this.user.role = data.Roles[0].name
         this.initializeMenu();
       },
       error: (error) => {
