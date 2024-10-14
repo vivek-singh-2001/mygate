@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CalanderComponent } from "./calander/calander.component";
+import { CalanderComponent } from "../calander/calander.component";
 
 @Component({
   selector: 'app-dashboard',

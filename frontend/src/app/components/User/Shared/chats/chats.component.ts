@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserChatComponent } from './user-chat/user-chat.component';
-import { ChatService } from '../../../services/chats/chat.service';
-import { UserService } from '../../../services/user/user.service';
+
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { ChatService } from '../../../../services/chats/chat.service';
+import { UserService } from '../../../../services/user/user.service';
 
 @Component({
   selector: 'app-chats',
@@ -19,12 +20,11 @@ export class ChatsComponent implements OnInit {
   selectedUser: any = null;
   roomId: string = '';
   currentUserId: number = 0;
-  private historySubscription!: Subscription;
   private userSubscription!: Subscription;
 
   constructor(
-    private ChatService: ChatService,
-    private userService: UserService
+    private readonly ChatService: ChatService,
+    private readonly userService: UserService
   ) {}
 
   ngOnInit(): void {

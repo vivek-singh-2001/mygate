@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { NavigationComponent } from '../../components/User/navigation/navigation.component';
-import { SideNavComponent } from '../../components/User/side-nav/side-nav.component';
+import { NavigationComponent } from '../../components/User/Shared/navigation/navigation.component';
+import { SideNavComponent } from '../../components/User/Shared/side-nav/side-nav.component';
 
 
 @Component({
