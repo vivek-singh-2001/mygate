@@ -73,9 +73,11 @@ export class CalanderComponent implements OnInit {
             },
           });
 
-          this.adminService.isAdmin$.subscribe({
-            next: (isAdmin) => {
-              this.isAdmin = isAdmin;
+          this.userService.userRoles$.subscribe({
+            next: (roleArray) => {
+              if(roleArray.includes('societyAdmin')){
+                this.isAdmin = true
+              }
             },
             error: (adminError) => {
               console.error('Failed to determine admin status:', adminError);
