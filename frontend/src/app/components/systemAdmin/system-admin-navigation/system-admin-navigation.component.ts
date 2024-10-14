@@ -12,6 +12,9 @@ import { RippleModule } from 'primeng/ripple';
 import { MenubarModule } from 'primeng/menubar';
 import { User } from '../../../interfaces/user.interface';
 import { House } from '../../../interfaces/house.interface';
+import { SocietyService } from '../../../services/society/society.Service';
+import { Society } from '../../../interfaces/society.interface';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-system-admin-navigation',
@@ -32,6 +35,8 @@ export class SystemAdminNavigationComponent {
   items: MenuItem[] = [];
   item: MenuItem[] | undefined;
   user!: User;
+  societies!: Society[];
+  ApprovedSocieties: string = '';
   houses: House[] = [];
   selectedHouse: string = '';
   isDropdownVisible: boolean = true; // Control dropdown visibility
@@ -39,40 +44,45 @@ export class SystemAdminNavigationComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly societyService: SocietyService
   ) {}
 
   ngOnInit(): void {
     this.loadUserData();
+    console.log('ngonit 1');
   }
 
   private initializeMenu(): void {
     this.items = [
-      {
-        label: 'Home',
-        icon: 'pi pi-home',
-      },
-      {
-        label: 'Projects',
-        icon: 'pi pi-search',
-      },
-      {
-        label: 'Contact',
-        icon: 'pi pi-envelope',
-      },
+      // {
+      //   label: 'Society',
+      //   icon: 'pi pi-warehouse',
+      //   badge: this.ApprovedSocieties,
+      //   styleClass: 'society-item',
+      //   command: () => this.goToSocieties(),
+      // },
+      // {
+      //   label: 'Projects',
+      //   icon: 'pi pi-search',
+      // },
+      // {
+      //   label: 'Contact',
+      //   icon: 'pi pi-envelope',
+      // },
     ];
 
     this.item = [
-      {
-        label: 'Profile',
-        icon: 'pi pi-user',
-        command: () => this.goToProfile(),
-      },
-      {
-        label: 'Settings',
-        icon: 'pi pi-cog',
-        command: () => this.goToSettings(),
-      },
+      // {
+      //   label: 'Profile',
+      //   icon: 'pi pi-user',
+      //   command: () => this.goToProfile(),
+      // },
+      // {
+      //   label: 'Settings',
+      //   icon: 'pi pi-cog',
+      //   command: () => this.goToSettings(),
+      // },
       {
         label: 'Logout',
         icon: 'pi pi-sign-out',
@@ -82,48 +92,39 @@ export class SystemAdminNavigationComponent {
   }
 
   private loadUserData(): void {
-    this.userService.getUserData().subscribe({
-      next: (data) => {
-        console.log(data,"wkfhv");
+    this.userService
+      .getUserData()
+      .pipe(
+        tap(() => {
+          this.fetchSocietyData();
+        })
+      )
+      .subscribe({
+        next: (data) => {
+          this.user = data;
+        },
+        error: (error) => {
+          console.error('Failed to fetch user details', error);
+        },
+      });
+  }
+
+  private fetchSocietyData() {
+    this.societyService.allSocietyData$.subscribe({
+      next: (societies) => {
         
-        this.user = data;
+        this.societies = societies;
+        this.ApprovedSocieties = societies.filter(society => society.status == 'approved').length.toString()
         this.initializeMenu();
-      },
-      error: (error) => {
-        console.error('Failed to fetch user details', error);
       },
     });
   }
 
-  goToProfile() {
-    console.log('Navigate to profile');
-    this.router.navigate(['/home/profile']);
-  }
-
-  goToSettings() {
-    console.log('Navigate to settings');
+  goToSocieties() {
+    this.router.navigate(['/systemAdmin/societies']);
   }
 
   logout() {
     this.authService.logout();
-  }
-
-  showDropdown() {
-    if (this.houses.length > 1) {
-      this.isDropdownVisible = true;
-    }
-  }
-
-  hideDropdown() {
-    this.isDropdownVisible = false;
-  }
-
-  // To keep dropdown open when hovering over dropdown
-  onDropdownMouseEnter() {
-    this.isDropdownVisible = true;
-  }
-
-  onDropdownMouseLeave() {
-    this.hideDropdown();
   }
 }

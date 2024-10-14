@@ -1,46 +1,41 @@
-::ng-deep  .mat-typography p {
-    margin: 0 !important
-   
+::ng-deep .mat-typography p {
+  margin: 0 !important;
 }
-::ng-deep  .p-menubar {
-    padding: 0.5rem;
-    background-color: var(--gray-300);
-    color: #4b5563;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-}
-
-::ng-deep  .p-menubar .p-submenu-list {
-    position: absolute;
-    z-index: 2;
-    max-width: 105px;
+::ng-deep .p-menubar {
+  padding: 0.5rem;
+  background-color: var(--gray-300);
+  color: #4b5563;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
 }
 
+::ng-deep .p-menubar .p-submenu-list {
+  position: absolute;
+  z-index: 2;
+  max-width: 105px;
+}
 
 .house-dropdown {
-    position: absolute;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    list-style-type: none;
-  }
-  
-  .house-dropdown ul {
-    margin: 0;
-    padding: 0;
-  }
-  
-  .house-dropdown ul li {
-    padding: 5px;
-    cursor: pointer;
-  }
-  
-  .house-dropdown ul li:hover {
-    background-color: #f0f0f0;
-  }
-  
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  list-style-type: none;
+}
 
+.house-dropdown ul {
+  margin: 0;
+  padding: 0;
+}
 
+.house-dropdown ul li {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.house-dropdown ul li:hover {
+  background-color: #f0f0f0;
+}
 
 
 

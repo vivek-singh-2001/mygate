@@ -19,6 +19,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { AddressService } from '../../../services/address/address.service';
 import { SocietyService } from '../../../services/society/society.Service';
 import { CustomValidators } from '../../../utils/noSpaceAllowed.validator';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-register',
@@ -34,8 +35,10 @@ import { CustomValidators } from '../../../utils/noSpaceAllowed.validator';
     IconFieldModule,
     InputIconModule,
     RadioButtonModule,
-    CalendarModule
+    CalendarModule,
+    ToastModule
   ],
+  providers:[],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })

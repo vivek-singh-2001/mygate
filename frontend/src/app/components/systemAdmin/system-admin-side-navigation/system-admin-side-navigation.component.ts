@@ -45,14 +45,14 @@ export class SystemAdminSideNavigationComponent {
         label: 'Dashboard',
         icon: 'pi pi-home',
         iconSize: 'large',
-        command: () => this.navigateTo('/home/dashboard'),
+        command: () => this.navigateTo('/systemAdmin/societies'),
       },
-      {
-        label: 'Messages',
-        icon: 'pi pi-comments',
-        iconSize: 'large',
-        command: () => this.navigateTo('/home/messages'),
-      },
+      // {
+      //   label: 'Messages',
+      //   icon: 'pi pi-comments',
+      //   iconSize: 'large',
+      //   command: () => this.navigateTo('/home/messages'),
+      // },
     ];
   }
 

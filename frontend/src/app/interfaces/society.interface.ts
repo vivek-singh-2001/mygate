@@ -14,5 +14,6 @@ export interface Society {
   societyAdminId: number | null;
   User?:User;
   numberOfHouses?:string;
-  numberOfUsers?:string
+  numberOfUsers?:string;
+
 }

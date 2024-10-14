@@ -1,4 +1,19 @@
-<p-menubar [model]="items" autoDisplay="false">
+<p-menubar [model]="items"  autoDisplay="false">
+
+  <ng-template pTemplate="start">
+    <div class="flex align-items-center gap-2">
+      <img src="assets/mygate.png" alt="mygate" height="50" class="ml-2">
+      <!-- <span class="font-bold text-xl">MyGate</span> -->
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="item" let-item>
+    <a class="p-menuitem-link">
+      <span class="p-menuitem-icon" [ngClass]="item.icon"></span>
+      <span class="p-menuitem-text">{{item.label}}</span>
+      <p-badge *ngIf="item.badge" [value]="item.badge" styleClass="p-badge-info"></p-badge>
+    </a>
+  </ng-template>
   <ng-template pTemplate="end">
     <div class="flex align-items-center gap-4 mr-4">
       <p-menu #menu [model]="item" popup="true"></p-menu>
