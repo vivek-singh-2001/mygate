@@ -1,9 +1,4 @@
 import { Routes } from '@angular/router';
-import { UnauthorizedComponent } from './components/shared/unauthorized/unauthorized.component';
-import { LoginComponent } from './components/shared/login/login.component';
-import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
-import { RegisterComponent } from './components/shared/register/register.component';
-import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { HomeComponent } from './layouts/user/home.component';
 import { AuthGuard } from './gaurds/auth.guard';
 import { NonSystemAdminGuard } from './gaurds/not-system-admin.gaurd';
@@ -11,8 +6,12 @@ import { DashboardComponent } from './components/User/Dashboard/dashboard.compon
 import { AdminGuard } from './gaurds/admin.gaurd';
 import { SystemAdminComponent } from './layouts/system-admin/system-admin.component';
 import { SystemAdminGuard } from './gaurds/system-admin.guard';
+import { UnauthorizedComponent } from './components/shared/unauthorized/unauthorized.component';
+import { RegisterComponent } from './components/shared/register/register.component';
+import { LoginComponent } from './components/shared/login/login.component';
+import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
+import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { PageNotFoundComponent } from './components/shared/pageNotFound/page-not-found.component';
-
 export const routes: Routes = [
   {
     path: 'login',
@@ -55,7 +54,7 @@ export const routes: Routes = [
         path: 'apartments',
         loadComponent: () =>
           import('./components/User/apartment/apartment.component').then(
-            (a) => a.ApartmentComponent
+            (a) =>a.ApartmentComponent 
           ),
         canActivate: [AdminGuard],
       },
@@ -63,24 +62,24 @@ export const routes: Routes = [
         path: 'apartments/wingDetails/:name/:id',
         loadComponent: () =>
           import('./components/User/apartment/wing-details/wing-details.component').then(
-            (w) => w.WingDetailsComponent
+            (w) =>w.WingDetailsComponent 
           ),
         canActivate: [AdminGuard],
       },
       {
         path: 'apartments/allocate-house',
         loadComponent: () =>
-          import('./components/User/admin/allocate-house/allocate-house.component').then(
-            (a) => a.AllocateHouseComponent
-          ),
+          import(
+            './components/User/admin/allocate-house/allocate-house.component'
+          ).then((a) =>a.AllocateHouseComponent ),
         canActivate: [AdminGuard],
       },
       {
         path: 'apartments/users',
         loadComponent: () =>
-          import('./components/User/admin/society-users/society-users.component').then(
-            (w) => w.SocietyUsersComponent
-          ),
+          import(
+            './components/User/admin/society-users/society-users.component'
+          ).then((w) => w.SocietyUsersComponent),
         canActivate: [AdminGuard],
       },
     ],
@@ -92,15 +91,16 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'societies', pathMatch: 'full' },
       {
-        path: 'societies',
-        canActivate: [SystemAdminGuard],
-        loadComponent: () =>
-          import('./components/systemAdmin/society-list/society-list.component').then(
-            (s) => s.SocietyListComponent
-          ),
-      },
-    ],
+        path:'societies',
+        canActivate:[SystemAdminGuard],
+        loadComponent:()=>
+          import(
+            './components/systemAdmin/society-list/society-list.component'
+          ).then((s)=>s.SocietyListComponent)
+      }
+    ]
   },
+  { path: 'unauthorized', component: UnauthorizedComponent },
   {
     path: '',
     redirectTo: 'login',

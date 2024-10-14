@@ -1,3 +1,4 @@
+
 const express = require("express");
 const morgan = require("morgan");
 const CustomError = require("./utils/CustomError");
@@ -50,13 +51,6 @@ app.use(
     },
   })
 );
-
-// Route all other requests to Angular
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/frontend/browser/index.html'));
-});
-
-app.use(cors({ origin: "http://192.1.200.38:4200", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 // Session configuration
@@ -95,8 +89,6 @@ app.use("*", (req, res, next) => {
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/frontend/browser/index.html'));
 });
-
-
 // ERROR HANDLER MUST BE DEFINED LAST
 app.use(globalErrorHandler);
 module.exports = app;

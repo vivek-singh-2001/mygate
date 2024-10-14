@@ -7,9 +7,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '../../../../services/events/event.service';
-import { AdminService } from '../../../../services/admin/admin.service';
-import { UserService } from '../../../../services/user/user.service';
 import { AppInitializationService } from '../../../../services/AppInitialization';
+import { UserService } from '../../../../services/user/user.service';
+import { AdminService } from '../../../../services/admin/admin.service';
 
 @Component({
   selector: 'app-calander',

@@ -13,8 +13,6 @@ exports.getUserById = (id) => {
         "passwordChangedAt",
         "passwordResetToken",
         "passwordResetTokenExpires",
-        "photo",
-        "role",
         "updatedAt",
       ],
     },

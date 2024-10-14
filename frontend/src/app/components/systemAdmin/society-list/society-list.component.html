@@ -7,10 +7,8 @@
   </div>
 </ng-container>
 
-
-
 <!-- user-list.component.html -->
-<p-table [value]="societies" class="p-datatable-sm" >
+<p-table [value]="societies" class="p-datatable-sm">
   <ng-template pTemplate="header">
     <tr>
       <th>Photo</th>
@@ -18,19 +16,19 @@
       <th>Society Name</th>
       <th>Number</th>
       <th>Email</th>
+      <th>Document</th>
+      <!-- <th>Action</th> -->
       <th>
         <p-dropdown
           [options]="statusOptions"
           [(ngModel)]="selectedStatus"
           placeholder="Select Status"
-          (onChange)="onStatusFilterChange()"
+          (onChange)="fetchSocieties()"
           [style]="{ width: '100px', border: 'none' }"
           appendTo="body"
         >
         </p-dropdown>
       </th>
-      <th>pdf</th>
-      <th>Action</th>
     </tr>
   </ng-template>
 
@@ -47,11 +45,16 @@
           style="width: 50px; height: 50px; border-radius: 50%"
         />
       </td>
-      <td>{{ society?.User?.firstname || 'N/A' }}</td>
-      <td>{{ society?.name || 'N/A' }}</td>
+      <td>
+        {{
+          (society?.User?.firstname || "") + 
+          (society?.User?.lastname ? " " + society.User.lastname : "") || "N/A"
+        }}
+      </td>
+      <td>{{ society?.name || "N/A" }}</td>
       <td>{{ society?.User?.number || "N/A" }}</td>
-      <td>{{ society?.User?.email || 'N/A' }}</td>
-      <td>{{ society?.status }}</td>
+      <td>{{ society?.User?.email || "N/A" }}</td>
+      <!-- <td>{{ society?.status }}</td> -->
       <td>
         <p-button
           icon="pi pi-download"
@@ -66,13 +69,13 @@
           [rounded]="true"
           severity="danger"
           [outlined]="true"
-          (onClick)="onCancel($event,society)"
+          (onClick)="onCancel($event, society)"
         />
         <p-button
           icon="pi pi-check"
           [rounded]="true"
           [outlined]="true"
-          (onClick)="onConfirm($event,society)"
+          (onClick)="onConfirm($event, society)"
         />
       </td>
       } @else if(society.status === 'approved') {
@@ -94,8 +97,6 @@
 >
   <p><b>No users found for the search query.</b></p>
 </div>
-
-
 
 <div class="card flex justify-content-center gap-2">
   <p-toast />

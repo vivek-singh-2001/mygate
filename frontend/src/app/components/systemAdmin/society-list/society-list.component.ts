@@ -62,6 +62,11 @@ export class SocietyListComponent {
         this.isLoading = false;
       },
       error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.message,
+        });
         console.error('Error fetching societies:', err);
         this.isLoading = false;
       },
@@ -86,11 +91,8 @@ export class SocietyListComponent {
     // Fetch the CSV file
     this.http.get(csvFileUrl, { responseType: 'text' }).subscribe({
       next: (csvData) => {
-        // Parse the CSV data
         const parsedData = this.parseCsv(csvData);
-        // Convert parsed data back to CSV format
         const csvString = this.convertArrayToCSV(parsedData);
-        // Trigger the download of the parsed CSV
         this.downloadCSV(csvString, filename);
         this.isLoading = false;
       },
@@ -199,14 +201,6 @@ export class SocietyListComponent {
       rejectButtonStyleClass: 'p-button-text',
       accept: () => {
         this.onCanelSociety(society);
-      },
-      reject: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Rejected',
-          detail: 'You have rejected',
-          life: 3000,
-        });
       },
     });
   }

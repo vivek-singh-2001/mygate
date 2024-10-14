@@ -57,7 +57,7 @@ export class AuthService {
             }
           },
         });
-        this.houseService.setHouses(user.data.user.Houses);
+        this.houseService.setHouses(user.data.Houses);
       }),
       catchError((error) => {
         console.error('Login failed: ', error);

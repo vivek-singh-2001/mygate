@@ -23,7 +23,7 @@ module.exports = (connectDB, DataTypes) => {
           model: 'users',
           key: 'id'
         },
-        allowNull: true 
+        allowNull: true
       },
       status:{
         type: DataTypes.ENUM('pending', 'approved','rejected'),

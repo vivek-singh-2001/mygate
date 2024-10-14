@@ -175,13 +175,14 @@ exports.createSociety = asyncErrorHandler(async (req, res, next) => {
 
 exports.rejectSociety = asyncErrorHandler(async (req, res, next) => {
   const societyData = req.body;
-  const { id: societyId, societyAdminId: userId } = societyData;
+  const { id: societyId, societyAdminId: userId, status } = societyData;
+  
 
-  if (!societyData.status == "pending") {
-    return next(new CustomError("society is not in pending state", 400));
+  if (!status == "pending") {
+    return next(new CustomError("Society is not in pending state", 400));
   }
   if (!(userId && societyId)) {
-    return next(new CustomError("society is not found", 400));
+    return next(new CustomError("Society or user not found", 400));
   }
 
   const response = await societyService.rejectSociety(societyId, userId);

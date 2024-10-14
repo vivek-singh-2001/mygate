@@ -70,15 +70,13 @@ exports.createSociety = async (csvData, societyId,next) => {
 
 exports.rejectSociety = async (societyId, userId) => {
   try {
-    // Step 1: Delete the user from the userRepository
     await userRepository.deleteUser(userId);
 
-    // Step 2: Update the society status to 'Rejected' in the societyRepository
     await societyRepository.updateSocietyStatus(societyId, 'rejected');
 
     return { message: 'Society rejected and user deleted successfully' };
   } catch (error) {
-    console.error('Error in rejecting society or deleting user:', error.message);
+    console.error('Error in rejecting society:', error);
     throw new Error('Failed to reject society and delete user. Please try again.');
   }
 };
