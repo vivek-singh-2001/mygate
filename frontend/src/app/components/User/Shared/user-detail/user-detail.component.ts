@@ -23,12 +23,12 @@ import { FamilyDetailsComponent } from './family-details/family-details.componen
 import { PersonalDetailsComponent } from './personal-details/personal-details.component';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { MessageService } from 'primeng/api';
-import { Gender, User } from '../../../interfaces/user.interface';
-import { House } from '../../../interfaces/house.interface';
-import { UserService } from '../../../services/user/user.service';
-import { HouseService } from '../../../services/houses/houseService';
-import { WingService } from '../../../services/wings/wing.service';
-import { lettersOnlyValidator } from '../../../utils/lettersOnlyValidator';
+import { Gender, User } from '../../../../interfaces/user.interface';
+import { House } from '../../../../interfaces/house.interface';
+import { UserService } from '../../../../services/user/user.service';
+import { HouseService } from '../../../../services/houses/houseService';
+import { WingService } from '../../../../services/wings/wing.service';
+import { lettersOnlyValidator } from '../../../../utils/lettersOnlyValidator';
 
 @Component({
   selector: 'app-user-detail',
@@ -82,11 +82,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   private familySubscription!: Subscription;
 
   constructor(
-    private fb: FormBuilder,
-    private userService: UserService,
-    private houseService: HouseService,
-    private wingService: WingService,
-    private messageService: MessageService
+    private readonly fb: FormBuilder,
+    private readonly userService: UserService,
+    private readonly houseService: HouseService,
+    private readonly wingService: WingService,
+    private readonly messageService: MessageService
   ) {
     this.genders = [
       { label: 'Male', value: 'male' },
@@ -118,6 +118,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
           console.log(userData);
           
           if (userData) {
+            
             this.userDetails = userData;
             this.userProfileForm.patchValue({
               firstname: userData.firstname || 'apple',

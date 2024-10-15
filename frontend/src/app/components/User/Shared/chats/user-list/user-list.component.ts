@@ -1,9 +1,9 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { UserService } from '../../../../services/user/user.service';
 import { CommonModule } from '@angular/common';
 import { switchMap } from 'rxjs/operators';
-import { HouseService } from '../../../../services/houses/houseService';
-import { BehaviorSubject, EMPTY, Subscription } from 'rxjs';
+import {  EMPTY, Subscription } from 'rxjs';
+import { UserService } from '../../../../../services/user/user.service';
+import { HouseService } from '../../../../../services/houses/houseService';
 
 @Component({
   selector: 'app-user-list',
@@ -20,8 +20,8 @@ export class UserListComponent implements OnInit {
   private subscription!: Subscription;
 
   constructor(
-    private userService: UserService,
-    private houseService: HouseService
+    private readonly userService: UserService,
+    private readonly houseService: HouseService
   ) {}
 
   ngOnInit() {
@@ -29,10 +29,7 @@ export class UserListComponent implements OnInit {
       .pipe(
         switchMap((selectedHouse) => {
           if (selectedHouse) {
-            console.log("helooooooooooooooooooooooo", selectedHouse);
             
-            // const societyId = selectedHouse.Floor.Wing.societyId;
-            // const wingId = selectedHouse.Floor.Wing.wingId;
             return this.userService.getUsersBySocietyIdAndWingId(
               selectedHouse.Floor.Wing.societyId,
               selectedHouse.Floor.wingId

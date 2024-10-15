@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageModule } from 'primeng/image';
-import { SocietyService } from '../../../services/society/society.Service';
-import { UserService } from '../../../services/user/user.service';
 import { map, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Society } from '../../../interfaces/society.interface';
+import { SocietyService } from '../../../../services/society/society.Service';
+import { UserService } from '../../../../services/user/user.service';
+import { Society } from '../../../../interfaces/society.interface';
 
 @Component({
   selector: 'app-apartment',

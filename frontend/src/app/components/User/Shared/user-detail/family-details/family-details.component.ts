@@ -13,7 +13,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
-import { Gender, User } from '../../../../interfaces/user.interface';
+import { Gender, User } from '../../../../../interfaces/user.interface';
 
 @Component({
   selector: 'app-family-details',

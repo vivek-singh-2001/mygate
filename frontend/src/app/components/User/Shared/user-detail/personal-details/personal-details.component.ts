@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { TabViewModule } from 'primeng/tabview';
@@ -15,9 +15,9 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, finalize, switchMap } from 'rxjs';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { Gender, User } from '../../../../interfaces/user.interface';
-import { UserService } from '../../../../services/user/user.service';
-import { Wing } from '../../../../interfaces/wing.interface';
+import { Gender, User } from '../../../../../interfaces/user.interface';
+import { UserService } from '../../../../../services/user/user.service';
+import { Wing } from '../../../../../interfaces/wing.interface';
 
 @Component({
   selector: 'app-personal-details',
@@ -42,7 +42,7 @@ import { Wing } from '../../../../interfaces/wing.interface';
   templateUrl: './personal-details.component.html',
   styleUrls: ['../user-detail.component.css', './personal-details.component.css'],
 })
-export class PersonalDetailsComponent {
+export class PersonalDetailsComponent implements OnInit {
   @Input() userDetails!: User;
   @Input() userProfileForm!: FormGroup;
   @Input() genders?: Gender[];
@@ -51,6 +51,9 @@ export class PersonalDetailsComponent {
   wingDetailsSubject = new BehaviorSubject<Wing | null>(null);
 
   constructor(private readonly userService: UserService) {}
+
+  ngOnInit(): void {
+  }
 
   onUserFormSubmit() {
     this.isLoading = true;

@@ -10,6 +10,7 @@ import { EventService } from '../../../../services/events/event.service';
 import { AppInitializationService } from '../../../../services/AppInitialization';
 import { UserService } from '../../../../services/user/user.service';
 import { AdminService } from '../../../../services/admin/admin.service';
+import { AuthService } from '../../../../services/auth/auth.service';
 
 @Component({
   selector: 'app-calander',
@@ -47,15 +48,15 @@ export class CalanderComponent implements OnInit {
 
   constructor(
     private readonly eventService: EventService,
-    private readonly adminService: AdminService,
     private readonly userService: UserService,
-    private readonly appInitializationService: AppInitializationService
+    private readonly appInitializationService: AppInitializationService,
+    private readonly authService:AuthService
   ) {}
 
   ngOnInit() {
     this.appInitializationService.isInitialized.subscribe({
       next: (isInitialized) => {
-        if (isInitialized) {
+        if (isInitialized || this.authService.isLoggedIn()) {
           this.userService.userSocietyId$.subscribe({
             next: (societyId) => {
               this.eventService.getEvents(societyId).subscribe({

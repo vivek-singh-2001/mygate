@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './layouts/user/home.component';
 import { AuthGuard } from './gaurds/auth.guard';
 import { NonSystemAdminGuard } from './gaurds/not-system-admin.gaurd';
-import { DashboardComponent } from './components/User/Dashboard/dashboard.component';
+import { DashboardComponent } from './components/User/Shared/Dashboard/dashboard.component';
 import { AdminGuard } from './gaurds/admin.gaurd';
 import { SystemAdminComponent } from './layouts/system-admin/system-admin.component';
 import { SystemAdminGuard } from './gaurds/system-admin.guard';
@@ -39,21 +39,21 @@ export const routes: Routes = [
       {
         path: 'messages',
         loadComponent: () =>
-          import('./components/User/chats/chats.component').then(
+          import('./components/User/Shared/chats/chats.component').then(
             (chat) => chat.ChatsComponent
           ),
       },
       {
         path: 'profile',
         loadComponent: () =>
-          import('./components/User/user-detail/user-detail.component').then(
+          import('./components/User/Shared/user-detail/user-detail.component').then(
             (user) => user.UserDetailComponent
           ),
       },
       {
         path: 'apartments',
         loadComponent: () =>
-          import('./components/User/apartment/apartment.component').then(
+          import('./components/User/Admin/apartment/apartment.component').then(
             (a) =>a.ApartmentComponent 
           ),
         canActivate: [AdminGuard],
@@ -61,7 +61,7 @@ export const routes: Routes = [
       {
         path: 'apartments/wingDetails/:name/:id',
         loadComponent: () =>
-          import('./components/User/apartment/wing-details/wing-details.component').then(
+          import('./components/User/Admin/apartment/wing-details/wing-details.component').then(
             (w) =>w.WingDetailsComponent 
           ),
         canActivate: [AdminGuard],
@@ -70,7 +70,7 @@ export const routes: Routes = [
         path: 'apartments/allocate-house',
         loadComponent: () =>
           import(
-            './components/User/admin/allocate-house/allocate-house.component'
+            './components/User/Admin/allocate-house/allocate-house.component'
           ).then((a) =>a.AllocateHouseComponent ),
         canActivate: [AdminGuard],
       },
@@ -78,7 +78,7 @@ export const routes: Routes = [
         path: 'apartments/users',
         loadComponent: () =>
           import(
-            './components/User/admin/society-users/society-users.component'
+            './components/User/Admin/society-users/society-users.component'
           ).then((w) => w.SocietyUsersComponent),
         canActivate: [AdminGuard],
       },

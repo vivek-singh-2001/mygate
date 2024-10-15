@@ -8,14 +8,14 @@ import { CommonModule } from '@angular/common';
 import { RippleModule } from 'primeng/ripple';
 import { MenuModule } from 'primeng/menu';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../services/auth/auth.service';
-import { UserService } from '../../../services/user/user.service';
-import { HouseService } from '../../../services/houses/houseService';
-import { WingService } from '../../../services/wings/wing.service';
-import { EventService } from '../../../services/events/event.service';
-import { AppInitializationService } from '../../../services/AppInitialization';
-import { User } from '../../../interfaces/user.interface';
-import { House } from '../../../interfaces/house.interface';
+import { AuthService } from '../../../../services/auth/auth.service';
+import { UserService } from '../../../../services/user/user.service';
+import { HouseService } from '../../../../services/houses/houseService';
+import { WingService } from '../../../../services/wings/wing.service';
+import { EventService } from '../../../../services/events/event.service';
+import { AppInitializationService } from '../../../../services/AppInitialization';
+import { User } from '../../../../interfaces/user.interface';
+import { House } from '../../../../interfaces/house.interface';
 
 @Component({
   selector: 'app-navigation',
@@ -92,11 +92,11 @@ export class NavigationComponent implements OnInit {
         icon: 'pi pi-user',
         command: () => this.goToProfile(),
       },
-      {
-        label: 'Settings',
-        icon: 'pi pi-cog',
-        command: () => this.goToSettings(),
-      },
+      // {
+      //   label: 'Settings',
+      //   icon: 'pi pi-cog',
+      //   command: () => this.goToSettings(),
+      // },
       {
         label: 'Logout',
         icon: 'pi pi-sign-out',
