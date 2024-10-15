@@ -18,8 +18,9 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { CalendarModule } from 'primeng/calendar';
 import { AddressService } from '../../../services/address/address.service';
 import { SocietyService } from '../../../services/society/society.Service';
-import { CustomValidators } from '../../../utils/noSpaceAllowed.validator';
+import { CustomValidators } from '../../../utils/customValidators';
 import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-register',
@@ -36,9 +37,9 @@ import { ToastModule } from 'primeng/toast';
     InputIconModule,
     RadioButtonModule,
     CalendarModule,
-    ToastModule
+    ToastModule,
   ],
-  providers:[],
+  providers: [MessageService],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -52,11 +53,14 @@ export class RegisterComponent implements OnInit {
   fileError: string | null = null;
   selectedFile: File | null = null;
 
+  invalidPostalCode = false; // Flag for postal code validity
+
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
     private readonly addressService: AddressService,
-    private readonly societyService: SocietyService
+    private readonly societyService: SocietyService,
+    private readonly messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -67,19 +71,44 @@ export class RegisterComponent implements OnInit {
     this.reactiveForm = this.formBuilder.group({
       firstname: ['', [Validators.required, CustomValidators.noSpaceAllowed]],
       lastname: ['', [Validators.required, CustomValidators.noSpaceAllowed]],
-      email: ['', [Validators.required, Validators.email]],
-      number: ['', [Validators.required]],
+      email: ['', [Validators.required, CustomValidators.validEmail]],
+      number: [
+        '',
+        [Validators.required, Validators.pattern('^[1-9][0-9]{9}$')],
+      ],
       dateofbirth: ['', [Validators.required]],
       address: this.formBuilder.group({
         s_name: ['', Validators.required],
         street: ['', Validators.required],
-        postal: ['', Validators.required],
+        postal: [
+          '',
+          [Validators.required, Validators.pattern('^[1-9][0-9]{5}$')],
+          // [CustomValidators.postalCodeValidator(this.addressService)],
+        ],
         city: ['', Validators.required],
         state: ['', Validators.required],
         country: ['', Validators.required],
       }),
       house_option: ['A-101', Validators.required],
     });
+  }
+
+  onNextStep(currentStepFields: string[], nextCallback: any) {
+    let isValid = true;
+
+    currentStepFields.forEach((field) => {
+      const control = this.reactiveForm.get(field);
+      if (control) {
+        if (control.invalid) {
+          control.markAsTouched();
+          isValid = false;
+        }
+      }
+    });
+
+    if (isValid) {
+      nextCallback.emit();
+    }
   }
 
   downloadSampleCSV() {
@@ -92,7 +121,6 @@ export class RegisterComponent implements OnInit {
     anchor.click();
   }
 
-  // Method to handle file selection
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (
@@ -118,23 +146,39 @@ export class RegisterComponent implements OnInit {
 
   // Form submission
   OnFormSubmitted() {
-    // Initialize formdata as a new FormData object
     const formdata = new FormData();
 
     if (this.reactiveForm.valid) {
-      // Append the society data
+      if (!this.selectedFile) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Kindly upload CSV file.',
+        });
+        return;
+      }
       formdata.append('society', JSON.stringify(this.reactiveForm.value));
 
-      // Append the selected file if it exists
-      if (this.selectedFile) {
-        formdata.append('file', this.selectedFile);
-      }
-      // Make the API call to register the society
+      formdata.append('file', this.selectedFile);
+
       this.societyService.registerSociety(formdata).subscribe({
-        next: (response) => {
-          console.log('Society registered successfully:', response);
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Your request has been submitted',
+          });
+          setTimeout(() => {
+            this.reactiveForm.reset();
+            this.goToLoginPage();
+          }, 2000);
         },
         error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: error.message || 'Error while processing your request',
+          });
           console.log('Error in registering society:', error.message);
         },
       });
@@ -159,18 +203,31 @@ export class RegisterComponent implements OnInit {
                 country: postOffice.Country,
               },
             });
+
+            this.invalidPostalCode = false;
           } else {
+            this.invalidPostalCode = true;
             console.error('Invalid PIN code or no data found.');
           }
         },
-        error: (error:Error) => {
+        error: (error: Error) => {
+          this.invalidPostalCode = true;
           console.error('Error fetching data:', error);
         },
       });
-    } else if (pincode.length > 6) {
-      console.log('PIN code should be 6 digits only.');
-    } else {
-      console.log('Waiting for 6-digit PIN code...');
+    }
+  }
+
+  validateNumericInput(event: KeyboardEvent): void {
+    const inputElement = event.target as HTMLInputElement | null;
+    const charCode = event.keyCode || event.which;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return;
+    }
+
+    if (inputElement?.value.length === 0 && charCode === 48) {
+      event.preventDefault();
     }
   }
 
