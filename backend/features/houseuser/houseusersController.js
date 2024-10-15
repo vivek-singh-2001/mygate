@@ -1,5 +1,5 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
-const houseuserService = require("./houseusersSservice");
+const houseuserService = require("./houseusersService");
 
 exports.getHouseDetails = asyncErrorHandler(async (req, res, next) => {
   const { id: houseId } = req.params;

@@ -9,13 +9,13 @@ import { AdminService } from './admin/admin.service';
   providedIn: 'root',
 })
 export class AppInitializationService {
-  private isInitialized$ = new BehaviorSubject<boolean>(false);
+  private readonly isInitialized$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-    private authService: AuthService,
-    private userService: UserService,
-    private houseService: HouseService,
-    private adminService: AdminService,
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+    private readonly houseService: HouseService,
+    private readonly adminService: AdminService,
   ) {}
 
   initialize(): Observable<boolean> {
@@ -31,10 +31,9 @@ export class AppInitializationService {
     }
   }
   private fetchUserData(): Observable<boolean> {
-    return this.userService.getCurrentUser().pipe(
+    return this.userService.getUserData().pipe(
       tap((user) => {
-        this.houseService.setHouses(user.data.user.Houses)
-        this.adminService.societydetails().subscribe()
+        this.houseService.setHouses(user.data.Houses)
       }),
       map(() => true)
     );

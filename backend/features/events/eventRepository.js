@@ -5,7 +5,7 @@ const { Event } = db;
 exports.getAllEvents = async (societyId) => {
   return await Event.findAll({
     where: {
-      SocietyId: societyId
+      societyId
     }
   });
 };

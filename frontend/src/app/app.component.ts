@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AppInitializationService } from './services/AppInitialization';
 import { AuthService } from './services/auth/auth.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,13 +12,13 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent  {
   title = 'frontend';
-  private authSubscription = Subscription;
 
   constructor(
-    private appInitializationService: AppInitializationService,
-    private authService: AuthService,
+    private readonly appInitializationService: AppInitializationService,
+    private readonly authService: AuthService,
   ) {
     if (this.authService.isLoggedIn()) {
+      console.log("is initialized called................................")
      this.appInitializationService.initialize().subscribe();
     }
   }

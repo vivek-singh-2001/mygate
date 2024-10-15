@@ -1,0 +1,339 @@
+<section class="container card">
+  <form class="form" [formGroup]="reactiveForm" (ngSubmit)="OnFormSubmitted()">
+    <p-card header="Registration Form">
+      <p-stepper [(activeStep)]="active">
+        <p-stepperPanel>
+          <ng-template
+            pTemplate="header"
+            let-onClick="onClick"
+            let-index="index"
+          >
+            <div
+              class="bg-transparent border-none inline-flex flex-column gap-2"
+            >
+              <span
+                class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
+                [ngClass]="{
+                  'bg-primary border-primary': index <= (active ?? 0),
+                  'surface-border': index > (active ?? 0)
+                }"
+              >
+                <i class="pi pi-user"></i>
+              </span>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="content" let-nextCallback="nextCallback">
+            <div class="flex flex-column gap-2 mx-auto">
+              <div class="column">
+                <div class="input-box">
+                  <input
+                    type="text"
+                    pInputText
+                    placeholder="First Name"
+                    formControlName="firstname"
+                  />
+                  <small
+                    *ngIf="reactiveForm.get('firstname')?.errors?.['required'] && reactiveForm.get('firstname')?.touched"
+                  >
+                    *First Name is a required field.
+                  </small>
+                  <small
+                    *ngIf="reactiveForm.get('firstname')?.errors?.['noSpaceAllowed'] && reactiveForm.get('firstname')?.touched"
+                  >
+                    *No Space is allowed.
+                  </small>
+                </div>
+
+                <div class="input-box">
+                  <input
+                    type="text"
+                    pInputText
+                    placeholder="Last Name"
+                    formControlName="lastname"
+                  />
+                  <small
+                    *ngIf="
+                      reactiveForm.get('lastname')?.invalid &&
+                      reactiveForm.get('lastname')?.touched
+                    "
+                  >
+                    *Last Name is a required field.
+                  </small>
+                  <small
+                    *ngIf="reactiveForm.get('lastname')?.errors?.['noSpaceAllowed'] "
+                  >
+                    *No Space is allowed.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="input-box">
+              <input
+                type="text"
+                placeholder="Email"
+                pInputText
+                formControlName="email"
+              />
+              <small
+                *ngIf="
+                  reactiveForm.get('email')?.invalid &&
+                  reactiveForm.get('email')?.touched
+                "
+              >
+                *Entered Email is not valid.
+              </small>
+            </div>
+            <div class="input-box">
+              <input
+                type="number"
+                maxlength="10"
+                minlength="10"
+                placeholder="Phone Number"
+                pInputText
+                formControlName="number"
+              />
+              <small
+                *ngIf="
+                  reactiveForm.get('number')?.invalid &&
+                  reactiveForm.get('number')?.touched
+                "
+              >
+                *Entered Numberis not valid.
+              </small>
+            </div>
+            <div class="input-box mt-3">
+              <p-calendar
+                placeholder="dateofbirth"
+                formControlName="dateofbirth"
+                [style]="{ width: '100%' }"
+                [maxDate]="today"
+              />
+              <small
+              *ngIf="
+                reactiveForm.get('dateofbirth')?.invalid &&
+                reactiveForm.get('dateofbirth')?.touched
+              "
+            >
+            *Date of Birth is required.
+            </small>
+            </div>
+
+            <div class="flex pt-4 justify-content-end">
+              <p-button
+                (onClick)="nextCallback.emit()"
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+              />
+            </div>
+          </ng-template>
+        </p-stepperPanel>
+        <p-stepperPanel>
+          <ng-template
+            pTemplate="header"
+            let-onClick="onClick"
+            let-index="index"
+          >
+            <div
+              class="bg-transparent border-none inline-flex flex-column gap-2"
+            >
+              <span
+                class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
+                [ngClass]="{
+                          'bg-primary border-primary': index <= (active ??0),
+                          'surface-border': index > (active ??0),
+                      }"
+              >
+                <i class="pi pi-warehouse"></i>
+              </span>
+            </div>
+          </ng-template>
+          <ng-template
+            pTemplate="content"
+            let-prevCallback="prevCallback"
+            let-nextCallback="nextCallback"
+          >
+            <div class="input-box address" formGroupName="address">
+              <input
+                type="text"
+                pInputText
+                placeholder="Society Name"
+                formControlName="s_name"
+              />
+              <small
+                *ngIf="
+                  reactiveForm.get('address.s_name')?.invalid &&
+                  reactiveForm.get('address.s_name')?.touched
+                "
+              >
+                *Society name is a required.
+              </small>
+              <input
+                type="text"
+                pInputText
+                placeholder="Street address "
+                formControlName="street"
+              />
+              <small
+                *ngIf="
+                  reactiveForm.get('address.street')?.invalid &&
+                  reactiveForm.get('address.street')?.touched
+                "
+              >
+                *Street address is a required .
+              </small>
+              <div class="column">
+                <input
+                  type="number"
+                  pInputText
+                  placeholder="Postal code"
+                  formControlName="postal"
+                  (input)="getStateByPincode()"
+                />
+
+                <input
+                  type="text"
+                  pInputText
+                  formControlName="city"
+                  readonly
+                  placeholder="Your city"
+                />
+              </div>
+
+              <div class="column">
+                <input
+                  pInputText
+                  type="text"
+                  formControlName="state"
+                  readonly
+                  placeholder="Your state"
+                />
+                <input
+                  pInputText
+                  type="text"
+                  readonly
+                  formControlName="country"
+                  placeholder="Your country"
+                />
+              </div>
+            </div>
+
+            <div class="flex pt-4 justify-content-between">
+              <p-button
+                (onClick)="prevCallback.emit()"
+                label="Back"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+              />
+              <p-button
+                (onClick)="nextCallback.emit()"
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+              />
+            </div>
+          </ng-template>
+        </p-stepperPanel>
+        <p-stepperPanel>
+          <ng-template
+            pTemplate="header"
+            let-onClick="onClick"
+            let-index="index"
+          >
+            <div
+              class="bg-transparent border-none inline-flex flex-column gap-2"
+            >
+              <span
+                class="border-round border-2 w-3rem h-3rem inline-flex align-items-center justify-content-center"
+                [ngClass]="{
+                  'bg-primary border-primary': index <= (active ?? 0),
+                  'surface-border': index > (active ?? 0)
+                }"
+              >
+                <i class="pi pi-upload"></i>
+              </span>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="content" let-prevCallback="prevCallback">
+            <div class="flex flex-column gap-2 mx-auto">
+              <div class="text-start text-xl font-semibold">
+                Upload Society Details
+              </div>
+
+              <!-- Instruction to Download Sample CSV -->
+              <div class="text-start">
+                <p>
+                  Download the sample CSV to fill out your society details:
+                  <a
+                    class="font-italic text-blue-500 border-bottom-1"
+                    (click)="downloadSampleCSV()"
+                    >Click me</a
+                  >
+                </p>
+              </div>
+
+              <!-- Upload CSV/Excel File -->
+              <div class="mt-2 mb-4">
+                <p>After filling the CSV, upload it below:</p>
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  accept=".csv, .xlsx"
+                />
+              </div>
+
+              <small class="text-red-500" *ngIf="fileError">{{
+                fileError
+              }}</small>
+            </div>
+            <div class="text-start text-xl font-semibold mb-4">
+              Your House Number Preference ?
+            </div>
+
+            <div class="flex flex-wrap justify-content-center gap-3">
+              <p-radioButton
+                formControlName="house_option"
+                label="A-101"
+                name="house_option"
+                value="A-101"
+              />
+              <p-radioButton
+                formControlName="house_option"
+                label="A-11"
+                name="house_option"
+                value="A-11"
+              />
+              <p-radioButton
+                formControlName="house_option"
+                label="A-1001"
+                name="house_option"
+                value="A-1001"
+              />
+            </div>
+
+            <div class="flex pt-4 justify-content-between">
+              <p-button
+                (onClick)="prevCallback.emit()"
+                label="Back"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+              />
+              <p-button
+                label="Submit"
+                (onClick)="OnFormSubmitted()"
+                icon="pi pi-check"
+              />
+            </div>
+          </ng-template>
+        </p-stepperPanel>
+      </p-stepper>
+    </p-card>
+  </form>
+</section>
+
+
+<div class="card flex justify-content-center gap-2">
+  <p-toast />
+</div>

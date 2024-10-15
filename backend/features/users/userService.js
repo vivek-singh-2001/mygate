@@ -1,5 +1,6 @@
 const userRepository = require("./userRepository");
 const CustomError = require("../../utils/CustomError");
+const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 
 exports.getUserById = async (id) => {
   const user = await userRepository.getUserById(id);
@@ -7,18 +8,15 @@ exports.getUserById = async (id) => {
   if (!userData) {
     throw new CustomError(`User with ID ${id} not found`, 404);
   }
-  
-  userData.role = 'Member';
+  // userData.role = userWithRole.Roles?.[0]?.name || null;
   return userData;
 };
 
 exports.updateUser = async (userId, updateData) => {
-  // Check if updateData is empty
   if (Object.keys(updateData).length === 0) {
     throw new CustomError("No update data provided", 400);
   }
 
-  // Allowed fields for update
   const allowedUpdateFields = [
     "firstname",
     "lastname",
@@ -27,7 +25,6 @@ exports.updateUser = async (userId, updateData) => {
     "dateofbirth",
   ];
 
-  // Filter only allowed fields
   const validFields = {};
   Object.keys(updateData).forEach((field) => {
     if (allowedUpdateFields.includes(field)) {
@@ -35,7 +32,6 @@ exports.updateUser = async (userId, updateData) => {
     }
   });
 
-  // Check if validFields is empty
   if (Object.keys(validFields).length === 0) {
     throw new CustomError("No valid fields provided for update", 400);
   }
@@ -45,6 +41,15 @@ exports.updateUser = async (userId, updateData) => {
     throw new CustomError("User not found", 404);
   }
   return updatedUser;
+};
+
+exports.deleteUser = async (userId) => {
+  if (!userId) {
+    throw new CustomError("User not Found", 400);
+  }
+  const deleteUser = await userRepository.deleteUser(userId);
+
+  return deleteUser;
 };
 
 exports.getFamilyMembers = async (userId, houseId) => {

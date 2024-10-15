@@ -11,5 +11,4 @@ const router = express.Router();
 // Define routes
 router.route("/wingHouseDetails/:id").get(protect,getWingHouseDetails)
 
-
 module.exports = router;

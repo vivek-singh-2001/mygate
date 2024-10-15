@@ -3,18 +3,18 @@ module.exports = (connectDB, DataTypes) => {
     "House",
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
       },
       house_no: {
-        type: DataTypes.STRING(10),
+        type: DataTypes.INTEGER,
         allowNull: false,
       }
     },
     {
-      timestamps: true,
+      timestamps: false,
       tableName:'houses'
     }
   );

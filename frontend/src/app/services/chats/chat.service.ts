@@ -3,16 +3,17 @@ import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { HttpClient } from '@angular/common/http';
 import { Observable,BehaviorSubject } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  private socket: Socket;
-  private apiUrl = 'http://localhost:7500/api/v1/chats';
-  private messageSubject = new BehaviorSubject<any>(null);
+  private readonly socket: Socket;
+  private readonly apiUrl = `${environment.apiUrl}/chats`;
+  private readonly messageSubject = new BehaviorSubject<string>('');
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     // Initialize WebSocket connection
     this.socket = io('http://localhost:7500', {
       transports: ['websocket'],
@@ -54,8 +55,8 @@ export class ChatService {
   }
 
   // Fetch chat history between two users
-  getChatHistory(userId1: number, userId2: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/history/${userId1}/${userId2}`);
+  getChatHistory(userId1: number, userId2: number): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}/history/${userId1}/${userId2}`);
   }
 }
 

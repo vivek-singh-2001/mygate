@@ -1,20 +1,19 @@
 const { db } = require("../../config/connection");
-const { User, HouseUser, House, Wing, Society } = db;
+const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole } = db;
 
 exports.getUserById = (id) => {
   return User.findOne({
     where: { id },
     attributes: {
-      include: [
-        "id",
-        "email",
-        "firstname",
-        "lastname",
-        "number",
-        "passcode",
-        "isMember",
-        "isOwner",
-        'dateofbirth'
+      exclude: [
+        "createdAt",
+        "otp",
+        "otpExpiry",
+        "password",
+        "passwordChangedAt",
+        "passwordResetToken",
+        "passwordResetTokenExpires",
+        "updatedAt",
       ],
     },
     include: [
@@ -22,33 +21,44 @@ exports.getUserById = (id) => {
         model: House,
         as: "Houses",
         attributes: {
-          exclude: ['createdAt', 'updatedAt']
+          exclude: ["createdAt", "updatedAt"],
         },
         include: [
           {
-            model: Wing,
-            as: "Wing",
+            model: Floor,
+            as: "Floor",
             include: [
               {
-                model: Society,
-                as: "Society",
-                attributes: {
-                  exclude: [
-                    'createdAt',
-                    'updatedAt'
-                  ]
-                }
+                model: Wing,
+                as: "Wing",
+                attributes: ["id", "name", "societyId"],
+                include: [
+                  {
+                    model: Society,
+                    as: "Society",
+                    attributes: ["id", "name", "address"],
+                  },
+                ],
               },
             ],
           },
         ],
       },
+      {
+        model: Role,
+        as: "Roles",
+        through: {
+          model: UserRole,
+          attributes: [],
+        },
+        attributes: ["id", "name"],
+      },
     ],
   });
 };
 
-exports.updateUser = (userId, updateData) => {
-  return User.update(updateData, { where: { id: userId } }).then(
+exports.updateUser = async (userId, updateData) => {
+  return await User.update(updateData, { where: { id: userId } }).then(
     ([updated]) => {
       if (updated) {
         return User.findOne({ where: { id: userId } });
@@ -58,17 +68,35 @@ exports.updateUser = (userId, updateData) => {
   );
 };
 
+exports.deleteUser = async (userId) => {
+  try {
+    console.log(userId);
+    
+    const user = await User.findByPk(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    await User.destroy({ where: { id: userId } });
+    return { message: "User deleted successfully" };
+  } catch (error) {
+    console.error("Error deleting user:", error.message);
+    throw error;
+  }
+};
+
 exports.findFamilyMembers = async (userId, houseId) => {
   const houseUser = await HouseUser.findOne({
-    where: { UserId: userId, HouseId: houseId },
-    attributes: ["HouseId"],
+    where: { userId, houseId },
+    attributes: ["houseId"],
   });
 
   if (!houseUser) {
     return [];
   }
 
-  const userHouseId = houseUser.HouseId;
+  const userHouseId = houseUser.houseId;
 
   return User.findAll({
     include: [
@@ -83,14 +111,15 @@ exports.findFamilyMembers = async (userId, houseId) => {
 };
 
 exports.createFamilyMember = async (userData) => {
-  const { firstname, lastname, number, email, dateofbirth, houseId ,isOwner} = userData;
+  const { firstname, lastname, number, email, dateofbirth, houseId, isOwner } =
+    userData;
   const newUser = await User.create({
     firstname,
     lastname,
     number,
     email,
     dateofbirth,
-    isOwner
+    isOwner,
   });
   await HouseUser.create({ UserId: newUser.id, HouseId: houseId });
   return newUser;

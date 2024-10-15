@@ -5,16 +5,25 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("houses", {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
       },
       house_no: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
-     
+      floorId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: 'floors',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
     });
   },
 

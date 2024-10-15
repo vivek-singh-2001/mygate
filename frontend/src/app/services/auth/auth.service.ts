@@ -8,26 +8,25 @@ import {
   Subscription,
   throwError,
   catchError,
-  finalize,
 } from 'rxjs';
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
-import { AdminService } from '../admin/admin.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:7500/api/v1/auth';
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
+  
   private subscription: Subscription | undefined;
 
   constructor(
-    private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute,
-    private userService: UserService,
-    private houseService: HouseService,
-    private adminService: AdminService
+    private  readonly http: HttpClient,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly userService: UserService,
+    private readonly houseService: HouseService,
   ) {}
 
   // Login with email and password
@@ -35,29 +34,33 @@ export class AuthService {
     const loginData = { email, password };
     return this.http.post<any>(`${this.apiUrl}/login`, loginData).pipe(
       switchMap((response) => {
+        console.log("ress login", response);
+        
         const token = response.token;
         if (token) {
           localStorage.setItem('authToken', token);
           localStorage.setItem('isLoggedIn', 'true');
         }
-        // Return new observable to fetch user data
         return this.userService.getCurrentUser();
       }),
       tap((user) => {
-        // Set houses after getting the user
-        console.log('user after login', user);
-
-        this.houseService.setHouses(user.data.user.Houses);
-        this.adminService.societydetails().subscribe();
-      }),
-      finalize(() => {
-        // Navigate only after a successful login
-        this.router.navigate(['/home']);
+        console.log("dwdwdwdwdbwdbwbdwbdwudbwudbwubd",user);
+        
+        this.userService.userRoles$.subscribe({
+          next: (roles) => {
+            console.log(roles);
+            if (roles.includes('systemAdmin')) {
+              this.router.navigate(['/systemAdmin']);
+            }
+            else{
+              this.router.navigate(['/home']);
+            }
+          },
+        });
+        this.houseService.setHouses(user.data.Houses);
       }),
       catchError((error) => {
-        // Handle error (wrong credentials)
         console.error('Login failed: ', error);
-        // Optionally, you can show an error message here
         return throwError(() => new Error('Login failed'));
       })
     );
@@ -77,8 +80,7 @@ export class AuthService {
         // Fetch user data and navigate after token is set
         this.userService.getCurrentUser().subscribe({
           next: (user) => {
-            this.houseService.setHouses(user.data.user.Houses);
-            this.adminService.societydetails().subscribe(); //to set the admin status
+            this.houseService.setHouses(user.data.Houses);
             this.router.navigate(['/home'], { replaceUrl: true });
           },
           error: (error) => console.error('Error fetching user data:', error),
@@ -110,9 +112,8 @@ export class AuthService {
     const token = localStorage.getItem('authToken');
     if (token) {
       const decodedToken = this.decodeToken(token);
-      return decodedToken.exp * 1000 > Date.now(); // Check if token is still valid
+      return decodedToken.exp * 1000 > Date.now();
     }
-
     return false;
   }
 
@@ -120,6 +121,7 @@ export class AuthService {
     try {
       return JSON.parse(atob(token.split('.')[1]));
     } catch (error) {
+      console.error(error);
       return null;
     }
   }

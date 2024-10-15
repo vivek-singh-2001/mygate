@@ -1,12 +1,17 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './components/login/login.component';
-import { HomeComponent } from './views/home/home.component';
+import { HomeComponent } from './layouts/user/home.component';
 import { AuthGuard } from './gaurds/auth.guard';
+import { NonSystemAdminGuard } from './gaurds/not-system-admin.gaurd';
+import { DashboardComponent } from './components/User/Dashboard/dashboard.component';
+import { AdminGuard } from './gaurds/admin.gaurd';
+import { SystemAdminComponent } from './layouts/system-admin/system-admin.component';
+import { SystemAdminGuard } from './gaurds/system-admin.guard';
+import { UnauthorizedComponent } from './components/shared/unauthorized/unauthorized.component';
+import { RegisterComponent } from './components/shared/register/register.component';
+import { LoginComponent } from './components/shared/login/login.component';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
-import { AdminGuard } from './services/admin/admin.gaurd';
-import { DashboardComponent } from './components/Dashboard/dashboard.component';
-import { RegisterComponent } from './components/register/register.component';
+import { PageNotFoundComponent } from './components/shared/pageNotFound/page-not-found.component';
 export const routes: Routes = [
   {
     path: 'login',
@@ -16,7 +21,6 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
-
   },
   {
     path: 'google/success',
@@ -25,7 +29,7 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, NonSystemAdminGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
@@ -35,21 +39,21 @@ export const routes: Routes = [
       {
         path: 'messages',
         loadComponent: () =>
-          import('./components/chats/chats.component').then(
+          import('./components/User/chats/chats.component').then(
             (chat) => chat.ChatsComponent
           ),
       },
       {
         path: 'profile',
         loadComponent: () =>
-          import('./components/user-detail/user-detail.component').then(
+          import('./components/User/user-detail/user-detail.component').then(
             (user) => user.UserDetailComponent
           ),
       },
       {
         path: 'apartments',
         loadComponent: () =>
-          import('./components/apartment/apartment.component').then(
+          import('./components/User/apartment/apartment.component').then(
             (a) =>a.ApartmentComponent 
           ),
         canActivate: [AdminGuard],
@@ -57,17 +61,16 @@ export const routes: Routes = [
       {
         path: 'apartments/wingDetails/:name/:id',
         loadComponent: () =>
-          import('./components/apartment/wing-details/wing-details.component').then(
+          import('./components/User/apartment/wing-details/wing-details.component').then(
             (w) =>w.WingDetailsComponent 
           ),
         canActivate: [AdminGuard],
       },
-      
       {
         path: 'apartments/allocate-house',
         loadComponent: () =>
           import(
-            './components/admin/allocate-house/allocate-house.component'
+            './components/User/admin/allocate-house/allocate-house.component'
           ).then((a) =>a.AllocateHouseComponent ),
         canActivate: [AdminGuard],
       },
@@ -75,12 +78,29 @@ export const routes: Routes = [
         path: 'apartments/users',
         loadComponent: () =>
           import(
-            './components/admin/society-users/society-users.component'
+            './components/User/admin/society-users/society-users.component'
           ).then((w) => w.SocietyUsersComponent),
         canActivate: [AdminGuard],
       },
     ],
   },
+  {
+    path: 'systemAdmin',
+    component: SystemAdminComponent,
+    canActivate: [AuthGuard, SystemAdminGuard],
+    children: [
+      { path: '', redirectTo: 'societies', pathMatch: 'full' },
+      {
+        path:'societies',
+        canActivate:[SystemAdminGuard],
+        loadComponent:()=>
+          import(
+            './components/systemAdmin/society-list/society-list.component'
+          ).then((s)=>s.SocietyListComponent)
+      }
+    ]
+  },
+  { path: 'unauthorized', component: UnauthorizedComponent },
   {
     path: '',
     redirectTo: 'login',
@@ -88,6 +108,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'login',
+    component: PageNotFoundComponent,  
   },
+  { path: 'unauthorized', component: UnauthorizedComponent },
 ];

@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "build:prod": "ng build --configuration production",
+    "build": "npm run clean && ng build",
+    "build:prod": "npm run clean && ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "clean": "rimraf dist"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +22,7 @@
     "@angular/platform-browser": "^18.1.0",
     "@angular/platform-browser-dynamic": "^18.1.0",
     "@angular/router": "^18.1.0",
+    "csv-parser": "^3.0.0",
     "ngx-cookie-service": "^18.0.0",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
@@ -46,6 +48,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "mini-css-extract-plugin": "^2.9.1",
+    "rimraf": "^6.0.1",
     "source-map-explorer": "^2.5.3",
     "terser-webpack-plugin": "^5.3.10",
     "typescript": "~5.5.2",

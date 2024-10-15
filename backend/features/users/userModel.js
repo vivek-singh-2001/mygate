@@ -1,4 +1,3 @@
-const { types } = require("pg");
 const crypto = require("crypto");
 const validator = require("validator");
 
@@ -7,9 +6,9 @@ module.exports = (connectDB, DataTypes) => {
     "User",
     {
       id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
         allowNull: false,
       },
       firstname: {
@@ -53,14 +52,6 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
       },
-      isOwner: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
-      isMember: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-      },
       passwordChangedAt: {
         type: DataTypes.DATE,
         allowNull: true,
@@ -73,18 +64,17 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      photo:{
+      photo: {
         type: DataTypes.STRING,
         allowNull: true,
-      }
+      },
     },
     {
-      tableName:'Users',
+      tableName: "users",
       hooks: {
         beforeCreate: async (user) => {
           if (!user.password) {
             const generatedPassword = user.generatePassword();
-            console.log(generatedPassword);
             user.password = await encryptPassword(generatedPassword);
           } else {
             validatePassword(user.password);

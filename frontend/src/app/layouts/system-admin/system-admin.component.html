@@ -1,0 +1,21 @@
+<div class="page-view">
+  <header class="navigation">
+    <app-system-admin-navigation></app-system-admin-navigation>
+  </header>
+  <div class="content-wrapper">
+    <div class="side-nav">
+      <app-system-admin-side-navigation
+        (expansionChanged)="onSidebarExpansionChanged($event)"
+      ></app-system-admin-side-navigation>
+    </div>
+
+    <div
+      class="main-display"
+      [ngClass]="{ 'content-shifted': isSidebarExpanded }"
+    >
+      <router-outlet>
+        <div class="w-250 h-250"></div>
+      </router-outlet>
+    </div>
+  </div>
+</div>

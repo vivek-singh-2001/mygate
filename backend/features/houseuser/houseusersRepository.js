@@ -5,18 +5,15 @@ const { User, Wing, Society, HouseUser, House } = db;
 exports.getHouseDetailsById = async (houseId) => {
   try {
     const houseDetails = await HouseUser.findAll({
-      where: { HouseId: houseId },
-      attributes: ["UserId", "id"],
-      include:[
+      where: { houseId },
+      attributes: ["userId", "id"],
+      include: [
         {
-          model:User,
-          attributes:['id', 'firstname','lastname','number','email','isOwner'],
+          model: User,
+          attributes: ["id", "firstname", "lastname", "number", "email"],
         },
-        
-      ]
+      ],
     });
-    
-
     return houseDetails;
   } catch (e) {
     throw new Error(e.message);

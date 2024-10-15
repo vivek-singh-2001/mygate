@@ -5,17 +5,17 @@ module.exports = (connectDB, DataTypes) => {
     "Chat",
     {
       id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
+        allowNull: false
       },
       senderId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
-        
       },
       receiverId: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
       },
       message: {
@@ -26,7 +26,6 @@ module.exports = (connectDB, DataTypes) => {
     {
       timestamps: true,
       tableName: 'chats',
-      
     }
   );
 

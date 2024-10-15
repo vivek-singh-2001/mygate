@@ -5,28 +5,37 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("chats", {
       id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUID,
         primaryKey: true,
+        allowNull: false,
       },
       senderId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
       },
       receiverId: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
         allowNull: false,
       },
       message: {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+      }
     });
   },
 
   async down(queryInterface, Sequelize) {
-    
-     await queryInterface.dropTable('chats');
-     
+    await queryInterface.dropTable("chats");
   },
 };

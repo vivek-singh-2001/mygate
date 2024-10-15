@@ -1,46 +1,32 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Floors', {
-      floor_id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
+    await queryInterface.createTable("floors", {
+      id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        allowNull: false
-      },
-      wing_id: {
-        type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Wings', // Name of the table you have for Wing
-          key: 'wing_id'
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE'
       },
       floor_number: {
         type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      number_of_houses: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-      },
-      createdAt: {
-        type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn('NOW')
       },
-      updatedAt: {
-        type: Sequelize.DATE,
+      wingId: {
+        type: Sequelize.UUID,
         allowNull: false,
-        defaultValue: Sequelize.fn('NOW')
-      }
+        references: {
+          model: "wings",
+          key: "id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Floors');
-  }
+    await queryInterface.dropTable("Floors");
+  },
 };

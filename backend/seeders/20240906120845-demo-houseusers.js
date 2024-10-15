@@ -1,56 +1,54 @@
-"use strict";
+'use strict';
+
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const houseUsers = [];
-    const totalUsers = 500;
-    const totalHouses = 40;
-    const maxUsersPerHouse = 6;
+    // Fetch all houses
+    const houses = await queryInterface.sequelize.query(
+      'SELECT id FROM "houses";',
+      { type: Sequelize.QueryTypes.SELECT }
+    );
 
-    // Create a map to track how many users have been assigned to each house
-    const houseUserCount = {};
+    const users = await queryInterface.sequelize.query(
+      'SELECT id FROM "users" ORDER BY "createdAt" ASC;',
+      { type: Sequelize.QueryTypes.SELECT }
+    );
 
-    // Loop through each user and assign them to a house if available
-    for (let UserId = 1; UserId <= totalUsers; UserId++) {
-      // Find a random houseId to allot the user
-      let HouseId;
-      let foundHouse = false;
-
-      while (!foundHouse) {
-        // Find a random houseId between 1 and totalHouses
-        HouseId = Math.floor(Math.random() * totalHouses) + 1;
-        
-        // Check if the house already has 6 users
-        if (
-          !houseUserCount[HouseId] ||
-          houseUserCount[HouseId] < maxUsersPerHouse
-        ) {
-          houseUserCount[HouseId] = houseUserCount[HouseId]
-            ? houseUserCount[HouseId] + 1
-            : 1;
-          foundHouse = true;
-        }
-      }
-
-      // Add the house-user relationship
-      houseUsers.push({
-        UserId,
-        HouseId,
-      });
-
-      // Stop if all users are allotted
-      if (
-        Object.keys(houseUserCount).length >= totalHouses &&
-        houseUserCount[HouseId] >= maxUsersPerHouse
-      ) {
-        break;
-      }
+    if (houses.length < 140 || users.length < 500) {
+      throw new Error('Not enough houses or users found. Ensure you have at least 140 houses and 500 users.');
     }
 
-    await queryInterface.bulkInsert("houseUsers", houseUsers, {});
+    const houseUsers = [];
+
+    houses.forEach((house, index) => {
+      const owner = users[index];
+      houseUsers.push({
+        id: uuidv4(),
+        houseId: house.id,
+        userId: owner.id,
+      });
+    });
+
+    // Assign the remaining 360 users as family members to the houses
+    let houseIndex = 0;
+    for (let i = 140; i < users.length; i++) {
+      houseUsers.push({
+        id: uuidv4(),
+        houseId: houses[houseIndex].id, // Assign family members to houses in a round-robin manner
+        userId: users[i].id,
+      });
+
+      // Move to the next house after each assignment (round-robin)
+      houseIndex = (houseIndex + 1) % houses.length;
+    }
+
+    // Insert the houseUsers into the database
+    await queryInterface.bulkInsert('houseUsers', houseUsers, {});
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("houseUsers", null, {});
+    // Delete all entries from the houseUsers table
+    await queryInterface.bulkDelete('houseUsers', null, {});
   },
 };
