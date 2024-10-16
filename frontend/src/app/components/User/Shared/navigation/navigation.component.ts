@@ -59,6 +59,7 @@ export class NavigationComponent implements OnInit {
       {
         label: 'Home',
         icon: 'pi pi-home',
+        command: () => this.goToHome(),
       },
       {
         label: this.selectedHouse || 'N/A',
@@ -133,8 +134,11 @@ export class NavigationComponent implements OnInit {
     });
   }
 
+  goToHome() {
+    this.router.navigate(['/home']);
+  }
+
   goToProfile() {
-    console.log('Navigate to profile');
     this.router.navigate(['/home/profile']);
   }
 

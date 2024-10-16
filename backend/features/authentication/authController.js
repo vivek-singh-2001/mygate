@@ -40,6 +40,7 @@ exports.protect = asyncErrorHandler(async (req, res, next) => {
 exports.googleAuth = passport.authenticate("google", {
   scope: ["profile", "email"],
 });
+
 exports.googleAuthCallback = passport.authenticate("google", {
   failureRedirect: "/login",
 });

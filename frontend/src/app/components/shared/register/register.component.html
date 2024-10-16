@@ -77,51 +77,75 @@
               />
               <small
                 *ngIf="
-                  reactiveForm.get('email')?.invalid &&
+                  reactiveForm.get('email')?.errors?.['required'] &&
                   reactiveForm.get('email')?.touched
                 "
               >
-                *Entered Email is not valid.
+                *Email is required.
+              </small>
+              <small
+                *ngIf="
+                  reactiveForm.get('email')?.errors?.['invalidEmail'] &&
+                  reactiveForm.get('email')?.touched
+                "
+              >
+                *Please enter a valid email address.
               </small>
             </div>
             <div class="input-box">
               <input
-                type="number"
+                type="tel"
+                pattern="[0-9]{10}"
                 maxlength="10"
-                minlength="10"
                 placeholder="Phone Number"
                 pInputText
                 formControlName="number"
+                inputmode="numeric"
+                (keypress)="validateNumericInput($event)"
               />
               <small
                 *ngIf="
-                  reactiveForm.get('number')?.invalid &&
+                  reactiveForm.get('number')?.errors?.['required'] &&
                   reactiveForm.get('number')?.touched
                 "
               >
-                *Entered Numberis not valid.
+                *Phone number is required.
+              </small>
+              <small
+                *ngIf="
+                  reactiveForm.get('number')?.hasError('pattern') &&
+                  !reactiveForm.get('number')?.errors?.['required'] &&
+                  reactiveForm.get('number')?.touched
+                "
+              >
+                *Please enter a valid phone number.
               </small>
             </div>
             <div class="input-box mt-3">
               <p-calendar
-                placeholder="dateofbirth"
+                placeholder="DOB"
                 formControlName="dateofbirth"
                 [style]="{ width: '100%' }"
                 [maxDate]="today"
               />
               <small
-              *ngIf="
-                reactiveForm.get('dateofbirth')?.invalid &&
-                reactiveForm.get('dateofbirth')?.touched
-              "
-            >
-            *Date of Birth is required.
-            </small>
+                *ngIf="
+                  reactiveForm.get('dateofbirth')?.invalid &&
+                  reactiveForm.get('dateofbirth')?.touched
+                "
+              >
+                *Date of Birth is required.
+              </small>
             </div>
 
             <div class="flex pt-4 justify-content-end">
               <p-button
-                (onClick)="nextCallback.emit()"
+                (onClick)="
+                  onNextStep(
+                    ['firstname', 'lastname', 'email', 'number', 'dateofbirth'],
+                    nextCallback
+                  )
+                "
                 label="Next"
                 icon="pi pi-arrow-right"
                 iconPos="right"
@@ -154,84 +178,145 @@
             let-prevCallback="prevCallback"
             let-nextCallback="nextCallback"
           >
-            <div class="input-box address" formGroupName="address">
-              <input
-                type="text"
-                pInputText
-                placeholder="Society Name"
-                formControlName="s_name"
-              />
-              <small
-                *ngIf="
-                  reactiveForm.get('address.s_name')?.invalid &&
-                  reactiveForm.get('address.s_name')?.touched
-                "
-              >
-                *Society name is a required.
-              </small>
-              <input
-                type="text"
-                pInputText
-                placeholder="Street address "
-                formControlName="street"
-              />
-              <small
-                *ngIf="
-                  reactiveForm.get('address.street')?.invalid &&
-                  reactiveForm.get('address.street')?.touched
-                "
-              >
-                *Street address is a required .
-              </small>
-              <div class="column">
-                <input
-                  type="number"
-                  pInputText
-                  placeholder="Postal code"
-                  formControlName="postal"
-                  (input)="getStateByPincode()"
-                />
-
+            <div formGroupName="address">
+              <div class="input-box">
                 <input
                   type="text"
                   pInputText
-                  formControlName="city"
-                  readonly
-                  placeholder="Your city"
+                  placeholder="Society Name"
+                  formControlName="s_name"
                 />
+                <small
+                  *ngIf="
+                    reactiveForm.get('address.s_name')?.invalid &&
+                    reactiveForm.get('address.s_name')?.touched
+                  "
+                >
+                  *Society name is required.
+                </small>
+              </div>
+              <div class="input-box">
+                <input
+                  type="text"
+                  pInputText
+                  placeholder="Street address "
+                  formControlName="street"
+                />
+                <small
+                  *ngIf="
+                    reactiveForm.get('address.street')?.invalid &&
+                    reactiveForm.get('address.street')?.touched
+                  "
+                >
+                  *Street address is required.
+                </small>
               </div>
 
-              <div class="column">
-                <input
-                  pInputText
-                  type="text"
-                  formControlName="state"
-                  readonly
-                  placeholder="Your state"
+              <div class="flex flex-column gap-2 mx-auto">
+                <div class="column">
+                  <div class="input-box">
+                    <input
+                      type="text"
+                      pInputText
+                      placeholder="Postal code"
+                      formControlName="postal"
+                      maxlength="6"
+                      pattern="[0-9]*"
+                      inputmode="numeric"
+                      (keypress)="validateNumericInput($event)"
+                      (input)="getStateByPincode()"
+                    />
+                    <small
+                      *ngIf="
+                        reactiveForm.get('address.postal')?.errors?.['required'] &&
+                        reactiveForm.get('address.postal')?.touched
+                      "
+                    >
+                      *Pincode is required.
+                    </small>
+                    <small
+                      *ngIf="
+                        reactiveForm.get('address.postal')?.hasError('pattern') &&
+                        !reactiveForm.get('address.postal')?.errors?.['required'] &&
+                        reactiveForm.get('address.postal')?.touched
+                      "
+                      class="p-error"
+                    >
+                      *Pincode must be 6 digits.
+                    </small>
+                    <small
+                      *ngIf="
+                        invalidPostalCode &&
+                        !reactiveForm.get('address.postal')?.errors?.['required'] &&
+                        !reactiveForm.get('address.postal')?.hasError('pattern')
+                      "
+                      class="p-error"
+                    >
+                      *Invalid Pincode.
+                    </small>
+                  </div>
+
+                  <div class="input-box">
+                    <input
+                      type="text"
+                      pInputText
+                      formControlName="city"
+                      readonly
+                      placeholder="Your city"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-column gap-2 mx-auto">
+                <div class="column">
+                  <div class="input-box">
+                    <input
+                      pInputText
+                      type="text"
+                      formControlName="state"
+                      readonly
+                      placeholder="Your state"
+                    />
+                  </div>
+                  <div class="input-box">
+                    <input
+                      pInputText
+                      type="text"
+                      readonly
+                      formControlName="country"
+                      placeholder="Your country"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex pt-4 justify-content-between">
+                <p-button
+                  (onClick)="prevCallback.emit()"
+                  label="Back"
+                  severity="secondary"
+                  icon="pi pi-arrow-left"
                 />
-                <input
-                  pInputText
-                  type="text"
-                  readonly
-                  formControlName="country"
-                  placeholder="Your country"
+                <p-button
+                  (onClick)="
+                    onNextStep(
+                      [
+                        'address.s_name',
+                        'address.street',
+                        'address.postal',
+                        'address.city',
+                        'address.state',
+                        'address.country'
+                      ],
+                      nextCallback
+                    )
+                  "
+                  label="Next"
+                  icon="pi pi-arrow-right"
+                  iconPos="right"
                 />
               </div>
-            </div>
-
-            <div class="flex pt-4 justify-content-between">
-              <p-button
-                (onClick)="prevCallback.emit()"
-                label="Back"
-                severity="secondary"
-                icon="pi pi-arrow-left"
-              />
-              <p-button
-                (onClick)="nextCallback.emit()"
-                label="Next"
-                icon="pi pi-arrow-right"
-                iconPos="right"
-              />
             </div>
           </ng-template>
         </p-stepperPanel>
@@ -332,7 +417,6 @@
     </p-card>
   </form>
 </section>
-
 
 <div class="card flex justify-content-center gap-2">
   <p-toast />

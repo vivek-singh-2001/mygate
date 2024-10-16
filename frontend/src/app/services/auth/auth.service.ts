@@ -44,8 +44,6 @@ export class AuthService {
         return this.userService.getCurrentUser();
       }),
       tap((user) => {
-        console.log("dwdwdwdwdbwdbwbdwbdwudbwudbwubd",user);
-        
         this.userService.userRoles$.subscribe({
           next: (roles) => {
             console.log(roles);
@@ -61,7 +59,7 @@ export class AuthService {
       }),
       catchError((error) => {
         console.error('Login failed: ', error);
-        return throwError(() => new Error('Login failed'));
+        return throwError(() => new Error(error.message));
       })
     );
   }

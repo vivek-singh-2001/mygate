@@ -1,7 +1,7 @@
 <div class="main-container">
   <div class="login-container">
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      <p-card header="login " [style]="{ width: '360px' }">
+      <p-card header="Login " [style]="{ width: '360px' }">
         <div class="field">
           <label for="email">Email</label>
           <input
@@ -21,7 +21,7 @@
           </small>
         </div>
         <div class="field">
-          <label for="password">password</label>
+          <label for="password">Password</label>
           <input
             type="password"
             pInputText
@@ -51,6 +51,7 @@
           styleClass="w-full"
           severity="contrast"
           (click)="onGoogleLogin()"
+          (keypress)="handleKeyPress($event)"
         >
           <span class="flex align-items-center">
             <img
@@ -58,9 +59,10 @@
               alt="Google"
               style="width: 24px; height: 24px; margin-right: 36px"
             />
-            <b>Login In with Google</b>
+            <b>Login with Google</b>
           </span>
         </p-button>
+
         <hr class="my-3" />
         <p-button styleClass="w-full" severity="contrast">
           <span class="flex align-items-center">
@@ -69,13 +71,17 @@
               alt="Google"
               style="width: 24px; height: 24px; margin-right: 36px"
             />
-            <b>Login In with Number</b>
+            <b>Login with Number</b>
           </span>
         </p-button>
         <p class="justify-content-center flex align-items-center mt-4">
-          Connect with Us ? <a href="/register"> Register</a>
+          Connect with Us?&nbsp;<a href="/register">Register</a>
         </p>
       </p-card>
     </form>
   </div>
+</div>
+
+<div class="card flex justify-content-center gap-2">
+  <p-toast />
 </div>

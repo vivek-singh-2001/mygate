@@ -9,7 +9,7 @@ import { AppComponent } from '../../app.component';
   template: `<p><app-root></app-root></p>`,
 })
 export class GoogleCallbackComponent implements OnInit {
-  constructor(private authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
   ngOnInit(): void {
     this.authService.handleGoogleLoginCallback();

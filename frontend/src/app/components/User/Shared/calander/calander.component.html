@@ -6,7 +6,7 @@
     <div class="flex gap-1 flex-column align-item-center">
       <span>{{ currentMonth | date : "MMMM yyyy" }}</span>
       @if(isAdmin){
-      <button (click)="addEvent()" class="add-event-btn">Add Event</button>
+      <p-button (onClick)="addEvent()" class="add-event-btn">Add Event</p-button>
       }
     </div>
     <p-button pRipple (onClick)="changeMonth(1)">&#8250;</p-button>
