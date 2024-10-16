@@ -12,6 +12,7 @@ import { LoginComponent } from './components/shared/login/login.component';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { PageNotFoundComponent } from './components/shared/pageNotFound/page-not-found.component';
+import { SecurityGaurdComponent } from './components/Staff/SecurityGaurd/security-gaurd.component';
 export const routes: Routes = [
   {
     path: 'login',
@@ -56,7 +57,7 @@ export const routes: Routes = [
           import('./components/User/Admin/apartment/apartment.component').then(
             (a) =>a.ApartmentComponent 
           ),
-        canActivate: [AdminGuard],
+        canActivate: [AdminGuard,],
       },
       {
         path: 'apartments/wingDetails/:name/:id',
@@ -64,7 +65,7 @@ export const routes: Routes = [
           import('./components/User/Admin/apartment/wing-details/wing-details.component').then(
             (w) =>w.WingDetailsComponent 
           ),
-        canActivate: [AdminGuard],
+        canActivate: [AdminGuard,],
       },
       {
         path: 'apartments/allocate-house',
@@ -72,7 +73,7 @@ export const routes: Routes = [
           import(
             './components/User/Admin/allocate-house/allocate-house.component'
           ).then((a) =>a.AllocateHouseComponent ),
-        canActivate: [AdminGuard],
+        canActivate: [AdminGuard,],
       },
       {
         path: 'apartments/users',
@@ -80,7 +81,23 @@ export const routes: Routes = [
           import(
             './components/User/Admin/society-users/society-users.component'
           ).then((w) => w.SocietyUsersComponent),
-        canActivate: [AdminGuard],
+        canActivate: [AdminGuard,],
+      },
+      {
+        path: 'apartments/AddSecurityGaurd',
+        loadComponent: () =>
+          import(
+            './components/Staff/SecurityGaurd/security-gaurd.component'
+          ).then((g) =>g.SecurityGaurdComponent ),
+        canActivate: [AdminGuard,],
+      },
+      {
+        path: 'apartments/AssignShift',
+        loadComponent: () =>
+          import(
+            './components/Staff/assign-role/assign-role.component'
+          ).then((g) =>g.AssignRoleComponent ),
+        canActivate: [AdminGuard,],
       },
     ],
   },
@@ -100,6 +117,8 @@ export const routes: Routes = [
       }
     ]
   },
+  { path: 'test', component: SecurityGaurdComponent },
+
   { path: 'unauthorized', component: UnauthorizedComponent },
   {
     path: '',
