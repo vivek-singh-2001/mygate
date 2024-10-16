@@ -6,7 +6,10 @@ exports.getAllEvents = async (societyId) => {
 };
 
 exports.createEvent = async (eventData) => {
-  return await eventRepository.createEvent(eventData);
+  const newEvent =  await eventRepository.createEvent(eventData);
+  console.log("new event",newEvent);
+  return newEvent
+  
 };
 
 exports.updateEvent = async (id, eventData, userRole) => {

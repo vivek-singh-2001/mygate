@@ -37,20 +37,20 @@ export class CalanderComponent implements OnInit {
   tooltipContent: string = '';
   tooltipPosition = { top: '0px', left: '0px' };
   isAdmin: boolean = false;
-  societyId!: number;
+  societyId!: string;
 
   eventData = {
     title: '',
     description: '',
     start_date: null,
-    SocietyId: 0,
+    SocietyId: '',
   };
 
   constructor(
     private readonly eventService: EventService,
     private readonly userService: UserService,
     private readonly appInitializationService: AppInitializationService,
-    private readonly authService:AuthService
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -59,10 +59,11 @@ export class CalanderComponent implements OnInit {
         if (isInitialized || this.authService.isLoggedIn()) {
           this.userService.userSocietyId$.subscribe({
             next: (societyId) => {
+              this.societyId = societyId;
               this.eventService.getEvents(societyId).subscribe({
                 next: (events) => {
                   this.events = events;
-                  this.generateCalendar(this.currentMonth); // Generate calendar after fetching events
+                  this.generateCalendar(this.currentMonth);
                 },
                 error: (eventError) => {
                   console.error('Failed to fetch events:', eventError);
@@ -76,8 +77,8 @@ export class CalanderComponent implements OnInit {
 
           this.userService.userRoles$.subscribe({
             next: (roleArray) => {
-              if(roleArray.includes('societyAdmin')){
-                this.isAdmin = true
+              if (roleArray.includes('societyAdmin')) {
+                this.isAdmin = true;
               }
             },
             error: (adminError) => {
@@ -88,7 +89,7 @@ export class CalanderComponent implements OnInit {
           this.eventService.events$.subscribe({
             next: (updatedEvents) => {
               this.events = updatedEvents;
-              this.generateCalendar(this.currentMonth); // Regenerate calendar with updated events
+              this.generateCalendar(this.currentMonth);
             },
             error: (updateError) => {
               console.error('Failed to fetch updated events:', updateError);
@@ -180,9 +181,15 @@ export class CalanderComponent implements OnInit {
     this.addEventFlag = false;
     this.eventData.SocietyId = this.societyId;
     console.log('eventData', this.eventData);
-    this.eventService.addEvent(this.eventData).subscribe();
-    this.eventData.title = '';
-    this.eventData.description = '';
-    this.eventData.start_date = null;
+    this.eventService.addEvent(this.eventData).subscribe({
+      next: () => {
+        this.eventData.title = '';
+        this.eventData.description = '';
+        this.eventData.start_date = null;
+      },
+      error:(err)=>{
+        console.error(err)
+      }
+    });
   }
 }

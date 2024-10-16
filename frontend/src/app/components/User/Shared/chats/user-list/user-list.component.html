@@ -6,7 +6,7 @@
     <ul class="user-list">
       <li
         *ngFor="let user of SocietyUsers"
-        (click)="selectUser(user)"
+        (onClick)="selectUser(user)"
         class="user-card"
       >
         {{ user.firstname }}

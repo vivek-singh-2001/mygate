@@ -1,3 +1,63 @@
-<div class="dashboardd">
-<app-calander></app-calander>
+<!-- <div class="row flex">
+  <div class="card flex flex-1 bg-red-300">
+    <div class="photo flex-1">
+      <i class="icon pi pi-bell" style="font-size: 4rem"></i>
+    </div>
+    <div class="context flex-1">
+      <p class="number">45</p>
+      <p class="message">Notice</p>
+    </div>
+  </div>
+  <div class="card flex flex-1 bg-blue-300" [routerLink]="['/home/messages']" style="cursor: pointer;">
+    <div class="photo flex-1">
+      <i class="icon pi pi-inbox" style="font-size: 4rem"></i>
+    </div>
+    <div class="context flex-1">
+      <p class="number">45</p>
+      <p class="message">Messages</p>
+    </div>
+  </div>
+  
+  <div class="card flex flex-1 bg-green-300">
+    <div class="photo flex-1">
+      <i class="icon pi pi-pen-to-square" style="font-size: 4rem"></i>
+    </div>
+    <div class="context flex-1">
+      <p class="number">45</p>
+      <p class="message">Complaints</p>
+    </div>
+  </div>
+  <div class="card flex flex-1 bg-yellow-300">
+    <div class="photo flex-1">
+      <i class="icon pi pi-calendar-plus" style="font-size: 4rem"></i>
+    </div>
+    <div class="context flex-1">
+      <p class="number">45</p>
+      <p class="message">Events</p>
+    </div>
+  </div>
+</div> -->
+
+<div class="row flex">
+  <div class="card flex-1 bg-red-300">
+    <div class="flex justify-content-between">
+      <p><b>Notice Board</b></p>
+      <i class="pi pi-plus-circle" style="font-size: 1.5rem; cursor: pointer;"></i>
+    </div>
+  </div>
+  <div
+    class="card flex-1 bg-blue-300"
+    [routerLink]="['/home/messages']"
+    style="cursor: pointer"
+  >
+    <p><b>Messages</b></p>
+  </div>
+
+  <div class="card flex-1 bg-green-300">
+    <p><b>Complaints</b></p>
+  </div>
+</div>
+
+<div class="calander">
+  <app-calander></app-calander>
 </div>
