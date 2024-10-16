@@ -1,12 +1,9 @@
 import {
   AbstractControl,
   FormControl,
-  FormGroup,
   ValidationErrors,
 } from '@angular/forms';
 import * as validator from 'validator';
-import { AddressService } from '../services/address/address.service';
-import { catchError, map, of } from 'rxjs';
 
 export class CustomValidators {
   static noSpaceAllowed(control: FormControl) {
@@ -16,7 +13,7 @@ export class CustomValidators {
     return null;
   }
 
-  static checkUserName(control: AbstractControl): Promise<any> {
+  static checkUserName(control: AbstractControl): Promise<{ checkUsername: boolean } | null> {
     return userNameAllowed(control.value);
   }
 
@@ -33,57 +30,12 @@ export class CustomValidators {
 
     return null;
   }
-
-  static postalCodeValidator(addressService: AddressService) {
-    console.log(':ljebnkjfbejkv');
-
-    return (control: AbstractControl) => {
-      const pincode = control.value;
-
-      if (!pincode || pincode.toString().length !== 6) {
-        return of(null);
-      }
-
-      return addressService.getStateByPincode(pincode).pipe(
-        map((response) => {
-          console.log('ress', response);
-
-          if (response && response[0].Status === 'Success') {
-            const postOffice = response[0].PostOffice[0];
-
-            console.log('postt', postOffice);
-
-            const formGroup = control.parent as FormGroup;
-            console.log("wewfw", formGroup);
-            
-            if (formGroup) {
-
-              formGroup.patchValue({
-                address: {
-                  city: postOffice.District,
-                  state: postOffice.State,
-                  country: postOffice.Country,
-                },
-              });
-            }
-
-            return null;
-          } else {
-            return { invalidPostalCode: true };
-          }
-        }),
-        catchError(() => {
-          return of({ invalidPostalCode: true });
-        })
-      );
-    };
-  }
 }
 
-function userNameAllowed(username: string) {
+function userNameAllowed(username: string): Promise<{ checkUsername: boolean } | null> {
   const takenUserNames = ['johnsmith', 'manojjha', 'sarahking'];
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       if (takenUserNames.includes(username)) {
         resolve({ checkUsername: true });

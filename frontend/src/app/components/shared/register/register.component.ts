@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -93,7 +93,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  onNextStep(currentStepFields: string[], nextCallback: any) {
+  onNextStep(currentStepFields: string[], nextCallback: EventEmitter<void>) {
     let isValid = true;
 
     currentStepFields.forEach((field) => {
@@ -121,20 +121,26 @@ export class RegisterComponent implements OnInit {
     anchor.click();
   }
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    if (
-      file &&
-      (file.type === 'text/csv' ||
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+      const file: File = input.files[0];
+      if (
+        file.type === 'text/csv' ||
         file.type ===
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    ) {
-      this.selectedFile = file;
-      this.fileError = null;
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      ) {
+        this.selectedFile = file;
+        this.fileError = null;
+      } else {
+        this.fileError = 'Please upload a valid CSV file';
+      }
     } else {
-      this.fileError = 'Please upload a valid CSV file';
+      this.fileError = 'No file selected';
     }
   }
+
   uploadFile() {
     if (!this.selectedFile) {
       this.fileError = 'No file selected. Please upload a CSV/Excel file.';
@@ -220,13 +226,14 @@ export class RegisterComponent implements OnInit {
 
   validateNumericInput(event: KeyboardEvent): void {
     const inputElement = event.target as HTMLInputElement | null;
-    const charCode = event.keyCode || event.which;
-    if (charCode < 48 || charCode > 57) {
+    const key = event.key;
+
+    if (key < '0' || key > '9') {
       event.preventDefault();
       return;
     }
 
-    if (inputElement?.value.length === 0 && charCode === 48) {
+    if (inputElement?.value.length === 0 && key === '0') {
       event.preventDefault();
     }
   }

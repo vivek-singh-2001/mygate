@@ -40,7 +40,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private readonly fb: FormBuilder,
     private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly messageService: MessageService
   ) {}
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -54,9 +55,11 @@ export class LoginComponent implements OnInit {
     });
     this.authService.handleGoogleLoginCallback();
   }
+
   get email() {
     return this.loginForm.controls['email'];
   }
+
   get password() {
     return this.loginForm.controls['password'];
   }
@@ -64,7 +67,15 @@ export class LoginComponent implements OnInit {
   onLogin(): void {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      this.authService.login(email, password).subscribe();
+      this.authService.login(email, password).subscribe({
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Login Failed',
+            detail: error,
+          });
+        },
+      });
     }
   }
 
@@ -75,4 +86,10 @@ export class LoginComponent implements OnInit {
   goToRegisterPage(){
     this.router.navigate(['/register']);
   }
+
+  handleKeyPress(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      this.onGoogleLogin();
+    }
+  }  
 }
