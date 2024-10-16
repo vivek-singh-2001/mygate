@@ -10,7 +10,7 @@ exports.getAllEvents = asyncErrorHandler(async (req, res) => {
 
 exports.createEvent = asyncErrorHandler(async (req, res) => {
   const eventData = req.body;
-  console.log(eventData);
+  // console.log(eventData);
   const newEvent = await eventService.createEvent(eventData);
   res.status(201).json(newEvent);
 });
