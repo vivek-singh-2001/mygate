@@ -1,7 +1,9 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const userService = require("./userService");
+const userRepository = require("./userRepository");
 const util = require("util");
 const jwt = require("jsonwebtoken");
+const CustomError = require("../../utils/CustomError");
 
 exports.getUserById = asyncErrorHandler(async (req, res, next) => {
   const token = req.headers?.authorization?.split(" ")[1];
@@ -30,18 +32,17 @@ exports.updateUser = asyncErrorHandler(async (req, res, next) => {
   }
 });
 
-exports.deleteUser = asyncErrorHandler(async(req,res,next)=>{
-  const {userId} = req.body;
+exports.deleteUser = asyncErrorHandler(async (req, res, next) => {
+  const { userId } = req.body;
   console.log(userId);
-  
 
   try {
     const deletedUser = await userService.deleteUser(userId);
-    res.status(200).json({ status: "success"});
+    res.status(200).json({ status: "success" });
   } catch (error) {
     next(error);
   }
-})
+});
 
 exports.getFamilyMembers = asyncErrorHandler(async (req, res, next) => {
   const { userId, houseId } = req.params;
@@ -78,4 +79,14 @@ exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+exports.getAllRoles = asyncErrorHandler(async (req, res, next) => {
+  const roles =await userRepository.getAllRoles();
+
+  if (!roles) {
+    return next(new CustomError("Roles not found", 404));
+  }
+
+  res.status(200).json({ status: "success", roles });
 });

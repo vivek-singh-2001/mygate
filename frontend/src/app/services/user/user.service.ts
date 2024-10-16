@@ -51,6 +51,7 @@ export class UserService {
         const rolesNames =
           response.data.Roles?.map((role: { name: string }) => role.name) || [];
         this.userRoleArraySubject.next(rolesNames);
+        
       }),
       catchError((error) => {
         console.error('Failed to load user data', error);

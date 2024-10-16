@@ -14,8 +14,8 @@ export class NonSystemAdminGuard implements CanActivate {
   ) {}
 
   canActivate(): Observable<boolean> {
-    // Define allowed roles explicitly
-    const allowedRoles = ['owner', 'wingAdmin','societyAdmin','familyMember'];
+   
+    const allowedRoles = ['owner', 'wingAdmin','societyAdmin','familyMember','security'];
 
     return this.userService.userRoles$.pipe(
       switchMap((roles: string[] | null) => {

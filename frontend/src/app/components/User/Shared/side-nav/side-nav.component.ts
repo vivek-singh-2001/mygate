@@ -108,6 +108,11 @@ export class SideNavComponent implements OnInit {
                   icon: 'pi pi-users',
                   command: () => this.navigateTo('/home/apartments/users'),
                 },
+                {
+                  label: 'Assign Security',
+                  icon: 'pi pi-lock',
+                  command: () => this.navigateTo('/home/apartments/SecurityGaurd'),
+                },
               ],
               // command: () => this.navigateTo('/home/apartments'),
             },

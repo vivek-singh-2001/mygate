@@ -1,4 +1,3 @@
-// admin.guard.ts
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -10,8 +9,8 @@ import { UserService } from '../services/user/user.service';
 })
 export class AdminGuard implements CanActivate {
   constructor(
-    private userService:UserService,
-    private router: Router
+    private readonly userService: UserService,
+    private readonly router: Router
   ) {}
 
   canActivate(): Observable<boolean> {
@@ -19,7 +18,14 @@ export class AdminGuard implements CanActivate {
     return this.userService.userRoles$.pipe(
       switchMap((roles: string[] | null) => {
         if (roles && roles.length > 0) {
-          return of(roles.includes('societyAdmin'));
+          // Check if user has either societyAdmin or wingAdmin roles
+          if (roles.includes('societyAdmin') || roles.includes('wingAdmin')) {
+            return of(true); // Allow access
+          } else {
+            // Redirect to unauthorized if user has any other role
+            this.router.navigate(['/unauthorized']);
+            return of(false);
+          }
         } else {
           // If roles are not available, trigger user data loading
           return this.userService.getCurrentUser().pipe(
@@ -27,11 +33,12 @@ export class AdminGuard implements CanActivate {
               // After fetching user data, check the updated userRoles$
               this.userService.userRoles$.pipe(
                 map((updatedRoles: string[]) => {
-                  if (updatedRoles.includes('societyAdmin')) {
-                    return true;
+                  // Check if user has either societyAdmin or wingAdmin roles
+                  if (updatedRoles.includes('societyAdmin') || updatedRoles.includes('wingAdmin')) {
+                    return true; // Allow access
                   } else {
                     this.router.navigate(['/unauthorized']);
-                    return false;
+                    return false; // Prevent access
                   }
                 })
               )

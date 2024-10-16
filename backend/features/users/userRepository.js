@@ -71,7 +71,7 @@ exports.updateUser = async (userId, updateData) => {
 exports.deleteUser = async (userId) => {
   try {
     console.log(userId);
-    
+
     const user = await User.findByPk(userId);
 
     if (!user) {
@@ -127,4 +127,19 @@ exports.createFamilyMember = async (userData) => {
 
 exports.saveUser = (user) => {
   return user.save();
+};
+
+exports.getAllRoles = async () => {
+  try {
+    const roles = await Role.findAll({
+      attributes: ["id", "name"],
+    });
+
+    const jsonResponse = roles.map((role) => role.dataValues);
+
+    return jsonResponse;
+  } catch (error) {
+    console.error("Error fetching roles:", error);
+    throw error;
+  }
 };

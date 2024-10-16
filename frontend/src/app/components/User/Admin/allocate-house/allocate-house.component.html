@@ -1,101 +1,101 @@
-<div class="top-profile flex justify-content-center align-item-center">
-    <div class="card">
-      <h4 class="flex justify-content-center">Allocate House</h4>
-  
-      <div>
-        <div
-        class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-      >
-        <p><b>Select your Wing</b></p>
-        <p-dropdown
-          class="abc"
-          [options]="wingOptions"
-          [(ngModel)]="numberOfWings"
-          optionLabel="name"
-          placeholder="Select Your wings"
-          (ngModelChange)="onWingSelection()"
-        />
-      </div>
-      <div
-        class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-      >
-        <p><b>Select your House</b></p>
-        <p-dropdown
-          class="abc"
-          [options]="houseOptions"
-          [(ngModel)]="numberOfHouse"
-          optionLabel="house_no"
-          placeholder="Select your House"
-          [disabled]="houseOptions.length === 0"
-        />
-      </div>
-        <form [formGroup]="userDetailForm">
-         
-  
+  <div class="top-profile flex justify-content-center align-item-center">
+      <div class="card">
+        <h4 class="flex justify-content-center">Allocate House</h4>
+    
+        <div>
           <div
-            class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-          >
-            <label for="firstname">First Name</label>
-            <input
-              id="firstname"
-              type="text"
-              formControlName="firstname"
-              pInputText
-            />
-          </div>
-          <div
-            class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-          >
-            <label for="lastname">Last Name</label>
-            <input
-              id="lastname"
-              type="text"
-              formControlName="lastname"
-              pInputText
-            />
-          </div>
-          <div
-            class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-          >
-            <label for="email">Email</label>
-            <input id="email" type="text" formControlName="email" pInputText />
-          </div>
-          <div
-            class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-          >
-            <label for="gender">Gender</label>
-            <p-dropdown
-              [options]="genders"
-              formControlName="gender"
-              placeholder="Select Gender"
-              optionLabel="label"
-            ></p-dropdown>
-          </div>
-          <div
-            class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-          >
-            <label for="number">Contact Number</label>
-            <input id="number" type="text" formControlName="number" pInputText />
-          </div>
-          <div
-            class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-          >
-            <label for="dateofbirth">Date of Birth</label>
-            <p-calendar
-              formControlName="dateofbirth"
-              dateFormat="dd/mm/yy"
-              appendTo="body"
-            />
-          </div>
-          <div
-            class="p-field flex align-items-center gap-6 justify-content-center px-4 flex-wrap mb-4"
-          >
-          <p-button (onClick)="onSubmit()" label="submit" 
-          [disabled]="!userDetailForm.valid || !numberOfWings || !numberOfHouse"
+          class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
+        >
+          <p><b>Select your Wing</b></p>
+          <p-dropdown
+            class="abc"
+            [options]="wingOptions"
+            [(ngModel)]="numberOfWings"
+            optionLabel="name"
+            placeholder="Select Your wings"
+            (ngModelChange)="onWingSelection()"
           />
-          </div>
-        </form>
+        </div>
+        <div
+          class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
+        >
+          <p><b>Select your House</b></p>
+          <p-dropdown
+            class="abc"
+            [options]="houseOptions"
+            [(ngModel)]="numberOfHouse"
+            optionLabel="house_no"
+            placeholder="Select your House"
+            [disabled]="houseOptions.length === 0"
+          />
+        </div>
+          <form [formGroup]="userDetailForm">
+          
+    
+            <div
+              class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
+            >
+              <label for="firstname">First Name</label>
+              <input
+                id="firstname"
+                type="text"
+                formControlName="firstname"
+                pInputText
+              />
+            </div>
+            <div
+              class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
+            >
+              <label for="lastname">Last Name</label>
+              <input
+                id="lastname"
+                type="text"
+                formControlName="lastname"
+                pInputText
+              />
+            </div>
+            <div
+              class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
+            >
+              <label for="email">Email</label>
+              <input id="email" type="text" formControlName="email" pInputText />
+            </div>
+            <div
+              class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
+            >
+              <label for="gender">Gender</label>
+              <p-dropdown
+                [options]="genders"
+                formControlName="gender"
+                placeholder="Select Gender"
+                optionLabel="label"
+              ></p-dropdown>
+            </div>
+            <div
+              class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
+            >
+              <label for="number">Contact Number</label>
+              <input id="number" type="text" formControlName="number" pInputText />
+            </div>
+            <div
+              class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
+            >
+              <label for="dateofbirth">Date of Birth</label>
+              <p-calendar
+                formControlName="dateofbirth"
+                dateFormat="dd/mm/yy"
+                appendTo="body"
+              />
+            </div>
+            <div
+              class="p-field flex align-items-center gap-6 justify-content-center px-4 flex-wrap mb-4"
+            >
+            <p-button (onClick)="onSubmit()" label="submit" 
+            [disabled]="!userDetailForm.valid || !numberOfWings || !numberOfHouse"
+            />
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
-  
+    
