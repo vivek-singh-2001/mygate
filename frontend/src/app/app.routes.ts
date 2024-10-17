@@ -58,6 +58,7 @@ export const routes: Routes = [
             (a) =>a.ApartmentComponent 
           ),
         canActivate: [AdminGuard,],
+    
       },
       {
         path: 'apartments/wingDetails/:name/:id',
@@ -66,6 +67,7 @@ export const routes: Routes = [
             (w) =>w.WingDetailsComponent 
           ),
         canActivate: [AdminGuard,],
+     
       },
       {
         path: 'apartments/allocate-house',
@@ -74,6 +76,7 @@ export const routes: Routes = [
             './components/User/Admin/allocate-house/allocate-house.component'
           ).then((a) =>a.AllocateHouseComponent ),
         canActivate: [AdminGuard,],
+ 
       },
       {
         path: 'apartments/users',
@@ -117,6 +120,8 @@ export const routes: Routes = [
       }
     ]
   },
+  { path: 'test', component: SecurityGaurdComponent },
+
   { path: 'test', component: SecurityGaurdComponent },
 
   { path: 'unauthorized', component: UnauthorizedComponent },
