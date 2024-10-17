@@ -1,13 +1,15 @@
 const { body } = require("express-validator");
 
-const bodyValidator = (fields) => {
-  return fields.map(({ name, isRequired, type }) => {
+exports.bodyValidator = (fields) => {
+  return fields.map(({ name, isRequired, type, enumValues }) => {
     let validationChain = body(name).trim();
 
     if (isRequired) {
       validationChain = validationChain
         .notEmpty()
         .withMessage(`${name} is required.`);
+    } else {
+      validationChain = validationChain.optional();
     }
 
     switch (type) {
@@ -25,6 +27,22 @@ const bodyValidator = (fields) => {
         validationChain = validationChain
           .isISO8601()
           .withMessage(`${name} must be a valid date.`);
+        break;
+      case "uuid":
+        validationChain = validationChain
+          .isUUID()
+          .withMessage(`${name} must be a valid UUID.`);
+        break;
+      case "enum":
+        if (enumValues) {
+          validationChain = validationChain
+            .isIn(enumValues)
+            .withMessage(
+              `${name} must be one of the following values: ${enumValues.join(
+                ", "
+              )}.`
+            );
+        }
         break;
       default:
         throw new Error(`Unsupported type: ${type}`);

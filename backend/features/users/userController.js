@@ -22,26 +22,16 @@ exports.getUserById = asyncErrorHandler(async (req, res, next) => {
 exports.updateUser = asyncErrorHandler(async (req, res, next) => {
   const userId = req.params.id;
   const updateData = req.body;
-  try {
-    const updatedUser = await userService.updateUser(userId, updateData);
-    res.status(200).json({ status: "success", data: updatedUser });
-  } catch (error) {
-    next(error);
-  }
+  const updatedUser = await userService.updateUser(userId, updateData);
+  res.status(200).json({ status: "success", data: updatedUser });
 });
 
-exports.deleteUser = asyncErrorHandler(async(req,res,next)=>{
-  const {userId} = req.body;
-  console.log(userId);
-  
+exports.deleteUser = asyncErrorHandler(async (req, res, next) => {
+  const { userId } = req.body;
 
-  try {
-    const deletedUser = await userService.deleteUser(userId);
-    res.status(200).json({ status: "success"});
-  } catch (error) {
-    next(error);
-  }
-})
+  await userService.deleteUser(userId);
+  res.status(200).json({ status: "success" });
+});
 
 exports.getFamilyMembers = asyncErrorHandler(async (req, res, next) => {
   const { userId, houseId } = req.params;

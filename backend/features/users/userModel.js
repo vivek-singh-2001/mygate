@@ -20,7 +20,7 @@ module.exports = (connectDB, DataTypes) => {
         allowNull: false,
       },
       number: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(10),
         allowNull: false,
       },
       otp: {
@@ -32,9 +32,9 @@ module.exports = (connectDB, DataTypes) => {
         allowNull: true,
       },
       passcode: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.STRING(7),
         allowNull: true,
-        defaultValue: 1111111,
+        defaultValue: 111111,
       },
       email: {
         type: DataTypes.STRING(100),

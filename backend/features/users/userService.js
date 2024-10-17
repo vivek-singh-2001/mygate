@@ -8,7 +8,6 @@ exports.getUserById = async (id) => {
   if (!userData) {
     throw new CustomError(`User with ID ${id} not found`, 404);
   }
-  // userData.role = userWithRole.Roles?.[0]?.name || null;
   return userData;
 };
 
