@@ -32,6 +32,7 @@ db.Chat = require("../features/chat/chatModel.js")(connectDB, DataTypes);
 db.Event = require("../features/events/eventModel.js")(connectDB, DataTypes);
 db.Role = require("../features/users/roleModel")(connectDB, DataTypes);
 db.UserRole = require("../features/users/userRoleModel")(connectDB, DataTypes);
+db.Visitor = require("../features/visitors/visitorModel.js")(connectDB, DataTypes);
 
 // =============society-wing (: One to many)============================
 
@@ -96,9 +97,6 @@ db.HouseUser.belongsTo(db.House, { foreignKey: 'houseId' });
 db.HouseUser.belongsTo(db.User, { foreignKey: 'userId' });
 db.User.hasMany(db.HouseUser, { foreignKey: 'userId' });
 
-// db.House.hasMany(db.HouseUser, { foreignKey: "houseId", as: "HouseUsers" });
-// db.User.hasMany(db.HouseUser, { foreignKey: "userId", as: "HouseUsers" });
-
 // ==============user-role (: Many to many)=========================
 
 db.User.belongsToMany(db.Role, {
@@ -123,6 +121,16 @@ db.User.hasMany(db.Chat, { foreignKey: "receiverId", as: "receivedMessages" });
 
 db.Chat.belongsTo(db.User, { foreignKey: "senderId", as: "sender" });
 db.Chat.belongsTo(db.User, { foreignKey: "receiverId", as: "receiver" });
+
+// ============== house-visitor (One to many) ======================
+
+db.House.hasMany(db.Visitor, { foreignKey: "houseId", allowNull: true });
+db.Visitor.belongsTo(db.House, { foreignKey: "houseId", allowNull: true });
+
+// ============== user-visitor (One to many) ======================
+
+db.User.hasMany(db.Visitor, { foreignKey: "responsibleUser" });
+db.Visitor.belongsTo(db.House, { foreignKey: "responsibleUser" });
 
 const check = async () => {
   try {
