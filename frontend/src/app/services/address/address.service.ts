@@ -1,18 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AddressService {
-  private baseUrl = 'https://api.postalpincode.in/pincode/';
+  private readonly baseUrl = 'https://api.postalpincode.in/pincode';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getStateByPincode(pincode: string): Observable<any> {
     console.log(pincode);
-    
-    return this.http.get<any>(`${this.baseUrl}${pincode}`);
+
+    return this.http.get<any>(`${this.baseUrl}/${pincode}`).pipe(
+      catchError((err) => {
+        console.log(err);
+        return of(null)
+      })
+    );
   }
 }

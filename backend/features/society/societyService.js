@@ -63,6 +63,9 @@ exports.createSociety = async (csvData, societyId,next) => {
   if(!wingsArray){
     return next(new CustomError("somethng wrong with csvFile",400))
   }
+
+  console.log(wingsArray);
+  
   
   const result = await societyRepository.createSociety(wingsArray,societyId);
   return result;
