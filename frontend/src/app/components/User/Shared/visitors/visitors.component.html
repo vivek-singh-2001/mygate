@@ -1,0 +1,134 @@
+<h5>Add Visitor</h5>
+<p-button
+  label="Add Visitor"
+  icon="pi pi-id-card"
+  (onClick)="showDialog()"
+></p-button>
+
+<p-dialog
+  header="Visitor Details"
+  [(visible)]="display"
+  modal="modal"
+  [responsive]="true"
+  styleClass="visitor-dialog"
+  (onHide)="closeDialog()"
+>
+  <div class="visitor-form-container">
+    <form [formGroup]="visitorForm" (ngSubmit)="onSubmit()">
+      <div class="p-field p-grid">
+        <label for="name" class="p-col-fixed" style="width: 150px">Name</label>
+        <div class="p-col">
+          <input id="name" formControlName="name" type="text" pInputText />
+          <small
+            *ngIf="visitorForm.get('name')?.errors?.['required'] && visitorForm.get('name')?.touched"
+            class="p-error"
+          >
+            Name is required
+          </small>
+        </div>
+      </div>
+
+      <div class="p-field p-grid">
+        <label for="number" class="p-col-fixed" style="width: 150px"
+          >Number</label
+        >
+        <div class="p-col">
+          <input
+            id="number"
+            type="tel"
+            pattern="[0-9]{10}"
+            maxlength="10"
+            pInputText
+            formControlName="number"
+            inputmode="numeric"
+            (keypress)="validateNumericInput($event)"
+          />
+          <small
+            *ngIf="visitorForm.get('number')?.errors?.['required'] && visitorForm.get('number')?.touched"
+            class="p-error"
+          >
+            Phone number is required.
+          </small>
+          <small
+            *ngIf="visitorForm.get('number')?.hasError('pattern') && !visitorForm.get('number')?.errors?.['required'] && visitorForm.get('number')?.touched"
+            class="p-error"
+          >
+            Please enter a valid phone number.
+          </small>
+        </div>
+      </div>
+
+      <div class="p-field p-grid">
+        <label for="vehicleNumber" class="p-col-fixed" style="width: 150px"
+          >Vehicle Number</label
+        >
+        <div class="p-col">
+          <input
+            id="vehicleNumber"
+            formControlName="vehicleNumber"
+            type="text"
+            pInputText
+          />
+        </div>
+      </div>
+
+      <div class="p-field p-grid">
+        <label for="startDate" class="p-col-fixed" style="width: 150px"
+          >Start Date</label
+        >
+        <div class="p-col">
+          <p-calendar
+            id="startDate"
+            formControlName="startDate"
+            [iconDisplay]="'input'"
+            [showIcon]="true"
+            [minDate]="today"
+          />
+        </div>
+      </div>
+
+      <div class="p-field p-grid">
+        <label for="endDate" class="p-col-fixed" style="width: 150px"
+          >End Date</label
+        >
+        <div class="p-col">
+          <p-calendar
+            id="startDate"
+            formControlName="endDate"
+            [iconDisplay]="'input'"
+            [showIcon]="true"
+            [minDate]="today"
+          />
+        </div>
+      </div>
+
+      <div class="p-field p-grid">
+        <label for="visitTime" class="p-col-fixed" style="width: 150px"
+          >Visit Time</label
+        >
+        <div class="p-col">
+          <p-calendar
+            id="visitTime"
+            formControlName="visitTime"
+            [iconDisplay]="'input'"
+            [showIcon]="true"
+            [timeOnly]="true"
+          />
+        </div>
+      </div>
+
+      <div class="button-container">
+        <p-button
+          label="Cancel"
+          (onClick)="closeDialog()"
+        />
+        <p-button
+          label="Submit"
+          type="submit"
+          icon="pi pi-check"
+          [disabled]="visitorForm.invalid"
+        />
+      </div>
+    </form>
+  </div>
+</p-dialog>

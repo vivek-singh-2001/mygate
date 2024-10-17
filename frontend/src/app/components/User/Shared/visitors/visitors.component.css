@@ -1,0 +1,50 @@
+.visitor-dialog {
+  width: 40vw;
+  max-width: 600px;
+}
+
+.visitor-form-container {
+  padding: 1.5rem;
+}
+
+.p-field.p-grid {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.p-field.p-grid label {
+  font-weight: bold;
+}
+
+.p-field.p-grid .p-col {
+  flex: 1;
+  position: relative;
+}
+
+::ng-deep .p-col input {
+  height: 40px;
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+  color: #4b5563;
+  margin-top: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0 5px;
+
+}
+
+.p-error {
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  color: red;
+  font-size: 0.8em;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}

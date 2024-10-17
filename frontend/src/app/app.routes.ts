@@ -51,6 +51,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'visitors',
+        loadComponent: () =>
+          import('./components/User/Shared/visitors/visitors.component').then(
+            (visitor) => visitor.VisitorsComponent
+          ),
+      },
+      {
         path: 'apartments',
         loadComponent: () =>
           import('./components/User/Admin/apartment/apartment.component').then(
