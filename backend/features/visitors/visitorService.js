@@ -1,4 +1,7 @@
 const visitorRepository = require("./visitorRepository");
+const houseRepository = require("../house/houseRepository");
+const userRepository = require("../users/userRepository");
+const CustomError = require("../../utils/CustomError");
 
 const generatePasscode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -15,11 +18,11 @@ exports.addVisitor = async (visitorData) => {
   const visitEndDate = new Date(visitorData.endDate);
 
   if (visitStartDate < currentDate) {
-    throw new Error("Visit start date cannot be in the past");
+    throw new CustomError("Visit start date cannot be in the past", 400);
   }
 
   if (visitEndDate < visitStartDate) {
-    throw new Error("Visit end date must be after or equal to start date");
+    throw new CustomError("Visit end date must be after or equal to start date", 400);
   }
 
   if (visitStartDate.toDateString() === currentDate.toDateString()) {
@@ -28,7 +31,7 @@ exports.addVisitor = async (visitorData) => {
     );
 
     if (visitTime < now) {
-      throw new Error("Visit time cannot be in the past");
+      throw new CustomError("Visit time cannot be in the past", 400);
     }
   }
 
@@ -39,4 +42,28 @@ exports.addVisitor = async (visitorData) => {
     passcode,
     visitTime: extractTime(new Date(visitorData.visitTime)),
   });
+};
+
+exports.getVisitors = async (houseId, userId) => {
+  if (!houseId && !userId) {
+    throw new CustomError("Please provide houseId or userId", 400);
+  }
+
+  const filters = {};
+
+  if (houseId) {
+    const house = await houseRepository.findById(houseId);
+    if (!house) {
+      throw new CustomError("Invalid houseId", 400);
+    }
+    filters.houseId = houseId;
+  } else if (userId) {
+    const user = await userRepository.findById(userId);
+    if (!user) {
+      throw new CustomError("Invalid userId", 400);
+    }
+    filters.responsibleUser = userId;
+  }
+
+  return await visitorRepository.getVisitors(filters)
 };

@@ -14,28 +14,27 @@ exports.createVisitor = async (visitorData) => {
     type,
     houseId,
     status,
-    responsibleUser
+    responsibleUser,
   } = visitorData;
 
-  try {
-    const newVisitor = await Visitor.create({
-      name,
-      number,
-      vehicleNumber: vehicleNumber || null,
-      purpose: purpose || "Visit",
-      startDate,
-      endDate,
-      visitTime,
-      passcode,
-      type,
-      status,
-      houseId: houseId || null,
-      responsibleUser: responsibleUser,
-    });
+  return await Visitor.create({
+    name,
+    number,
+    vehicleNumber: vehicleNumber || null,
+    purpose: purpose || "Visit",
+    startDate,
+    endDate,
+    visitTime,
+    passcode,
+    type,
+    status,
+    houseId: houseId || null,
+    responsibleUser: responsibleUser,
+  });
+};
 
-    return newVisitor;
-  } catch (error) {
-    console.error("Error in creating new visitor:", error);
-    throw new Error("Error creating visitor in the database");
-  }
+exports.getVisitors = async (filters) => {
+  return await Visitor.findAll({
+    where: filters,
+  });
 };

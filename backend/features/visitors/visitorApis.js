@@ -28,8 +28,9 @@ const visitorValidationRules = bodyValidator([
   { name: "responsibleUser", isRequired: true, type: "uuid" },
 ]);
 
-const { addVisitor } = visitorController;
+const { addVisitor, getVisitors } = visitorController;
 
+router.get("/", getVisitors)
 router.post("/add", validate(visitorValidationRules), addVisitor);
 
 module.exports = router;

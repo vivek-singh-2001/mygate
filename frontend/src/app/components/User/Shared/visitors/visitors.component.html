@@ -132,3 +132,35 @@
     </form>
   </div>
 </p-dialog>
+
+<div class="visitor-list">
+  <p-table [value]="visitors" *ngIf="visitors.length > 0">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Name</th>
+        <th>Number</th>
+        <th>Passcode</th>
+        <th>Visit Start</th>
+        <th>Visit End</th>
+        <th>Time</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-visitor>
+      <tr>
+        <td>{{ visitor.name }}</td>
+        <td>{{ visitor.number }}</td>
+        <td>{{ visitor.passcode }}</td>
+        <td>{{ visitor.startDate | date: 'shortDate' }}</td>
+        <td>{{ visitor.endDate | date: 'shortDate' }}</td>
+        <td>{{ visitor.visitTime }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- No visitors found message -->
+  <p *ngIf="visitors.length === 0">No visitors to display.</p>
+</div>
+
+<div class="card flex justify-content-center gap-2">
+  <p-toast />
+</div>

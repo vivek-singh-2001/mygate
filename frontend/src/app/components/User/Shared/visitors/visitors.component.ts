@@ -14,6 +14,9 @@ import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { UserService } from '../../../../services/user/user.service';
 import { VisitorService } from '../../../../services/visitor/visitor.service';
+import { ToastModule } from 'primeng/toast';
+import { HouseService } from '../../../../services/houses/houseService';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-visitors',
@@ -26,6 +29,8 @@ import { VisitorService } from '../../../../services/visitor/visitor.service';
     MessagesModule,
     DropdownModule,
     CalendarModule,
+    ToastModule,
+    TableModule
   ],
   providers: [MessageService],
   templateUrl: './visitors.component.html',
@@ -45,12 +50,15 @@ export class VisitorsComponent implements OnInit {
   ];
   today: Date = new Date();
   userId: string = '';
+  houseId: string = '';
+  visitors: any = []
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly visitorService: VisitorService,
     private readonly messageService: MessageService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly houseService: HouseService
   ) {
     this.visitorForm = this.fb.group({
       name: ['', Validators.required],
@@ -59,7 +67,6 @@ export class VisitorsComponent implements OnInit {
         [Validators.required, Validators.pattern('^[1-9][0-9]{9}$')],
       ],
       vehicleNumber: [''],
-      purpose: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       visitTime: ['', Validators.required],
@@ -67,12 +74,36 @@ export class VisitorsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userService.userData$.subscribe({
-      next: (user) => {
-        this.userId = user.id;
+    this.userService.userData$.subscribe((user) => {
+      this.userId = user.id
+    });
+
+    this.houseService.selectedHouse$.subscribe((selectedHouse) => {
+      if (selectedHouse) this.houseId = selectedHouse.id
+    });
+
+    // if (this.houseId !== '') {
+    //   this.fetchVisitors(this.houseId)
+    // } else {
+      this.fetchVisitors(undefined, this.userId)
+    // }
+  }
+
+  fetchVisitors(houseId?: string, userId?: string): void {
+    this.visitorService.getVisitors(houseId, userId).subscribe({
+      next: (visitors) => {
+        if (visitors) {
+          console.log("visitorss", visitors);
+          
+          this.visitors = visitors.data;
+        }
       },
       error: (error) => {
-        console.error('Error fetching user data:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to fetch visitors: ' + error.message,
+        });
       },
     });
   }
@@ -94,6 +125,7 @@ export class VisitorsComponent implements OnInit {
         purpose: 'Visit',
         type: 'Invited',
         status: 'Pending',
+        houseId: this.houseId ? this.houseId : null,
         responsibleUser: this.userId,
       };
 
