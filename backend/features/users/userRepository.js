@@ -62,6 +62,12 @@ exports.getUserById = (id) => {
   });
 };
 
+exports.findById = async (id) => {
+  return await User.findOne({
+    where: { id },
+  });
+};
+
 exports.updateUser = async (userId, updateData) => {
   return await User.update(updateData, { where: { id: userId } }).then(
     ([updated]) => {

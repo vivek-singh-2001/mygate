@@ -12,7 +12,7 @@ const validate = (schemas) => {
 
       errors.array().forEach(error => {
         if (error.location === 'params') {
-          genericError = "Parameter validation failed. Please check your input.   ";
+          genericError = "Parameter validation failed. Please check your input.";
         } else if (error.location === 'body') {
           genericError = "Body validation failed. Please check your input.";
         }

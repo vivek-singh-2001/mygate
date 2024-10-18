@@ -61,3 +61,9 @@ exports.getWingHouseDetailsById = async (wingId) => {
     throw new Error(e.message);
   }
 };
+
+exports.findById = async (houseId) => {
+  return await House.findOne({
+    where: { id: houseId },
+  });
+};

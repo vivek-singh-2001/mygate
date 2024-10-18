@@ -4,9 +4,9 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class HouseService {
-  private housesSubject = new BehaviorSubject<any[]>([]);
-  private selectedHouseSubject = new BehaviorSubject<any>(null);
-  private societyAdminDetailsSubject = new BehaviorSubject<any>(null);
+  private readonly housesSubject = new BehaviorSubject<any[]>([]);
+  private readonly selectedHouseSubject = new BehaviorSubject<any>(null);
+  private readonly societyAdminDetailsSubject = new BehaviorSubject<any>(null);
 
   houses$ = this.housesSubject.asObservable();
   selectedHouse$ = this.selectedHouseSubject.asObservable();
