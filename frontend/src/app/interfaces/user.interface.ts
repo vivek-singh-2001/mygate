@@ -16,7 +16,9 @@ export interface User {
   house?: House
   wingDetails?: Wing
   role?: string
-  photo?: string
+  photo?: string;
+  data?:[]
+  unreadMessageCount?:number
 }
 
 export interface Gender {

@@ -43,7 +43,7 @@ exports.getUserById = (id) => {
             ],
           },
         ],
-      },
+      },  
       {
         model: Role,
         as: "Roles",
@@ -53,6 +53,11 @@ exports.getUserById = (id) => {
         },
         attributes: ["id", "name"],
       },
+      {
+        model:Society,
+        as:"Societies",
+        attributes: ["id", "name", "address"],
+      }
     ],
   });
 };
@@ -133,4 +138,19 @@ exports.createFamilyMember = async (userData) => {
 
 exports.saveUser = (user) => {
   return user.save();
+};
+
+exports.getAllRoles = async () => {
+  try {
+    const roles = await Role.findAll({
+      attributes: ["id", "name"],
+    });
+
+    const jsonResponse = roles.map((role) => role.dataValues);
+
+    return jsonResponse;
+  } catch (error) {
+    console.error("Error fetching roles:", error);
+    throw error;
+  }
 };

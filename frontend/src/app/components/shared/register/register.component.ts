@@ -112,7 +112,7 @@ export class RegisterComponent implements OnInit {
   }
 
   downloadSampleCSV() {
-    const sampleCsvData = `Wing Name, Floors,Number of Houses \nA,1,10\nA,2,10 \nA,3,8 \nB,1,12 \nB,1,12\nB,2,12\nB,3,10`;
+    const sampleCsvData = `Wing Name, Floors,Number of Houses \nA,1,10\nA,2,10 \nA,3,8 \nB,1,12 \nB,2,12\nB,3,10`;
     const blob = new Blob([sampleCsvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const anchor = document.createElement('a');

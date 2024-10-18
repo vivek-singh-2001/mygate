@@ -19,42 +19,42 @@ exports.parseCsvFile = (filePath) => {
 const processCsvData = (csvData) => {
   const wings = [];
 
+
+
   csvData.forEach((row) => {
-    const wingName = row["Wing Name"]; // Correctly getting wing name
+    const wingName = row["Wing Name"]?.trim();
 
-    const floorNumber = row["Floors"];
+    const floorNumber = row[" Floors"]?.trim();
 
-    const numberOfHouses = parseInt(row["Number of Houses"], 10); // Correctly getting number of houses
+    const numberOfHouses = parseInt(row["Number of Houses "]?.trim(), 10);
 
     // Correctly find the wing by its name
-    const wing = wings.find((w) => w.name === wingName); // Use wingName to find
+    const wing = wings.find((w) => w.name === wingName);
 
     if (!wing) {
-      // If wing doesn't exist, create a new one
       wings.push({
         name: wingName,
         floors: [
           {
             number: floorNumber,
-            houses: numberOfHouses, // Store the house count directly
+            houses: numberOfHouses,
           },
         ],
       });
     } else {
-      // If the wing exists, find the corresponding floor
       const floor = wing.floors.find((f) => f.number === floorNumber);
       if (!floor) {
-        // If the floor doesn't exist, create it
         wing.floors.push({
           number: floorNumber,
-          houses: numberOfHouses, // Store the house count directly
+          houses: numberOfHouses,
         });
       } else {
-        // If the floor exists, accumulate the number of houses
-        floor.houses += numberOfHouses; // Accumulate the count of houses
+        floor.houses += numberOfHouses;
       }
     }
   });
+
+
 
   return wings;
 };

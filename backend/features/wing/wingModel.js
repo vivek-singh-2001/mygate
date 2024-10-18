@@ -18,7 +18,7 @@ module.exports = (connectDB, DataTypes) => {
           model: "users",
           key: "id",
         },
-        allowNull: true, // Allow null if a wing doesn't have an admin
+        allowNull: true, 
       },
     },
     {

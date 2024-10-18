@@ -1,7 +1,9 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const userService = require("./userService");
+const userRepository = require("./userRepository");
 const util = require("util");
 const jwt = require("jsonwebtoken");
+const CustomError = require("../../utils/CustomError");
 
 exports.getUserById = asyncErrorHandler(async (req, res, next) => {
   const token = req.headers?.authorization?.split(" ")[1];
@@ -68,4 +70,14 @@ exports.updatePassword = asyncErrorHandler(async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+exports.getAllRoles = asyncErrorHandler(async (req, res, next) => {
+  const roles =await userRepository.getAllRoles();
+
+  if (!roles) {
+    return next(new CustomError("Roles not found", 404));
+  }
+
+  res.status(200).json({ status: "success", roles });
 });

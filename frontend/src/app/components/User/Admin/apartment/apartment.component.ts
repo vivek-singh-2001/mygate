@@ -32,6 +32,8 @@ export class ApartmentComponent implements OnInit {
       .userSocietyId$
       .pipe(
         switchMap((societyId) => {
+          console.log(societyId);
+          
           if (!societyId) {
             throw new Error('Society ID is missing');
           }

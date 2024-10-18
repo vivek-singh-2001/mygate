@@ -77,14 +77,14 @@ export class NavigationComponent implements OnInit {
         onMouseEnter: () => this.showDropdown(),
         onMouseLeave: () => this.hideDropdown(),
       },
-      {
-        label: 'Projects',
-        icon: 'pi pi-search',
-      },
-      {
-        label: 'Contact',
-        icon: 'pi pi-envelope',
-      },
+      // {
+      //   label: 'Projects',
+      //   icon: 'pi pi-search',
+      // },
+      // {
+      //   label: 'Contact',
+      //   icon: 'pi pi-envelope',
+      // },
     ];
 
     this.item = [
