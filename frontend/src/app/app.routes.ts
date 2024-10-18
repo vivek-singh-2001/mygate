@@ -13,6 +13,7 @@ import { GoogleCallbackComponent } from './services/auth/googleCallback.componen
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { PageNotFoundComponent } from './components/shared/pageNotFound/page-not-found.component';
 import { SecurityGaurdComponent } from './components/Staff/SecurityGaurd/security-gaurd.component';
+import { PendingUserComponent } from './components/shared/pending-user/pending-user.component';
 export const routes: Routes = [
   {
     path: 'login',
@@ -26,7 +27,10 @@ export const routes: Routes = [
   {
     path: 'google/success',
     component: GoogleCallbackComponent,
+    canActivate:[AuthGuard]
   },
+  { path: 'pending', component: PendingUserComponent },
+
   {
     path: 'home',
     component: HomeComponent,
@@ -47,36 +51,33 @@ export const routes: Routes = [
       {
         path: 'profile',
         loadComponent: () =>
-          import('./components/User/Shared/user-detail/user-detail.component').then(
-            (user) => user.UserDetailComponent
-          ),
+          import(
+            './components/User/Shared/user-detail/user-detail.component'
+          ).then((user) => user.UserDetailComponent),
       },
       {
         path: 'apartments',
         loadComponent: () =>
           import('./components/User/Admin/apartment/apartment.component').then(
-            (a) =>a.ApartmentComponent 
+            (a) => a.ApartmentComponent
           ),
-        canActivate: [AdminGuard,],
-    
+        canActivate: [AdminGuard],
       },
       {
         path: 'apartments/wingDetails/:name/:id',
         loadComponent: () =>
-          import('./components/User/Admin/apartment/wing-details/wing-details.component').then(
-            (w) =>w.WingDetailsComponent 
-          ),
-        canActivate: [AdminGuard,],
-     
+          import(
+            './components/User/Admin/apartment/wing-details/wing-details.component'
+          ).then((w) => w.WingDetailsComponent),
+        canActivate: [AdminGuard],
       },
       {
         path: 'apartments/allocate-house',
         loadComponent: () =>
           import(
             './components/User/Admin/allocate-house/allocate-house.component'
-          ).then((a) =>a.AllocateHouseComponent ),
-        canActivate: [AdminGuard,],
- 
+          ).then((a) => a.AllocateHouseComponent),
+        canActivate: [AdminGuard],
       },
       {
         path: 'apartments/users',
@@ -84,23 +85,23 @@ export const routes: Routes = [
           import(
             './components/User/Admin/society-users/society-users.component'
           ).then((w) => w.SocietyUsersComponent),
-        canActivate: [AdminGuard,],
+        canActivate: [AdminGuard],
       },
       {
         path: 'apartments/AddSecurityGaurd',
         loadComponent: () =>
           import(
             './components/Staff/SecurityGaurd/security-gaurd.component'
-          ).then((g) =>g.SecurityGaurdComponent ),
-        canActivate: [AdminGuard,],
+          ).then((g) => g.SecurityGaurdComponent),
+        canActivate: [AdminGuard],
       },
       {
         path: 'apartments/AssignShift',
         loadComponent: () =>
-          import(
-            './components/Staff/assign-role/assign-role.component'
-          ).then((g) =>g.AssignRoleComponent ),
-        canActivate: [AdminGuard,],
+          import('./components/Staff/assign-role/assign-role.component').then(
+            (g) => g.AssignRoleComponent
+          ),
+        canActivate: [AdminGuard],
       },
     ],
   },
@@ -111,16 +112,15 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'societies', pathMatch: 'full' },
       {
-        path:'societies',
-        canActivate:[SystemAdminGuard],
-        loadComponent:()=>
+        path: 'societies',
+        canActivate: [SystemAdminGuard],
+        loadComponent: () =>
           import(
             './components/systemAdmin/society-list/society-list.component'
-          ).then((s)=>s.SocietyListComponent)
-      }
-    ]
+          ).then((s) => s.SocietyListComponent),
+      },
+    ],
   },
-  { path: 'test', component: SecurityGaurdComponent },
 
   { path: 'test', component: SecurityGaurdComponent },
 
@@ -132,7 +132,7 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    component: PageNotFoundComponent,  
+    component: PageNotFoundComponent,
   },
   { path: 'unauthorized', component: UnauthorizedComponent },
 ];

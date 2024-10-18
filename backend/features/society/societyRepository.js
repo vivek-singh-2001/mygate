@@ -1,7 +1,8 @@
 const { db } = require("../../config/connection");
 const { Sequelize } = require("sequelize");
 const CustomError = require("../../utils/CustomError");
-const { User, HouseUser, House, Wing, Society, Floor } = db;
+const { Op } = require("sequelize");
+const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole } = db;
 
 exports.getsocietyById = async (societyId) => {
   const society = await Society.findByPk({ id: societyId });
@@ -93,21 +94,20 @@ exports.findSocietyByUserId = async (userId) => {
   return await Society.findOne({ where: { societyAdminId: userId } });
 };
 
-
 exports.updateSocietyStatus = async (societyId, newStatus) => {
   try {
     const society = await Society.findByPk(societyId);
 
     if (!society) {
-      throw new Error('Society not found');
+      throw new Error("Society not found");
     }
 
     await society.update({ status: newStatus });
 
-    return { message: 'Society status updated successfully', society };
+    return { message: "Society status updated successfully", society };
   } catch (error) {
-    console.error('Error updating society status:', error.message);
-    throw error; 
+    console.error("Error updating society status:", error.message);
+    throw error;
   }
 };
 
@@ -133,7 +133,13 @@ exports.registerSociety = async (societyDetails, status) => {
       { transaction }
     );
 
-    console.log(user);
+    await UserRole.create(
+      {
+        userId: user.id,
+        roleId: "47e46734-9b68-4c64-8386-8ff9efa740c5",
+      },
+      { transaction }
+    );
 
     const society = await Society.create(
       {
@@ -177,7 +183,7 @@ exports.getAllSocieties = async (status) => {
       where: filter,
       include: [
         {
-          model: User, // Assuming the User model is associated with Society
+          model: User, 
         },
       ],
     });
@@ -188,7 +194,7 @@ exports.getAllSocieties = async (status) => {
   }
 };
 
-exports.createSociety = async (wingsArray, societyId) => {
+exports.createSociety = async (wingsArray, societyId, userId) => {
   const createdData = [];
   let transaction;
   try {
@@ -245,7 +251,26 @@ exports.createSociety = async (wingsArray, societyId) => {
       createdData.push(wingData);
     }
 
-    await Society.update({ status: "approved" }, { where: { id: societyId } },{transaction});
+    await Society.update(
+      { status: "approved" },
+      { where: { id: societyId } },
+      { transaction }
+    );
+
+    await UserRole.update(
+      {
+        roleId: "47e46734-9b68-4c64-8386-8ff9efa740c4",
+      },
+      {
+        where: {
+          [Op.and]: [
+            { userId: userId },
+            { roleId: "47e46734-9b68-4c64-8386-8ff9efa740c5" },
+          ],
+        },
+      },
+      { transaction }
+    );
 
     await transaction.commit();
     return {
@@ -253,7 +278,7 @@ exports.createSociety = async (wingsArray, societyId) => {
       wings: createdData,
     };
   } catch (error) {
-    console.error("Error creating society and its related data:", error);
+    console.log("Error creating society and its related data:", error);
     if (transaction) await transaction.rollback();
     throw error;
   }

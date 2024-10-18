@@ -151,6 +151,9 @@ exports.getCsvFile = asyncErrorHandler(async (req, res, next) => {
 exports.createSociety = asyncErrorHandler(async (req, res, next) => {
   const societyData = req.body;
   const { csvData: csvFile, id: societyId } = societyData;
+  const userId = societyData.User.id;
+ 
+
 
   if (!csvFile) {
     return next(new CustomError("csvFile not found!", 404));
@@ -160,7 +163,7 @@ exports.createSociety = asyncErrorHandler(async (req, res, next) => {
     return next(new CustomError("society is not in pending state", 400));
   }
 
-  const response = await societyService.createSociety(csvFile, societyId, next);
+  const response = await societyService.createSociety(csvFile, societyId,userId,next);
 
   if (!response) {
     return next(new CustomError("unable to create society", 404));
@@ -177,7 +180,6 @@ exports.rejectSociety = asyncErrorHandler(async (req, res, next) => {
   const societyData = req.body;
   const { id: societyId, societyAdminId: userId, status } = societyData;
   
-
   if (!status == "pending") {
     return next(new CustomError("Society is not in pending state", 400));
   }

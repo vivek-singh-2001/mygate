@@ -50,6 +50,9 @@ export class AuthService {
             if (roles.includes('systemAdmin')) {
               this.router.navigate(['/systemAdmin']);
             }
+            else if(roles.includes('pending')){
+              this.router.navigate(['/pending'])
+            }
             else{
               this.router.navigate(['/home']);
             }

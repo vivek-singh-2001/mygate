@@ -43,7 +43,7 @@ exports.getUserById = (id) => {
             ],
           },
         ],
-      },
+      },  
       {
         model: Role,
         as: "Roles",
@@ -53,6 +53,11 @@ exports.getUserById = (id) => {
         },
         attributes: ["id", "name"],
       },
+      {
+        model:Society,
+        as:"Societies",
+        attributes: ["id", "name", "address"],
+      }
     ],
   });
 };

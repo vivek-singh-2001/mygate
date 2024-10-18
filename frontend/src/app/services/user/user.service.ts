@@ -12,6 +12,7 @@ const roleMappings: { [key: string]: string } = {
   societyAdmin: 'Society Admin',
   owner: 'Owner',
   wingAdmin: 'Wing Admin',
+  pending:'Pending'
 };
 
 @Injectable({
@@ -43,11 +44,12 @@ export class UserService {
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {
+        console.log(response);
         response.data.role = roleMappings[response.data.Roles[0].name];
         this.userDataSubject.next(response.data);
         this.userSocietyIdSubject.next(
-          response.data.Houses[0].Floor.Wing.societyId
-        );
+          response.data.Houses[0]?.Floor.Wing.societyId
+         || response.data.Societies[0].id) 
         const rolesNames =
           response.data.Roles?.map((role: { name: string }) => role.name) || [];
         this.userRoleArraySubject.next(rolesNames);
