@@ -62,7 +62,7 @@ export class UserService {
     );
   }
 
-  updateUser(userId: number, userData: User): Observable<any> {
+  updateUser(userId: string, userData: User): Observable<any> {
     return this.http
       .patch(`${this.userApiUrl}/updateUser/${userId}`, userData)
       .pipe(
@@ -106,7 +106,7 @@ export class UserService {
     return this.http.get(`${this.societyApiUrl}/${societyId}/wing/${wingId}`);
   }
 
-  getFamilyMembers(userId: number, houseId: number): Observable<any> {
+  getFamilyMembers(userId: string, houseId: number): Observable<any> {
     if (this.familyDataSubject.getValue()) {
       return this.familyDataSubject.asObservable();
     } else {
@@ -114,7 +114,7 @@ export class UserService {
     }
   }
 
-  fetchFamilyMembers(userId: number, houseId: number): Observable<any> {
+  fetchFamilyMembers(userId: string, houseId: number): Observable<any> {
     if (!userId || !houseId) {
       console.error(
         'User Id and House Id is not available, cannot fetch family members.'

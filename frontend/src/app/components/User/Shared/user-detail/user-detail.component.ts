@@ -62,7 +62,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   genders: Gender[] = [];
   userProfileForm!: FormGroup;
   userDetails: User = {
-    id: 0,
+    id: '',
     isMember: true,
     isOwner: true,
     firstname: '',
@@ -174,7 +174,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
 
   //Get Family Members
-  getFamilyMembers(userId: number, houseId: number) {
+  getFamilyMembers(userId: string, houseId: number) {
     this.familySubscription = this.userService
       .getFamilyMembers(userId, houseId)
       .subscribe((response) => {

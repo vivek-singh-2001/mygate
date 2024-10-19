@@ -118,10 +118,7 @@
       </div>
 
       <div class="button-container">
-        <p-button
-          label="Cancel"
-          (onClick)="closeDialog()"
-        />
+        <p-button label="Cancel" (onClick)="closeDialog()" />
         <p-button
           label="Submit"
           type="submit"
@@ -143,6 +140,7 @@
         <th>Visit Start</th>
         <th>Visit End</th>
         <th>Time</th>
+        <th>Actions</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-visitor>
@@ -150,16 +148,69 @@
         <td>{{ visitor.name }}</td>
         <td>{{ visitor.number }}</td>
         <td>{{ visitor.passcode }}</td>
-        <td>{{ visitor.startDate | date: 'shortDate' }}</td>
-        <td>{{ visitor.endDate | date: 'shortDate' }}</td>
+        <td>{{ visitor.startDate | date : "shortDate" }}</td>
+        <td>{{ visitor.endDate | date : "shortDate" }}</td>
         <td>{{ visitor.visitTime }}</td>
+        <td>
+          <button (click)="openShareDialog(visitor)">Share</button>
+        </td>
       </tr>
     </ng-template>
   </p-table>
 
-  <!-- No visitors found message -->
   <p *ngIf="visitors.length === 0">No visitors to display.</p>
 </div>
+
+<div id="visitor-card-template" style="display: none">
+  <div class="visitor-card">
+    <h2>Visitor Pass</h2>
+    <p><strong>Name:</strong> {{ selectedVisitor?.name }}</p>
+    <p><strong>Phone Number:</strong> {{ selectedVisitor?.number }}</p>
+    <p><strong>Vehicle Number:</strong> {{ selectedVisitor?.vehicleNumber }}</p>
+    <p><strong>Visit Date:</strong> {{ selectedVisitor?.startDate | date: 'shortDate' }}</p>
+    <p><strong>Visit Time:</strong> {{ selectedVisitor?.visitTime }}</p>
+  </div>
+</div>
+
+<div id="visitor-card" class="visitor-card" style="display: none">
+  <h2 class="card-title">Visitor Pass</h2>
+  <div class="card-content">
+    <div class="visitor-details">
+      <p><strong>Name:</strong> {{selectedVisitor?.name}}</p>
+      <p><strong>Phone Number:</strong> {{selectedVisitor?.number}}</p>
+      <p><strong>Visit Date:</strong> {{selectedVisitor?.vehicleNumber}}</p>
+      <p><strong>End Date:</strong> {{selectedVisitor?.name}}</p>
+      <p><strong>Visit Time:</strong> {{selectedVisitor?.name}}</p>
+      <p><strong>Vehicle Number:</strong> {{selectedVisitor?.name}}</p>
+      <p><strong>Status:</strong> Pending</p>
+    </div>
+  </div>
+  <!-- <div class="card-footer">
+    <img src="assets/logo.png" alt="Company Logo" class="logo" />
+  </div> -->
+</div>
+
+<p-dialog header="Share Visitor Pass" [(visible)]="displayDialog" [modal]="true" [responsive]="true">
+  <div class="share-options">
+    <p-button
+      label="Share on WhatsApp"
+      icon="pi pi-whatsapp"
+      (click)="shareOnWhatsApp()"
+    ></p-button>
+    
+    <p-button
+      label="Share on Twitter"
+      icon="pi pi-twitter"
+      (click)="shareOnTwitter()"
+    ></p-button>
+    
+    <p-button
+      label="Share on Facebook"
+      icon="pi pi-facebook"
+      (click)="shareOnFacebook()"
+    ></p-button>
+  </div>
+</p-dialog>
 
 <div class="card flex justify-content-center gap-2">
   <p-toast />

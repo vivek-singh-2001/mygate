@@ -48,3 +48,51 @@
   justify-content: space-between;
   margin-top: 1.5rem;
 }
+
+.visitor-card {
+  width: 350px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+}
+
+.card-title {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.card-content {
+  padding: 10px;
+}
+
+.visitor-details {
+  font-size: 1.1em;
+}
+
+.visitor-details p {
+  margin: 5px 0;
+}
+
+.card-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.logo {
+  max-width: 100px;
+  height: auto;
+}
+
+.buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+p-button {
+  margin: 10px;
+}

@@ -1,7 +1,7 @@
 import { Wing } from "./wing.interface";
 
 export interface House {
-  id: number;
+  id: string;
   house_no: string;
   WingId: number;
   Wing: Wing;

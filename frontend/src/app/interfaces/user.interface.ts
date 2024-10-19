@@ -7,11 +7,11 @@ export interface User {
   firstname: string;
   lastname: string;
   number: string;
-  id: number;
+  id: string;
   passcode?: string;
   isMember?: boolean;
   isOwner: boolean;
-  houseId?: number
+  houseId?: string
   gender?: string
   house?: House
   wingDetails?: Wing
