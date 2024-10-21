@@ -38,3 +38,9 @@ exports.getVisitors = async (filters) => {
     where: filters,
   });
 };
+
+exports.findByPasscode = async (passcode) => {
+  return await Visitor.findOne({
+    where: { passcode },
+  });
+};

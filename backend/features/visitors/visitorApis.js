@@ -4,6 +4,8 @@ const visitorController = require("./visitorController");
 const validate = require("../../utils/validationMiddleware");
 const { bodyValidator } = require("../../validations/bodyValidation");
 
+const { addVisitor, getVisitors, verifyPasscode } = visitorController;
+
 const visitorValidationRules = bodyValidator([
   { name: "name", isRequired: true, type: "string" },
   { name: "number", isRequired: true, type: "int" },
@@ -28,9 +30,16 @@ const visitorValidationRules = bodyValidator([
   { name: "responsibleUser", isRequired: true, type: "uuid" },
 ]);
 
-const { addVisitor, getVisitors } = visitorController;
+const passcodeValidationRules = bodyValidator([
+  { name: "passcode", isRequired: true, type: "string" },
+]);
 
-router.get("/", getVisitors)
+router.get("/", getVisitors);
 router.post("/add", validate(visitorValidationRules), addVisitor);
+router.post(
+  "/verify-passcode",
+  validate(passcodeValidationRules),
+  verifyPasscode
+);
 
 module.exports = router;

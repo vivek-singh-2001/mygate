@@ -22,7 +22,10 @@ exports.addVisitor = async (visitorData) => {
   }
 
   if (visitEndDate < visitStartDate) {
-    throw new CustomError("Visit end date must be after or equal to start date", 400);
+    throw new CustomError(
+      "Visit end date must be after or equal to start date",
+      400
+    );
   }
 
   if (visitStartDate.toDateString() === currentDate.toDateString()) {
@@ -65,5 +68,19 @@ exports.getVisitors = async (houseId, userId) => {
     filters.responsibleUser = userId;
   }
 
-  return await visitorRepository.getVisitors(filters)
+  return await visitorRepository.getVisitors(filters);
+};
+
+exports.verifyPasscode = async (passcode) => {
+  if (passcode.length !== 6) {
+    throw new CustomError("Invalid passcode", 404);
+  }
+
+  const visitor = await visitorRepository.findByPasscode(passcode);
+
+  if (!visitor) {
+    throw new CustomError("Invalid passcode", 404);
+  }
+
+  return visitor;
 };
