@@ -18,6 +18,9 @@ import { ToastModule } from 'primeng/toast';
 import { HouseService } from '../../../../services/houses/houseService';
 import { TableModule } from 'primeng/table';
 import { User } from '../../../../interfaces/user.interface';
+import { TooltipModule } from 'primeng/tooltip';
+import { Visitor } from '../../../../interfaces/visitor.interface';
+import { TabViewModule } from 'primeng/tabview';
 
 @Component({
   selector: 'app-visitors',
@@ -32,6 +35,8 @@ import { User } from '../../../../interfaces/user.interface';
     CalendarModule,
     ToastModule,
     TableModule,
+    TooltipModule,
+    TabViewModule
   ],
   providers: [MessageService],
   templateUrl: './visitors.component.html',
@@ -52,8 +57,11 @@ export class VisitorsComponent implements OnInit {
   today: Date = new Date();
   userData!: User;
   houseData!: any;
-  visitors: any = [];
-  selectedVisitor: any;
+  visitors: Visitor[] = [];
+  expectedVisitors: Visitor[] = [];
+  pastVisitors: Visitor[] = [];
+  pendingVisitors: Visitor[] = [];
+  selectedVisitor!: Visitor;
   displayDialog: boolean = false;
   imageUrl: string = '';
 
@@ -102,6 +110,18 @@ export class VisitorsComponent implements OnInit {
       next: (visitors) => {
         if (visitors) {
           console.log('visitorss', visitors);
+          this.expectedVisitors = visitors.data.filter(
+            (visitor: Visitor) =>
+              visitor.type === 'Invited' && visitor.status === 'Pending'
+          );
+          this.pastVisitors = visitors.data.filter(
+            (visitor: Visitor) =>
+              visitor.status === 'Approved' || visitor.status === 'Rejected'
+          );
+          this.pendingVisitors = visitors.data.filter(
+            (visitor: Visitor) =>
+              visitor.type === 'Uninvited' && visitor.status === 'Pending'
+          );
           this.visitors = visitors.data;
         }
       },
@@ -145,6 +165,7 @@ export class VisitorsComponent implements OnInit {
             detail: 'Visitor added successfully!',
           });
           this.closeDialog();
+          this.openShareDialog(response.data);
         },
         error: (error) => {
           this.messageService.add({
@@ -157,13 +178,13 @@ export class VisitorsComponent implements OnInit {
     } else {
       this.messageService.add({
         severity: 'warn',
-        summary: 'Warning',
-        detail: 'Please fill in all required fields.',
+        summary: 'Invalid Form',
+        detail: 'Please ensure all required fields are filled and valid.',
       });
     }
   }
 
-  generateVisitorImage(visitor: any): Promise<string> {
+  generateVisitorImage(visitor: Visitor): Promise<string> {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
@@ -278,34 +299,6 @@ export class VisitorsComponent implements OnInit {
           // downloadLink.download = `Visitor_${visitor.name}.png`;
           // downloadLink.click();
 
-          // canvas.toBlob((blob) => {
-          //   // Check if the blob is null
-          //   if (blob) {
-          //     const imageUrl = URL.createObjectURL(blob);
-
-          //     // Web Share API for sharing the image
-          //     if (navigator.share) {
-          //       navigator
-          //         .share({
-          //           title: `Visitor Pass for ${visitor.name}`,
-          //           text: `Here is the visitor pass for ${visitor.name}`,
-          //           files: [new File([blob], `Visitor_${visitor.name}.png`, { type: 'image/png' })],
-          //         })
-          //         .then(() => console.log('Share was successful.'))
-          //         .catch((error) => console.log('Sharing failed', error));
-          //     } else {
-          //       console.log('Web Share API is not supported in this browser.');
-          //       // Provide fallback option, such as downloading the image
-          //       const downloadLink = document.createElement('a');
-          //       downloadLink.href = imageUrl;
-          //       downloadLink.download = `Visitor_${visitor.name}.png`;
-          //       downloadLink.click();
-          //     }
-          //   } else {
-          //     console.error('Blob generation failed!');
-          //   }
-          // }, 'image/png');
-
           const imageUrl = canvas.toDataURL('image/png');
           resolve(imageUrl);
         } else {
@@ -315,54 +308,12 @@ export class VisitorsComponent implements OnInit {
     });
   }
 
-  shareVisitor(visitor: any) {
-    this.generateVisitorImage(visitor)
-      .then((imageUrl) => {
-        // Check if the browser supports the Web Share API and file sharing
-        if (navigator.canShare && navigator.canShare({ files: [] })) {
-          fetch(imageUrl)
-            .then((res) => res.blob())
-            .then((blob) => {
-              const file = new File([blob], 'visitor-pass.png', {
-                type: 'image/png',
-              });
-
-              if (navigator.canShare({ files: [file] })) {
-                navigator
-                  .share({
-                    title: 'Visitor Pass',
-                    text: `Visitor pass for ${visitor.name}`,
-                    files: [file], // Share the image file
-                  })
-                  .then(() => console.log('Share successful'))
-                  .catch((error) => console.log('Error sharing:', error));
-              } else {
-                console.log('This browser does not support sharing files.');
-                alert('This browser does not support sharing files.');
-              }
-            });
-        } else {
-          // Fallback for browsers that don't support Web Share API or file sharing
-          console.log('Sharing not supported in this browser11');
-          alert('Sharing not supported in this browser');
-        }
-      })
-      .catch((error) => {
-        console.error('Error generating image:', error);
-      });
-  }
-
-  openShareDialog(visitor: any) {
+  openShareDialog(visitor: Visitor) {
     this.generateVisitorImage(visitor).then((imageUrl) => {
-      this.imageUrl = imageUrl; // Save the image URL to share later
-      this.displayDialog = true; // Open the dialog
+      this.imageUrl = imageUrl;
+      this.displayDialog = true;
     });
   }
-
-  // openShareDialog(imageUrl: string) {
-  //   const whatsappUrl = `https://api.whatsapp.com/send?text=Check%20out%20this%20visitor%20pass:%20${encodeURIComponent(imageUrl)}`;
-  //   window.open(whatsappUrl, '_blank');
-  // }
 
   shareOnWhatsApp() {
     fetch(this.imageUrl)
@@ -371,7 +322,6 @@ export class VisitorsComponent implements OnInit {
         const formData = new FormData();
         formData.append('file', blob, 'visitor-pass.png');
 
-        // Upload to File.io
         fetch('https://file.io', {
           method: 'POST',
           body: formData,
@@ -379,11 +329,13 @@ export class VisitorsComponent implements OnInit {
           .then((response) => response.json())
           .then((data) => {
             if (data.success) {
-              const downloadUrl = data.link; // Get the download link
-              const whatsappUrl = `https://api.whatsapp.com/send?text=Check%20out%20this%20visitor%20pass:%20${encodeURIComponent(
-                downloadUrl
+              const downloadUrl = data.link;
+              const message = `${this.userData.firstname} has invited you to ${this.houseData.Floor.Wing.Society.name}. Check out your visitor pass.`;
+              const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+                message + ' ' + downloadUrl
               )}`;
               window.open(whatsappUrl, '_blank');
+              this.displayDialog = false;
             } else {
               console.error('Image upload failed:', data);
             }
@@ -393,26 +345,64 @@ export class VisitorsComponent implements OnInit {
       .catch((err) => console.error('Error fetching the image blob:', err));
   }
 
-  shareOnWhatsApp11() {
-    const message = `Visitor Pass ${this.imageUrl}`;
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(whatsappUrl, '_blank');
-  }
-
   shareOnTwitter() {
-    const twitterUrl = `https://twitter.com/intent/tweet?text=Visitor%20Pass%20&url=${encodeURIComponent(
-      this.imageUrl
-    )}`;
-    window.open(twitterUrl, '_blank');
+    fetch(this.imageUrl)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const formData = new FormData();
+        formData.append('file', blob, 'visitor-pass.png');
+
+        fetch('https://file.io', {
+          method: 'POST',
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              const downloadUrl = data.link;
+              const message = `${this.userData.firstname} has invited you to ${this.houseData.Floor.Wing.Society.name}. Check out your visitor pass.`;
+              const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                message + ' ' + downloadUrl
+              )}`;
+              window.open(twitterUrl, '_blank');
+              this.displayDialog = false;
+            } else {
+              console.error('Image upload failed:', data);
+            }
+          })
+          .catch((err) => console.error('Error uploading to File.io:', err));
+      })
+      .catch((err) => console.error('Error fetching the image blob:', err));
   }
 
   shareOnFacebook() {
-    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-      this.imageUrl
-    )}`;
-    window.open(facebookUrl, '_blank');
+    fetch(this.imageUrl)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const formData = new FormData();
+        formData.append('file', blob, 'visitor-pass.png');
+
+        fetch('https://file.io', {
+          method: 'POST',
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              const downloadUrl = data.link;
+              const message = `${this.userData.firstname} has invited you to ${this.houseData.Floor.Wing.Society.name}. Check out your visitor pass.`;
+              const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                downloadUrl
+              )}&quote=${encodeURIComponent(message)}`;
+              window.open(facebookUrl, '_blank');
+              this.displayDialog = false;
+            } else {
+              console.error('Image upload failed:', data);
+            }
+          })
+          .catch((err) => console.error('Error uploading to File.io:', err));
+      })
+      .catch((err) => console.error('Error fetching the image blob:', err));
   }
 
   validateNumericInput(event: KeyboardEvent): void {
