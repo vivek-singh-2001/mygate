@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('societies', {
+    await queryInterface.createTable("societies", {
       id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -22,35 +22,35 @@ module.exports = {
       societyAdminId: {
         type: Sequelize.UUID,
         references: {
-          model: 'users',
-          key: 'id',
+          model: "users",
+          key: "id",
         },
         allowNull: false,
-        onUpdate: 'CASCADE',
+        onUpdate: "CASCADE",
       },
-      status:{
-        type: DataTypes.ENUM('pending', 'approved','rejected'),
-        defaultValue: 'pending' 
+      status: {
+        type: Sequelize.ENUM("pending", "approved", "rejected"),
+        defaultValue: "pending",
       },
-      csvData:{
-        type: DataTypes.TEXT,
-        allowNull: true ,
-        onUpdate: 'CASCADE',
+      csvData: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+        onUpdate: "CASCADE",
       },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-      }
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('societies');
-  }
+    await queryInterface.dropTable("societies");
+  },
 };

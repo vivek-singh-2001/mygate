@@ -167,6 +167,8 @@ export class RegisterComponent implements OnInit {
 
       formdata.append('file', this.selectedFile);
 
+      console.log(formdata);
+
       this.societyService.registerSociety(formdata).subscribe({
         next: () => {
           this.messageService.add({

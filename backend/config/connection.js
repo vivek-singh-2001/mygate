@@ -24,10 +24,7 @@ db.Notice = require("../features/notice/noticeModel.js")(connectDB, DataTypes);
 db.Society = require("../features/society/societyModel")(connectDB, DataTypes);
 db.Wing = require("../features/wing/wingModel.js")(connectDB, DataTypes);
 db.Floor = require("../features/floor/floorModel.js")(connectDB, DataTypes);
-db.HouseUser = require("../features/houseuser/houseUserModel.js")(
-  connectDB,
-  DataTypes
-);
+db.HouseUser = require("../features/houseuser/houseUserModel.js")(connectDB, DataTypes);
 db.Chat = require("../features/chat/chatModel.js")(connectDB, DataTypes);
 db.Event = require("../features/events/eventModel.js")(connectDB, DataTypes);
 db.Role = require("../features/users/roleModel")(connectDB, DataTypes);
@@ -58,7 +55,7 @@ db.Wing.belongsTo(db.User, { foreignKey: "wingAdminId" });
 
 // =============society-user (: One to many)============================
 db.User.hasMany(db.Society, { foreignKey: "societyAdminId" });
-db.Society.belongsTo(db.User, { foreignKey: "societyAdminId"  });
+db.Society.belongsTo(db.User, { foreignKey: "societyAdminId" });
 
 // =============user-notice (: One to many)============================
 
@@ -88,16 +85,15 @@ db.User.belongsToMany(db.House, {
   otherKey: "houseId",
 });
 
-
 db.House.belongsToMany(db.User, {
   through: db.HouseUser,
   foreignKey: "houseId",
   otherKey: "userId",
 });
-db.House.hasMany(db.HouseUser, { foreignKey: 'houseId' });
-db.HouseUser.belongsTo(db.House, { foreignKey: 'houseId' });
-db.HouseUser.belongsTo(db.User, { foreignKey: 'userId' });
-db.User.hasMany(db.HouseUser, { foreignKey: 'userId' });
+db.House.hasMany(db.HouseUser, { foreignKey: "houseId" });
+db.HouseUser.belongsTo(db.House, { foreignKey: "houseId" });
+db.HouseUser.belongsTo(db.User, { foreignKey: "userId" });
+db.User.hasMany(db.HouseUser, { foreignKey: "userId" });
 
 // db.House.hasMany(db.HouseUser, { foreignKey: "houseId", as: "HouseUsers" });
 // db.User.hasMany(db.HouseUser, { foreignKey: "userId", as: "HouseUsers" });
@@ -114,10 +110,10 @@ db.Role.belongsToMany(db.User, {
   foreignKey: "roleId",
   otherKey: "userId",
 });
-db.User.hasMany(db.UserRole, { foreignKey: 'userId' });
-db.UserRole.belongsTo(db.User, { foreignKey: 'userId' });
-db.UserRole.belongsTo(db.Role, { foreignKey: 'roleId' });
-db.Role.hasMany(db.UserRole, { foreignKey: 'userId' });
+db.User.hasMany(db.UserRole, { foreignKey: "userId" });
+db.UserRole.belongsTo(db.User, { foreignKey: "userId" });
+db.UserRole.belongsTo(db.Role, { foreignKey: "roleId" });
+db.Role.hasMany(db.UserRole, { foreignKey: "userId" });
 
 // ==============user-chat ========================================
 
@@ -137,11 +133,9 @@ db.Visitor.belongsTo(db.House, { foreignKey: "houseId", allowNull: true });
 db.User.hasMany(db.Visitor, { foreignKey: "responsibleUser" });
 db.Visitor.belongsTo(db.House, { foreignKey: "responsibleUser" });
 
-
 // ==============staff-society (: One to many)=========================
 db.Society.hasMany(db.Staff, { foreignKey: "societyId" });
 db.Staff.belongsTo(db.Society, { foreignKey: "societyId" });
-
 
 // ==============staff-role (: One to many)=========================
 db.Role.hasMany(db.Staff, { foreignKey: "roleId" });
@@ -150,8 +144,6 @@ db.Staff.belongsTo(db.Role, { foreignKey: "roleId" });
 // ==============staff-shift (: One to many)=========================
 db.Staff.hasMany(db.Shift, { foreignKey: "staffId" });
 db.Shift.belongsTo(db.Staff, { foreignKey: "staffId" });
-
-
 
 const check = async () => {
   try {

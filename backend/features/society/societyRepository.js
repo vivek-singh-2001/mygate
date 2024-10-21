@@ -41,23 +41,8 @@ exports.findSocietyAdminsDetails = async (societyId) => {
     attributes: [
       "id",
       "name",
-      [
-        Sequelize.fn(
-          "COUNT",
-          Sequelize.fn("DISTINCT", Sequelize.col("Floors->Houses.id"))
-        ),
-        "numberOfHouses",
-      ],
-      [
-        Sequelize.fn(
-          "COUNT",
-          Sequelize.fn(
-            "DISTINCT",
-            Sequelize.col("Floors->Houses->HouseUsers.id")
-          )
-        ),
-        "numberOfUsers",
-      ],
+      [Sequelize.fn("COUNT", Sequelize.fn("DISTINCT", Sequelize.col("Floors->Houses.id"))), "numberOfHouses"],
+      [Sequelize.fn("COUNT", Sequelize.fn("DISTINCT", Sequelize.col("Floors->Houses->HouseUsers.id"))), "numberOfUsers"],
     ],
     include: [
       {
@@ -110,16 +95,10 @@ exports.updateSocietyStatus = async (societyId, newStatus) => {
   }
 };
 
-exports.registerSociety = async (societyDetails, status) => {
+exports.registerSociety = async (societyDetails, status, pendingRole) => {
   const transaction = await db.connectDB.transaction();
   try {
     // Create the user within the transaction
-    console.log({
-      firstname: societyDetails.societyDetails.firstname,
-      lastname: societyDetails.societyDetails.lastname,
-      email: societyDetails.societyDetails.email,
-      number: societyDetails.societyDetails.number,
-    });
 
     const user = await User.create(
       {
@@ -135,7 +114,7 @@ exports.registerSociety = async (societyDetails, status) => {
     await UserRole.create(
       {
         userId: user.id,
-        roleId: "47e46734-9b68-4c64-8386-8ff9efa740c5",
+        roleId: societyDetails.pendingRole.id,
       },
       { transaction }
     );
@@ -182,7 +161,7 @@ exports.getAllSocieties = async (status) => {
       where: filter,
       include: [
         {
-          model: User, 
+          model: User,
         },
       ],
     });
@@ -193,15 +172,11 @@ exports.getAllSocieties = async (status) => {
   }
 };
 
-exports.createSociety = async (wingsArray, societyId, userId,transaction) => {
+exports.createSociety = async (wingsArray, societyId, userId, transaction) => {
   const createdData = [];
   try {
-
     for (let wing of wingsArray) {
-      const newWing = await Wing.create(
-        { name: wing.name, societyId: societyId },
-        { transaction }
-      );
+      const newWing = await Wing.create({ name: wing.name, societyId: societyId }, { transaction });
 
       const wingId = newWing.id;
 
@@ -212,10 +187,7 @@ exports.createSociety = async (wingsArray, societyId, userId,transaction) => {
       };
 
       for (const floor of wing.floors) {
-        const newFloor = await Floor.create(
-          { floor_number: floor.number, wingId: wingId },
-          { transaction }
-        );
+        const newFloor = await Floor.create({ floor_number: floor.number, wingId: wingId }, { transaction });
 
         const floorId = newFloor.id;
 
@@ -232,10 +204,7 @@ exports.createSociety = async (wingsArray, societyId, userId,transaction) => {
         for (let i = 0; i < floor.houses; i++) {
           const houseNumber = startingHouseNumber + i;
 
-          const newHouse = await House.create(
-            { house_no: houseNumber, floorId: floorId },
-            { transaction }
-          );
+          const newHouse = await House.create({ house_no: houseNumber, floorId: floorId }, { transaction });
 
           floorData.houses.push({
             houseId: newHouse.id,
@@ -248,11 +217,7 @@ exports.createSociety = async (wingsArray, societyId, userId,transaction) => {
       createdData.push(wingData);
     }
 
-    await Society.update(
-      { status: "approved" },
-      { where: { id: societyId } },
-      { transaction }
-    );
+    await Society.update({ status: "approved" }, { where: { id: societyId } }, { transaction });
 
     return {
       societyId: societyId,

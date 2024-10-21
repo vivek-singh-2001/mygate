@@ -152,6 +152,11 @@ exports.createSociety = asyncErrorHandler(async (req, res, next) => {
   const societyData = req.body;
   const { csvData: csvFile, id: societyId } = societyData;
   const userId = societyData.User.id;
+
+  console.log(csvFile);
+  console.log(societyId);
+  console.log(userId);
+  
  
 
 
