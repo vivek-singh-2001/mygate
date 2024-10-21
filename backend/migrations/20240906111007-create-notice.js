@@ -15,7 +15,7 @@ module.exports = {
         allowNull: true,
       },
       media: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       isThought: {

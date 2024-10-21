@@ -48,8 +48,8 @@ db.Floor.belongsTo(db.Wing, { foreignKey: "wingId" });
 
 // =============wing-notice (: One to many)============================
 
-db.Wing.hasMany(db.Notice, { foreignKey: "wingId" });
-db.Notice.belongsTo(db.Wing, { foreignKey: "wingId" });
+db.Society.hasMany(db.Notice, { foreignKey: "societyId" });
+db.Notice.belongsTo(db.Society, { foreignKey: "societyId" });
 
 // =============wing-user (: One to many)============================
 

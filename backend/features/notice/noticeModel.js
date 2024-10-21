@@ -9,20 +9,22 @@ module.exports = (connectDB, DataTypes) => {
         allowNull: false,
       },
       text: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
       },
       media: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true,
       },
       isThought: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
+        defaultValue:false,
       },
       isNotice: {
         type: DataTypes.BOOLEAN,
         allowNull: true,
+        defaultValue:false,
       }
     },
     {

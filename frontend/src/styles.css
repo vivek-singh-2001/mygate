@@ -2,31 +2,39 @@
 @import "primeicons/primeicons.css";
 
 html,
-body{
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
- font-family: 'Algerian', sans-serif;   
- }
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: "Algerian", sans-serif;
+}
 
- :root {
-    --white: #fff;
-    --offwhite:#faf9f6;
-    --snow:      #fafdff;
-    --ivory    :#fffff0;
-    --aliceblue:#f0f8ff;
-    --ghostwhite:#f8f8ff;
-    --black:    #000;
-    --gray-50:  #f9f9f9;
-    --gray-100: #ececec;
-    --gray-200: #e3e3e3;
-    --gray-300: #cdcdcd;
-    --gray-400: #b4b4b4;
-    --gray-500: #9b9b9b;
-    --gray-600: #676767;
-    --gray-700: #424242;
-    --gray-750: #2f2f2f;
-    --gray-800: #212121;
-    
+:root {
+  --white: #fff;
+  --offwhite: #faf9f6;
+  --snow: #fafdff;
+  --ivory: #fffff0;
+  --aliceblue: #f0f8ff;
+  --ghostwhite: #f8f8ff;
+  --black: #000;
+  --gray-50: #f9f9f9;
+  --gray-100: #ececec;
+  --gray-200: #e3e3e3;
+  --gray-300: #cdcdcd;
+  --gray-400: #b4b4b4;
+  --gray-500: #9b9b9b;
+  --gray-600: #676767;
+  --gray-700: #424242;
+  --gray-750: #2f2f2f;
+  --gray-800: #212121;
+}
+
+.display-card {
+  background-color: var(--offwhite);
+  box-shadow: 0 4px 13px #e1e1e1;
+  border: none;
+  border-radius: 7px;
+  align-items: center;
+  padding: 10px;
 }

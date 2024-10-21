@@ -1,7 +1,6 @@
 const { db } = require("../../config/connection");
 const { Sequelize } = require("sequelize");
 const CustomError = require("../../utils/CustomError");
-const { Op } = require("sequelize");
 const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole } = db;
 
 exports.getsocietyById = async (societyId) => {
@@ -194,11 +193,9 @@ exports.getAllSocieties = async (status) => {
   }
 };
 
-exports.createSociety = async (wingsArray, societyId, userId) => {
+exports.createSociety = async (wingsArray, societyId, userId,transaction) => {
   const createdData = [];
-  let transaction;
   try {
-    transaction = await db.connectDB.transaction();
 
     for (let wing of wingsArray) {
       const newWing = await Wing.create(
@@ -257,22 +254,6 @@ exports.createSociety = async (wingsArray, societyId, userId) => {
       { transaction }
     );
 
-    await UserRole.update(
-      {
-        roleId: "47e46734-9b68-4c64-8386-8ff9efa740c4",
-      },
-      {
-        where: {
-          [Op.and]: [
-            { userId: userId },
-            { roleId: "47e46734-9b68-4c64-8386-8ff9efa740c5" },
-          ],
-        },
-      },
-      { transaction }
-    );
-
-    await transaction.commit();
     return {
       societyId: societyId,
       wings: createdData,

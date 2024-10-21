@@ -2,6 +2,8 @@ const societyRepository = require("./societyRepository");
 const CustomError = require("../../utils/CustomError");
 const userRepository = require("../users/userRepository");
 const { parseCsvFile } = require("../../utils/csvFileParse");
+const { db } = require("../../config/connection");
+
 
 exports.getUsersBySociety = async (societyId, limits, offsets, searchQuery) => {
   const users = await societyRepository.findUsersBySociety(
@@ -59,17 +61,46 @@ exports.getSocieties = async (status) => {
 };
 
 exports.createSociety = async (csvData, societyId, userId, next) => {
-  const wingsArray = await parseCsvFile(csvData);
-  if (!wingsArray) {
-    return next(new CustomError("somethng wrong with csvFile", 400));
-  }
+  let transaction;
 
-  const result = await societyRepository.createSociety(
-    wingsArray,
-    societyId,
-    userId
-  );
-  return result;
+  try {
+    transaction = await db.connectDB.transaction();
+
+    const wingsArray = await parseCsvFile(csvData);
+    if (!wingsArray) {
+      return next(new CustomError("somethng wrong with csvFile", 400));
+    }
+
+    const result = await societyRepository.createSociety(
+      wingsArray,
+      societyId,
+      userId,
+      transaction
+    );
+
+    const currentRole = await userRepository.getRoleByName("pending");
+    const newRole = await userRepository.getRoleByName("societyAdmin");
+
+    if (!currentRole || !newRole) {
+      return next(new CustomError("Role not found", 400));
+    }
+
+    await userRepository.updateUserRole(
+      userId,
+      currentRole.id,
+      newRole.id,
+      transaction // Pass the transaction
+    );
+
+    // Commit the transaction
+    await transaction.commit();
+
+    return result;
+  } catch (error) {
+    console.log("Error creating society:", error);
+    if (transaction) await transaction.rollback(); // Rollback on error
+    return next(new CustomError("Error creating society", 500));
+  }
 };
 
 exports.rejectSociety = async (societyId, userId) => {
