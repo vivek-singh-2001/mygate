@@ -1,3 +1,13 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-visitor-btn {
+  margin-left: auto;
+}
+
 .visitor-dialog {
   width: 40vw;
   max-width: 600px;
@@ -95,4 +105,31 @@
 
 p-button {
   margin: 10px;
+}
+
+.share-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.image-container img {
+  max-width: 50%;
+  height: auto;
+}
+
+.share-buttons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.share-buttons p-button {
+  margin: 5px 0;
 }
