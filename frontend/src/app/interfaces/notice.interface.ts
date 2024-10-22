@@ -5,5 +5,7 @@ export interface Notice{
     createdAt:string,
     updatedAt:string,
     societyId:string,
-    userId:string
+    userId:string,
+    mediaUrls:string[]
+    noticeList:string[]
 }

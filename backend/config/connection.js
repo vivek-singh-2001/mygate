@@ -32,6 +32,7 @@ db.UserRole = require("../features/users/userRoleModel")(connectDB, DataTypes);
 db.Visitor = require("../features/visitors/visitorModel.js")(connectDB, DataTypes);
 db.Staff = require("../features/staff/staffModel.js")(connectDB, DataTypes);
 db.Shift = require("../features/shift/shiftModel.js")(connectDB, DataTypes);
+db.NotificationCount = require("../features/notificationCount/notificationCountModel.js")(connectDB, DataTypes);
 
 // =============society-wing (: One to many)============================
 
@@ -95,8 +96,6 @@ db.HouseUser.belongsTo(db.House, { foreignKey: "houseId" });
 db.HouseUser.belongsTo(db.User, { foreignKey: "userId" });
 db.User.hasMany(db.HouseUser, { foreignKey: "userId" });
 
-// db.House.hasMany(db.HouseUser, { foreignKey: "houseId", as: "HouseUsers" });
-// db.User.hasMany(db.HouseUser, { foreignKey: "userId", as: "HouseUsers" });
 
 // ==============user-role (: Many to many)=========================
 
@@ -144,6 +143,14 @@ db.Staff.belongsTo(db.Role, { foreignKey: "roleId" });
 // ==============staff-shift (: One to many)=========================
 db.Staff.hasMany(db.Shift, { foreignKey: "staffId" });
 db.Shift.belongsTo(db.Staff, { foreignKey: "staffId" });
+
+// ==============notification count with society and user (: One to many)=========================
+db.Society.hasMany(db.NotificationCount, { foreignKey: "societyId" });
+db.NotificationCount.belongsTo(db.Society, { foreignKey: "societyId" });
+
+db.User.hasMany(db.NotificationCount, { foreignKey: "userId" });
+db.NotificationCount.belongsTo(db.User, { foreignKey: "userId" });
+
 
 const check = async () => {
   try {

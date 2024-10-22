@@ -28,9 +28,9 @@ export class NoticeService {
     }
   }
 
-  fetchNotices(societyId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/getAllNotice/${societyId}`).pipe(
-      tap((response: any) => {
+  fetchNotices(societyId: string): Observable<ResponseOutput> {
+    return this.http.get<ResponseOutput>(`${this.apiUrl}/getAllNotice/${societyId}`).pipe(
+      tap((response: ResponseOutput) => {
         this.noticeSubject.next(response.data);
       })
     );
@@ -43,4 +43,8 @@ export class NoticeService {
   clearEvents() {
     this.noticeSubject.next([]);
   }
+
+
+
+  
 }

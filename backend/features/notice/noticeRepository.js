@@ -23,8 +23,7 @@ const NoticeRepository = {
   },
 
   getAllNotice: async (societyId) => {
-    console.log("wdwwwfw",societyId);
-    return await Notice.findAll({
+    const notices =  await Notice.findAll({
       where:{societyId},
       include: [{
         model: User,
@@ -32,6 +31,18 @@ const NoticeRepository = {
         attributes: [ 'firstname','lastname', 'email'],
       }],
     });
+
+    return notices.map(notice=>{
+      const mediaFilenames = JSON.parse(notice.media);
+      const mediaUrls = mediaFilenames.map(filename=>{
+        return `${process.env.BASE_URL}/uploads/${filename}`;
+      });
+
+      return {
+        ...notice.toJSON(),
+        mediaUrls
+      }
+    })
   },
 
   getNoticeById: async (id) => {
