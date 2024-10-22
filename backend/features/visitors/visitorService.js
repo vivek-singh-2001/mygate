@@ -84,3 +84,23 @@ exports.verifyPasscode = async (passcode) => {
 
   return visitor;
 };
+
+exports.approveVisitor = async (visitorId, status) => {
+  const visitor = await visitorRepository.findById(visitorId);
+  
+  if (!visitor) {
+    throw new CustomError("Visitor not found", 404);
+  }
+
+  if (visitor.status === 'Approved') {
+    throw new CustomError("Visitor has already been approved", 400);
+  }
+
+  const updatedVisitor = await visitorRepository.updateVisitorStatus(visitorId, status);
+
+  if (!updatedVisitor) {
+    throw new CustomError("Error while updating visitor status", 500);
+  }
+
+  return updatedVisitor;
+}

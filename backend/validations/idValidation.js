@@ -1,9 +1,7 @@
 const { param } = require('express-validator');
 
 const idValidationSchema = [
-  param('id')
-    .isInt({ min: 1 })
-    .withMessage('ID must be a positive integer.'),
+  param('id').isUUID().withMessage('ID must be a valid uuid.'),
 ];
 
 module.exports = {

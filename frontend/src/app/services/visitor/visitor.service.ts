@@ -39,4 +39,16 @@ export class VisitorService {
       })
     );
   }
+
+  updateVisitorStatus(visitorId: string, status: 'Approved'| 'Rejected'): Observable<any> {
+    return this.http.patch(`${this.visitorApiUrl}/approval/${visitorId}`, {status}).pipe(
+      tap((response) => {
+        console.log('Visitor status updated successfully:', response);
+      }),
+      catchError((error) => {
+        console.error('Failed to update visitor status', error);
+        return of(null);
+      })
+    );
+  }
 }

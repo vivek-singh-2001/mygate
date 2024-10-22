@@ -3,8 +3,10 @@ const router = express.Router();
 const visitorController = require("./visitorController");
 const validate = require("../../utils/validationMiddleware");
 const { bodyValidator } = require("../../validations/bodyValidation");
+const { idValidationSchema } = require("../../validations/idValidation");
 
-const { addVisitor, getVisitors, verifyPasscode } = visitorController;
+const { addVisitor, getVisitors, verifyPasscode, approveVisitor } =
+  visitorController;
 
 const visitorValidationRules = bodyValidator([
   { name: "name", isRequired: true, type: "string" },
@@ -41,5 +43,6 @@ router.post(
   validate(passcodeValidationRules),
   verifyPasscode
 );
+router.patch("/approval/:id", validate(idValidationSchema), approveVisitor);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 const { db } = require("../../config/connection");
 const { Visitor } = db;
+const CustomError = require("../../utils/CustomError");
 
 exports.createVisitor = async (visitorData) => {
   const {
@@ -43,4 +44,31 @@ exports.findByPasscode = async (passcode) => {
   return await Visitor.findOne({
     where: { passcode },
   });
+};
+
+exports.findById = async (visitorId) => {
+  return await Visitor.findOne({
+    where: { id: visitorId },
+  });
+};
+
+exports.updateVisitorStatus = async (visitorId, status) => {
+  try {
+    const [rowsUpdated, [updatedVisitor]] = await Visitor.update(
+      { status },
+      {
+        where: { id: visitorId },
+        returning: true,
+      }
+    );
+
+    if (rowsUpdated === 0) {
+      return null;
+    }
+
+    return updatedVisitor;
+  } catch (error) {
+    console.log(error);
+    throw new CustomError(error);
+  }
 };

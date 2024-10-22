@@ -32,3 +32,21 @@ exports.verifyPasscode = asyncErrorHandler(async (req, res, next) => {
     message: "Visitor verified",
   });
 });
+
+exports.approveVisitor = asyncErrorHandler(async (req, res, next) => {
+  const { id: visitorId } = req.params;
+  const { status } = req.body;
+
+  if (!status || (status !== 'Approved' && status !== 'Rejected')) {
+    res.status(400).json({
+      message: 'Status is required and must be either approved or rejected'
+    });
+  }
+
+  const updatedVisitor = await visitorService.approveVisitor(visitorId, status);
+
+  res.status(200).json({
+    status: "success",
+    data: updatedVisitor
+  });
+});

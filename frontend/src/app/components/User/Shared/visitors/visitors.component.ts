@@ -5,7 +5,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { MessagesModule } from 'primeng/messages';
@@ -21,6 +21,7 @@ import { User } from '../../../../interfaces/user.interface';
 import { TooltipModule } from 'primeng/tooltip';
 import { Visitor } from '../../../../interfaces/visitor.interface';
 import { TabViewModule } from 'primeng/tabview';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'app-visitors',
@@ -36,9 +37,10 @@ import { TabViewModule } from 'primeng/tabview';
     ToastModule,
     TableModule,
     TooltipModule,
-    TabViewModule
+    TabViewModule,
+    ConfirmDialogModule
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './visitors.component.html',
   styleUrl: './visitors.component.css',
 })
@@ -64,13 +66,16 @@ export class VisitorsComponent implements OnInit {
   selectedVisitor!: Visitor;
   displayDialog: boolean = false;
   imageUrl: string = '';
+  confirmDialogVisible = false
+  actionType!: 'approve' | 'reject';
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly visitorService: VisitorService,
     private readonly messageService: MessageService,
     private readonly userService: UserService,
-    private readonly houseService: HouseService
+    private readonly houseService: HouseService,
+    private readonly confirmationService: ConfirmationService
   ) {
     this.visitorForm = this.fb.group({
       name: ['', Validators.required],
@@ -182,6 +187,42 @@ export class VisitorsComponent implements OnInit {
         detail: 'Please ensure all required fields are filled and valid.',
       });
     }
+  }
+
+  showConfirmation(visitor: Visitor, action: 'Approved' | 'Rejected') {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to ${action === 'Approved' ? 'approve' : 'reject'} this visitor?`,
+      header: 'Confirm Action',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: action === 'Approved' ? 'p-button-success' : 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.updateVisitorStatus(visitor, action);
+      },
+    });
+  }
+
+  updateVisitorStatus(visitor: Visitor, status: 'Approved' | 'Rejected') {
+    this.visitorService.updateVisitorStatus(visitor.id, status).subscribe({
+      next: (response) => {
+        this.pendingVisitors = this.pendingVisitors.filter(
+          (p) => p.id !== visitor.id
+        );
+        this.pastVisitors.push(response.data);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: status === 'Approved' ? 'Visitor approved successfully.': 'Visitor rejected successfully.',
+        });
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to update visitor status: ' + error.message,
+        });
+      },
+    });
   }
 
   generateVisitorImage(visitor: Visitor): Promise<string> {
