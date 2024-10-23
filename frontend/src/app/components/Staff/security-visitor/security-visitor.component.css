@@ -1,0 +1,115 @@
+.visitor-form-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.visitor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-title h2 {
+  text-align: center;
+  color: #343a40;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #495057;
+}
+
+.form-group input,
+.form-group p-dropdown {
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group p-dropdown:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+small {
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.submit-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #0056b3;
+}
+
+::ng-deep.file-input {
+  display: none;
+  color: white;
+}
+
+.file-upload span {
+  margin-left: 10px;
+  font-weight: bold;
+  color: white;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  color: #333;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #e0e0e0;
+}
+
+.file-input {
+  display: none; /* Hide the default input */
+}
+
+.file-name {
+  font-size: 14px;
+  color: #555;
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

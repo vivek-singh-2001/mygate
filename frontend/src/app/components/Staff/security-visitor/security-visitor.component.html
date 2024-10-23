@@ -1,0 +1,96 @@
+<div class="visitor-form-container">
+  <form [formGroup]="visitorForm" (ngSubmit)="onSubmit()" class="visitor-form">
+    <div class="form-title">
+      <h2>Visitor Information</h2>
+    </div>
+
+    <div class="form-group">
+      <label for="name">Visitor Name</label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        class="p-inputtext p-component"
+        placeholder="Enter visitor name"
+      />
+      <small
+        *ngIf="
+          visitorForm.get('name')?.invalid && visitorForm.get('name')?.touched
+        "
+      >
+        Name is required
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input
+        id="phone"
+        type="text"
+        formControlName="phone"
+        class="p-inputtext p-component"
+        placeholder="Enter phone number"
+      />
+      <small
+        *ngIf="
+          visitorForm.get('phone')?.invalid && visitorForm.get('phone')?.touched
+        "
+      >
+        Phone number is required
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="purpose">Purpose of visit</label>
+      <input
+        id="purpose"
+        type="text"
+        formControlName="purpose"
+        class="p-inputtext p-component"
+        placeholder="Enter visit purpose"
+      />
+      <small
+        *ngIf="
+          visitorForm.get('purpose')?.invalid &&
+          visitorForm.get('purpose')?.touched
+        "
+      >
+        Purpose is required
+      </small>
+    </div>
+
+    <!-- <div class="form-group">
+        <label for="houseId">Select House</label>
+        <p-dropdown
+          [options]="houses"
+          formControlName="houseId"
+          placeholder="Select House"
+          class="p-inputtext p-component"
+        ></p-dropdown>
+        <small *ngIf="visitorForm.get('houseId')?.invalid && visitorForm.get('houseId')?.touched">
+          House is required
+        </small>
+      </div> -->
+
+    <div class="form-group">
+      <label for="image">Visitor Image</label>
+      <div class="file-upload">
+        <label class="custom-file-upload">
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            class="file-input"
+            accept="image/*"
+          />
+          Choose File
+        </label>
+        <p class="file-name" *ngIf="selectedFileName">{{ selectedFileName }}</p>
+      </div>
+      <small *ngIf="!selectedFile && formSubmitted">Image is required</small>
+    </div>
+
+    <div class="form-buttons">
+      <button pButton type="submit" label="Submit" class="submit-btn"></button>
+    </div>
+  </form>
+</div>
