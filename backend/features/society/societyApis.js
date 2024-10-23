@@ -5,20 +5,18 @@ const { protect } = authController;
 
 const multer = require("multer");
 
-// Set up storage for uploaded files
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Specify the upload directory
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname); // Add timestamp to the filename
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
 
 const router = express.Router();
-
 
 const {
   getUsersBySociety,
