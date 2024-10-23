@@ -43,7 +43,7 @@ exports.getUserById = (id) => {
             ],
           },
         ],
-      },  
+      },
       {
         model: Role,
         as: "Roles",
@@ -54,10 +54,10 @@ exports.getUserById = (id) => {
         attributes: ["id", "name"],
       },
       {
-        model:Society,
-        as:"Societies",
+        model: Society,
+        as: "Societies",
         attributes: ["id", "name", "address"],
-      }
+      },
     ],
   });
 };
@@ -151,6 +151,48 @@ exports.getAllRoles = async () => {
     return jsonResponse;
   } catch (error) {
     console.error("Error fetching roles:", error);
+    throw error;
+  }
+};
+
+exports.getRoleByName = async (roleName) => {
+  try {
+    const role = await Role.findOne({
+      where: { name: roleName },
+    });
+    return role;
+  } catch (error) {
+    console.log("Error fetching role:", error);
+    throw error;
+  }
+};
+
+exports.updateUserRole = async (
+  userId,
+  currentRoleId,
+  newRoleId,
+  transaction
+) => {
+  try {
+    // Update the user role in the UserRole table
+    const [updatedRows] = await UserRole.update(
+      { roleId: newRoleId },
+      {
+        where: {
+          userId: userId,
+          roleId: currentRoleId,
+        },
+        transaction,
+      }
+    );
+
+    if (updatedRows === 0) {
+      throw new Error("No rows updated. User role may not exist.");
+    }
+
+    return updatedRows;
+  } catch (error) {
+    console.error("Error updating user role:", error);
     throw error;
   }
 };

@@ -1,4 +1,4 @@
-const { Model } = require("sequelize");
+
 const { db } = require("../../config/connection");
 const { User, Wing, Society, HouseUser, House } = db;
 

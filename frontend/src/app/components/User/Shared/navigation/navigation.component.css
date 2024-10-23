@@ -17,8 +17,8 @@
 }
 
 .mygate-image {
-  width: auto; /* or specify a width */
-  height: 50px; /* or whatever height is appropriate */
+  width: auto; 
+  height: auto; 
   max-width: 100%; /* Ensure it doesn't exceed the container width */
 }
 

@@ -27,7 +27,7 @@ export const routes: Routes = [
   {
     path: 'google/success',
     component: GoogleCallbackComponent,
-    canActivate:[AuthGuard]
+    canActivate: [AuthGuard],
   },
   { path: 'pending', component: PendingUserComponent },
 
@@ -54,6 +54,13 @@ export const routes: Routes = [
           import(
             './components/User/Shared/user-detail/user-detail.component'
           ).then((user) => user.UserDetailComponent),
+      },
+      {
+        path: 'notice',
+        loadComponent: () =>
+          import('./components/User/Shared/notice/notice.component').then(
+            (notice) => notice.NoticeComponent
+          ),
       },
       {
         path: 'visitors',
