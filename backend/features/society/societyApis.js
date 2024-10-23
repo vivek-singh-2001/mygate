@@ -2,9 +2,11 @@ const express = require("express");
 const societyController = require("./societyController");
 const authController = require("../../features/authentication/authController");
 const { protect } = authController;
-const {uploadSingle} = require('../../middleware/multer')
+const upload = require('../../middleware/multer');
 
 const router = express.Router();
+
+const { uploadSingle } = upload(/csv|xlsx|xls/);
 
 const {
   getUsersBySociety,
