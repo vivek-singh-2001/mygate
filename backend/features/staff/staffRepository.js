@@ -1,27 +1,49 @@
 const { db } = require("../../config/connection");
+const CustomError = require("../../utils/CustomError");
+const userRepository = require("../users/userRepository");
 const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole, Staff } =
   db;
 
 const staffRepository = {
   createStaff: async (staffData) => {
-    const newStaff = await Staff.create({
-      roleId: staffData.roleId,
-      name: staffData.gaurdDetails.name,
-      contactNumber: staffData.gaurdDetails.contactNumber,
-      email: staffData.gaurdDetails.email,
-      address: staffData.gaurdDetails.address,
-      startDate: staffData.gaurdDetails.startDate,
-      status: staffData.gaurdDetails.status,
-      societyId: staffData.societyId,
-      createdBy: staffData.createdBy,
-    });
-    console.log(newStaff);
+   const  transaction = await db.connectDB.transaction();
 
+    try {
+      const newStaff = await User.create(
+        {
+          firstname: staffData.firstname,
+          lastname: staffData.lastname,
+          number: staffData.contactNumber,
+          email: staffData.email,
+          dateofbirth: staffData.dateofbirth,
+        },
+        { transaction }
+      );
+
+      const roleToAssign = await userRepository.getRoleByName(
+        staffData.role.name
+      );
+      await UserRole.create(
+        {
+          userId: newStaff.id,
+          roleId: roleToAssign.id,
+        },
+        { transaction }
+      );
+      await transaction.commit()
+
+      return newStaff;
+    } catch (error) {
+      console.log(error);
+      
+      await transaction.rollback();
+      throw new CustomError(error.message || "Failed to create staff", 500);
+    }
   },
 
   getAllStaff: async (societyId) => {
     return await Staff.findAll({
-      where:{societyId:societyId}
+      where: { societyId: societyId },
     });
   },
 

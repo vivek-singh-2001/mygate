@@ -46,7 +46,7 @@ export class AuthService {
       tap((user) => {
         this.userService.userRoles$.subscribe({
           next: (roles) => {
-            console.log(roles);
+            console.log("my roles......",roles);
             if (roles.includes('systemAdmin')) {
               this.router.navigate(['/systemAdmin']);
             }
