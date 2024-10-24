@@ -73,12 +73,7 @@ export class SideNavComponent implements OnInit {
         iconSize: 'large',
         command: () => this.navigateTo('/home/notice'),
       },
-      {
-        label: 'Events',
-        icon: 'pi pi-calendar-plus',
-        iconSize: 'large',
-        command: () => this.navigateTo('/home/events'),
-      },
+  
       {
         label: 'Complaints',
         icon: 'pi pi-pen-to-square',
@@ -90,12 +85,6 @@ export class SideNavComponent implements OnInit {
         icon: 'pi pi-id-card',
         iconSize: 'large',
         command: () => this.navigateTo('/home/visitors'),
-      },
-      {
-        label: 'Security',
-        icon: 'pi pi-id-card',
-        iconSize: 'large',
-        command: () => this.navigateTo('/home/security'),
       },
       ...(this.isAdmin
         ? [

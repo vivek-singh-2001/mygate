@@ -12,21 +12,23 @@ import {
 import { UserService } from '../user/user.service';
 import { HouseService } from '../houses/houseService';
 import { environment } from '../../../environments/environment';
+import { SocietyStaffService } from '../societyStaff/societyStaff.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly apiUrl = `${environment.apiUrl}/auth`;
-  
+
   private subscription: Subscription | undefined;
 
   constructor(
-    private  readonly http: HttpClient,
+    private readonly http: HttpClient,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly userService: UserService,
     private readonly houseService: HouseService,
+    private readonly societyStaffService: SocietyStaffService
   ) {}
 
   // Login with email and password
@@ -34,8 +36,8 @@ export class AuthService {
     const loginData = { email, password };
     return this.http.post<any>(`${this.apiUrl}/login`, loginData).pipe(
       switchMap((response) => {
-        console.log("ress login", response);
-        
+        console.log('ress login', response);
+
         const token = response.token;
         if (token) {
           localStorage.setItem('authToken', token);
@@ -46,17 +48,19 @@ export class AuthService {
       tap((user) => {
         this.userService.userRoles$.subscribe({
           next: (roles) => {
-            console.log("my roles......",roles);
             if (roles.includes('systemAdmin')) {
               this.router.navigate(['/systemAdmin']);
-            }
-            else if(roles.includes('pending')){
-              this.router.navigate(['/pending'])
-            }
-            else if(roles.includes('security')){
-              this.router.navigate(['/Security'])
-            }
-            else{
+            } else if (roles.includes('pending')) {
+              this.router.navigate(['/pending']);
+            } else if (roles.includes('security')) {
+              this.societyStaffService.staffDetails(user.data.id).subscribe({
+                next: (data) => {
+                  console.log("pppppppppppppppppppppp",data);
+                  
+                  this.router.navigate(['/Security']);
+                },
+              });
+            } else {
               this.router.navigate(['/home']);
             }
           },

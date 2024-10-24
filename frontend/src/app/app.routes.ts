@@ -71,13 +71,6 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'security', //testinggggggg
-        loadComponent: () =>
-          import('./components/Staff/security-visitor/security-visitor.component').then(
-            (security) => security.SecurityVisitorComponent
-          ),
-      },
-      {
         path: 'apartments',
         loadComponent: () =>
           import('./components/User/Admin/apartment/apartment.component').then(

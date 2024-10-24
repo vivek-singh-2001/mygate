@@ -34,7 +34,7 @@ import { MenubarModule } from 'primeng/menubar';
 export class SecurityNavigationComponent {
   items: MenuItem[] = [];
   item: MenuItem[] | undefined;
-  user!: User;
+  user!: any;
   societies!: Society[];
   ApprovedSocieties: string = '';
   houses: House[] = [];
@@ -44,11 +44,14 @@ export class SecurityNavigationComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
+    private readonly societyService:SocietyService
   
   ) {}
 
   ngOnInit(): void {
     this.loadUserData();
+    // this.societyService.fetchSocietyData('').subscribe()
+    
   }
 
   private initializeMenu(): void {
@@ -64,7 +67,7 @@ export class SecurityNavigationComponent {
   private loadUserData(): void {
     this.userService.getUserData().subscribe({
       next: (data) => {
-        this.user = data;
+        this.user = data.data;
         this.initializeMenu();
       },
       error: (error) => {

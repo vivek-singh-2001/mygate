@@ -1,7 +1,7 @@
 const { db } = require("../../config/connection");
 const CustomError = require("../../utils/CustomError");
 const userRepository = require("../users/userRepository");
-const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole, Staff } =
+const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole, Staff,SocietyStaff } =
   db;
 
 const staffRepository = {
@@ -11,17 +11,17 @@ const staffRepository = {
     try {
       const newStaff = await User.create(
         {
-          firstname: staffData.firstname,
-          lastname: staffData.lastname,
-          number: staffData.contactNumber,
-          email: staffData.email,
-          dateofbirth: staffData.dateofbirth,
+          firstname: staffData.gaurdDetails.firstname,
+          lastname: staffData.gaurdDetails.lastname,
+          number: staffData.gaurdDetails.contactNumber,
+          email: staffData.gaurdDetails.email,
+          dateofbirth: staffData.gaurdDetails.dateofbirth,
         },
         { transaction }
       );
 
       const roleToAssign = await userRepository.getRoleByName(
-        staffData.role.name
+        staffData.gaurdDetails.role.name
       );
       await UserRole.create(
         {
@@ -30,6 +30,14 @@ const staffRepository = {
         },
         { transaction }
       );
+
+      await SocietyStaff.create({
+        societyId:staffData.societyId,
+        staffId:newStaff.id
+      },{
+        transaction
+      })
+      
       await transaction.commit()
 
       return newStaff;

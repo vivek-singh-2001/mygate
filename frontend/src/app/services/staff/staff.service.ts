@@ -32,8 +32,12 @@ export class StaffService {
     );
   }
 
-  registerStaff(data:any):Observable<ResponseOutput>{
-    return this.http.post<ResponseOutput>(`${this.staffApiUrl}/staff/createStaff`,data)
+  registerStaff(gaurdDta:any,societyId:string):Observable<ResponseOutput>{
+    const formData = {
+      gaurdDetails:gaurdDta,
+      societyId:societyId
+    }
+    return this.http.post<ResponseOutput>(`${this.staffApiUrl}/staff/createStaff`,formData)
   }
 
   getAllStaff(societyId:string):Observable<ResponseOutput>{
