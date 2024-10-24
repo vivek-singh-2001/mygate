@@ -53,6 +53,9 @@ export class AuthService {
             else if(roles.includes('pending')){
               this.router.navigate(['/pending'])
             }
+            else if(roles.includes('security')){
+              this.router.navigate(['/Security'])
+            }
             else{
               this.router.navigate(['/home']);
             }

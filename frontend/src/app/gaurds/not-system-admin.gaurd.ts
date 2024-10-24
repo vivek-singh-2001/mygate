@@ -20,7 +20,6 @@ export class NonSystemAdminGuard implements CanActivate {
     return this.userService.userRoles$.pipe(
       switchMap((roles: string[] | null) => {
         if (roles && roles.length > 0) {
-          console.log("My role is", roles);
           
           // Check if user has any of the allowed roles
           const hasAllowedRole = roles.some(role => allowedRoles.includes(role));

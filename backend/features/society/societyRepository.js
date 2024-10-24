@@ -11,7 +11,7 @@ exports.getsocietyById = async (societyId) => {
   return society;
 };
 
-exports.findUsersBySociety = (societyId, limits, offsets, searchQuery) => {
+exports.findUsersBySociety = (societyId, limits=null, offsets=0, searchQuery=null) => {
   const query = `
         SELECT * FROM GetUsersBySociety($1,$2,$3,$4);
     `;

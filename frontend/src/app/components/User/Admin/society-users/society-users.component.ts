@@ -31,6 +31,7 @@ export class SocietyUsersComponent implements OnInit {
   users: User[] = [];
   first: number = 0; //offset
   rows: number = 20; //limit
+  societyId!: string;
   totalRecords: number = 0; //total records fetched
   searchQuery: string = '';
   noUsersFound: boolean = false;
@@ -40,66 +41,81 @@ export class SocietyUsersComponent implements OnInit {
   constructor(private readonly userService: UserService) {}
 
   ngOnInit(): void {
- 
-    this.userService.userSocietyId$.pipe(
-      switchMap((societyId) => {
-        if (!societyId) {
-          this.noUsersFound = true;
-          return of([]);
-        }
-
-     
-        return this.searchSubject.pipe(
-          debounceTime(500), 
-          distinctUntilChanged(), 
-          switchMap((searchQuery) =>
-            this.loadUsers(societyId, this.first, this.rows, searchQuery)
-          ),
-          catchError((error) => {
-            console.log('Error during user fetch', error);
-            this.users = [];
-            this.totalRecords = 0;
+    this.userService.userSocietyId$
+      .pipe(
+        switchMap((societyId) => {
+          if (!societyId) {
             this.noUsersFound = true;
-            return of([]); 
-          })
-        );
-      })
-    ).subscribe();
+            return of([]);
+          }
+          console.log(societyId);
+
+          this.societyId = societyId;
+          return this.searchSubject.pipe(
+            debounceTime(500),
+            distinctUntilChanged(),
+            switchMap((searchQuery) =>
+              this.loadUsers(societyId, this.rows, this.first, searchQuery)
+            ),
+            catchError((error) => {
+              console.log('Error during user fetch', error);
+              this.users = [];
+              this.totalRecords = 0;
+              this.noUsersFound = true;
+              return of([]);
+            })
+          );
+        })
+      )
+      .subscribe();
 
     this.searchSubject.next(this.searchQuery);
   }
 
-
-  loadUsers(societyId: string, offset: number, limit: number, search: string = '') {
-    return this.userService.getUsersBySocietyId(societyId, limit, offset, search).pipe(
-      tap((data) => {
-        this.users = data.data.users; 
-        this.totalRecords = data.totalRecords; 
-        this.noUsersFound = this.users.length === 0; 
-      }),
-      catchError((error) => {
-        console.log('Error loading users:', error);
-        this.users = [];
-        this.totalRecords = 0;
-        this.noUsersFound = true;
-        return of({ data: { users: [] }, totalRecords: 0 }); 
-      })
-    );
+  loadUsers(
+    societyId: string,
+    limit: number,
+    offset: number,
+    search: string = ''
+  ) {
+    return this.userService
+      .getUsersBySocietyId(societyId, limit, offset, search)
+      .pipe(
+        tap((data) => {
+          this.users = data.data.users;
+          this.totalRecords = data.totalRecords;
+          this.noUsersFound = this.users.length === 0;
+        }),
+        catchError((error) => {
+          console.log('Error loading users:', error);
+          this.users = [];
+          this.totalRecords = 0;
+          this.noUsersFound = true;
+          return of({ data: { users: [] }, totalRecords: 0 });
+        })
+      );
   }
 
   viewUserDetails(user: User) {
     console.log('Viewing details of:', user);
   }
 
- 
   onSearch(query: string): void {
-    this.searchQuery = query; 
-    this.searchSubject.next(query); 
+    this.searchQuery = query;
+    this.searchSubject.next(query);
   }
 
   onPageChange(event: PageEvent): void {
     this.first = event.first ?? 0;
     this.rows = event.rows ?? 20;
-    this.searchSubject.next(this.searchQuery); 
+    console.log(this.rows, this.first);
+
+    this.searchSubject.next(this.searchQuery);
+    this.loadUsers(
+      this.societyId,
+      this.rows,
+      this.first,
+      this.searchQuery
+    ).subscribe();
   }
 }

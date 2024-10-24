@@ -25,6 +25,11 @@
       {{ newNoticesCount }}
     </span>
     </div>
+    <div class=" m-2 h-11rem  custom-scroll ">
+     <p class="p-4 mt-4 flex justify-content-center alig-items-center">
+      {{notices.text}}
+     </p>
+    </div>
   </div>
   <div class="card flex-1 bg-blue-300" style="cursor: pointer">
     <div class="flex justify-content-between">
@@ -40,11 +45,14 @@
   <div class="card flex-1 bg-green-300">
     <div class="flex justify-content-between">
       <p><b>Complaints</b></p>
-      <i
+      <div class="flex gap-2">
+        <i
         class="pi pi-plus-circle"
         style="font-size: 1.5rem; cursor: pointer"
         [routerLink]="['/home/complaints']"
       ></i>
+      <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
+      </div>
     </div>
   </div>
 </div>
