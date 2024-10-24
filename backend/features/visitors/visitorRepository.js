@@ -16,6 +16,7 @@ exports.createVisitor = async (visitorData) => {
     houseId,
     status,
     responsibleUser,
+    image
   } = visitorData;
 
   return await Visitor.create({
@@ -31,6 +32,7 @@ exports.createVisitor = async (visitorData) => {
     status: status || "Pending",
     houseId: houseId || null,
     responsibleUser: responsibleUser,
+    image: image || null
   });
 };
 

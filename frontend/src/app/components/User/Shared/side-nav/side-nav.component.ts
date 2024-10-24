@@ -73,18 +73,18 @@ export class SideNavComponent implements OnInit {
         iconSize: 'large',
         command: () => this.navigateTo('/home/notice'),
       },
-      {
-        label: 'Events',
-        icon: 'pi pi-calendar-plus',
-        iconSize: 'large',
-        command: () => this.navigateTo('/home/events'),
-      },
-      {
-        label: 'Complaints',
-        icon: 'pi pi-pen-to-square',
-        iconSize: 'large',
-        command: () => this.navigateTo('/home/complaints'),
-      },
+      // {
+      //   label: 'Events',
+      //   icon: 'pi pi-calendar-plus',
+      //   iconSize: 'large',
+      //   command: () => this.navigateTo('/home/events'),
+      // },
+      // {
+      //   label: 'Complaints',
+      //   icon: 'pi pi-pen-to-square',
+      //   iconSize: 'large',
+      //   command: () => this.navigateTo('/home/complaints'),
+      // },
       {
         label: 'Visitors',
         icon: 'pi pi-id-card',

@@ -18,7 +18,6 @@ const {
   createSociety,
   rejectSociety,
   checkIsAdmin,
-  getHouses
 } = societyController;
 
 router.get("/:id", protect, getUsersBySociety);
