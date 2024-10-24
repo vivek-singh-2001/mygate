@@ -154,9 +154,8 @@ export class VisitorsComponent implements OnInit {
       console.log('form data', this.visitorForm.value);
       const visitorData = {
         ...this.visitorForm.value,
-        purpose: 'Visit',
         type: 'Invited',
-        status: 'Pending',
+        purpose: 'Visit',
         houseId: this.houseData ? this.houseData.id : null,
         responsibleUser: this.userData.id,
       };

@@ -3,6 +3,9 @@ const visitorService = require("./visitorService");
 
 exports.addVisitor = asyncErrorHandler(async (req, res, next) => {
   const visitorData = req.body;
+  if (req.file) {
+    visitorData.image = req.file.path;
+  }
   const newVisitor = await visitorService.addVisitor(visitorData);
   return res.status(201).json({
     status: "success",

@@ -26,9 +26,9 @@ exports.createVisitor = async (visitorData) => {
     startDate,
     endDate,
     visitTime,
-    passcode,
+    passcode: passcode || null,
     type,
-    status,
+    status: status || "Pending",
     houseId: houseId || null,
     responsibleUser: responsibleUser,
   });

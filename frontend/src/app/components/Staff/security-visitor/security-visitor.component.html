@@ -59,18 +59,32 @@
       </small>
     </div>
 
-    <!-- <div class="form-group">
-        <label for="houseId">Select House</label>
-        <p-dropdown
-          [options]="houses"
-          formControlName="houseId"
-          placeholder="Select House"
-          class="p-inputtext p-component"
-        ></p-dropdown>
-        <small *ngIf="visitorForm.get('houseId')?.invalid && visitorForm.get('houseId')?.touched">
-          House is required
-        </small>
-      </div> -->
+    <div class="form-group">
+      <label for="wingId">Select Wing</label>
+      <p-dropdown
+        [options]="wings"
+        formControlName="wingId"
+        placeholder="Select Wing"
+        class="p-inputtext p-component"
+        (onChange)="onWingSelection($event.value)"
+      ></p-dropdown>
+      <small *ngIf="visitorForm.get('wingId')?.invalid && visitorForm.get('wingId')?.touched">
+        Wing is required
+      </small>
+    </div>
+  
+    <div class="form-group">
+      <label for="houseId">Select House</label>
+      <p-dropdown
+        [options]="houses"
+        formControlName="houseId"
+        placeholder="Select House"
+        class="p-inputtext p-component"
+      ></p-dropdown>
+      <small *ngIf="visitorForm.get('houseId')?.invalid && visitorForm.get('houseId')?.touched">
+        House is required
+      </small>
+    </div>
 
     <div class="form-group">
       <label for="image">Visitor Image</label>
@@ -93,4 +107,8 @@
       <button pButton type="submit" label="Submit" class="submit-btn"></button>
     </div>
   </form>
+</div>
+
+<div class="card flex justify-content-center gap-2">
+  <p-toast />
 </div>

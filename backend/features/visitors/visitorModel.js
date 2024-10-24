@@ -16,6 +16,10 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.STRING(10),
         allowNull: false,
       },
+      image: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+      },
       vehicleNumber: {
         type: DataTypes.STRING(20),
         allowNull: true,

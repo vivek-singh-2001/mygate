@@ -156,9 +156,6 @@ exports.createSociety = asyncErrorHandler(async (req, res, next) => {
   console.log(csvFile);
   console.log(societyId);
   console.log(userId);
-  
- 
-
 
   if (!csvFile) {
     return next(new CustomError("csvFile not found!", 404));
@@ -168,7 +165,12 @@ exports.createSociety = asyncErrorHandler(async (req, res, next) => {
     return next(new CustomError("society is not in pending state", 400));
   }
 
-  const response = await societyService.createSociety(csvFile, societyId,userId,next);
+  const response = await societyService.createSociety(
+    csvFile,
+    societyId,
+    userId,
+    next
+  );
 
   if (!response) {
     return next(new CustomError("unable to create society", 404));
@@ -184,7 +186,7 @@ exports.createSociety = asyncErrorHandler(async (req, res, next) => {
 exports.rejectSociety = asyncErrorHandler(async (req, res, next) => {
   const societyData = req.body;
   const { id: societyId, societyAdminId: userId, status } = societyData;
-  
+
   if (!status == "pending") {
     return next(new CustomError("Society is not in pending state", 400));
   }
@@ -194,7 +196,6 @@ exports.rejectSociety = asyncErrorHandler(async (req, res, next) => {
 
   const response = await societyService.rejectSociety(societyId, userId);
 
-  // Send a success response to the client
   res.status(200).json({
     status: "success",
     message: "Society rejected and society admin deleted successfully",

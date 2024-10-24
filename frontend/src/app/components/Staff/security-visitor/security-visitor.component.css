@@ -113,3 +113,14 @@ small {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+::ng-deep .p-dropdown {
+  /* padding: 8px; */
+  /* font-size: 1rem; */
+  /* height: 40px; */
+  width: 100%;
+}
+
+::ng-deep .p-inputtext {
+  padding: 4px;
+}

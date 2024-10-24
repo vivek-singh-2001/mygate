@@ -4,6 +4,9 @@ const visitorController = require("./visitorController");
 const validate = require("../../utils/validationMiddleware");
 const { bodyValidator } = require("../../validations/bodyValidation");
 const { idValidationSchema } = require("../../validations/idValidation");
+const upload = require('../../middleware/multer');
+
+const { uploadSingle } = upload(/jpeg|jpg|png|webp/, 'image');
 
 const { addVisitor, getVisitors, verifyPasscode, approveVisitor } =
   visitorController;
@@ -37,12 +40,13 @@ const passcodeValidationRules = bodyValidator([
 ]);
 
 router.get("/", getVisitors);
-router.post("/add", validate(visitorValidationRules), addVisitor);
+router.post("/add", uploadSingle, validate(visitorValidationRules), addVisitor);
 router.post(
   "/verify-passcode",
   validate(passcodeValidationRules),
   verifyPasscode
 );
 router.patch("/approval/:id", validate(idValidationSchema), approveVisitor);
+router.patch("/approval/", validate(idValidationSchema), approveVisitor);
 
 module.exports = router;
