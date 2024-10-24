@@ -18,7 +18,6 @@ export class AppComponent  {
     private readonly authService: AuthService,
   ) {
     if (this.authService.isLoggedIn()) {
-      console.log("is initialized called................................")
      this.appInitializationService.initialize().subscribe();
     }
   }

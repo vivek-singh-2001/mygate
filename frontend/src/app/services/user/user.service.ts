@@ -44,16 +44,16 @@ export class UserService {
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {
-        console.log(response);
+        console.log("response.........................",response);
+        
         response.data.role = roleMappings[response.data.Roles[0].name];
         this.userDataSubject.next(response.data);
         this.userSocietyIdSubject.next(
           response.data.Houses[0]?.Floor.Wing.societyId
-         || response.data.Societies[0].id) 
+         || response.data.Societies[0]?.id)
         const rolesNames =
           response.data.Roles?.map((role: { name: string }) => role.name) || [];
         this.userRoleArraySubject.next(rolesNames);
-        
       }),
       catchError((error) => {
         console.error('Failed to load user data', error);

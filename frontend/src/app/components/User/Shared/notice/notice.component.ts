@@ -12,7 +12,6 @@ import { UserService } from '../../../../services/user/user.service';
 import { MessageService } from 'primeng/api';
 import { Notice } from '../../../../interfaces/notice.interface';
 import { GalleriaModule } from 'primeng/galleria';
-import { NotificationCountService } from '../../../../services/notificationCount/notificationCount.service';
 
 interface ItemsToAppend {
   description: string;
@@ -54,7 +53,6 @@ export class NoticeComponent implements OnInit {
     private readonly noticeService: NoticeService,
     private readonly userService: UserService,
     private readonly messageService: MessageService,
-    private readonly notificationService:NotificationCountService
   ) {
     this.formData = new FormData();
   }
@@ -121,23 +119,6 @@ export class NoticeComponent implements OnInit {
           detail: data.message,
         });
         this.notices.unshift(data.data.newNotice);
-
-       // Increment notification count for the notice type
-      this.notificationService.incrementCount(this.societyId, this.userId, 'notice')
-      .subscribe({
-        next: (count:any) => {
-          console.log(`Notification count incremented: ${count}`);
-          // this.notificationService.getCount(this.societyId,this.userId,'notice').subscribe({
-          //   next:(count:any)=>{
-          //     console.log("from notice component",count.count);
-          //     this.noticeCountUpdated.emit(count.count)
-          //   }
-          // })
-        },
-        error: (err:any) => {
-          console.error('Error incrementing notification count:', err);
-        },
-      });
 
         // Clear FormData by reinitializing it
         this.formData = new FormData();

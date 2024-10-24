@@ -46,12 +46,15 @@ export class AuthService {
       tap((user) => {
         this.userService.userRoles$.subscribe({
           next: (roles) => {
-            console.log(roles);
+            console.log("my roles......",roles);
             if (roles.includes('systemAdmin')) {
               this.router.navigate(['/systemAdmin']);
             }
             else if(roles.includes('pending')){
               this.router.navigate(['/pending'])
+            }
+            else if(roles.includes('security')){
+              this.router.navigate(['/Security'])
             }
             else{
               this.router.navigate(['/home']);

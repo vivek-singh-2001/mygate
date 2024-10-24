@@ -19,9 +19,15 @@
     <div
       class="p-field flex align-items-center gap-4 justify-content-between px-4 flex-wrap mb-4"
     >
-      <label for="name">Name</label>
-      <input id="name" type="text" formControlName="name" pInputText />
+      <label for="name">Firstname</label>
+      <input id="name" type="text" formControlName="firstname" pInputText />
     </div>
+    <div
+    class="p-field flex align-items-center gap-4 justify-content-between px-4 flex-wrap mb-4"
+  >
+    <label for="name">Lastname</label>
+    <input id="name" type="text" formControlName="lastname" pInputText />
+  </div>
     <div
       class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
     >
@@ -45,33 +51,31 @@
         type="text"
         pInputText
         formControlName="email"
-        placeholder="(Optional)"
+        placeholder=""
       />
     </div>
-    <div
-      class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-    >
-      <label for="name">Address</label>
-      <input id="address" type="text" formControlName="address" pInputText />
-    </div>
-
-    <div
-      class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-    >
-      <label for="dateofbirth">Start Date</label>
+    
+    <div  class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4">
+      <label for="dateofbirth" class="flex align-items-center"
+        >Date of Birth</label
+      >
       <p-calendar
-        formControlName="startDate"
-        dateFormat="dd/mm/yy"
+        name="dateofbirth"
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        formControlName="dateofbirth"
+        [style]="{ width: '100%' }"
         appendTo="body"
+
       />
     </div>
     <div
       class="p-field flex align-items-center gap-6 justify-content-center px-4 flex-wrap mb-4"
     >
       <p-button
-        (onClick)="onSubmit()"
+        (click)="onSubmit()"
         label="submit"
-        [disabled]="!securityGuardForm.valid"
+    
       />
     </div>
   </form>

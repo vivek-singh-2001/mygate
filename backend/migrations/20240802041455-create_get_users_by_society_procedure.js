@@ -11,7 +11,7 @@ module.exports = {
 
     // Create procedure to fetch users by society ID
     await queryInterface.sequelize.query(`
-      CREATE OR REPLACE FUNCTION GetUsersBySociety(society_id UUID, limits INT DEFAULT 10, offsets INT DEFAULT 0, searchQuery VARCHAR DEFAULT NULL)
+      CREATE OR REPLACE FUNCTION GetUsersBySociety(society_id UUID, limits INT DEFAULT NULL, offsets INT DEFAULT 0, searchQuery VARCHAR DEFAULT NULL)
       RETURNS TABLE(
         id UUID,
         firstname VARCHAR,

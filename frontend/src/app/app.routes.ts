@@ -14,6 +14,7 @@ import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { PageNotFoundComponent } from './components/shared/pageNotFound/page-not-found.component';
 import { SecurityGaurdComponent } from './components/Staff/SecurityGaurd/security-gaurd.component';
 import { PendingUserComponent } from './components/shared/pending-user/pending-user.component';
+import { SecurityComponent } from './layouts/Security/security.component';
 export const routes: Routes = [
   {
     path: 'login',
@@ -141,6 +142,10 @@ export const routes: Routes = [
           ).then((s) => s.SocietyListComponent),
       },
     ],
+  },
+  {
+    path:'Security',
+    component:SecurityComponent,
   },
 
   { path: 'test', component: SecurityGaurdComponent },

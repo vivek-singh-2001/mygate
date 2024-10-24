@@ -16,7 +16,7 @@ export class NoticeService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getNotices(societyId: string): Observable<any> {
+    getNotices(societyId: string): Observable<any> {
     if (this.noticeSubject.getValue().noticeList?.length > 0) {
       return this.notices$;
     } else {

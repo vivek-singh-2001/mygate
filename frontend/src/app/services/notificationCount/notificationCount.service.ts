@@ -1,44 +1,77 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, tap } from "rxjs";
-import { environment } from "../../../environments/environment";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { io, Socket } from 'socket.io-client';
+import { UserService } from '../user/user.service';
 
 @Injectable({
-    providedIn: 'root',
-  })
-  export class NotificationCountService {
+  providedIn: 'root',
+})
+export class NotificationCountService {
+  private readonly apiUrl = `${environment.apiUrl}/notificationcount`;
 
-    private readonly apiUrl = `${environment.apiUrl}/notificationcount`;
+  private readonly notificationCountSubject = new BehaviorSubject<number>(0);
+  private readonly newNoticeSubject = new BehaviorSubject<any>('');
+  notificationCount$ = this.notificationCountSubject.asObservable();
+  newNotice$ = this.newNoticeSubject .asObservable();
 
-    private readonly notificationCountSubject = new BehaviorSubject<number>(0);
-    notificationCount$ = this.notificationCountSubject.asObservable();
-  
-    constructor(private readonly http: HttpClient) {}
-  
-    // Fetch the current notification count
-    getCount(societyId: string, userId: string, type: string): Observable<number> {
-      
-      return this.http.get<number>(`${this.apiUrl}/${societyId}/${userId}/${type}`);
+  private readonly socket: Socket;
+  private cachedCount: number | null = null;
+
+  constructor(
+    private readonly http: HttpClient,
+    private readonly userService: UserService
+  ) {
+    // Initialize WebSocket connection
+    this.socket = io('http://localhost:7500', {
+      transports: ['websocket'],
+      withCredentials: true,
+    });
+
+    // Listen for 'noticeCreated' event and just log that a notice was created
+    this.socket.on('noticeCreated', (data) => {
+      this.newNoticeSubject.next(data.notice)
+    });
+
+    // Get user data to join the user's notification room
+    this.userService.getUserData().subscribe((user) => {
+      if (user && user.id) {
+        this.joinNotificationRoom(user.id);
+
+        // Listen for 'updatedCount' event to get the updated notification count and notice
+        this.socket.on('updatedCount', (data) => {
+          console.log('Updated notification count received:', data);
+          // Update the count when the event is received
+          this.notificationCountSubject.next(data.count); // Update the UI with the count
+          this.cachedCount = data.count;
+        });
+      }
+    });
+  }
+
+  // Method to join a user's specific room
+  joinNotificationRoom(userId: string) {
+    this.socket.emit('joinRoom', userId); // Join the room with userId as the room name
+  }
+
+  // Fetch the current notification count
+  getCount(
+    societyId: string,
+    userId: string,
+    type: string
+  ): Observable<number> {
+    if (this.cachedCount !== null) {
+      return of(this.cachedCount); // Return the cached count if it is available
     }
-  
-    // Increment the count and emit new value
-    incrementCount(societyId: string, userId: string, type: string): Observable<number> {
-      return this.http.post<number>(`${this.apiUrl}/increment`, {
-        societyId,
-        userId,
-        type,
-      }).pipe(
-        tap((response:any) => {
-            console.log("from service ", response.count);
-            
-          this.notificationCountSubject.next(response.count);  // Update the BehaviorSubject with the new count
+    return this.http
+      .get<number>(`${this.apiUrl}/${societyId}/${userId}/${type}`)
+      .pipe(
+        tap((count: any) => {
+          this.cachedCount = count.count;
+          console.log('From service:', count.count);
+          this.notificationCountSubject.next(count.count);
         })
       );
-    }
-  
-    // Reset the count for a specific type
-    resetCount(societyId: string, userId: string, type: string): Observable<void> {
-      return this.http.post<void>(`${this.apiUrl}/reset/${societyId}/${userId}/${type}`, {});
-    }
   }
-  
+}
