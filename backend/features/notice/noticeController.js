@@ -3,34 +3,35 @@ const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const CustomError = require("../../utils/CustomError");
 
 exports.createNotice = asyncErrorHandler(async (req, res, next) => {
-    const noticeData = req.body;
-    const images = req.files;
-    
-  
-    // Validate the input
-    if (!noticeData.description || !noticeData.societyId || !noticeData.userId) {
-      return next(new CustomError('Missing required fields: description, societyId, or userId.', 400));
-    }
-    const newNotice = await NoticeService.createNotice(noticeData, images);
-    return res.status(201).json({
-      status: "success",
-      message: "Notice created successfully",
-      data: {
-        newNotice,
-      },
-    });
+  const noticeData = req.body;
+  const images = req.files;
+
+  if (!noticeData.description || !noticeData.societyId || !noticeData.userId) {
+    return next(
+      new CustomError(
+        "Missing required fields: description, societyId, or userId.",
+        400
+      )
+    );
+  }
+  const newNotice = await NoticeService.createNotice(noticeData, images);
+  return res.status(201).json({
+    status: "success",
+    message: "Notice created successfully",
+    data: {
+      newNotice,
+    },
   });
-  
-  
+});
+
 exports.getAllNotice = asyncErrorHandler(async (req, res, next) => {
   const { societyId } = req.params;
-  
 
   const noticeList = await NoticeService.getAllNotice(societyId);
   if (!noticeList) {
     return next(new CustomError("Notice list doesnt found"));
   }
-  res.status(200).json({ status: "success",data:{noticeList} });
+  res.status(200).json({ status: "success", data: { noticeList } });
 });
 
 exports.getNoticeById = asyncErrorHandler(async (req, res, next) => {
