@@ -24,6 +24,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { environment } from '../../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { ImageModule } from 'primeng/image';
 
 @Component({
   selector: 'app-visitors',
@@ -41,6 +42,7 @@ import { HttpClient } from '@angular/common/http';
     TooltipModule,
     TabViewModule,
     ConfirmDialogModule,
+    ImageModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './visitors.component.html',
