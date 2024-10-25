@@ -3,9 +3,7 @@ const visitorService = require("./visitorService");
 
 exports.addVisitor = asyncErrorHandler(async (req, res, next) => {
   const visitorData = req.body;
-  if (req.file) {
-    visitorData.image = req.file.path;
-  }
+  visitorData.image = req.file?.path || null;
   const newVisitor = await visitorService.addVisitor(visitorData);
   return res.status(201).json({
     status: "success",
@@ -40,9 +38,9 @@ exports.approveVisitor = asyncErrorHandler(async (req, res, next) => {
   const { id: visitorId } = req.params;
   const { status } = req.body;
 
-  if (!status || (status !== 'Approved' && status !== 'Rejected')) {
+  if (!status || (status !== "Approved" && status !== "Rejected")) {
     res.status(400).json({
-      message: 'Status is required and must be either approved or rejected'
+      message: "Status is required and must be either approved or rejected",
     });
   }
 
@@ -50,6 +48,6 @@ exports.approveVisitor = asyncErrorHandler(async (req, res, next) => {
 
   res.status(200).json({
     status: "success",
-    data: updatedVisitor
+    data: updatedVisitor,
   });
 });

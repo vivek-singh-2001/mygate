@@ -139,6 +139,16 @@ export const routes: Routes = [
   {
     path:'Security',
     component:SecurityComponent,
+    children: [
+      { path: '', redirectTo: 'visitors', pathMatch: 'full' },
+      {
+        path: 'visitors',
+        loadComponent: () =>
+          import('./components/Staff/security-visitor/security-visitor.component').then(
+            (security) => security.SecurityVisitorComponent
+          ),
+      },
+    ],
   },
 
   { path: 'test', component: SecurityGaurdComponent },
