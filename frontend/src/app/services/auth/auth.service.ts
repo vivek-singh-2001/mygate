@@ -53,13 +53,7 @@ export class AuthService {
             } else if (roles.includes('pending')) {
               this.router.navigate(['/pending']);
             } else if (roles.includes('security')) {
-              this.societyStaffService.staffDetails(user.data.id).subscribe({
-                next: (data) => {
-                  console.log("pppppppppppppppppppppp",data);
-                  
-                  this.router.navigate(['/Security']);
-                },
-              });
+              this.router.navigate(['/Security']);
             } else {
               this.router.navigate(['/home']);
             }

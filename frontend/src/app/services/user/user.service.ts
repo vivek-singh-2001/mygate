@@ -44,6 +44,7 @@ export class UserService {
   getCurrentUser(): Observable<any> {
     return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
       tap((response: any) => {        
+        
         response.data.role = roleMappings[response.data.Roles[0].name];
         this.userDataSubject.next(response.data);
         this.userSocietyIdSubject.next(

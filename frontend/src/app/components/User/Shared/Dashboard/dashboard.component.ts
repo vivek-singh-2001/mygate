@@ -53,7 +53,10 @@ export class DashboardComponent implements OnInit {
       next: (count: any) => {
         this.newNoticesCount = count; 
         this.noticeService.getNotices(this.societyId).subscribe((notice)=>{
-          this.notices = notice.noticeList[0]
+          const sortedNoticeList = notice.noticeList.sort((a: any, b: any) => {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          });
+          this.notices = sortedNoticeList[0]
         })
       },
     });

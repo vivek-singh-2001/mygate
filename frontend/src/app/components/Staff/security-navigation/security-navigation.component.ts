@@ -1,13 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
 import { UserService } from '../../../services/user/user.service';
-import { Router } from '@angular/router';
 import { SocietyService } from '../../../services/society/society.Service';
 import { House } from '../../../interfaces/house.interface';
 import { Society } from '../../../interfaces/society.interface';
-import { User } from '../../../interfaces/user.interface';
 import { MenuItem } from 'primeng/api';
-import { tap } from 'rxjs';
 import { MenuModule } from 'primeng/menu';
 import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
@@ -31,7 +28,7 @@ import { MenubarModule } from 'primeng/menubar';
   templateUrl: './security-navigation.component.html',
   styleUrl: './security-navigation.component.css',
 })
-export class SecurityNavigationComponent {
+export class SecurityNavigationComponent implements OnInit {
   items: MenuItem[] = [];
   item: MenuItem[] | undefined;
   user!: any;
@@ -44,14 +41,11 @@ export class SecurityNavigationComponent {
   constructor(
     private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly societyService:SocietyService
-  
+    private readonly societyService: SocietyService
   ) {}
 
   ngOnInit(): void {
     this.loadUserData();
-    // this.societyService.fetchSocietyData('').subscribe()
-    
   }
 
   private initializeMenu(): void {
@@ -67,11 +61,13 @@ export class SecurityNavigationComponent {
   private loadUserData(): void {
     this.userService.getUserData().subscribe({
       next: (data) => {
-        this.user = data.data;
+        this.user = data;        
         this.initializeMenu();
       },
       error: (error) => {
         console.error('Failed to fetch user details', error);
+      },
+      complete: () => {
       },
     });
   }
