@@ -59,3 +59,14 @@ exports.imagePath = (req, res) => {
   const filePath = path.join(__dirname, "../../uploads", req.params.filename);
   res.sendFile(filePath);
 }
+
+exports.getAllVisitors = asyncErrorHandler(async(req, res, next) => {
+  const { id: societyId } = req.params;
+
+  const data = await visitorService.getAllVisitors(societyId);
+
+  res.status(200).json({
+    status: "success",
+    data
+  })
+})

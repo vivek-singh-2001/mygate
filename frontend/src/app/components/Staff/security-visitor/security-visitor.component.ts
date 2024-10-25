@@ -15,22 +15,30 @@ import { DropdownModule } from 'primeng/dropdown';
 import { VisitorService } from '../../../services/visitor/visitor.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { Visitor } from '../../../interfaces/visitor.interface';
+import { DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
+import { InputOtpModule } from 'primeng/inputotp';
 
 @Component({
   selector: 'app-security-visitor',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, ButtonModule, DropdownModule, ToastModule],
+  imports: [ReactiveFormsModule, CommonModule, ButtonModule, DropdownModule, ToastModule, DialogModule, TableModule, InputOtpModule],
   templateUrl: './security-visitor.component.html',
   styleUrl: './security-visitor.component.css',
   providers: [MessageService],
 })
 export class SecurityVisitorComponent implements OnInit {
   visitorForm!: FormGroup;
+  verificationForm!: FormGroup;
   selectedFile: File | null = null;
   selectedFileName: string | null = null;
   houses: any[] = [];
   wings: Wing[] = [];
+  visitors: Visitor[] = []
   formSubmitted: boolean = false;
+  display: boolean = false;
+  verifyDialog: boolean = false;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -50,8 +58,13 @@ export class SecurityVisitorComponent implements OnInit {
       houseId: ['', Validators.required],
     });
 
+    this.verificationForm = this.fb.group({
+      passcode: ['', Validators.required]
+    });
+
     this.userService.userSocietyId$.subscribe((societyId) => {
       this.fetchWings(societyId);
+      this.fetchVisitors(societyId);
     });
   }
 
@@ -69,6 +82,35 @@ export class SecurityVisitorComponent implements OnInit {
         console.error('Failed to load wings', error);
       },
     });
+  }
+
+  fetchVisitors(societyId: string): void {
+    this.visitorService.getSocietyVisitors(societyId).subscribe({
+      next: (response: any) => {
+        this.visitors = response.data;
+      },
+      error: (error) => {
+        console.error('Failed to load visitors', error);
+      },
+    });
+  }
+
+  showDialog() {
+    this.display = true;
+  }
+
+  closeDialog() {
+    this.display = false;
+    this.visitorForm.reset();
+  }
+
+  showVerificationDialog() {
+    this.verifyDialog = true;
+  }
+
+  closeVerificationDialog() {
+    this.verifyDialog = false;
+    this.verificationForm.reset()
   }
 
   onWingSelection(wingId: string): void {

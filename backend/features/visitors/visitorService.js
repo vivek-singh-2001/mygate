@@ -1,6 +1,7 @@
 const visitorRepository = require("./visitorRepository");
 const houseRepository = require("../house/houseRepository");
 const userRepository = require("../users/userRepository");
+const societyRepository = require("../society/societyRepository")
 const CustomError = require("../../utils/CustomError");
 
 const generatePasscode = () => {
@@ -103,4 +104,16 @@ exports.approveVisitor = async (visitorId, status) => {
   }
 
   return updatedVisitor;
+}
+
+exports.getAllVisitors = async(societyId) => {
+  const society = await societyRepository.getsocietyById(societyId);
+
+  // console.log("jdbf", society);
+  
+  if (!society) {
+    throw new CustomError("Society not found", 404);
+  }
+
+  return await visitorRepository.getAllVisitors(societyId)
 }

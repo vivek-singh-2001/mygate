@@ -97,7 +97,6 @@ db.HouseUser.belongsTo(db.House, { foreignKey: "houseId" });
 db.HouseUser.belongsTo(db.User, { foreignKey: "userId" });
 db.User.hasMany(db.HouseUser, { foreignKey: "userId" });
 
-
 // ==============user-role (: Many to many)=========================
 
 db.User.belongsToMany(db.Role, {
@@ -131,7 +130,7 @@ db.Visitor.belongsTo(db.House, { foreignKey: "houseId", allowNull: true });
 // ============== user-visitor (One to many) ======================
 
 db.User.hasMany(db.Visitor, { foreignKey: "responsibleUser" });
-db.Visitor.belongsTo(db.House, { foreignKey: "responsibleUser" });
+db.Visitor.belongsTo(db.User, { foreignKey: "responsibleUser" });
 
 // ==============staff-society (: One to many)=========================
 db.Society.hasMany(db.Staff, { foreignKey: "societyId" });

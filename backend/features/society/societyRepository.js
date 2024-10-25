@@ -14,7 +14,7 @@ const {
 } = db;
 
 exports.getsocietyById = async (societyId) => {
-  const society = await Society.findByPk({ id: societyId });
+  const society = await Society.findByPk(societyId);
   if (!society) {
     throw new CustomError("society not found", 404);
   }

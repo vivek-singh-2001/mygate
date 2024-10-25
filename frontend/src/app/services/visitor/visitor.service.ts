@@ -51,4 +51,16 @@ export class VisitorService {
       })
     );
   }
+
+  getSocietyVisitors(societyId: string): Observable<any> {
+    return this.http.get(`${this.visitorApiUrl}/all/${societyId}`).pipe(
+      tap((response) => {
+        console.log('Visitors data:', response);
+      }),
+      catchError((error) => {
+        console.error('Failed to get visitors data', error);
+        return of(null);
+      })
+    )
+  }
 }

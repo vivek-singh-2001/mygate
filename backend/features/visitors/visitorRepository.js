@@ -1,5 +1,5 @@
 const { db } = require("../../config/connection");
-const { Visitor } = db;
+const { Visitor, House, Floor, Wing } = db;
 const CustomError = require("../../utils/CustomError");
 
 exports.createVisitor = async (visitorData) => {
@@ -16,7 +16,7 @@ exports.createVisitor = async (visitorData) => {
     houseId,
     status,
     responsibleUser,
-    image
+    image,
   } = visitorData;
 
   return await Visitor.create({
@@ -32,7 +32,7 @@ exports.createVisitor = async (visitorData) => {
     status: status || "Pending",
     houseId: houseId || null,
     responsibleUser: responsibleUser,
-    image: image || null
+    image: image || null,
   });
 };
 
@@ -73,4 +73,29 @@ exports.updateVisitorStatus = async (visitorId, status) => {
     console.log(error);
     throw new CustomError(error);
   }
+};
+
+exports.getAllVisitors = async (societyId) => {
+  return await Visitor.findAll({
+    where: { type: "Uninvited" },
+    include: [
+      {
+        model: House,
+        required: true,
+        include: [
+          {
+            model: Floor,
+            required: true,
+            include: [
+              {
+                model: Wing,
+                required: true,
+                where: { societyId: societyId },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
 };
