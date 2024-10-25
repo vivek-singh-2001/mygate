@@ -15,6 +15,7 @@ import { PageNotFoundComponent } from './components/shared/pageNotFound/page-not
 import { SecurityGaurdComponent } from './components/Staff/SecurityGaurd/security-gaurd.component';
 import { PendingUserComponent } from './components/shared/pending-user/pending-user.component';
 import { SecurityComponent } from './layouts/Security/security.component';
+import { SecurityGuard } from './gaurds/security.gaurd';
 export const routes: Routes = [
   {
     path: 'login',
@@ -68,13 +69,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/User/Shared/visitors/visitors.component').then(
             (visitor) => visitor.VisitorsComponent
-          ),
-      },
-      {
-        path: 'security', //testinggggggg
-        loadComponent: () =>
-          import('./components/Staff/security-visitor/security-visitor.component').then(
-            (security) => security.SecurityVisitorComponent
           ),
       },
       {
@@ -144,16 +138,18 @@ export const routes: Routes = [
     ],
   },
   {
-    path:'Security',
-    component:SecurityComponent,
+    path: 'Security',
+    component: SecurityComponent,
+    canActivate: [SecurityGuard],
     children: [
       { path: '', redirectTo: 'visitors', pathMatch: 'full' },
       {
         path: 'visitors',
+        canActivate: [SecurityGuard],
         loadComponent: () =>
-          import('./components/Staff/security-visitor/security-visitor.component').then(
-            (security) => security.SecurityVisitorComponent
-          ),
+          import(
+            './components/Staff/security-visitor/security-visitor.component'
+          ).then((security) => security.SecurityVisitorComponent),
       },
     ],
   },
@@ -170,5 +166,4 @@ export const routes: Routes = [
     path: '**',
     component: PageNotFoundComponent,
   },
-  { path: 'unauthorized', component: UnauthorizedComponent },
 ];

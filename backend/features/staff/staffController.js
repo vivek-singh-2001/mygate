@@ -6,7 +6,7 @@ const CustomError = require('../../utils/CustomError');
 exports.createStaff = asyncErrorHandler(async (req, res, next) => {
   const staffData = req.body;
 
-  console.log(staffData);
+  console.log(staffData.societyId);
   
 
   const newStaff = await staffService.createStaff(staffData,next);

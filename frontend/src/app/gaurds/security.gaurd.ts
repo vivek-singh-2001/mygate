@@ -7,7 +7,7 @@ import { UserService } from '../services/user/user.service';
 @Injectable({
   providedIn: 'root',
 })
-export class NonSystemAdminGuard implements CanActivate {
+export class SecurityGuard implements CanActivate {
   constructor(
     private readonly userService: UserService,
     private readonly router: Router
@@ -15,7 +15,7 @@ export class NonSystemAdminGuard implements CanActivate {
 
   canActivate(): Observable<boolean> {
    
-    const allowedRoles = ['owner', 'wingAdmin','societyAdmin','familyMember'];
+    const allowedRoles = ['security'];
 
     return this.userService.userRoles$.pipe(
       switchMap((roles: string[] | null) => {
@@ -23,9 +23,8 @@ export class NonSystemAdminGuard implements CanActivate {
           
           // Check if user has any of the allowed roles
           const hasAllowedRole = roles.some(role => allowedRoles.includes(role));
-          const isSystemAdmin = roles.includes('systemAdmin');
           
-          if (hasAllowedRole && !isSystemAdmin) {
+          if (hasAllowedRole ) {
             return of(true);  // Allow access
           } else {
             // Redirect to unauthorized page if not allowed
@@ -41,9 +40,8 @@ export class NonSystemAdminGuard implements CanActivate {
                   console.log('Checking updated roles:', updatedRoles);
 
                   const hasAllowedRole = updatedRoles.some(role => allowedRoles.includes(role));
-                  const isSystemAdmin = updatedRoles.includes('systemAdmin');
 
-                  if (hasAllowedRole && !isSystemAdmin) {
+                  if (hasAllowedRole ) {
                     return true;  // Allow access
                   } else {
                     this.router.navigate(['/unauthorized']);

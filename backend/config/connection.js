@@ -33,6 +33,7 @@ db.Visitor = require("../features/visitors/visitorModel.js")(connectDB, DataType
 db.Staff = require("../features/staff/staffModel.js")(connectDB, DataTypes);
 db.Shift = require("../features/shift/shiftModel.js")(connectDB, DataTypes);
 db.NotificationCount = require("../features/notificationCount/notificationCountModel.js")(connectDB, DataTypes);
+db.SocietyStaff = require("../features/society/societyStaffModel.js")(connectDB, DataTypes);
 
 // =============society-wing (: One to many)============================
 
@@ -150,6 +151,23 @@ db.NotificationCount.belongsTo(db.Society, { foreignKey: "societyId" });
 
 db.User.hasMany(db.NotificationCount, { foreignKey: "userId" });
 db.NotificationCount.belongsTo(db.User, { foreignKey: "userId" });
+
+// =============societyStaff with society and user (: One to many)=========================
+
+db.User.belongsToMany(db.Society, {
+  through: db.SocietyStaff,
+  foreignKey: "staffId",
+  otherKey: "societyId",
+});
+db.Society.belongsToMany(db.User, {
+  through: db.SocietyStaff,
+  foreignKey: "societyId",
+  otherKey: "staffId",
+});
+db.User.hasMany(db.SocietyStaff, { foreignKey: "staffId" });
+db.SocietyStaff.belongsTo(db.User, { foreignKey: "staffId" });
+db.SocietyStaff.belongsTo(db.Society, { foreignKey: "societyId", as: 'Society', });
+db.Society.hasMany(db.SocietyStaff, { foreignKey: "societyId",as:'Staff' });
 
 
 const check = async () => {

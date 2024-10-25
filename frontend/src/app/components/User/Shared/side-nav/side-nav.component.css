@@ -41,7 +41,7 @@
 ::ng-deep .menuwraper .p-menubar .p-submenu-list {
   position: absolute;
   z-index: 2;
-  max-width: fit-content;
+  /* max-width: fit-content; */
 }
 
 

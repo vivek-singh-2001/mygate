@@ -74,8 +74,6 @@ export class SecurityVisitorComponent implements OnInit {
   onWingSelection(wingId: string): void {
     this.wingService.fetchHousesByWingId(wingId).subscribe({
       next: (response: any) => {
-        console.log('kfjvbsfdkjvsbdfjld bklgs', response);
-
         this.houses = response.data.wingHouseDetails
           // .filter((house: any) => house.owner)
           .sort((a: any, b: any) => a.house_no - b.house_no)

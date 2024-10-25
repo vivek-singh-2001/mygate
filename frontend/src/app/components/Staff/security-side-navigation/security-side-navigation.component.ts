@@ -38,14 +38,13 @@ export class SecuritySideNavigationComponent {
 
   }
 
-
   initializeMenuItems() {
     this.items = [
       {
-        label: 'Dashboard',
-        icon: 'pi pi-home',
+        label: 'visitors',
+        icon: 'pi pi-id-card',
         iconSize: 'large',
-        command: () => this.navigateTo('/Security/home'),
+        command: () => this.navigateTo('/Security/visitors'),
       },
     ];
   }

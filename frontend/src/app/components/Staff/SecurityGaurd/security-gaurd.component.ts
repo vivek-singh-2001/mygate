@@ -106,9 +106,7 @@ export class SecurityGaurdComponent implements OnInit {
 
   onSubmit() {
     if (this.securityGuardForm.valid) {
-      console.log(this.securityGuardForm.value);
-
-      this.staffService.registerStaff(this.securityGuardForm.value).subscribe({
+      this.staffService.registerStaff(this.securityGuardForm.value,this.societyId).subscribe({
         next: (staff) => {
           console.log(staff);
           

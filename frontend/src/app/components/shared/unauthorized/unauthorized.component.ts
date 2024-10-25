@@ -22,6 +22,9 @@ export class UnauthorizedComponent {
         else if(roleArray.includes('pending')){
           this.router.navigate(['pending'])
         }
+        else if(roleArray.includes('security')){
+          this.router.navigate(['Security'])
+        }
         else {
           this.router.navigate(['/home']);
         }

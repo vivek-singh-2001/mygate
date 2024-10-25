@@ -69,7 +69,6 @@ export class NotificationCountService {
       .pipe(
         tap((count: any) => {
           this.cachedCount = count.count;
-          console.log('From service:', count.count);
           this.notificationCountSubject.next(count.count);
         })
       );

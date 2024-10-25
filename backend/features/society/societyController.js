@@ -202,3 +202,13 @@ exports.rejectSociety = asyncErrorHandler(async (req, res, next) => {
     data: response,
   });
 });
+
+exports.getStaffDetails = asyncErrorHandler(async(req,res,next)=>{
+  const {userId} = req.params;
+  const staffData = await societyService.getStaffDetails(userId);
+
+  res.status(200).json({
+    status: "success",
+    data: staffData,
+  });
+})

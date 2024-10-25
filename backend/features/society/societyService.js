@@ -104,3 +104,7 @@ exports.rejectSociety = async (societyId, userId) => {
     throw new Error("Failed to reject society and delete user. Please try again.");
   }
 };
+
+exports.getStaffDetails = async (userId)=>{
+    return await societyRepository.getStaffDetails(userId)
+}
