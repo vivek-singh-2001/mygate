@@ -85,10 +85,8 @@ export class SocietyListComponent {
     const filename = fullPath.split('/').pop() ?? '';
     this.isLoading = true;
 
-    // Construct the URL to fetch the CSV
     const csvFileUrl = `${environment.apiUrl}/society/csv/${filename}`;
 
-    // Fetch the CSV file
     this.http.get(csvFileUrl, { responseType: 'text' }).subscribe({
       next: (csvData) => {
         const parsedData = this.parseCsv(csvData);

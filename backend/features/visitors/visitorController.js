@@ -1,9 +1,12 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const visitorService = require("./visitorService");
+const path = require('path');
 
 exports.addVisitor = asyncErrorHandler(async (req, res, next) => {
   const visitorData = req.body;
-  visitorData.image = req.file?.path || null;
+  visitorData.image = path.join("/uploads/", req.file?.filename) || null;
+  console.log(123, visitorData.image);
+  
   const newVisitor = await visitorService.addVisitor(visitorData);
   return res.status(201).json({
     status: "success",
@@ -51,3 +54,8 @@ exports.approveVisitor = asyncErrorHandler(async (req, res, next) => {
     data: updatedVisitor,
   });
 });
+
+exports.imagePath = (req, res) => {
+  const filePath = path.join(__dirname, "../../uploads", req.params.filename);
+  res.sendFile(filePath);
+}

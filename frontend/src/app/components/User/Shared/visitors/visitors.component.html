@@ -210,6 +210,7 @@
           <th scope="col">Visit Start</th>
           <th scope="col">Visit End</th>
           <th scope="col">Time</th>
+          <th scope="col">Image</th>
           <th scope="col">Actions</th>
         </tr>
       </ng-template>
@@ -221,6 +222,14 @@
           <td>{{ visitor.startDate | date : "shortDate" }}</td>
           <td>{{ visitor.endDate | date : "shortDate" }}</td>
           <td>{{ visitor.visitTime }}</td>
+          <td>
+            <img
+              [src]="getImageUrl(visitor.image)"
+              alt="Visitor Image"
+              width="50"
+              height="50"
+            />
+          </td>
           <td>
             <p-button
               icon="pi pi-check"

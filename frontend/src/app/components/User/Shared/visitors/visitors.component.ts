@@ -22,6 +22,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { Visitor } from '../../../../interfaces/visitor.interface';
 import { TabViewModule } from 'primeng/tabview';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { environment } from '../../../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-visitors',
@@ -38,13 +40,15 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     TableModule,
     TooltipModule,
     TabViewModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './visitors.component.html',
   styleUrl: './visitors.component.css',
 })
 export class VisitorsComponent implements OnInit {
+  public apiUrl: string = environment.apiUrl;
+
   display: boolean = false;
   visitorForm: FormGroup;
   visitorTypes = [
@@ -66,7 +70,7 @@ export class VisitorsComponent implements OnInit {
   selectedVisitor!: Visitor;
   displayDialog: boolean = false;
   imageUrl: string = '';
-  confirmDialogVisible = false
+  confirmDialogVisible = false;
   actionType!: 'approve' | 'reject';
 
   constructor(
@@ -75,7 +79,8 @@ export class VisitorsComponent implements OnInit {
     private readonly messageService: MessageService,
     private readonly userService: UserService,
     private readonly houseService: HouseService,
-    private readonly confirmationService: ConfirmationService
+    private readonly confirmationService: ConfirmationService,
+    private readonly http: HttpClient
   ) {
     this.visitorForm = this.fb.group({
       name: ['', Validators.required],
@@ -190,10 +195,13 @@ export class VisitorsComponent implements OnInit {
 
   showConfirmation(visitor: Visitor, action: 'Approved' | 'Rejected') {
     this.confirmationService.confirm({
-      message: `Are you sure you want to ${action === 'Approved' ? 'approve' : 'reject'} this visitor?`,
+      message: `Are you sure you want to ${
+        action === 'Approved' ? 'approve' : 'reject'
+      } this visitor?`,
       header: 'Confirm Action',
       icon: 'pi pi-exclamation-triangle',
-      acceptButtonStyleClass: action === 'Approved' ? 'p-button-success' : 'p-button-danger',
+      acceptButtonStyleClass:
+        action === 'Approved' ? 'p-button-success' : 'p-button-danger',
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
         this.updateVisitorStatus(visitor, action);
@@ -211,7 +219,10 @@ export class VisitorsComponent implements OnInit {
         this.messageService.add({
           severity: 'success',
           summary: 'Success',
-          detail: status === 'Approved' ? 'Visitor approved successfully.': 'Visitor rejected successfully.',
+          detail:
+            status === 'Approved'
+              ? 'Visitor approved successfully.'
+              : 'Visitor rejected successfully.',
         });
       },
       error: (error) => {
@@ -224,35 +235,62 @@ export class VisitorsComponent implements OnInit {
     });
   }
 
+  getImageUrl(imagePath: string): string {
+    if (!imagePath) {
+      console.error('Image path not found');
+      return '';
+    }
+
+    const filename = imagePath.split('/').pop() ?? '';
+
+    return `${environment.apiUrl}/visitors/image/${filename}`;
+  }
+
   generateVisitorImage(visitor: Visitor): Promise<string> {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      
+
       const scaleFactor = 2;
       const canvasWidth = 400 * scaleFactor;
       const canvasHeight = 600 * scaleFactor;
-  
+
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
-  
+
       if (ctx) {
         ctx.scale(scaleFactor, scaleFactor);
-  
+
         const logo = new Image();
         logo.src = 'assets/mygate.png';
-  
+
         logo.onload = () => {
           ctx.fillStyle = '#FF4D4D';
-          ctx.fillRect(0, 0, canvasWidth / scaleFactor, canvasHeight / scaleFactor);
-  
-          const drawRoundedRect = (x: number, y: number, width: number, height: number, radius: number) => {
+          ctx.fillRect(
+            0,
+            0,
+            canvasWidth / scaleFactor,
+            canvasHeight / scaleFactor
+          );
+
+          const drawRoundedRect = (
+            x: number,
+            y: number,
+            width: number,
+            height: number,
+            radius: number
+          ) => {
             ctx.beginPath();
             ctx.moveTo(x + radius, y);
             ctx.lineTo(x + width - radius, y);
             ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
             ctx.lineTo(x + width, y + height - radius);
-            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.quadraticCurveTo(
+              x + width,
+              y + height,
+              x + width - radius,
+              y + height
+            );
             ctx.lineTo(x + radius, y + height);
             ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
             ctx.lineTo(x, y + radius);
@@ -261,38 +299,38 @@ export class VisitorsComponent implements OnInit {
             ctx.fillStyle = '#FFFFFF';
             ctx.fill();
           };
-  
+
           drawRoundedRect(20, 40, 360, 520, 20);
-  
+
           const logoHeight = 70;
           const logoY = 50;
           ctx.drawImage(logo, (400 - 100) / 2, logoY, 100, logoHeight);
-  
+
           const textStartY = logoY + logoHeight + 50;
-  
+
           ctx.fillStyle = '#555';
           ctx.font = 'normal 22px Arial';
           ctx.fillText(`Hello, `, 40, textStartY);
-  
+
           const greetingWidth = ctx.measureText(`Hello, `).width;
-  
+
           ctx.fillStyle = '#555';
           ctx.font = 'bold 22px Arial';
           ctx.fillText(`${visitor.name}`, 40 + greetingWidth, textStartY);
-  
+
           const nextY = textStartY + 60;
-  
+
           ctx.fillStyle = '#555';
           ctx.font = 'bold 22px Arial';
           const userFullName = `${this.userData.firstname} ${this.userData.lastname}`;
           ctx.fillText(userFullName, 40, nextY);
-  
+
           const fullNameWidth = ctx.measureText(userFullName).width;
-  
+
           ctx.fillStyle = '#555';
           ctx.font = 'normal 22px Arial';
           ctx.fillText(`has invited you to`, 40 + fullNameWidth + 10, nextY);
-  
+
           ctx.fillStyle = '#555';
           ctx.font = 'bold 22px Arial';
           ctx.fillText(
@@ -300,38 +338,42 @@ export class VisitorsComponent implements OnInit {
             40,
             nextY + 40
           );
-  
+
           ctx.fillStyle = '#333';
           ctx.font = 'normal 16px Arial';
           const startDate = new Date(visitor.startDate).toLocaleDateString();
           const endDate = new Date(visitor.endDate).toLocaleDateString();
           const dateY = nextY + 100;
           ctx.fillText(`${startDate} - ${endDate}`, 40, dateY);
-  
+
           const passcodeY = dateY + 60;
           ctx.fillStyle = '#FFFFFF';
           ctx.fillRect(40, passcodeY, 320, 100);
-  
+
           ctx.fillStyle = '#333';
           ctx.font = 'bold 50px Arial';
           ctx.textAlign = 'center';
-          ctx.fillText(visitor.passcode, canvas.width / (2 * scaleFactor), passcodeY + 60);
-  
+          ctx.fillText(
+            visitor.passcode,
+            canvas.width / (2 * scaleFactor),
+            passcodeY + 60
+          );
+
           ctx.font = 'italic 14px Arial';
           ctx.fillStyle = '#666';
           ctx.textAlign = 'center';
-  
+
           const footerY = passcodeY + 160;
           ctx.fillText(
             'Please share this passcode with security at the gate.',
             canvas.width / (2 * scaleFactor),
             footerY
           );
-  
+
           const imageUrl = canvas.toDataURL('image/png');
           resolve(imageUrl);
         };
-  
+
         logo.onerror = () => {
           reject(new Error('Failed to load the logo image.'));
         };
@@ -340,7 +382,6 @@ export class VisitorsComponent implements OnInit {
       }
     });
   }
-  
 
   openShareDialog(visitor: Visitor) {
     this.generateVisitorImage(visitor).then((imageUrl) => {
