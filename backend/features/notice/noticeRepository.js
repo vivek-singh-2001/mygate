@@ -1,7 +1,8 @@
 const { db } = require("../../config/connection");
 const CustomError = require("../../utils/CustomError");
-const { Notice, User, NotificationCount } = db;
+const { Notice, User } = db;
 const notificationCountRepository = require("../notificationCount/notificationCountRepository");
+const userRepository = require("../users/userRepository");
 
 const NoticeRepository = {
   createNotice: async (noticeData, Images, societyUsers) => {
@@ -26,9 +27,23 @@ const NoticeRepository = {
         "notice"
       );
 
+      const mediaUrlsFilename = JSON.parse(newNotice.media);
+      const mediaUrls = mediaUrlsFilename.map((filename) => {
+        return `${process.env.BASE_URL}/uploads/${filename}`;
+      });
+
+
+      const user = await userRepository.getUserById(newNotice.userId);
+      const authorData = { firstname: user.firstname, lastname: user.lastname };
+
+      const dataToSend = {
+        ...newNotice.toJSON(),
+        mediaUrls,
+        User: authorData,
+      };
       // Commit the transaction
       await transaction.commit();
-      return newNotice;
+      return dataToSend;
 
       // return newNotice;
     } catch (error) {
@@ -56,13 +71,9 @@ const NoticeRepository = {
       const mediaFilenames = JSON.parse(notice.media);
 
       const mediaUrls = mediaFilenames.map((filename) => {
-        
-
         return `${process.env.BASE_URL}/uploads/${filename}`;
       });
 
-      console.log(mediaUrls);
-      
       return {
         ...notice.toJSON(),
         mediaUrls,

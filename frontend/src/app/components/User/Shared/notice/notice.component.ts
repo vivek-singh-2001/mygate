@@ -77,6 +77,8 @@ export class NoticeComponent implements OnInit {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         });
         this.notices = sortedNoticeList;
+        console.log(this.notices);
+        
       },
       error: (err) => {
         console.log(err);
