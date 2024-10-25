@@ -5,8 +5,6 @@ const notificationCountRepository = require("../notificationCount/notificationCo
 
 const NoticeRepository = {
   createNotice: async (noticeData, Images, societyUsers) => {
-    
-
     const transaction = await db.connectDB.transaction();
     try {
       const mediaFilenames = Images.map((image) => image.filename);
@@ -28,7 +26,6 @@ const NoticeRepository = {
         "notice"
       );
 
-     
       // Commit the transaction
       await transaction.commit();
       return newNotice;
@@ -57,10 +54,15 @@ const NoticeRepository = {
 
     return notices.map((notice) => {
       const mediaFilenames = JSON.parse(notice.media);
+
       const mediaUrls = mediaFilenames.map((filename) => {
+        
+
         return `${process.env.BASE_URL}/uploads/${filename}`;
       });
 
+      console.log(mediaUrls);
+      
       return {
         ...notice.toJSON(),
         mediaUrls,

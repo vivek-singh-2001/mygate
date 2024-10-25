@@ -6,6 +6,7 @@ exports.createNotice = asyncErrorHandler(async (req, res, next) => {
     const noticeData = req.body;
     const images = req.files;
     
+   
   
     // Validate the input
     if (!noticeData.description || !noticeData.societyId || !noticeData.userId) {
@@ -25,7 +26,6 @@ exports.createNotice = asyncErrorHandler(async (req, res, next) => {
 exports.getAllNotice = asyncErrorHandler(async (req, res, next) => {
   const { societyId } = req.params;
   
-
   const noticeList = await NoticeService.getAllNotice(societyId);
   if (!noticeList) {
     return next(new CustomError("Notice list doesnt found"));

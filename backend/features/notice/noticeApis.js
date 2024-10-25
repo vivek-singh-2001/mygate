@@ -5,7 +5,7 @@ const upload = require('../../middleware/multer');
 
 const router = express.Router();
 
-const { uploadMultiple } = upload(/jpeg|jpg|png|webp/);
+const { uploadMultiple } = upload(/jpeg|jpg|png|webp|svg|webp/);
 
 router.post('/', uploadMultiple,NoticeController.createNotice);
 router.get('/getAllNotice/:societyId', NoticeController.getAllNotice);

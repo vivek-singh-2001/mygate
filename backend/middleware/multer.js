@@ -23,7 +23,7 @@ const fileFilter = (allowedTypes) => {
   };
 };
 
-const upload = (allowedTypes,fieldName = "file", maxFiles = 5) => {
+const upload = (allowedTypes,fieldName = "files", maxFiles = 5) => {
   return {
     uploadMultiple: multer({
       storage: storage,

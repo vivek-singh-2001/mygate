@@ -40,13 +40,14 @@ interface ItemsToAppend {
 export class NoticeComponent implements OnInit {
   noticeForm: boolean = false;
   viewNoticeForm: boolean = false;
+  username!:string;
   specificNoticeDetail: any = [];
   noticeDescription: string = '';
   selectedFiles: File[] = [];
   societyId: string = '';
   userId: string = '';
   formData!: FormData;
-  notices!: Notice[];
+  notices!: any;
   @Output() noticeCountUpdated = new EventEmitter<number>();
 
   constructor(
@@ -61,6 +62,7 @@ export class NoticeComponent implements OnInit {
     this.userService.userData$.subscribe({
       next: (userData) => {
         this.userId = userData.id;
+        this.username = userData.firstname
         this.userService.userSocietyId$.subscribe({
           next: (societyId) => {
             this.societyId = societyId;
@@ -71,7 +73,10 @@ export class NoticeComponent implements OnInit {
 
     this.noticeService.getNotices(this.societyId).subscribe({
       next: (notices) => {
-        this.notices = notices.noticeList;
+        const sortedNoticeList = notices.noticeList.sort((a: any, b: any) => {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        });
+        this.notices = sortedNoticeList;
       },
       error: (err) => {
         console.log(err);
@@ -93,6 +98,7 @@ export class NoticeComponent implements OnInit {
   createNotice(fileInput: HTMLInputElement) {
     this.formData = new FormData();
 
+
     const itemsToAppend: ItemsToAppend = {
       description: this.noticeDescription,
       societyId: this.societyId,
@@ -109,17 +115,16 @@ export class NoticeComponent implements OnInit {
         this.formData.append('files', element);
       }
     }
-
+    
     this.noticeService.createNotice(this.formData).subscribe({
       next: (data: any) => {
-        console.log(data.data.newNotice);
-
         this.messageService.add({
           severity: 'success',
           detail: data.message,
         });
+        console.log(data.data.newNotice);
+      
         this.notices.unshift(data.data.newNotice);
-
         // Clear FormData by reinitializing it
         this.formData = new FormData();
         this.noticeForm = false;
