@@ -1,58 +1,78 @@
 <div class="row flex">
   <div class="card flex-1 bg-red-300">
     <div class="flex justify-content-between">
-      <p><b>Notice Board</b></p>
+      <p><b class="no-data-text">Notice Board</b></p>
       <div class="flex gap-2">
         <i
-        class="pi pi-plus-circle"
-        style="font-size: 1.5rem; cursor: pointer"
-        [routerLink]="['/home/notice']"
-      ></i>
-      <i class="pi pi-bell text-2xl" pBadge [value]="newNoticesCount"></i>
+          class="pi pi-plus-circle"
+          style="font-size: 1.5rem; cursor: pointer"
+          [routerLink]="['/home/notice']"
+        ></i>
+        <i class="pi pi-bell text-2xl" pBadge [value]="newNoticesCount"></i>
       </div>
-      <span
-      class="new-notice-count"
-      style="
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        background-color: red;
-        border-radius: 50%;
-        color: white;
-        padding: 5px 10px;
-        font-size: 0.8rem;"
-    >
-      {{ newNoticesCount }}
-    </span>
     </div>
-    <div class=" m-2 h-11rem  custom-scroll ">
-     <p class="p-4 mt-4 flex justify-content-center alig-items-center">
-      {{notices?.text}}
-     </p>
+    <div class="m-2 h-11rem custom-scroll">
+      <p class="p-4 mt-4 flex justify-content-center alig-items-center">
+        {{ notices?.text }}
+      </p>
     </div>
   </div>
   <div class="card flex-1 bg-blue-300" style="cursor: pointer">
     <div class="flex justify-content-between">
-      <p><b>Messages</b></p>
-      <i
-        class="pi pi-plus-circle"
-        style="font-size: 1.5rem; cursor: pointer"
-        [routerLink]="['/home/messages']"
-      ></i>
+      <p><b class="no-data-text">Messages</b></p>
+      <div class="flex gap-2">
+        <i
+          class="pi pi-plus-circle"
+          style="font-size: 1.5rem; cursor: pointer"
+          [routerLink]="['/home/messages']"
+        ></i>
+        <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
+      </div>
+    </div>
+    <div class="m-2 h-11rem custom-scroll">
+      <p class="p-6 flex justify-content-center alig-items-center">
+        <b class="no-data-text mt-3">No New Messages</b>
+      </p>
     </div>
   </div>
 
   <div class="card flex-1 bg-green-300">
     <div class="flex justify-content-between">
-      <p><b>Complaints</b></p>
+      <p><b class="no-data-text">Complaints</b></p>
       <div class="flex gap-2">
         <i
-        class="pi pi-plus-circle"
-        style="font-size: 1.5rem; cursor: pointer"
-        [routerLink]="['/home/complaints']"
-      ></i>
-      <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
+          class="pi pi-plus-circle"
+          style="font-size: 1.5rem; cursor: pointer"
+          [routerLink]="['/home/complaints']"
+        ></i>
+        <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
       </div>
+    </div>
+    <div class="m-2 h-11rem custom-scroll">
+      <p class="p-6 flex justify-content-center alig-items-center">
+        <b class="no-data-text mt-3">No New Complaints</b>
+      </p>
+    </div>
+  </div>
+
+  <div class="card flex-1 bg-indigo-300">
+    <div class="flex justify-content-between">
+      <p><b class="no-data-text"> Visitors</b></p>
+      <div class="flex gap-2">
+        <i
+          class="pi pi-plus-circle"
+          style="font-size: 1.5rem; cursor: pointer"
+          [routerLink]="['/home/visitors']"
+        ></i>
+        <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
+      </div>
+    </div>
+    <div
+      class="m-2 h-11rem custom-scroll flex justify-content-center alig-items-center"
+    >
+      <p class="p-7 flex justify-content-center alig-items-center">
+        <b class="no-data-text">No New Visotors</b>
+      </p>
     </div>
   </div>
 </div>
