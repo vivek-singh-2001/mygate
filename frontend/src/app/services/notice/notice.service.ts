@@ -40,11 +40,8 @@ export class NoticeService {
     return this.http.post<ResponseOutput>(this.apiUrl, noticeData);
   }
 
-  clearEvents() {
+  clearNotices() {
     this.noticeSubject.next([]);
   }
-
-
-
   
 }

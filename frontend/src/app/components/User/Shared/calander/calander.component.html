@@ -6,7 +6,9 @@
     <div class="flex gap-1 flex-column align-item-center">
       <span>{{ currentMonth | date : "MMMM yyyy" }}</span>
       @if(isAdmin){
-      <p-button (onClick)="addEvent()" class="add-event-btn">Add Event</p-button>
+      <p-button (onClick)="addEvent()" class="add-event-btn"
+        >Add Event</p-button
+      >
       }
     </div>
     <p-button pRipple (onClick)="changeMonth(1)">&#8250;</p-button>
@@ -36,6 +38,7 @@
                 ? day.events[0].color
                 : 'transparent'
             }"
+            (click)="eventDay(day)"
           >
             {{ day.date.getDate() }}
 
@@ -74,23 +77,26 @@
     [modal]="true"
     [(visible)]="addEventFlag"
     [style]="{ width: '25rem' }"
-    [contentStyle]="{ 'background-color': '#333' , color:'white'}"
   >
     <div class="flex align-items-center gap-3 mb-3">
       <label for="title" class="font-semibold w-6rem">Title</label>
-      <input
+      <textarea
         id="title"
+        rows="1"
         class="flex-auto"
+        pInputText
         autocomplete="off"
         [(ngModel)]="eventData.title"
-      />
+      >
+      </textarea>
     </div>
     <div class="flex align-items-center gap-3 mb-5">
       <label for="description" class="font-semibold w-6rem">Description</label>
       <textarea
-        rows="5"
+        rows="2"
         id="description"
         class="flex-auto"
+        pInputText
         autocomplete="off"
         [(ngModel)]="eventData.description"
       ></textarea>

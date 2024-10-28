@@ -70,11 +70,6 @@ td.disabled {
   white-space: pre-line; /* To handle newlines in text */
 }
 
-::ng-deep .event-calander .p-dialog-header {
-  background-color: #333;
-  color: #ddd;
-}
-
 ::ng-deep .add-event-btn .p-button {
   padding: 6px 10px;
 }

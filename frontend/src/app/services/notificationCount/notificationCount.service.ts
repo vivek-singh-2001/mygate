@@ -75,10 +75,10 @@ export class NotificationCountService {
     type: string
   ): Observable<number> {
     if (type === 'notice' && this.noticeCachedCount !== null) {
-      return of(this.noticeCachedCount); 
+      return of(this.noticeCachedCount);
     }
     if (type === 'chat' && this.chatCachedCount !== null) {
-      return of(this.chatCachedCount); 
+      return of(this.chatCachedCount);
     }
 
     return this.http
@@ -86,13 +86,30 @@ export class NotificationCountService {
       .pipe(
         tap((count: any) => {
           if (type === 'notice') {
-            this.noticeCachedCount = count.count; 
-            this.notificationCountSubject.next(count.count); 
+            this.noticeCachedCount = count.count;
+            this.notificationCountSubject.next(count.count);
           } else if (type === 'chat') {
-            this.chatCachedCount = count.count; 
-            this.chatNotificationCountSubject.next(count.count); 
+            this.chatCachedCount = count.count;
+            this.chatNotificationCountSubject.next(count.count);
           }
         })
       );
   }
+
+  resetCount(societyId: string, userId: string, type: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/reset/${societyId}/${userId}/${type}`, {}).pipe(
+      tap(() => {
+        // Reset the cached count and the subject value based on type
+        if (type === 'notice') {
+          this.noticeCachedCount = 0;
+          this.notificationCountSubject.next(0);
+        } else if (type === 'chat') {
+          this.chatCachedCount = 0;
+          this.chatNotificationCountSubject.next(0);
+        }
+      })
+    );
+  }
+
+  
 }

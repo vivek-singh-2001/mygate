@@ -57,9 +57,9 @@ export class NavigationComponent implements OnInit {
   private initializeMenu(): void {
     this.items = [
       {
-        label: 'Home',
-        icon: 'pi pi-home',
-        command: () => this.goToHome(),
+        label: 'visitors',
+        icon: 'pi pi-id-card',
+        command: () => this.goToVisitors(),
       },
       {
         label: this.selectedHouse || 'N/A',
@@ -134,8 +134,8 @@ export class NavigationComponent implements OnInit {
     });
   }
 
-  goToHome() {
-    this.router.navigate(['/home']);
+  goToVisitors() {
+    this.router.navigate(['/home/visitors']);
   }
 
   goToProfile() {

@@ -1,8 +1,8 @@
 <p-menubar [model]="items" autoDisplay="false">
 
   <ng-template pTemplate="start">
-    <div class="flex align-items-center gap-2">
-      <img src="assets/mygate.svg" alt="mygate" class="mygate-image">
+    <div class="flex align-items-center gap-2"  style="cursor: pointer;" [routerLink]="['/home']">
+      <img src="assets/mygate.svg" alt="mygate" class="mygate-image" >
 
     </div>
   </ng-template>

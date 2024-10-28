@@ -9,8 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { EventService } from '../../../../services/events/event.service';
 import { AppInitializationService } from '../../../../services/AppInitialization';
 import { UserService } from '../../../../services/user/user.service';
-import { AdminService } from '../../../../services/admin/admin.service';
 import { AuthService } from '../../../../services/auth/auth.service';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'app-calander',
@@ -23,6 +23,7 @@ import { AuthService } from '../../../../services/auth/auth.service';
     InputTextareaModule,
     CalendarModule,
     FormsModule,
+    InputTextModule
   ],
   templateUrl: './calander.component.html',
   styleUrl: './calander.component.css',
@@ -33,6 +34,7 @@ export class CalanderComponent implements OnInit {
   weeks: any[] = [];
   events: any[] = [];
   tooltipVisible = false;
+  today: Date = new Date();
   addEventFlag: boolean = false;
   tooltipContent: string = '';
   tooltipPosition = { top: '0px', left: '0px' };
@@ -42,7 +44,7 @@ export class CalanderComponent implements OnInit {
   eventData = {
     title: '',
     description: '',
-    start_date: null,
+    start_date: null as Date | null, // Allow both Date and null
     SocietyId: '',
   };
 
@@ -77,7 +79,7 @@ export class CalanderComponent implements OnInit {
 
           this.userService.userRoles$.subscribe({
             next: (roleArray) => {
-              if (roleArray.includes('societyAdmin')) {
+              if (roleArray.includes('societyAdmin') || roleArray.includes('wingAdmin')) {
                 this.isAdmin = true;
               }
             },
@@ -187,9 +189,27 @@ export class CalanderComponent implements OnInit {
         this.eventData.description = '';
         this.eventData.start_date = null;
       },
-      error:(err)=>{
-        console.error(err)
-      }
+      error: (err) => {
+        console.error(err);
+      },
     });
+  }
+
+  eventDay(day: any) {
+    const selectedDate = new Date(
+      day.date.getFullYear(),
+      day.date.getMonth(),
+      day.date.getDate()
+    );
+    const today = new Date(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.today.getDate()
+    );
+
+    if (selectedDate.getTime() >= today.getTime() && this.isAdmin) {
+      this.addEventFlag = true;
+      this.eventData.start_date = selectedDate;
+    }
   }
 }
