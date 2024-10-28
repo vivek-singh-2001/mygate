@@ -12,12 +12,17 @@ export class NotificationCountService {
   private readonly apiUrl = `${environment.apiUrl}/notificationcount`;
 
   private readonly notificationCountSubject = new BehaviorSubject<number>(0);
+  private readonly chatNotificationCountSubject = new BehaviorSubject<number>(
+    0
+  );
   private readonly newNoticeSubject = new BehaviorSubject<any>('');
   notificationCount$ = this.notificationCountSubject.asObservable();
-  newNotice$ = this.newNoticeSubject .asObservable();
+  chatNotificationCount$ = this.chatNotificationCountSubject.asObservable();
+  newNotice$ = this.newNoticeSubject.asObservable();
 
   private readonly socket: Socket;
-  private cachedCount: number | null = null;
+  private noticeCachedCount: number | null = null;
+  private chatCachedCount: number | null = null;
 
   constructor(
     private readonly http: HttpClient,
@@ -31,7 +36,7 @@ export class NotificationCountService {
 
     // Listen for 'noticeCreated' event and just log that a notice was created
     this.socket.on('noticeCreated', (data) => {
-      this.newNoticeSubject.next(data.notice)
+      this.newNoticeSubject.next(data.notice);
     });
 
     // Get user data to join the user's notification room
@@ -44,7 +49,15 @@ export class NotificationCountService {
           console.log('Updated notification count received:', data);
           // Update the count when the event is received
           this.notificationCountSubject.next(data.count); // Update the UI with the count
-          this.cachedCount = data.count;
+          this.noticeCachedCount = data.count;
+        });
+
+        // Listen for the updated chat count event
+        this.socket.on('updatedChatCount', (data) => {
+          console.log('Updated chat notification count received:', data.count);
+          // Update the chat notification count subject
+          this.chatNotificationCountSubject.next(data.count); // Update the UI with the count
+          this.chatCachedCount = data.count;
         });
       }
     });
@@ -61,15 +74,24 @@ export class NotificationCountService {
     userId: string,
     type: string
   ): Observable<number> {
-    if (this.cachedCount !== null) {
-      return of(this.cachedCount); // Return the cached count if it is available
+    if (type === 'notice' && this.noticeCachedCount !== null) {
+      return of(this.noticeCachedCount); 
     }
+    if (type === 'chat' && this.chatCachedCount !== null) {
+      return of(this.chatCachedCount); 
+    }
+
     return this.http
       .get<number>(`${this.apiUrl}/${societyId}/${userId}/${type}`)
       .pipe(
         tap((count: any) => {
-          this.cachedCount = count.count;
-          this.notificationCountSubject.next(count.count);
+          if (type === 'notice') {
+            this.noticeCachedCount = count.count; 
+            this.notificationCountSubject.next(count.count); 
+          } else if (type === 'chat') {
+            this.chatCachedCount = count.count; 
+            this.chatNotificationCountSubject.next(count.count); 
+          }
         })
       );
   }
