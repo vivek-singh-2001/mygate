@@ -26,14 +26,15 @@ import { NoticeService } from '../../../../services/notice/notice.service';
 export class DashboardComponent implements OnInit {
   newNoticesCount: number = 0;
   newComplaintsCount: number = 0;
-  notices:any=[];
+  newChatCount: number = 0;
+  notices: any = [];
   societyId: string = '';
   userId: string = '';
 
   constructor(
     private readonly notificationCountService: NotificationCountService,
     private readonly userService: UserService,
-    private readonly noticeService:NoticeService
+    private readonly noticeService: NoticeService
   ) {}
 
   ngOnInit() {
@@ -44,6 +45,7 @@ export class DashboardComponent implements OnInit {
           next: (societyId) => {
             this.societyId = societyId;
             this.fetchNoticeCount();
+            this.fetchChatCount();
           },
         });
       },
@@ -51,13 +53,22 @@ export class DashboardComponent implements OnInit {
 
     this.notificationCountService.notificationCount$.subscribe({
       next: (count: any) => {
-        this.newNoticesCount = count; 
-        this.noticeService.getNotices(this.societyId).subscribe((notice)=>{
+        this.newNoticesCount = count;
+        this.noticeService.getNotices(this.societyId).subscribe((notice) => {
           const sortedNoticeList = notice.noticeList.sort((a: any, b: any) => {
-            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            return (
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
           });
-          this.notices = sortedNoticeList[0]
-        })
+          this.notices = sortedNoticeList[0];
+        });
+      },
+    });
+
+    // Subscribe to chat notification count updates
+    this.notificationCountService.chatNotificationCount$.subscribe({
+      next: (count: any) => {
+        this.newChatCount = count;
       },
     });
   }
@@ -67,10 +78,25 @@ export class DashboardComponent implements OnInit {
       .getCount(this.societyId, this.userId, 'notice')
       .subscribe({
         next: (count: any) => {
-          this.newNoticesCount = count.count; 
+          this.newNoticesCount = count.count;
         },
         error: (err) => {
           console.error('Error fetching notice count:', err);
+        },
+      });
+  }
+
+  // Fetch chat notification count
+  private fetchChatCount() {
+    this.notificationCountService
+      .getCount(this.societyId, this.userId, 'chat')
+      .subscribe({
+        next: (count: any) => {
+          console.log('fom the dashboard', count.count);
+          this.newChatCount = count.count;
+        },
+        error: (err) => {
+          console.error('Error fetching chat count:', err);
         },
       });
   }

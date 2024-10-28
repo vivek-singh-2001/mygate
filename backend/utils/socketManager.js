@@ -1,6 +1,8 @@
 // socketManager.js
 const socketIo = require("socket.io");
 const { sendMessage } = require("../features/chat/chatService");
+const notificationCountRepository = require("../features/notificationCount/notificationCountRepository");
+const userRepository = require("../features/users/userRepository");
 
 let io;
 
@@ -35,6 +37,18 @@ const initSocket = (server) => {
           message,
           createdAt,
         });
+
+        const reciever = await userRepository.getUserById(receiverId);
+
+        const messageCount = await notificationCountRepository.incrementCount(
+          reciever.Houses[0].Floor.Wing.Society.id || null,
+          receiverId,
+          "chat"
+        );
+        io.to(receiverId).emit("updatedChatCount", {
+          count: messageCount,
+        });
+        
       } catch (error) {
         console.error("Error sending message:", error);
       }
@@ -55,6 +69,7 @@ const initSocket = (server) => {
 
 const getSocket = () => {
   if (!io) {
+    console.log("Attempted to get io but it's not initialized");
     throw new Error("Socket.io not initialized");
   }
   return io;

@@ -54,5 +54,9 @@
   display: none; /* For Chrome, Safari, and Edge */
 }
 
+.no-data-text{
+  letter-spacing: 1.2px;
+}
+
 
 
