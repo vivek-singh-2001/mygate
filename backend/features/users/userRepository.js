@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const { db } = require("../../config/connection");
 const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole } = db;
 
@@ -55,8 +56,9 @@ exports.getUserById = (id) => {
       },
       {
         model: Society,
-        as: "Societies",
+        as: "societyDetails",
         attributes: ["id", "name", "address"],
+       
       },
     ],
   });
