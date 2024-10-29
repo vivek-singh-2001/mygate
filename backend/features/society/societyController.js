@@ -6,7 +6,6 @@ const CustomError = require("../../utils/CustomError");
 const path = require("path");
 
 exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
-
   const { id: societyId } = req.params;
   const { limits = 10, offsets = 0, searchQuery = "" } = req.query;
 
@@ -27,7 +26,6 @@ exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
       users,
     },
   });
-
 });
 
 exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
@@ -149,12 +147,9 @@ exports.getCsvFile = asyncErrorHandler(async (req, res, next) => {
 
 exports.createSociety = asyncErrorHandler(async (req, res, next) => {
   const societyData = req.body;
-  const { csvData: csvFile, id: societyId } = societyData;
-  const userId = societyData.User.id;
 
-  console.log(csvFile);
-  console.log(societyId);
-  console.log(userId);
+  const { csvData: csvFile, id: societyId } = societyData;
+  const userId = societyData.societyAdminId;
 
   if (!csvFile) {
     return next(new CustomError("csvFile not found!", 404));

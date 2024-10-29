@@ -160,6 +160,8 @@ export class SocietyListComponent {
 
   onApproveSociety(society: Society) {
     this.isLoading = true;
+    console.log(society);
+    
     this.societyService
       .createSociety(society)
       .pipe(
