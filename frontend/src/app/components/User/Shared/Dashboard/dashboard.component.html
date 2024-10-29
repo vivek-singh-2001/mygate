@@ -12,7 +12,10 @@
       </div>
     </div>
     <div class="m-2 h-11rem custom-scroll">
-      <p class="p-4 mt-4 flex justify-content-center alig-items-center">
+      <p *ngIf="newNoticesCount == 0" class="p-6 flex justify-content-center alig-items-center">
+        <b class="no-data-text mt-3">No New Notices</b>
+      </p>
+      <p *ngIf="newNoticesCount !== 0" class="p-4 mt-4 flex justify-content-center alig-items-center">
         {{ notices?.text }}
       </p>
     </div>

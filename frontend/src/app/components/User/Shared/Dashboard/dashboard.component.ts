@@ -43,9 +43,10 @@ export class DashboardComponent implements OnInit {
         this.userId = userData.id;
         this.userService.userSocietyId$.subscribe({
           next: (societyId) => {
+            console.log("pppp",societyId);
             this.societyId = societyId;
             this.fetchNoticeCount();
-            this.fetchChatCount();
+            // this.fetchChatCount(); 
           },
         });
       },
@@ -65,12 +66,12 @@ export class DashboardComponent implements OnInit {
       },
     });
 
-    // Subscribe to chat notification count updates
-    this.notificationCountService.chatNotificationCount$.subscribe({
-      next: (count: any) => {
-        this.newChatCount = count;
-      },
-    });
+    // // Subscribe to chat notification count updates
+    // this.notificationCountService.chatNotificationCount$.subscribe({
+    //   next: (count: any) => {
+    //     this.newChatCount = count;
+    //   },
+    // });
   }
 
   private fetchNoticeCount() {
@@ -86,18 +87,18 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  // Fetch chat notification count
-  private fetchChatCount() {
-    this.notificationCountService
-      .getCount(this.societyId, this.userId, 'chat')
-      .subscribe({
-        next: (count: any) => {
-          console.log('fom the dashboard', count.count);
-          this.newChatCount = count.count;
-        },
-        error: (err) => {
-          console.error('Error fetching chat count:', err);
-        },
-      });
-  }
+  // // Fetch chat notification count
+  // private fetchChatCount() {
+  //   this.notificationCountService
+  //     .getCount(this.societyId, this.userId, 'chat')
+  //     .subscribe({
+  //       next: (count: any) => {
+  //         console.log('fom the dashboard', count.count);
+  //         this.newChatCount = count.count;
+  //       },
+  //       error: (err) => {
+  //         console.error('Error fetching chat count:', err);
+  //       },
+  //     });
+  // }
 }

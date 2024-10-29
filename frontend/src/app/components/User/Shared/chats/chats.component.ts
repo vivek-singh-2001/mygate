@@ -27,7 +27,7 @@ export class ChatsComponent implements OnInit {
   constructor(
     private readonly ChatService: ChatService,
     private readonly userService: UserService,
-    private readonly notificationCuntService: NotificationCountService
+    // private readonly notificationCuntService: NotificationCountService
   ) {}
 
   ngOnInit(): void {
@@ -35,12 +35,12 @@ export class ChatsComponent implements OnInit {
       next: (userData) => {
         this.currentUserId = userData.id;
         this.userService.userSocietyId$.subscribe({
-          next: (societyId) => {
-            this.societyId = societyId;
-            this.notificationCuntService
-              .resetCount(this.societyId, this.currentUserId, 'chat')
-              .subscribe();
-          },
+          // next: (societyId) => {
+          //   this.societyId = societyId;
+          //   this.notificationCuntService
+          //     .resetCount(this.societyId, this.currentUserId, 'chat')
+          //     .subscribe();
+          // },
         });
       },
       error: (error) => {

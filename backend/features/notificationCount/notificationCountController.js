@@ -16,6 +16,7 @@ exports.incrementCount = asyncErrorHandler( async (req, res,next) => {
 
 exports.resetCount = asyncErrorHandler( async (req, res,next) => {
   const { societyId, userId, type } = req.params;
-  await notificationCountService.resetCount(societyId, userId, type);
-  res.status(204).send();
+  const {senderId} = req.body
+const notificationCount =   await notificationCountService.resetCount(societyId, userId, type,senderId);
+  res.status(204).send(notificationCount);
 });
