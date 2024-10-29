@@ -12,6 +12,7 @@ import { UserService } from '../../../../services/user/user.service';
 import { MessageService } from 'primeng/api';
 import { Notice } from '../../../../interfaces/notice.interface';
 import { GalleriaModule } from 'primeng/galleria';
+import { NotificationCountService } from '../../../../services/notificationCount/notificationCount.service';
 
 interface ItemsToAppend {
   description: string;
@@ -48,12 +49,14 @@ export class NoticeComponent implements OnInit {
   userId: string = '';
   formData!: FormData;
   notices!: any;
+  isAdmin:boolean = false;
   @Output() noticeCountUpdated = new EventEmitter<number>();
 
   constructor(
     private readonly noticeService: NoticeService,
     private readonly userService: UserService,
     private readonly messageService: MessageService,
+    private readonly notificationCuntService:NotificationCountService
   ) {
     this.formData = new FormData();
   }
@@ -63,9 +66,17 @@ export class NoticeComponent implements OnInit {
       next: (userData) => {
         this.userId = userData.id;
         this.username = userData.firstname
+        
         this.userService.userSocietyId$.subscribe({
           next: (societyId) => {
             this.societyId = societyId;
+            this.userService.userRoles$.subscribe({
+              next:(roleArray)=>{
+                if(roleArray.includes('societyAdmin') || roleArray.includes('wingAdmin')){
+                  this.isAdmin = true
+                }
+              }
+            })
           },
         });
       },
@@ -78,12 +89,14 @@ export class NoticeComponent implements OnInit {
         });
         this.notices = sortedNoticeList;
         console.log(this.notices);
-        
+        this.notificationCuntService.resetCount(this.societyId,this.userId,'notice').subscribe()
       },
       error: (err) => {
         console.log(err);
       },
     });
+
+   
   }
 
   showNoticeForm() {

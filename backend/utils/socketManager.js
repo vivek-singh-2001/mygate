@@ -27,7 +27,7 @@ const initSocket = (server) => {
 
         await sendMessage(senderId, receiverId, message);
         console.log("send message succesfully stored in db");
-        const roomId = `${senderId} - ${receiverId}`;
+      
 
         // Emit the message to the receiver
         io.emit("receiveMessage", {
@@ -43,9 +43,11 @@ const initSocket = (server) => {
         const messageCount = await notificationCountRepository.incrementCount(
           reciever.Houses[0].Floor.Wing.Society.id || null,
           receiverId,
-          "chat"
+          "chat",
+          senderId
         );
         io.to(receiverId).emit("updatedChatCount", {
+          senderId,
           count: messageCount,
         });
         

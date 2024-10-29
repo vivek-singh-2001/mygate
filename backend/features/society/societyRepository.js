@@ -192,6 +192,7 @@ exports.getAllSocieties = async (status) => {
       include: [
         {
           model: User,
+          as:'societyDetails'
         },
       ],
     });

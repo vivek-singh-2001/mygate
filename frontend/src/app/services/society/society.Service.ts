@@ -64,6 +64,8 @@ export class SocietyService {
   }
 
   createSociety(societyData: Society): Observable<Society> {
+    console.log("aaja",societyData);
+    
     return this.http.post<Society>(`${this.societyApiUrl}/createSociety`, societyData)
   }
 

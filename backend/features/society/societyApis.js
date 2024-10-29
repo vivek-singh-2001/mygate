@@ -6,7 +6,7 @@ const upload = require('../../middleware/multer');
 
 const router = express.Router();
 
-const { uploadSingle } = upload(/csv|xlsx|xls/);
+const { uploadSingle } = upload(/csv|xlsx|xls/,"file");
 
 const {
   getUsersBySociety,

@@ -1,50 +1,52 @@
 <div class="row flex">
-  <div class="card flex-1 bg-red-300">
+  <div
+    class="card flex-1 bg-red-300"
+    style="cursor: pointer"
+    [routerLink]="['/home/notice']"
+  >
     <div class="flex justify-content-between">
       <p><b class="no-data-text">Notice Board</b></p>
       <div class="flex gap-2">
-        <i
-          class="pi pi-plus-circle"
-          style="font-size: 1.5rem; cursor: pointer"
-          [routerLink]="['/home/notice']"
-        ></i>
+        
         <i class="pi pi-bell text-2xl" pBadge [value]="newNoticesCount"></i>
       </div>
     </div>
     <div class="m-2 h-11rem custom-scroll">
-      <p class="p-4 mt-4 flex justify-content-center alig-items-center">
+      <p *ngIf="newNoticesCount == 0" class="p-6 flex justify-content-center alig-items-center">
+        <b class="no-data-text mt-3">No New Notices</b>
+      </p>
+      <p *ngIf="newNoticesCount !== 0" class="p-4 mt-4 flex justify-content-center alig-items-center">
         {{ notices?.text }}
       </p>
     </div>
   </div>
-  <div class="card flex-1 bg-blue-300" style="cursor: pointer">
+  <div
+    class="card flex-1 bg-blue-300"
+    style="cursor: pointer"
+    [routerLink]="['/home/messages']"
+  >
     <div class="flex justify-content-between">
       <p><b class="no-data-text">Messages</b></p>
       <div class="flex gap-2">
-        <i
-          class="pi pi-plus-circle"
-          style="font-size: 1.5rem; cursor: pointer"
-          [routerLink]="['/home/messages']"
-        ></i>
+       
         <i class="pi pi-bell text-2xl" pBadge [value]="newChatCount"></i>
       </div>
     </div>
     <div class="m-2 h-11rem custom-scroll">
-      <p class="p-6 flex justify-content-center alig-items-center">
+      <p *ngIf="newChatCount == 0" class="p-6 flex justify-content-center alig-items-center">
         <b class="no-data-text mt-3">No New Messages</b>
+      </p>
+      <p *ngIf="newChatCount !== 0" class="p-6 flex justify-content-center alig-items-center">
+        <b class="no-data-text mt-3">{{newChatCount}} New Messages</b>
       </p>
     </div>
   </div>
 
-  <div class="card flex-1 bg-green-300">
+  <div class="card flex-1 bg-green-300" [routerLink]="['/home/Complaints']">
     <div class="flex justify-content-between">
       <p><b class="no-data-text">Complaints</b></p>
       <div class="flex gap-2">
-        <i
-          class="pi pi-plus-circle"
-          style="font-size: 1.5rem; cursor: pointer"
-          [routerLink]="['/home/complaints']"
-        ></i>
+        
         <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
       </div>
     </div>
@@ -55,15 +57,11 @@
     </div>
   </div>
 
-  <div class="card flex-1 bg-indigo-300">
+  <div class="card flex-1 bg-indigo-300" [routerLink]="['/home/visitors']">
     <div class="flex justify-content-between">
       <p><b class="no-data-text"> Visitors</b></p>
       <div class="flex gap-2">
-        <i
-          class="pi pi-plus-circle"
-          style="font-size: 1.5rem; cursor: pointer"
-          [routerLink]="['/home/visitors']"
-        ></i>
+       
         <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
       </div>
     </div>

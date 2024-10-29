@@ -7,9 +7,11 @@
       <li
         *ngFor="let user of SocietyUsers"
         (click)="selectUser(user)"
-        class="user-card"
+        class="user-card flex justify-content-between"
+
       >
-        {{ user.firstname }}
+        <p>{{ user.firstname }}</p>
+        <p-badge *ngIf="unreadMessages[user.id] > 0" value="{{ unreadMessages[user.id] }}"></p-badge>
       </li>
     </ul>
   </div>

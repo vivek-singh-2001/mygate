@@ -37,7 +37,6 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/login`, loginData).pipe(
       switchMap((response) => {
         console.log('ress login', response);
-
         const token = response.token;
         if (token) {
           localStorage.setItem('authToken', token);

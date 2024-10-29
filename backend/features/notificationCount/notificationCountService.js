@@ -7,8 +7,8 @@ exports.incrementCount = async (societyId, userId, type) => {
   return await notificationCountRepository.incrementCount(societyId, userId, type);
 };
 
-exports.resetCount = async (societyId, userId, type) => {
-  return await notificationCountRepository.resetCount(societyId, userId, type);
+exports.resetCount = async (societyId, userId, type,senderId) => {
+  return await notificationCountRepository.resetCount(societyId, userId, type,senderId);
 };
 
 

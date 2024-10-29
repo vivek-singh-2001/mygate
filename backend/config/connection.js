@@ -56,8 +56,8 @@ db.User.hasMany(db.Wing, { foreignKey: "wingAdminId" });
 db.Wing.belongsTo(db.User, { foreignKey: "wingAdminId" });
 
 // =============society-user (: One to many)============================
-db.User.hasMany(db.Society, { foreignKey: "societyAdminId" });
-db.Society.belongsTo(db.User, { foreignKey: "societyAdminId" });
+db.User.hasMany(db.Society, { foreignKey: "societyAdminId" ,as:'societyDetails'});
+db.Society.belongsTo(db.User, { foreignKey: "societyAdminId",as:'societyDetails' });
 
 // =============user-notice (: One to many)============================
 

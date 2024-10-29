@@ -24,6 +24,11 @@ module.exports = (connectDB, DataTypes) => {
           key: "id",
         },
       },
+      senderId:{
+        type:DataTypes.UUID,
+        allowNull:true,
+        defaultValue:null,
+      },
       type: {
         type: DataTypes.ENUM("notice", "chat", "complaint"),
         allowNull: false,
