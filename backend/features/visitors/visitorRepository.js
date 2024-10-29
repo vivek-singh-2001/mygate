@@ -1,5 +1,5 @@
 const { db } = require("../../config/connection");
-const { Visitor, House, Floor, Wing } = db;
+const { Visitor, House, Floor, Wing, User } = db;
 const CustomError = require("../../utils/CustomError");
 
 exports.createVisitor = async (visitorData) => {
@@ -96,6 +96,9 @@ exports.getAllVisitors = async (societyId) => {
           },
         ],
       },
+      {
+        model: User,
+      }
     ],
   });
 };

@@ -48,7 +48,7 @@ router.post(
   validate(passcodeValidationRules),
   verifyPasscode
 );
-router.patch("/approval/", validate(idValidationSchema), approveVisitor);
+router.patch("/approval/:id", validate(idValidationSchema), approveVisitor);
 router.get("/image/:filename", imagePath);
 router.get("/all/:id", getAllVisitors)
 

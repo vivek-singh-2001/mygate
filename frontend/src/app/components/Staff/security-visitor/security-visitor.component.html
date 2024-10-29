@@ -49,18 +49,24 @@
         <label for="phone">Phone Number</label>
         <input
           id="phone"
-          type="text"
+          type="tel"
+          pattern="[0-9]{10}"
+          maxlength="10"
+          inputmode="numeric"
           formControlName="phone"
           class="p-inputtext p-component"
           placeholder="Enter phone number"
+          (keypress)="validateNumericInput($event)"
         />
         <small
-          *ngIf="
-            visitorForm.get('phone')?.invalid &&
-            visitorForm.get('phone')?.touched
-          "
+          *ngIf="visitorForm.get('phone')?.errors?.['required'] && visitorForm.get('phone')?.touched"
         >
-          Phone number is required
+          Phone number is required.
+        </small>
+        <small
+          *ngIf="visitorForm.get('phone')?.hasError('pattern') && !visitorForm.get('phone')?.errors?.['required'] && visitorForm.get('phone')?.touched"
+        >
+          Please enter a valid phone number.
         </small>
       </div>
 
@@ -109,6 +115,7 @@
           formControlName="houseId"
           placeholder="Select House"
           class="p-inputtext p-component"
+          [filter]="true"
         ></p-dropdown>
         <small
           *ngIf="
@@ -159,34 +166,34 @@
   styleClass="verify-dialog"
   (onHide)="closeVerificationDialog()"
 >
-    <form [formGroup]="verificationForm" class="verification-form">
-      <div class="form-group">
-        <p-inputOtp
-          formControlName="passcode"
-          [integerOnly]="true"
-          [length]="6"
-          placeholder="******"
-          class="p-inputOtp otp-input"
-        ></p-inputOtp>
-        <small
-          *ngIf="
-            verificationForm.get('passcode')?.invalid &&
-            verificationForm.get('passcode')?.touched
-          "
-        >
-          Passcode is required
-        </small>
-      </div>
-      <div class="form-buttons">
-        <button
-          pButton
-          type="submit"
-          label="Verify"
-          class="verify-btn"
-          [disabled]="verificationForm.invalid"
-        ></button>
-      </div>
-    </form>
+  <form [formGroup]="verificationForm" class="verification-form" (ngSubmit)="onPasscodeSubmit()">
+    <div class="form-group">
+      <p-inputOtp
+        formControlName="passcode"
+        [integerOnly]="true"
+        [length]="6"
+        placeholder="******"
+        class="p-inputOtp otp-input"
+      ></p-inputOtp>
+      <small
+        *ngIf="
+          verificationForm.get('passcode')?.invalid &&
+          verificationForm.get('passcode')?.touched
+        "
+      >
+        Passcode is required
+      </small>
+    </div>
+    <div class="form-buttons">
+      <button
+        pButton
+        type="submit"
+        label="Verify"
+        class="verify-btn"
+        [disabled]="verificationForm.invalid"
+      ></button>
+    </div>
+  </form>
 </p-dialog>
 
 <p-table [value]="visitors" *ngIf="visitors.length > 0">
@@ -194,20 +201,28 @@
     <tr>
       <th scope="col">Name</th>
       <th scope="col">Number</th>
-      <th scope="col">Passcode</th>
-      <th scope="col">Visit Start</th>
-      <th scope="col">Visit End</th>
+      <th scope="col">Visit Date</th>
       <th scope="col">Time</th>
+      <th scope="col">House</th>
+      <th scope="col">Requested to</th>
+      <th scope="col">Status</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-visitor>
     <tr>
       <td>{{ visitor.name }}</td>
       <td>{{ visitor.number }}</td>
-      <td>{{ visitor.passcode }}</td>
       <td>{{ visitor.startDate | date : "shortDate" }}</td>
-      <td>{{ visitor.endDate | date : "shortDate" }}</td>
       <td>{{ visitor.visitTime }}</td>
+      <td>{{ visitor.House?.Floor?.Wing?.name || '' }} - {{ visitor.House?.house_no || '' }}</td>
+      <td>{{ visitor.User.firstname }} {{ visitor.User.lastname || '' }}</td>
+       <td [ngClass]="{
+          'status-approved': visitor.status === 'Approved',
+          'status-rejected': visitor.status === 'Rejected',
+          'status-pending': visitor.status === 'Pending'
+        }">
+        {{ visitor.status }}
+      </td>
     </tr>
   </ng-template>
 </p-table>

@@ -23,7 +23,16 @@ import { InputOtpModule } from 'primeng/inputotp';
 @Component({
   selector: 'app-security-visitor',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, ButtonModule, DropdownModule, ToastModule, DialogModule, TableModule, InputOtpModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    ButtonModule,
+    DropdownModule,
+    ToastModule,
+    DialogModule,
+    TableModule,
+    InputOtpModule,
+  ],
   templateUrl: './security-visitor.component.html',
   styleUrl: './security-visitor.component.css',
   providers: [MessageService],
@@ -35,7 +44,7 @@ export class SecurityVisitorComponent implements OnInit {
   selectedFileName: string | null = null;
   houses: any[] = [];
   wings: Wing[] = [];
-  visitors: Visitor[] = []
+  visitors: Visitor[] = [];
   formSubmitted: boolean = false;
   display: boolean = false;
   verifyDialog: boolean = false;
@@ -52,14 +61,14 @@ export class SecurityVisitorComponent implements OnInit {
   ngOnInit() {
     this.visitorForm = this.fb.group({
       name: ['', Validators.required],
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern('^[6-9][0-9]{9}$')]],
       purpose: ['', Validators.required],
       wingId: ['', Validators.required],
       houseId: ['', Validators.required],
     });
 
     this.verificationForm = this.fb.group({
-      passcode: ['', Validators.required]
+      passcode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
     });
 
     this.userService.userSocietyId$.subscribe((societyId) => {
@@ -87,7 +96,11 @@ export class SecurityVisitorComponent implements OnInit {
   fetchVisitors(societyId: string): void {
     this.visitorService.getSocietyVisitors(societyId).subscribe({
       next: (response: any) => {
-        this.visitors = response.data;
+        this.visitors = response.data.sort((a: any, b: any) => {
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        });
       },
       error: (error) => {
         console.error('Failed to load visitors', error);
@@ -110,7 +123,7 @@ export class SecurityVisitorComponent implements OnInit {
 
   closeVerificationDialog() {
     this.verifyDialog = false;
-    this.verificationForm.reset()
+    this.verificationForm.reset();
   }
 
   onWingSelection(wingId: string): void {
@@ -167,8 +180,14 @@ export class SecurityVisitorComponent implements OnInit {
       formData.append('name', this.visitorForm.get('name')?.value);
       formData.append('number', this.visitorForm.get('phone')?.value);
       formData.append('purpose', this.visitorForm.get('purpose')?.value);
-      formData.append('houseId', this.visitorForm.get('houseId')?.value.houseId);
-      formData.append('responsibleUser', this.visitorForm.get('houseId')?.value.ownerId);
+      formData.append(
+        'houseId',
+        this.visitorForm.get('houseId')?.value.houseId
+      );
+      formData.append(
+        'responsibleUser',
+        this.visitorForm.get('houseId')?.value.ownerId
+      );
       formData.append('image', this.selectedFile);
       formData.append('type', 'Uninvited');
       formData.append('startDate', todayDate);
@@ -176,7 +195,7 @@ export class SecurityVisitorComponent implements OnInit {
       formData.append('visitTime', visitTime);
 
       this.visitorService.addVisitor(formData).subscribe({
-        next: (response) => {
+        next: () => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -193,6 +212,45 @@ export class SecurityVisitorComponent implements OnInit {
       });
     } else {
       this.visitorForm.markAllAsTouched();
+    }
+  }
+
+  onPasscodeSubmit() {
+    const object = {
+      passcode: this.verificationForm.get('passcode')?.value,
+    };
+    this.visitorService.verifyVisitor(object).subscribe({
+      next: () => {
+        this.verifyDialog = false;
+        this.verificationForm.reset();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Visitor verified!',
+        });
+      },
+      error: (error) => {
+        console.log(error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Invalid passcode',
+        });
+      },
+    });
+  }
+
+  validateNumericInput(event: KeyboardEvent): void {
+    const inputElement = event.target as HTMLInputElement | null;
+    const key = event.key;
+
+    if (key < '0' || key > '9') {
+      event.preventDefault();
+      return;
+    }
+
+    if (inputElement?.value.length === 0 && key === '0') {
+      event.preventDefault();
     }
   }
 }

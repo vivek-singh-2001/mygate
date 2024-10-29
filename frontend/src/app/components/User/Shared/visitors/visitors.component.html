@@ -146,18 +146,17 @@
               </small>
             </div>
           </div>
-
+          
           <div class="p-field p-grid">
-            <label for="vehicleNumber" class="p-col-fixed" style="width: 150px"
-              >Vehicle Number</label
-            >
+            <label for="vehicleNumber" class="p-col-fixed" style="width: 150px">Vehicle Number</label>
             <div class="p-col">
-              <input
+              <p-inputMask
                 id="vehicleNumber"
                 formControlName="vehicleNumber"
+                mask="a*-99-a*-9999"
                 type="text"
-                pInputText
-              />
+                placeholder="GJ-18-AA-0000"
+              ></p-inputMask>
             </div>
           </div>
 
@@ -172,6 +171,7 @@
                 [iconDisplay]="'input'"
                 [showIcon]="true"
                 [minDate]="today"
+                appendTo="body"
               />
             </div>
           </div>
@@ -187,6 +187,7 @@
                 [iconDisplay]="'input'"
                 [showIcon]="true"
                 [minDate]="today"
+                appendTo="body"
               />
             </div>
           </div>
@@ -202,6 +203,7 @@
                 [iconDisplay]="'input'"
                 [showIcon]="true"
                 [timeOnly]="true"
+                hourFormat="12"
               />
             </div>
           </div>

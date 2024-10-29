@@ -108,9 +108,6 @@ exports.approveVisitor = async (visitorId, status) => {
 
 exports.getAllVisitors = async(societyId) => {
   const society = await societyRepository.getsocietyById(societyId);
-
-  // console.log("jdbf", society);
-  
   if (!society) {
     throw new CustomError("Society not found", 404);
   }

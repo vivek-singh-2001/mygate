@@ -4,8 +4,7 @@ const path = require('path');
 
 exports.addVisitor = asyncErrorHandler(async (req, res, next) => {
   const visitorData = req.body;
-  visitorData.image = path.join("/uploads/", req.file?.filename) || null;
-  console.log(123, visitorData.image);
+  visitorData.image = req.file ? path.join("/uploads/", req.file?.filename) : null;
   
   const newVisitor = await visitorService.addVisitor(visitorData);
   return res.status(201).json({

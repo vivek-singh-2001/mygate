@@ -153,10 +153,21 @@ small {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-::ng-deep .p-inputtext {
-  height: 50px;
-}
 
 ::ng-deep .p-inputotp {
   margin-bottom: 15px;
+}
+
+::ng-deep .p-inputOtp .p-inputtext {
+  height: 50px;
+}
+
+.status-approved {
+  color: green;
+}
+.status-rejected {
+  color: red;
+}
+.status-pending {
+  color: orange;
 }
