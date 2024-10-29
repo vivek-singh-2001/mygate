@@ -15,10 +15,6 @@ export class VisitorService {
     return this.http.post(`${this.visitorApiUrl}/add`, visitorData).pipe(
       tap((response) => {
         console.log('Visitor added successfully:', response);
-      }),
-      catchError((error) => {
-        console.error('Failed to add visitor', error);
-        return of(null);
       })
     );
   }
@@ -50,5 +46,17 @@ export class VisitorService {
         return of(null);
       })
     );
+  }
+
+  getSocietyVisitors(societyId: string): Observable<any> {
+    return this.http.get(`${this.visitorApiUrl}/all/${societyId}`).pipe(
+      tap((response) => {
+        console.log('Visitors data:', response);
+      })
+    )
+  }
+
+  verifyVisitor(passcode: any): Observable<any> {
+    return this.http.post(`${this.visitorApiUrl}/verify-passcode`, passcode)
   }
 }

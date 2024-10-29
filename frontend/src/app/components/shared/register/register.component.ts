@@ -74,7 +74,7 @@ export class RegisterComponent implements OnInit {
       email: ['', [Validators.required, CustomValidators.validEmail]],
       number: [
         '',
-        [Validators.required, Validators.pattern('^[1-9][0-9]{9}$')],
+        [Validators.required, Validators.pattern('^[6-9][0-9]{9}$')],
       ],
       dateofbirth: ['', [Validators.required]],
       address: this.formBuilder.group({

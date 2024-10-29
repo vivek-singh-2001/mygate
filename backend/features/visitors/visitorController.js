@@ -4,8 +4,7 @@ const path = require('path');
 
 exports.addVisitor = asyncErrorHandler(async (req, res, next) => {
   const visitorData = req.body;
-  visitorData.image = path.join("/uploads/", req.file?.filename) || null;
-  console.log(123, visitorData.image);
+  visitorData.image = req.file ? path.join("/uploads/", req.file?.filename) : null;
   
   const newVisitor = await visitorService.addVisitor(visitorData);
   return res.status(201).json({
@@ -59,3 +58,14 @@ exports.imagePath = (req, res) => {
   const filePath = path.join(__dirname, "../../uploads", req.params.filename);
   res.sendFile(filePath);
 }
+
+exports.getAllVisitors = asyncErrorHandler(async(req, res, next) => {
+  const { id: societyId } = req.params;
+
+  const data = await visitorService.getAllVisitors(societyId);
+
+  res.status(200).json({
+    status: "success",
+    data
+  })
+})

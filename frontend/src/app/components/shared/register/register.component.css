@@ -105,10 +105,6 @@
   box-shadow: rgba(187, 185, 185, 0.35) 0px 5px 15px;
 }
 
-input.ng-invalid.ng-touched {
-  border: red 2px solid;
-}
-
 .btn-gen-username {
   margin: 10px 0px;
   padding: 10px 30px;

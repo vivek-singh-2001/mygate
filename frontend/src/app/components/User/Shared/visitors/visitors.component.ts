@@ -24,6 +24,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { environment } from '../../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { ImageModule } from 'primeng/image';
+import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
   selector: 'app-visitors',
@@ -41,6 +43,8 @@ import { HttpClient } from '@angular/common/http';
     TooltipModule,
     TabViewModule,
     ConfirmDialogModule,
+    ImageModule,
+    InputMaskModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './visitors.component.html',
@@ -86,7 +90,7 @@ export class VisitorsComponent implements OnInit {
       name: ['', Validators.required],
       number: [
         '',
-        [Validators.required, Validators.pattern('^[1-9][0-9]{9}$')],
+        [Validators.required, Validators.pattern('^[6-9][0-9]{9}$')],
       ],
       vehicleNumber: [''],
       startDate: ['', Validators.required],
@@ -97,8 +101,6 @@ export class VisitorsComponent implements OnInit {
 
   ngOnInit() {
     this.userService.userData$.subscribe((user) => {
-      console.log('userrrr', user);
-
       this.userData = user;
     });
 
@@ -167,7 +169,7 @@ export class VisitorsComponent implements OnInit {
 
       this.visitorService.addVisitor(visitorData).subscribe({
         next: (response) => {
-          this.visitors.push(response.data);
+          this.expectedVisitors.push(response.data);
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -177,10 +179,11 @@ export class VisitorsComponent implements OnInit {
           this.openShareDialog(response.data);
         },
         error: (error) => {
+          console.error(error.message);
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Failed to add visitor: ' + error.message,
+            detail: 'Failed to add visitor',
           });
         },
       });

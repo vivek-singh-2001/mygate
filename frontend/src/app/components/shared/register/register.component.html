@@ -104,19 +104,14 @@
                 (keypress)="validateNumericInput($event)"
               />
               <small
-                *ngIf="
-                  reactiveForm.get('number')?.errors?.['required'] &&
-                  reactiveForm.get('number')?.touched
-                "
+                *ngIf="reactiveForm.get('number')?.errors?.['required'] && reactiveForm.get('number')?.touched"
+                class="p-error"
               >
                 *Phone number is required.
               </small>
               <small
-                *ngIf="
-                  reactiveForm.get('number')?.hasError('pattern') &&
-                  !reactiveForm.get('number')?.errors?.['required'] &&
-                  reactiveForm.get('number')?.touched
-                "
+                *ngIf="reactiveForm.get('number')?.hasError('pattern') && !reactiveForm.get('number')?.errors?.['required'] && reactiveForm.get('number')?.touched"
+                class="p-error"
               >
                 *Please enter a valid phone number.
               </small>

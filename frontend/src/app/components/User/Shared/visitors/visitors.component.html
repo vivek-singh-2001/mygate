@@ -1,4 +1,87 @@
 <p-tabView>
+  <p-tabPanel header="Pending">
+    <p-table [value]="pendingVisitors" *ngIf="pendingVisitors.length > 0">
+      <ng-template pTemplate="header">
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Number</th>
+          <th scope="col">Visit Start</th>
+          <th scope="col">Visit End</th>
+          <th scope="col">Time</th>
+          <th scope="col">Purpose</th>
+          <th scope="col">Image</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-visitor>
+        <tr>
+          <td>{{ visitor.name }}</td>
+          <td>{{ visitor.number }}</td>
+          <td>{{ visitor.startDate | date : "shortDate" }}</td>
+          <td>{{ visitor.endDate | date : "shortDate" }}</td>
+          <td>{{ visitor.visitTime }}</td>
+          <td>{{ visitor.purpose }}</td>
+          <td>
+              <p-image
+                [src]="getImageUrl(visitor.image)"
+                [alt]="'Visitor Image'"
+                width="50"
+                height="70"
+                preview="true"
+                styleClass="visitor-image"
+              ></p-image>
+          </td>
+          <td>
+            <p-button
+              icon="pi pi-check"
+              [rounded]="true"
+              [outlined]="true"
+              (onClick)="showConfirmation(visitor, 'Approved')"
+            />
+            <p-button
+              icon="pi pi-times"
+              [rounded]="true"
+              [outlined]="true"
+              severity="danger"
+              (onClick)="showConfirmation(visitor, 'Rejected')"
+            />
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p *ngIf="pendingVisitors.length === 0">No pending visitors to display.</p>
+  </p-tabPanel>
+
+  <p-tabPanel header="Past">
+    <p-table [value]="pastVisitors" *ngIf="pastVisitors.length > 0">
+      <ng-template pTemplate="header">
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Number</th>
+          <th scope="col">Passcode</th>
+          <th scope="col">Visit Start</th>
+          <th scope="col">Visit End</th>
+          <th scope="col">Time</th>
+          <th scope="col">Status</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-visitor>
+        <tr>
+          <td>{{ visitor.name }}</td>
+          <td>{{ visitor.number }}</td>
+          <td>{{ visitor.passcode }}</td>
+          <td>{{ visitor.startDate | date : "shortDate" }}</td>
+          <td>{{ visitor.endDate | date : "shortDate" }}</td>
+          <td>{{ visitor.visitTime }}</td>
+          <td>
+            {{ visitor.type === "Invited" ? visitor.type : visitor.status }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <p *ngIf="pastVisitors.length === 0">No past visitors to display.</p>
+  </p-tabPanel>
+
   <p-tabPanel header="Expected">
     <div class="header-container">
       <p-button
@@ -63,18 +146,17 @@
               </small>
             </div>
           </div>
-
+          
           <div class="p-field p-grid">
-            <label for="vehicleNumber" class="p-col-fixed" style="width: 150px"
-              >Vehicle Number</label
-            >
+            <label for="vehicleNumber" class="p-col-fixed" style="width: 150px">Vehicle Number</label>
             <div class="p-col">
-              <input
+              <p-inputMask
                 id="vehicleNumber"
                 formControlName="vehicleNumber"
+                mask="a*-99-a*-9999"
                 type="text"
-                pInputText
-              />
+                placeholder="GJ-18-AA-0000"
+              ></p-inputMask>
             </div>
           </div>
 
@@ -90,6 +172,7 @@
                 [showIcon]="true"
                 [minDate]="today"
                 appendTo="body"
+           
               />
             </div>
           </div>
@@ -122,6 +205,7 @@
                 [iconDisplay]="'input'"
                 [showIcon]="true"
                 [timeOnly]="true"
+                hourFormat="12"
               />
             </div>
           </div>
@@ -171,87 +255,6 @@
     <p *ngIf="expectedVisitors.length === 0">
       No expected visitors to display.
     </p>
-  </p-tabPanel>
-
-  <p-tabPanel header="Past">
-    <p-table [value]="pastVisitors" *ngIf="pastVisitors.length > 0">
-      <ng-template pTemplate="header">
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Number</th>
-          <th scope="col">Passcode</th>
-          <th scope="col">Visit Start</th>
-          <th scope="col">Visit End</th>
-          <th scope="col">Time</th>
-          <th scope="col">Status</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-visitor>
-        <tr>
-          <td>{{ visitor.name }}</td>
-          <td>{{ visitor.number }}</td>
-          <td>{{ visitor.passcode }}</td>
-          <td>{{ visitor.startDate | date : "shortDate" }}</td>
-          <td>{{ visitor.endDate | date : "shortDate" }}</td>
-          <td>{{ visitor.visitTime }}</td>
-          <td>
-            {{ visitor.type === "Invited" ? visitor.type : visitor.status }}
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <p *ngIf="pastVisitors.length === 0">No past visitors to display.</p>
-  </p-tabPanel>
-
-  <p-tabPanel header="Pending">
-    <p-table [value]="pendingVisitors" *ngIf="pendingVisitors.length > 0">
-      <ng-template pTemplate="header">
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Number</th>
-          <th scope="col">Passcode</th>
-          <th scope="col">Visit Start</th>
-          <th scope="col">Visit End</th>
-          <th scope="col">Time</th>
-          <th scope="col">Image</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-visitor>
-        <tr>
-          <td>{{ visitor.name }}</td>
-          <td>{{ visitor.number }}</td>
-          <td>{{ visitor.passcode }}</td>
-          <td>{{ visitor.startDate | date : "shortDate" }}</td>
-          <td>{{ visitor.endDate | date : "shortDate" }}</td>
-          <td>{{ visitor.visitTime }}</td>
-          <td>
-            <img
-              [src]="getImageUrl(visitor.image)"
-              alt="Visitor Image"
-              width="50"
-              height="50"
-            />
-          </td>
-          <td>
-            <p-button
-              icon="pi pi-check"
-              [rounded]="true"
-              [outlined]="true"
-              (onClick)="showConfirmation(visitor, 'Approved')"
-            />
-            <p-button
-              icon="pi pi-times"
-              [rounded]="true"
-              [outlined]="true"
-              severity="danger"
-              (onClick)="showConfirmation(visitor, 'Rejected')"
-            />
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <p *ngIf="pendingVisitors.length === 0">No pending visitors to display.</p>
   </p-tabPanel>
 </p-tabView>
 

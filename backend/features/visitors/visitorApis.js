@@ -10,7 +10,7 @@ const path = require("path");
 
 const { uploadSingle } = upload(/jpeg|jpg|png|webp/, "image");
 
-const { addVisitor, getVisitors, verifyPasscode, approveVisitor, imagePath } =
+const { addVisitor, getVisitors, verifyPasscode, approveVisitor, imagePath, getAllVisitors } =
   visitorController;
 
 const visitorValidationRules = bodyValidator([
@@ -48,7 +48,8 @@ router.post(
   validate(passcodeValidationRules),
   verifyPasscode
 );
-router.patch("/approval/", validate(idValidationSchema), approveVisitor);
+router.patch("/approval/:id", validate(idValidationSchema), approveVisitor);
 router.get("/image/:filename", imagePath);
+router.get("/all/:id", getAllVisitors)
 
 module.exports = router;
