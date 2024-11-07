@@ -12,7 +12,6 @@ export class SocietyStaffService {
   constructor(private readonly http: HttpClient) {}
 
   staffDetails(userId:string):Observable<any>{
-    console.log(userId);
     return this.http.get<any>(`${this.ApiUrl}/getStaffDetails/${userId}`)
   }
 }

@@ -19,6 +19,8 @@ import { Visitor } from '../../../interfaces/visitor.interface';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { InputOtpModule } from 'primeng/inputotp';
+import { StaffService } from '../../../services/staff/staff.service';
+import { SocietyStaffService } from '../../../services/societyStaff/societyStaff.service';
 
 @Component({
   selector: 'app-security-visitor',
@@ -55,7 +57,8 @@ export class SecurityVisitorComponent implements OnInit {
     private readonly societyService: SocietyService,
     private readonly wingService: WingService,
     private readonly visitorService: VisitorService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly societyStaffService: SocietyStaffService
   ) {}
 
   ngOnInit() {
@@ -71,9 +74,16 @@ export class SecurityVisitorComponent implements OnInit {
       passcode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
     });
 
-    this.userService.userSocietyId$.subscribe((societyId) => {
-      this.fetchWings(societyId);
-      this.fetchVisitors(societyId);
+    this.userService.getUserData().subscribe({
+      next: (userData) => {
+        this.societyStaffService.staffDetails(userData.id).subscribe({
+          next: (data) => {
+            console.log(data.data.societyId);
+            this.fetchWings(data.data.societyId);
+            this.fetchVisitors(data.data.societyId);
+          },
+        });
+      },
     });
   }
 
