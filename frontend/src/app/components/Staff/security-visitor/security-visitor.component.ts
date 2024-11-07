@@ -19,7 +19,6 @@ import { Visitor } from '../../../interfaces/visitor.interface';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { InputOtpModule } from 'primeng/inputotp';
-import { StaffService } from '../../../services/staff/staff.service';
 import { SocietyStaffService } from '../../../services/societyStaff/societyStaff.service';
 
 @Component({
@@ -74,17 +73,12 @@ export class SecurityVisitorComponent implements OnInit {
       passcode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
     });
 
-    this.userService.getUserData().subscribe({
-      next: (userData) => {
-        this.societyStaffService.staffDetails(userData.id).subscribe({
-          next: (data) => {
-            console.log(data.data.societyId);
-            this.fetchWings(data.data.societyId);
-            this.fetchVisitors(data.data.societyId);
-          },
-        });
-      },
-    });
+    this.userService.userData$.subscribe((userData) => {
+      this.societyStaffService.staffDetails(userData.id).subscribe((response) => {
+        this.fetchWings(response.data.societyId);
+        this.fetchVisitors(response.data.societyId);
+      });
+    })
   }
 
   fetchWings(societyId: string): void {
