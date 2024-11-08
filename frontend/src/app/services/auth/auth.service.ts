@@ -74,6 +74,7 @@ export class AuthService {
   handleGoogleLoginCallback(): void {
     this.route.queryParams.subscribe((params) => {
       const token = params['token'];
+      console.log('tokrn', token);
       if (token) {
         localStorage.setItem('authToken', token);
         localStorage.setItem('isLoggedIn', 'true');
@@ -82,6 +83,19 @@ export class AuthService {
         this.userService.getCurrentUser().subscribe({
           next: (user) => {
             this.houseService.setHouses(user.data.Houses);
+            this.userService.userRoles$.subscribe({
+              next: (roles) => {
+                if (roles.includes('systemAdmin')) {
+                  this.router.navigate(['/systemAdmin'], { replaceUrl: true });
+                } else if (roles.includes('pending')) {
+                  this.router.navigate(['/pending'], { replaceUrl: true });
+                } else if (roles.includes('security')) {
+                  this.router.navigate(['/Security'], { replaceUrl: true });
+                } else {
+                  this.router.navigate(['/home'], { replaceUrl: true });
+                }
+              },
+            });
             this.router.navigate(['/home'], { replaceUrl: true });
           },
           error: (error) => console.error('Error fetching user data:', error),
