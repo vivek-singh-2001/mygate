@@ -105,8 +105,6 @@ export class VisitorsComponent implements OnInit {
     });
 
     this.houseService.selectedHouse$.subscribe((selectedHouse) => {
-      console.log('houseeee', selectedHouse);
-
       if (selectedHouse) this.houseData = selectedHouse;
     });
 
@@ -115,6 +113,10 @@ export class VisitorsComponent implements OnInit {
     } else {
       this.fetchVisitors(undefined, this.userData.id);
     }
+
+    this.visitorService.listenForVisitorUpdates(this.userData.id).subscribe((visitor) => {
+      this.pendingVisitors.unshift(visitor)
+    });
   }
 
   fetchVisitors(houseId?: string, userId?: string): void {

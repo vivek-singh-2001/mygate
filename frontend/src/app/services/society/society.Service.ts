@@ -32,9 +32,6 @@ export class SocietyService {
             .get<any>(`${this.societyApiUrl}/societyAdminsDetails/${societyId}`)
             .pipe(
               tap((response) => {
-                console.log("fafhwauifgwauvwaufwaufwugd",response);
-                
-                
                 if (response?.data) {
                   this.societyDataSubject.next(response.data); // Update BehaviorSubject
                 }

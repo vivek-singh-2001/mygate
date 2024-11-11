@@ -25,7 +25,7 @@ export class NotificationCountService {
     private readonly http: HttpClient,
     private readonly userService: UserService
   ) {
-    this.socket = io('http://localhost:7500', {
+    this.socket = io(environment.socketUrl, {
       transports: ['websocket'],
       withCredentials: true,
     });
@@ -37,7 +37,7 @@ export class NotificationCountService {
 
     // Subscribe to user data to join notification room and set up event listeners
     this.userService.getUserData().subscribe((user) => {
-      if (user && user.id) {
+      if (user?.id) {
         this.joinNotificationRoom(user.id);
 
         // Listen for updated notice count event

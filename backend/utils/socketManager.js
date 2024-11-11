@@ -9,7 +9,7 @@ let io;
 const initSocket = (server) => {
   io = socketIo(server, {
     cors: {
-      origin: "http://localhost:4200", // Your Angular app URL
+      origin: "http://localhost:4200",
       methods: ["GET", "POST"],
       credentials: true,
     },
@@ -21,15 +21,11 @@ const initSocket = (server) => {
 
     socket.on("sendMessage", async ({ senderId, receiverId, message, id }) => {
       try {
-        // Create chat entry in the database
-
         const createdAt = new Date().toISOString();
 
         await sendMessage(senderId, receiverId, message);
         console.log("send message succesfully stored in db");
       
-
-        // Emit the message to the receiver
         io.emit("receiveMessage", {
           id,
           senderId,
@@ -62,7 +58,7 @@ const initSocket = (server) => {
       console.log(`User ${socket.id} joined room ${roomId}`);
     });
 
-    // Handle client disconnect
+    // Socket.io disconnection handling
     socket.on("disconnect", () => {
       console.log("Client disconnected:", socket.id);
     });

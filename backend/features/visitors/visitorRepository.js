@@ -19,7 +19,7 @@ exports.createVisitor = async (visitorData) => {
     image,
   } = visitorData;
 
-  return await Visitor.create({
+  const newVisitor = await Visitor.create({
     name,
     number,
     vehicleNumber: vehicleNumber || null,
@@ -34,6 +34,33 @@ exports.createVisitor = async (visitorData) => {
     responsibleUser: responsibleUser,
     image: image || null,
   });
+
+  const fullVisitorRecord = await Visitor.findOne({
+    where: { id: newVisitor.id },
+    include: [
+      {
+        model: House,
+        required: true,
+        include: [
+          {
+            model: Floor,
+            required: true,
+            include: [
+              {
+                model: Wing,
+                required: true,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        model: User,
+      },
+    ],
+  });
+
+  return fullVisitorRecord;
 };
 
 exports.getVisitors = async (filters) => {
@@ -98,7 +125,7 @@ exports.getAllVisitors = async (societyId) => {
       },
       {
         model: User,
-      }
+      },
     ],
   });
 };

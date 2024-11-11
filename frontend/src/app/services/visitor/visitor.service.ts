@@ -1,15 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { BehaviorSubject, catchError, fromEvent, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { io, Socket } from 'socket.io-client';
+import { Visitor } from '../../interfaces/visitor.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class VisitorService {
   private readonly visitorApiUrl = `${environment.apiUrl}/visitors`;
+  private readonly socket: Socket;
 
-  constructor(private readonly http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {
+    this.socket = io(environment.socketUrl, {
+      transports: ['websocket'],
+      withCredentials: true,
+    });
+
+    this.socket.on('connect', () => {
+      console.log('Connected to WebSocket server',this.socket.connected);
+    });
+
+    this.socket.on('disconnect', () => {
+      console.log('Disconnected from WebSocket server');
+    });
+  }
 
   addVisitor(visitorData: any): Observable<any> {
     return this.http.post(`${this.visitorApiUrl}/add`, visitorData).pipe(
@@ -58,5 +74,9 @@ export class VisitorService {
 
   verifyVisitor(passcode: any): Observable<any> {
     return this.http.post(`${this.visitorApiUrl}/verify-passcode`, passcode)
+  }
+
+  listenForVisitorUpdates(userId: string) {
+    return fromEvent(this.socket, `visitorUpdate:${userId}`);
   }
 }

@@ -166,7 +166,11 @@
   styleClass="verify-dialog"
   (onHide)="closeVerificationDialog()"
 >
-  <form [formGroup]="verificationForm" class="verification-form" (ngSubmit)="onPasscodeSubmit()">
+  <form
+    [formGroup]="verificationForm"
+    class="verification-form"
+    (ngSubmit)="onPasscodeSubmit()"
+  >
     <div class="form-group">
       <p-inputOtp
         formControlName="passcode"
@@ -203,7 +207,8 @@
       <th scope="col">Number</th>
       <th scope="col">Visit Date</th>
       <th scope="col">Time</th>
-      <th scope="col">House</th>
+      <th scope="col">Image</th>
+      <th scope="col">House No.</th>
       <th scope="col">Requested to</th>
       <th scope="col">Status</th>
     </tr>
@@ -214,13 +219,28 @@
       <td>{{ visitor.number }}</td>
       <td>{{ visitor.startDate | date : "shortDate" }}</td>
       <td>{{ visitor.visitTime }}</td>
-      <td>{{ visitor.House?.Floor?.Wing?.name || '' }} - {{ visitor.House?.house_no || '' }}</td>
-      <td>{{ visitor.User.firstname }} {{ visitor.User.lastname || '' }}</td>
-       <td [ngClass]="{
+      <td>
+        <p-image
+          [src]="getImageUrl(visitor.image)"
+          [alt]="'Visitor Image'"
+          width="50"
+          height="70"
+          preview="true"
+          styleClass="visitor-image"
+        ></p-image>
+      </td>
+      <td>
+        {{ visitor.House?.Floor?.Wing?.name || "" }} -
+        {{ visitor.House?.house_no || "" }}
+      </td>
+      <td>{{ visitor.User.firstname }} {{ visitor.User.lastname || "" }}</td>
+      <td
+        [ngClass]="{
           'status-approved': visitor.status === 'Approved',
           'status-rejected': visitor.status === 'Rejected',
           'status-pending': visitor.status === 'Pending'
-        }">
+        }"
+      >
         {{ visitor.status }}
       </td>
     </tr>

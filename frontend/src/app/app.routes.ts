@@ -28,8 +28,7 @@ export const routes: Routes = [
   },
   {
     path: 'google/success',
-    component: GoogleCallbackComponent,
-    canActivate: [AuthGuard],
+    component: GoogleCallbackComponent
   },
   { path: 'pending', component: PendingUserComponent },
 

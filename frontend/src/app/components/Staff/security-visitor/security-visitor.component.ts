@@ -20,6 +20,8 @@ import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { InputOtpModule } from 'primeng/inputotp';
 import { SocietyStaffService } from '../../../services/societyStaff/societyStaff.service';
+import { ImageModule } from 'primeng/image';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-security-visitor',
@@ -33,6 +35,7 @@ import { SocietyStaffService } from '../../../services/societyStaff/societyStaff
     DialogModule,
     TableModule,
     InputOtpModule,
+    ImageModule
   ],
   templateUrl: './security-visitor.component.html',
   styleUrl: './security-visitor.component.css',
@@ -74,11 +77,13 @@ export class SecurityVisitorComponent implements OnInit {
     });
 
     this.userService.userData$.subscribe((userData) => {
-      this.societyStaffService.staffDetails(userData.id).subscribe((response) => {
-        this.fetchWings(response.data.societyId);
-        this.fetchVisitors(response.data.societyId);
-      });
-    })
+      this.societyStaffService
+        .staffDetails(userData.id)
+        .subscribe((response) => {
+          this.fetchWings(response.data.societyId);
+          this.fetchVisitors(response.data.societyId);
+        });
+    });
   }
 
   fetchWings(societyId: string): void {
@@ -128,6 +133,17 @@ export class SecurityVisitorComponent implements OnInit {
   closeVerificationDialog() {
     this.verifyDialog = false;
     this.verificationForm.reset();
+  }
+
+  getImageUrl(imagePath: string): string {
+    if (!imagePath) {
+      console.error('Image path not found');
+      return '';
+    }
+
+    const filename = imagePath.split('/').pop() ?? '';
+
+    return `${environment.apiUrl}/visitors/image/${filename}`;
   }
 
   onWingSelection(wingId: string): void {
@@ -199,12 +215,17 @@ export class SecurityVisitorComponent implements OnInit {
       formData.append('visitTime', visitTime);
 
       this.visitorService.addVisitor(formData).subscribe({
-        next: () => {
+        next: (response) => {
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'Request sent successfully!',
           });
+          this.display = false;
+          this.visitorForm.reset();
+          this.visitors.unshift(response.data);
+          this.selectedFile = null;
+          this.selectedFileName = null;
         },
         error: (error) => {
           this.messageService.add({

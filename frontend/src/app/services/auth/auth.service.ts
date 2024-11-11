@@ -28,7 +28,7 @@ export class AuthService {
     private readonly route: ActivatedRoute,
     private readonly userService: UserService,
     private readonly houseService: HouseService,
-    private readonly societyStaffService: SocietyStaffService
+    private readonly societyStaffService: SocietyStaffService,
   ) {}
 
   // Login with email and password
@@ -72,7 +72,11 @@ export class AuthService {
   }
 
   handleGoogleLoginCallback(): void {
+    console.log("helooooo222", this.route.queryParams);
+    
     this.route.queryParams.subscribe((params) => {
+      console.log("paaaaaa", params);
+      
       const token = params['token'];
       console.log('tokrn', token);
       if (token) {

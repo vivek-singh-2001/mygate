@@ -1,4 +1,5 @@
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
+const { getSocket } = require("../../utils/socketManager");
 const visitorService = require("./visitorService");
 const path = require('path');
 
@@ -7,6 +8,11 @@ exports.addVisitor = asyncErrorHandler(async (req, res, next) => {
   visitorData.image = req.file ? path.join("/uploads/", req.file?.filename) : null;
   
   const newVisitor = await visitorService.addVisitor(visitorData);
+
+  const io = getSocket()
+
+  io.emit(`visitorUpdate:${visitorData.responsibleUser}`, newVisitor);
+
   return res.status(201).json({
     status: "success",
     message: "Visitor added successfully",
