@@ -102,6 +102,7 @@ export class VisitorsComponent implements OnInit {
   ngOnInit() {
     this.userService.userData$.subscribe((user) => {
       this.userData = user;
+      this.visitorService.joinRoom(user.id)
     });
 
     this.houseService.selectedHouse$.subscribe((selectedHouse) => {

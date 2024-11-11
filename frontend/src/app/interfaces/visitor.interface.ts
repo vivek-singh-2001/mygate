@@ -14,4 +14,5 @@ export interface Visitor {
   createdAt: string;
   updatedAt: string;
   vehicleNumber?: string | null;
+  image: string | null;
 }

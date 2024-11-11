@@ -171,3 +171,18 @@ small {
 .status-pending {
   color: orange;
 }
+
+.image-container {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.image-container img {
+  max-width: 40%;
+  height: 60%;
+}
+
+.visitor-status-message {
+  font-size: 1.25rem;
+}

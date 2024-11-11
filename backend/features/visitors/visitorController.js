@@ -11,7 +11,7 @@ exports.addVisitor = asyncErrorHandler(async (req, res, next) => {
 
   const io = getSocket()
 
-  io.emit(`visitorUpdate:${visitorData.responsibleUser}`, newVisitor);
+  io.to(visitorData.responsibleUser).emit(`visitorUpdate:${visitorData.responsibleUser}`, newVisitor);
 
   return res.status(201).json({
     status: "success",
@@ -53,6 +53,10 @@ exports.approveVisitor = asyncErrorHandler(async (req, res, next) => {
   }
 
   const updatedVisitor = await visitorService.approveVisitor(visitorId, status);
+
+  const io = getSocket()
+
+  io.emit('visitorUpdate', updatedVisitor);
 
   res.status(200).json({
     status: "success",

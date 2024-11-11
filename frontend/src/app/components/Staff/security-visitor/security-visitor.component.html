@@ -248,6 +248,31 @@
 </p-table>
 <p *ngIf="visitors.length === 0">No expected visitors to display.</p>
 
+<p-dialog
+  [(visible)]="statusDialogVisible"
+  header="Visitor Status Update"
+  modal="modal"
+  [responsive]="true"
+  (onHide)="closeStatusDialog()"
+>
+  <div *ngIf="updatedVisitor">
+    <div *ngIf="updatedVisitor.image" class="image-container">
+      <img [src]="getImageUrl(updatedVisitor.image)" alt="Visitor Profile" />
+    </div>
+    <p class="visitor-status-message">
+      <strong>{{ updatedVisitor.name }}</strong> has been 
+      <strong
+        [ngClass]="{
+          'status-approved': updatedVisitor.status === 'Approved',
+          'status-rejected': updatedVisitor.status === 'Rejected'
+        }"
+      >{{ updatedVisitor.status.toLowerCase() }}</strong>.
+      <span *ngIf="updatedVisitor.status === 'Approved'">You may allow them to enter.</span>
+      <span *ngIf="updatedVisitor.status === 'Rejected'">Please do not allow entry.</span>
+      </p>
+  </div>
+</p-dialog>
+
 <div class="card flex justify-content-center gap-2">
   <p-toast />
 </div>

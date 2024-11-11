@@ -76,7 +76,15 @@ export class VisitorService {
     return this.http.post(`${this.visitorApiUrl}/verify-passcode`, passcode)
   }
 
+  joinRoom(userId: string): void {
+    this.socket.emit('joinRoom', userId);
+  }
+
   listenForVisitorUpdates(userId: string) {
     return fromEvent(this.socket, `visitorUpdate:${userId}`);
+  }
+
+  listenForVisitorUpdates11() {
+    return fromEvent(this.socket, `visitorUpdate`);
   }
 }

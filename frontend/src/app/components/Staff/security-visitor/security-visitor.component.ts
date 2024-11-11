@@ -35,7 +35,7 @@ import { environment } from '../../../../environments/environment';
     DialogModule,
     TableModule,
     InputOtpModule,
-    ImageModule
+    ImageModule,
   ],
   templateUrl: './security-visitor.component.html',
   styleUrl: './security-visitor.component.css',
@@ -52,6 +52,8 @@ export class SecurityVisitorComponent implements OnInit {
   formSubmitted: boolean = false;
   display: boolean = false;
   verifyDialog: boolean = false;
+  statusDialogVisible: boolean = false
+  updatedVisitor: Visitor | null = null
 
   constructor(
     private readonly fb: FormBuilder,
@@ -77,12 +79,18 @@ export class SecurityVisitorComponent implements OnInit {
     });
 
     this.userService.userData$.subscribe((userData) => {
+      this.visitorService.joinRoom(userData.id);
       this.societyStaffService
         .staffDetails(userData.id)
         .subscribe((response) => {
           this.fetchWings(response.data.societyId);
           this.fetchVisitors(response.data.societyId);
         });
+    });
+
+    this.visitorService.listenForVisitorUpdates11().subscribe((visitor) => {
+      this.updatedVisitor = visitor;
+      this.statusDialogVisible = true;  
     });
   }
 
@@ -135,9 +143,13 @@ export class SecurityVisitorComponent implements OnInit {
     this.verificationForm.reset();
   }
 
+  closeStatusDialog() {
+    this.statusDialogVisible = false;
+    this.updatedVisitor = null;
+  }
+
   getImageUrl(imagePath: string): string {
     if (!imagePath) {
-      console.error('Image path not found');
       return '';
     }
 
