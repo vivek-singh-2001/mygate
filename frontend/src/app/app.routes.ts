@@ -71,6 +71,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'payments',
+        loadComponent: () =>
+          import('./components/User/Shared/payments/payments.component').then(
+            (visitor) => visitor.PaymentsComponent
+          ),
+      },
+      {
         path: 'apartments',
         loadComponent: () =>
           import('./components/User/Admin/apartment/apartment.component').then(

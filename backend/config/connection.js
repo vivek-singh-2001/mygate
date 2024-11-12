@@ -34,6 +34,7 @@ db.Staff = require("../features/staff/staffModel.js")(connectDB, DataTypes);
 db.Shift = require("../features/shift/shiftModel.js")(connectDB, DataTypes);
 db.NotificationCount = require("../features/notificationCount/notificationCountModel.js")(connectDB, DataTypes);
 db.SocietyStaff = require("../features/society/societyStaffModel.js")(connectDB, DataTypes);
+db.Payment = require("../features/payment/paymentModel.js")(connectDB, DataTypes);
 
 // =============society-wing (: One to many)============================
 
@@ -167,6 +168,10 @@ db.User.hasMany(db.SocietyStaff, { foreignKey: "staffId" });
 db.SocietyStaff.belongsTo(db.User, { foreignKey: "staffId" });
 db.SocietyStaff.belongsTo(db.Society, { foreignKey: "societyId", as: 'Society', });
 db.Society.hasMany(db.SocietyStaff, { foreignKey: "societyId",as:'Staff' });
+
+// ==============user-payment (: One to many)=========================
+db.User.hasMany(db.Payment, { foreignKey: "userId" });
+db.Payment.belongsTo(db.User, { foreignKey: "userId" });
 
 
 const check = async () => {
