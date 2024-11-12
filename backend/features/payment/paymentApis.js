@@ -19,11 +19,10 @@ const getPaymentsByOwnerValidationRules = bodyValidator([
   { name: "ownerId", isRequired: true, type: "uuid" },
 ]);
 
-
-router.post("/",paymentValidationRules, paymentController.createPayment);
+router.post("/create",paymentValidationRules, paymentController.createPayment);
 router.post('/verify-payment', paymentController.verifyPayment);
 router.get("/payments/:paymentId",paymentIdValidationRules, paymentController.getPaymentById);
-router.get("/payments/user/:ownerId",getPaymentsByOwnerValidationRules, paymentController.getPaymentsForUser);
-router.get("/payments", paymentController.getAllPayments);
+router.get("/user/:ownerId",getPaymentsByOwnerValidationRules, paymentController.getPaymentsForUser);
+router.get("/all/:id", paymentController.getAllPayments);
 
 module.exports = router;

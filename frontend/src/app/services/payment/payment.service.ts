@@ -18,7 +18,7 @@ export class PaymentService {
     houseId: string
   ) {
     return this.http.post<{ success: boolean; data: PaymentRecord; razorpayKey: string }>(
-      `${this.apiUrl}`,
+      `${this.apiUrl}/create`,
       {
         amount,
         ownerId,
@@ -33,8 +33,9 @@ export class PaymentService {
       paymentData
     );
   }
+
   getPaymentById(paymentId: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${paymentId}`);
+    return this.http.get(`${this.apiUrl}/payments/${paymentId}`);
   }
 
   getPaymentsForUser(ownerId: string): Observable<any> {
