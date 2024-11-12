@@ -32,8 +32,8 @@ interface RazorpayOptions {
 export class PaymentsComponent {
   amount = 50000;
   currency = 'INR';
-  ownerId = 'efe28c36-fbcd-4e63-8168-12facbfe4b08';
-  houseId = "ac348c69-9efc-401e-bc5c-ad4766131c09";
+  ownerId = '1404fe56-aed7-4630-bf2c-a3a3ab8a66a2';
+  houseId = "ea8758bc-413a-4268-aa55-8c191ff934a2";
 
   constructor(private readonly paymentService: PaymentService) {}
 

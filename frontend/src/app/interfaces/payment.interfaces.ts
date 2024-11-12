@@ -1,7 +1,14 @@
-export interface Payment {
-    ownerId:string,
-    houseId?:string,
-    amount:number,
-    transactionId:string,
-    status:string
+export interface PaymentRecord {
+  id: string;
+  ownerId: string;
+  houseId?: string;
+  amount: number;
+  status: 'pending' | 'failure' | 'success';
+  paymentDate: Date;
+  orderId: string;
+  razorpayPaymentId?: string;
+  razorpaySignature?: string;
+  failureReason?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

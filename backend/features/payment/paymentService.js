@@ -10,7 +10,6 @@ exports.createPayment = async (paymentDetails) => {
     });
     return await paymentRepository.createPayment({
       ...paymentDetails,
-      userId: paymentDetails.ownerId,
       orderId: order.id,
       status: "pending",
     });

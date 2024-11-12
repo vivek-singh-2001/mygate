@@ -84,7 +84,7 @@ export class VisitorService {
     return fromEvent(this.socket, `visitorUpdate:${userId}`);
   }
 
-  listenForVisitorUpdates11() {
+  listenVisitorStatusUpdate() {
     return fromEvent(this.socket, `visitorUpdate`);
   }
 }

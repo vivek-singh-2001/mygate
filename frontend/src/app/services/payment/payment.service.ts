@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { PaymentRecord } from '../../interfaces/payment.interfaces';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class PaymentService {
     ownerId: string,
     houseId: string
   ) {
-    return this.http.post<{ success: boolean; data: any; razorpayKey: string }>(
+    return this.http.post<{ success: boolean; data: PaymentRecord; razorpayKey: string }>(
       `${this.apiUrl}`,
       {
         amount,

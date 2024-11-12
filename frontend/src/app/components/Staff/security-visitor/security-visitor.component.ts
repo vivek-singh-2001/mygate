@@ -88,7 +88,7 @@ export class SecurityVisitorComponent implements OnInit {
         });
     });
 
-    this.visitorService.listenForVisitorUpdates11().subscribe((visitor) => {
+    this.visitorService.listenVisitorStatusUpdate().subscribe((visitor) => {
       this.updatedVisitor = visitor;
       this.statusDialogVisible = true;  
     });
