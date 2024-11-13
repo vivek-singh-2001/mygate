@@ -72,6 +72,7 @@ exports.getPaymentsForUser = asyncErrorHandler(async (req, res, next) => {
 });
 
 exports.getAllPayments = asyncErrorHandler(async (req, res, next) => {
-  const payments = await paymentService.getAllPayments();
+  const { id: societyId } = req.params;
+  const payments = await paymentService.getAllPayments(societyId);
   return res.status(200).json({ success: true, data: payments });
 });

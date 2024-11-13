@@ -2,12 +2,13 @@ const razorpayInstance = require("../../config/razorPay");
 const paymentRepository = require("./paymentRepository");
 const houseRepository = require("../house/houseRepository");
 const CustomError = require("../../utils/CustomError");
+const societyRepository = require("../society/societyRepository");
 
 exports.makePayment = async (paymentId) => {
   try {
-    const payment = await paymentRepository.getPaymentById(paymentId)
+    const payment = await paymentRepository.getPaymentById(paymentId);
     if (!payment) {
-      throw new CustomError('Invalid payment id. No record found', 404)
+      throw new CustomError("Invalid payment id. No record found", 404);
     }
     const order = await razorpayInstance.orders.create({
       amount: payment.amount * 100,
@@ -25,7 +26,7 @@ exports.makePayment = async (paymentId) => {
 exports.createOrder = async (societyId, amount, date, category) => {
   try {
     const houses = await houseRepository.getHousesBySocietyId(societyId);
-    const month = new Date(date).getMonth() + 1; 
+    const month = new Date(date).getMonth() + 1;
     const year = new Date(date).getFullYear();
 
     for (const house of houses) {
@@ -49,7 +50,7 @@ exports.createOrder = async (societyId, amount, date, category) => {
           category
         );
       } else {
-       return `${category} for ${month} - ${year} is already requested to each houses. `
+        return `${category} for ${month} - ${year} is already requested to each houses. `;
       }
     }
 
@@ -97,11 +98,36 @@ exports.getPaymentsForUser = async (ownerId) => {
   }
 };
 
-exports.getAllPayments = async () => {
+exports.getAllPaymentExpenses = async (societyId) => {
   try {
-    const payments = await paymentRepository.getAllPayments();
-    return payments;
+    const society = await societyRepository.getSocietyById(societyId);
+    if (!society) {
+      throw new CustomError("Society not found", 404);
+    }
+
+    const [payments, expenses] = await Promise.all([
+      paymentRepository.getAllPayments(societyId),
+      paymentRepository.getExpenses(societyId)
+    ]);
+
+    return [
+      ...payments.map((payment) => ({
+        amount: payment.amount,
+        purpose: payment.purpose,
+        date: payment.status === 'success' ? payment.paymentDate : payment.dueDate,
+        paymentEntity: `${payment.House.Floor.Wing.name} - ${payment.House.house_no}`,
+        type: 'Credit'
+      })),
+      ...expenses.map((expense) => ({
+        amount: expense.amount,
+        purpose: `${expense.category}: ${expense.description}`,
+        date: expense.date,
+        paymentEntity: `Society Management`,
+        type: 'Debit'
+      }))
+    ];
   } catch (error) {
-    throw new Error("Error fetching all payments: " + error.message);
+    console.error("Error fetching payment expenses:", error);
+    throw new Error("Error fetching payment expenses: " + error.message);
   }
 };

@@ -1,5 +1,5 @@
 const { db } = require("../../config/connection");
-const { Payment } = db;
+const { Payment, House, Floor, Wing, User, SocietyExpense } = db;
 const { Op } = require("sequelize");
 
 exports.makePayment = async (paymentId, orderId) => {
@@ -8,7 +8,7 @@ exports.makePayment = async (paymentId, orderId) => {
       { orderId },
       { where: { id: paymentId }, returning: true }
     );
-    
+
     return updatedPayments[1][0];
   } catch (error) {
     throw new Error("Error creating payment: " + error.message);
@@ -17,7 +17,7 @@ exports.makePayment = async (paymentId, orderId) => {
 
 exports.createOrder = async (houseId, ownerId, amount, date, category) => {
   console.log("reposss", category);
-  
+
   try {
     const newPayment = await Payment.create({
       ownerId: ownerId,
@@ -59,28 +59,71 @@ exports.getPaymentsForUser = async (ownerId) => {
   }
 };
 
-exports.checkExistingOrder = async (houseId, ownerId, month, year,category) => {
+exports.checkExistingOrder = async (
+  houseId,
+  ownerId,
+  month,
+  year,
+  category
+) => {
   return Payment.findOne({
     where: {
       houseId,
       ownerId,
-      purpose:category,
+      purpose: category,
       dueDate: {
-        [Op.between]: [
-          new Date(year, month - 1, 1),
-          new Date(year, month, 0),
-        ],
+        [Op.between]: [new Date(year, month - 1, 1), new Date(year, month, 0)],
       },
     },
   });
 };
 
-
-exports.getAllPayments = async () => {
+exports.getAllPayments = async (societyId) => {
   try {
-    const payments = await Payment.findAll();
-    return payments;
+    return await Payment.findAll({
+      attributes: ['amount', 'purpose', 'dueDate', 'status', 'paymentDate'],
+      include: [
+        {
+          model: House,
+          required: true,
+          attributes: ['house_no'],
+          include: [
+            {
+              model: Floor,
+              required: true,
+              attributes: ['floor_number'],
+              include: [
+                {
+                  model: Wing,
+                  required: true,
+                  attributes: ['name'],
+                  where: { societyId },
+                },
+              ],
+            },
+          ],
+        },
+        // {
+        //   model: User,
+        //   required: true,
+        //   attributes: ['firstname', 'lastname', 'number', 'email','photo']
+        // },
+      ],
+    });
   } catch (error) {
+    console.log("fwkfbw", error);
+    throw new Error("Error fetching all payments: " + error.message);
+  }
+};
+
+exports.getExpenses = async (societyId) => {
+  try {
+    return await SocietyExpense.findAll({
+      where: { societyId },
+      attributes: ['date', 'amount', 'category', 'description', 'status']
+    });
+  } catch (error) {
+    console.log("fwkfbw", error);
     throw new Error("Error fetching all payments: " + error.message);
   }
 };

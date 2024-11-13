@@ -174,18 +174,19 @@ db.Society.hasMany(db.SocietyStaff, { foreignKey: "societyId",as:'Staff' });
 db.User.hasMany(db.Payment, { foreignKey: "ownerId" });
 db.Payment.belongsTo(db.User, { foreignKey: "ownerId" });
 
+// ==============house-payment (: One to many)=========================
+db.House.hasMany(db.Payment, { foreignKey: "houseId" });
+db.Payment.belongsTo(db.House, { foreignKey: "houseId" });
 
 // ==============society-societyExpanses (: One to many)=========================
 db.Society.hasMany(db.SocietyExpense, { foreignKey: 'societyId' });
 db.SocietyExpense.belongsTo(db.Society, { foreignKey: 'societyId' });
 
-
-
 const check = async () => {
   try {
     await connectDB.authenticate();
     console.log("Connection has been established successfully.");
-    await db.connectDB.sync({ alter: false, force: false });
+    await db.connectDB.sync({ alter: true, force: false });
     console.log("All models were synchronized successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
