@@ -23,6 +23,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { GeolocationService } from '../../../services/geolocation/geolocation.service';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -71,7 +72,24 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadGoogleMapsScript();
     this.initializeForm();
+  }
+
+
+   // Dynamically load Google Maps script
+   loadGoogleMapsScript() {
+    const apiKey = environment.googleMapsApiKey;
+    const script = document.createElement('script');
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`;
+    script.async = true;
+    document.body.appendChild(script);
+
+    // Global callback to initialize the map
+    (window as any).initMap = () => {
+      // Map initialization can happen here if needed
+      console.log('Google Maps script loaded');
+    };
   }
 
   initializeForm() {
