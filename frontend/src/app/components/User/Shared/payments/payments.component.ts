@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { UserService } from '../../../../services/user/user.service';
+import { MaintenanceReportComponent } from "../../Admin/maintenance-report/maintenance-report.component";
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -35,7 +36,7 @@ interface RazorpayOptions {
 @Component({
   selector: 'app-payments',
   standalone: true,
-  imports: [ TableModule,
+  imports: [TableModule,
     ToastModule,
     ButtonModule,
     CommonModule,
@@ -43,7 +44,7 @@ interface RazorpayOptions {
     DialogModule,
     InputTextModule,
     FormsModule,
-    GalleriaModule,],
+    GalleriaModule, MaintenanceReportComponent],
   templateUrl: './payments.component.html',
   styleUrl: './payments.component.css',
 })

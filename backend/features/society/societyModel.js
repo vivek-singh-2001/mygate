@@ -34,8 +34,12 @@ module.exports = (connectDB, DataTypes) => {
         allowNull: true ,
         onUpdate: 'CASCADE',
       },
-      maintenance:{
-        type:DataTypes.INTEGER ,
+      latitude:{
+        type:DataTypes.STRING,
+        allowNull:true
+      },
+      longitude:{
+        type:DataTypes.STRING,
         allowNull:true
       }
     },

@@ -7,7 +7,6 @@ import { AdminGuard } from './gaurds/admin.gaurd';
 import { SystemAdminComponent } from './layouts/system-admin/system-admin.component';
 import { SystemAdminGuard } from './gaurds/system-admin.guard';
 import { UnauthorizedComponent } from './components/shared/unauthorized/unauthorized.component';
-import { RegisterComponent } from './components/shared/register/register.component';
 import { LoginComponent } from './components/shared/login/login.component';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
@@ -24,11 +23,14 @@ export const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegisterComponent,
+    loadComponent: () =>
+      import('./components/shared/register/register.component').then(
+        (r) => r.RegisterComponent
+      ),
   },
   {
     path: 'google/success',
-    component: GoogleCallbackComponent
+    component: GoogleCallbackComponent,
   },
   { path: 'pending', component: PendingUserComponent },
 
@@ -125,13 +127,6 @@ export const routes: Routes = [
           ),
         canActivate: [AdminGuard],
       },
-      {
-        path:'apartments/maintenance-Report',
-        loadComponent:()=>
-          import('./components/User/Admin/maintenance-report/maintenance-report.component').then(
-            (m)=> m.MaintenanceReportComponent
-          )
-      }
     ],
   },
   {

@@ -21,6 +21,8 @@ import { SocietyService } from '../../../services/society/society.Service';
 import { CustomValidators } from '../../../utils/customValidators';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { GeolocationService } from '../../../services/geolocation/geolocation.service';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @Component({
   selector: 'app-register',
@@ -38,6 +40,7 @@ import { MessageService } from 'primeng/api';
     RadioButtonModule,
     CalendarModule,
     ToastModule,
+    GoogleMapsModule,
   ],
   providers: [MessageService],
   templateUrl: './register.component.html',
@@ -47,20 +50,24 @@ export class RegisterComponent implements OnInit {
   active: number | undefined = 0;
   today: Date = new Date();
 
+  latitude?: number;
+  longitude?: number;
+  selectedLocation: { lat: number; lng: number } | null = null;
+  invalidPostalCode = false;
+
   reactiveForm!: FormGroup;
   states: { name: string; code: string }[] = [];
   districts: string[] = [];
   fileError: string | null = null;
   selectedFile: File | null = null;
 
-  invalidPostalCode = false; // Flag for postal code validity
-
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
     private readonly addressService: AddressService,
     private readonly societyService: SocietyService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly geolocationService: GeolocationService
   ) {}
 
   ngOnInit(): void {
@@ -109,6 +116,10 @@ export class RegisterComponent implements OnInit {
     if (isValid) {
       nextCallback.emit();
     }
+  }
+
+  pp(nextCallback: EventEmitter<void>) {
+    nextCallback.emit();
   }
 
   downloadSampleCSV() {
@@ -165,6 +176,12 @@ export class RegisterComponent implements OnInit {
       }
       formdata.append('society', JSON.stringify(this.reactiveForm.value));
 
+      // Append latitude and longitude if selected location exists
+      if (this.selectedLocation) {
+        formdata.append('latitude', this.selectedLocation.lat.toString());
+        formdata.append('longitude', this.selectedLocation.lng.toString());
+      }
+
       formdata.append('file', this.selectedFile);
 
       console.log(formdata);
@@ -213,6 +230,22 @@ export class RegisterComponent implements OnInit {
             });
 
             this.invalidPostalCode = false;
+
+            // Assume we get approximate lat/lng coordinates for the pincode
+            this.geolocationService.getCoordinatesByPincode(pincode).subscribe({
+              next: (coordinates) => {
+                // Center the map at the pincode location
+                this.latitude = coordinates.lat;
+                this.longitude = coordinates.lng;
+                this.invalidPostalCode = false;
+              },
+              error: () => {
+                this.invalidPostalCode = true;
+                console.error(
+                  'Could not find coordinates for the provided pincode.'
+                );
+              },
+            });
           } else {
             this.invalidPostalCode = true;
             console.error('Invalid PIN code or no data found.');
@@ -223,6 +256,15 @@ export class RegisterComponent implements OnInit {
           console.error('Error fetching data:', error);
         },
       });
+    }
+  }
+
+  selectLocation(event: google.maps.MapMouseEvent): void {
+    if (event.latLng) {
+      this.selectedLocation = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
     }
   }
 

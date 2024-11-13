@@ -10,6 +10,7 @@ import { UserService } from '../../../../services/user/user.service';
 import { PaymentService } from '../../../../services/payment/payment.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-maintenance-report',
@@ -24,6 +25,7 @@ import { ToastModule } from 'primeng/toast';
     InputTextareaModule,
     FormsModule,
     ToastModule,
+    CalendarModule
   ],
   providers: [MessageService],
   templateUrl: './maintenance-report.component.html',
@@ -33,6 +35,9 @@ export class MaintenanceReportComponent implements OnInit {
   displayPaymentDialog = false;
   displayExpensesDialog = false;
   societyId: string = '';
+
+  minDate: Date = new Date();
+  maxDate: Date = new Date();
 
   paymentAmount: number | null = null;
   paymentDate: string | null = null;
@@ -61,6 +66,14 @@ export class MaintenanceReportComponent implements OnInit {
         this.societyId = societyId;
       },
     });
+
+    this.minDate.setDate(1);
+
+    // Set maxDate to the last day of the next month
+    const nextMonth = new Date(this.minDate);
+    nextMonth.setMonth(this.minDate.getMonth() + 2);
+    nextMonth.setDate(0); // Last day of the next month
+    this.maxDate = nextMonth;
   }
 
   showPaymentDialog() {

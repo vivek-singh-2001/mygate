@@ -47,13 +47,15 @@ exports.isUserAdmin = async (userId) => {
   return society;
 };
 
-exports.registerSociety = async (societyDetails) => {
+exports.registerSociety = async (societyDetails,latitude,longitude) => {
   const pendingRole = await userRepository.getRoleByName("pending");
 
   const result = await societyRepository.registerSociety({
     societyDetails,
     status: "pending",
     pendingRole,
+    latitude,
+    longitude
   });
   return result;
 };

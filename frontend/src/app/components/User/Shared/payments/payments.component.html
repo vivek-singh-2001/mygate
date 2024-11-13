@@ -1,3 +1,5 @@
+<app-maintenance-report></app-maintenance-report>
+
 <div class="mx-8 mt-8">
   <div class="display-card">
     <div class="flex justify-content-between mb-4">
@@ -52,10 +54,7 @@
         </ng-template>
       </p-table>
 
-      <div
-        *ngIf="paymentsData.length === 0"
-      class="mb-5 text-center"
-      >
+      <div *ngIf="paymentsData.length === 0" class="mb-5 text-center">
         <p>You are All Clear up. No new Payment to Make</p>
       </div>
     </div>
@@ -88,12 +87,9 @@
           </tr>
         </ng-template>
       </p-table>
-      <div
-      *ngIf="paymentHistoryData.length === 0"
-    class="mb-5 text-center"
-    >
-      <p>you have not done any payment yet.</p>
-    </div>
+      <div *ngIf="paymentHistoryData.length === 0" class="mb-5 text-center">
+        <p>you have not done any payment yet.</p>
+      </div>
     </div>
   </div>
 </div>
