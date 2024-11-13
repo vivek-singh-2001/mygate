@@ -125,6 +125,13 @@ export const routes: Routes = [
           ),
         canActivate: [AdminGuard],
       },
+      {
+        path:'apartments/maintenance-Report',
+        loadComponent:()=>
+          import('./components/User/Admin/maintenance-report/maintenance-report.component').then(
+            (m)=> m.MaintenanceReportComponent
+          )
+      }
     ],
   },
   {

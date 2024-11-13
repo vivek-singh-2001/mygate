@@ -35,6 +35,7 @@ db.Shift = require("../features/shift/shiftModel.js")(connectDB, DataTypes);
 db.NotificationCount = require("../features/notificationCount/notificationCountModel.js")(connectDB, DataTypes);
 db.SocietyStaff = require("../features/society/societyStaffModel.js")(connectDB, DataTypes);
 db.Payment = require("../features/payment/paymentModel.js")(connectDB, DataTypes);
+db.SocietyExpense = require("../features/expenses/societyExpensesModel.js")(connectDB,DataTypes)
 
 // =============society-wing (: One to many)============================
 
@@ -170,15 +171,21 @@ db.SocietyStaff.belongsTo(db.Society, { foreignKey: "societyId", as: 'Society', 
 db.Society.hasMany(db.SocietyStaff, { foreignKey: "societyId",as:'Staff' });
 
 // ==============user-payment (: One to many)=========================
-db.User.hasMany(db.Payment, { foreignKey: "userId" });
-db.Payment.belongsTo(db.User, { foreignKey: "userId" });
+db.User.hasMany(db.Payment, { foreignKey: "ownerId" });
+db.Payment.belongsTo(db.User, { foreignKey: "ownerId" });
+
+
+// ==============society-societyExpanses (: One to many)=========================
+db.Society.hasMany(db.SocietyExpense, { foreignKey: 'societyId' });
+db.SocietyExpense.belongsTo(db.Society, { foreignKey: 'societyId' });
+
 
 
 const check = async () => {
   try {
     await connectDB.authenticate();
     console.log("Connection has been established successfully.");
-    await db.connectDB.sync({ alter: true, force: false });
+    await db.connectDB.sync({ alter: false, force: false });
     console.log("All models were synchronized successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);

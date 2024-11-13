@@ -1,7 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PaymentService } from '../../../../services/payment/payment.service';
 import { loadRazorpay } from '../../../../utils/razorpay';
 import { firstValueFrom } from 'rxjs';
+import { GalleriaModule } from 'primeng/galleria';
+import { FormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { DialogModule } from 'primeng/dialog';
+import { CardModule } from 'primeng/card';
+import { CommonModule } from '@angular/common';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { TableModule } from 'primeng/table';
+import { UserService } from '../../../../services/user/user.service';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -25,27 +35,54 @@ interface RazorpayOptions {
 @Component({
   selector: 'app-payments',
   standalone: true,
-  imports: [],
+  imports: [ TableModule,
+    ToastModule,
+    ButtonModule,
+    CommonModule,
+    CardModule,
+    DialogModule,
+    InputTextModule,
+    FormsModule,
+    GalleriaModule,],
   templateUrl: './payments.component.html',
   styleUrl: './payments.component.css',
 })
-export class PaymentsComponent {
-  amount = 50000;
-  currency = 'INR';
-  ownerId = '1404fe56-aed7-4630-bf2c-a3a3ab8a66a2';
-  houseId = "ea8758bc-413a-4268-aa55-8c191ff934a2";
+export class PaymentsComponent implements OnInit {
+  paymentsData:any[] = [];
+  isPaymentHistory: boolean = false;
+  paymentHistoryData: any[] = [];
 
-  constructor(private readonly paymentService: PaymentService) {}
+  constructor(private readonly paymentService: PaymentService,
+    private readonly userService:UserService
+  ) {}
 
-  async onPayNow() {
+  ngOnInit(): void {
+    this.userService.getUserData().subscribe({
+      next:(user)=>{
+        this.paymentService.getPaymentsForUser(user.id).subscribe({
+          next:(data)=>{
+            data.data.forEach((payment: any) => {
+              if (payment.status === 'pending') {
+                this.paymentsData.push(payment);
+              } else  {
+                this.paymentHistoryData.push(payment);
+              }
+            });
+          }
+        })
+      }
+    })
+  }
+
+  async onPayNow(paymentId: string) {
     try {
       const orderResponse = await firstValueFrom(
-        this.paymentService.createOrder(this.amount, this.ownerId, this.houseId)
+        this.paymentService.makePayment(paymentId)
       );
 
       if (orderResponse?.success) {
+        
         const { data, razorpayKey } = orderResponse;
-
         // Razorpay SDK
         const razorpayScriptLoaded = await loadRazorpay();
         if (!razorpayScriptLoaded)
@@ -57,7 +94,7 @@ export class PaymentsComponent {
           amount: data.amount,
           currency: 'INR',
           name: 'My Gate',
-          description: 'Test Transaction',
+          description: 'Maintenance payment',
           order_id: data.orderId,
           handler: async (response: RazorpayResponse) => {
             const paymentData = {
@@ -89,4 +126,9 @@ export class PaymentsComponent {
       alert('Payment failed. Please try again.');
     }
   }
+
+  toggleView() {
+    this.isPaymentHistory = !this.isPaymentHistory;
+  }
+
 }

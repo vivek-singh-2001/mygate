@@ -10,7 +10,7 @@ module.exports = (connectDB, DataTypes) => {
       },
       ownerId: {
         type: DataTypes.UUID,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "users",
           key: "id",
@@ -18,7 +18,7 @@ module.exports = (connectDB, DataTypes) => {
       },
       houseId: {
         type: DataTypes.UUID,
-        allowNull: true,
+        allowNull: false,
         references: {
           model: "houses",
           key: "id",
@@ -28,14 +28,22 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.FLOAT,
         allowNull: false,
       },
+      purpose: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "Maintenance"
+      },
+      dueDate: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
       status: {
         type: DataTypes.ENUM("pending", "failure", "success"),
         defaultValue: "pending",
       },
       paymentDate: {
         type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW,
+        allowNull: true,
       },
       orderId: {
         type: DataTypes.STRING,

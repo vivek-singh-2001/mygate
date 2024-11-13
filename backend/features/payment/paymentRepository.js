@@ -1,9 +1,32 @@
 const { db } = require("../../config/connection");
 const { Payment } = db;
+const { Op } = require("sequelize");
 
-exports.createPayment = async (paymentDetails) => {
+exports.makePayment = async (paymentId, orderId) => {
   try {
-    const newPayment = await Payment.create(paymentDetails);
+    const updatedPayments = await Payment.update(
+      { orderId },
+      { where: { id: paymentId }, returning: true }
+    );
+    
+    return updatedPayments[1][0];
+  } catch (error) {
+    throw new Error("Error creating payment: " + error.message);
+  }
+};
+
+exports.createOrder = async (houseId, ownerId, amount, date, category) => {
+  console.log("reposss", category);
+  
+  try {
+    const newPayment = await Payment.create({
+      ownerId: ownerId,
+      houseId: houseId,
+      amount: amount,
+      purpose: category,
+      dueDate: date,
+      status: "pending",
+    });
     return newPayment;
   } catch (error) {
     throw new Error("Error creating payment: " + error.message);
@@ -35,6 +58,23 @@ exports.getPaymentsForUser = async (ownerId) => {
     throw new Error("Error fetching payments for user: " + error.message);
   }
 };
+
+exports.checkExistingOrder = async (houseId, ownerId, month, year,category) => {
+  return Payment.findOne({
+    where: {
+      houseId,
+      ownerId,
+      purpose:category,
+      dueDate: {
+        [Op.between]: [
+          new Date(year, month - 1, 1),
+          new Date(year, month, 0),
+        ],
+      },
+    },
+  });
+};
+
 
 exports.getAllPayments = async () => {
   try {

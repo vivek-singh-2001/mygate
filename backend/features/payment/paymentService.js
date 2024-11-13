@@ -1,21 +1,62 @@
 const razorpayInstance = require("../../config/razorPay");
 const paymentRepository = require("./paymentRepository");
+const houseRepository = require("../house/houseRepository");
+const CustomError = require("../../utils/CustomError");
 
-exports.createPayment = async (paymentDetails) => {
+exports.makePayment = async (paymentId) => {
   try {
+    const payment = await paymentRepository.getPaymentById(paymentId)
+    if (!payment) {
+      throw new CustomError('Invalid payment id. No record found', 404)
+    }
     const order = await razorpayInstance.orders.create({
-      amount: paymentDetails.amount * 100,
+      amount: payment.amount * 100,
       currency: "INR",
       receipt: `receipt_${new Date().getTime()}`,
     });
-    return await paymentRepository.createPayment({
-      ...paymentDetails,
-      orderId: order.id,
-      status: "pending",
-    });
+    return await paymentRepository.makePayment(paymentId, order.id);
   } catch (error) {
     console.log("rqfwerwegwe", error);
-    
+
+    throw new Error("Error processing payment: " + error.message);
+  }
+};
+
+exports.createOrder = async (societyId, amount, date, category) => {
+  try {
+    const houses = await houseRepository.getHousesBySocietyId(societyId);
+    const month = new Date(date).getMonth() + 1; 
+    const year = new Date(date).getFullYear();
+
+    for (const house of houses) {
+      const ownerId = house.Users[0].id;
+
+      // Check if an order for the specified month already exists
+      const existingOrder = await paymentRepository.checkExistingOrder(
+        house.id,
+        ownerId,
+        month,
+        year,
+        category
+      );
+
+      if (!existingOrder) {
+        await paymentRepository.createOrder(
+          house.id,
+          ownerId,
+          amount,
+          date,
+          category
+        );
+      } else {
+       return `${category} for ${month} - ${year} is already requested to each houses. `
+      }
+    }
+
+    return houses;
+  } catch (error) {
+    console.log("rqfwerwegwe", error);
+
     throw new Error("Error processing payment: " + error.message);
   }
 };
@@ -35,7 +76,7 @@ exports.verifyPayment = async (
 };
 
 exports.updatePaymentStatus = async (order_id, status, details) => {
-  return await paymentRepository.updatePaymentStatus(order_id, status, details)
+  return await paymentRepository.updatePaymentStatus(order_id, status, details);
 };
 
 exports.getPaymentById = async (paymentId) => {

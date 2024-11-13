@@ -74,12 +74,7 @@ export class SideNavComponent implements OnInit {
         command: () => this.navigateTo('/home/notice'),
       },
   
-      {
-        label: 'Complaints',
-        icon: 'pi pi-pen-to-square',
-        iconSize: 'large',
-        command: () => this.navigateTo('/home/complaints'),
-      },
+     
       {
         label: 'Visitors',
         icon: 'pi pi-id-card',
@@ -124,6 +119,11 @@ export class SideNavComponent implements OnInit {
                   label: 'Assign Staff Shift',
                   icon: 'pi pi-hourglass',
                   command: () => this.navigateTo('/home/apartments/AssignShift'),
+                },
+                {
+                  label: 'Maintenance Report',
+                  icon: 'pi pi-book',
+                  command: () => this.navigateTo('/home/apartments/maintenance-Report'),
                 },
               ],
               // command: () => this.navigateTo('/home/apartments'),

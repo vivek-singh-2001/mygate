@@ -2,11 +2,19 @@ const paymentService = require("./paymentService");
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const CustomError = require("../../utils/CustomError");
 
-exports.createPayment = asyncErrorHandler(async (req, res, next) => {
-  const paymentDetails = req.body;
+exports.makePayment = asyncErrorHandler(async (req, res, next) => {
+  const {paymentId} = req.body;
 
-  const newPayment = await paymentService.createPayment(paymentDetails);
+  const newPayment = await paymentService.makePayment(paymentId);
   return res.status(201).json({ success: true, data: newPayment });
+});
+
+exports.createOrder = asyncErrorHandler(async (req, res, next) => {
+  const maintenanceData = req.body;
+  const { societyId, amount, date ,category} = maintenanceData;
+  
+  const newOrder = await paymentService.createOrder(societyId, amount, date,category);
+  return res.status(201).json({ success: true,count:newOrder.length, data: newOrder });
 });
 
 exports.verifyPayment = async (req, res) => {
@@ -24,17 +32,15 @@ exports.verifyPayment = async (req, res) => {
       await paymentService.updatePaymentStatus(razorpay_order_id, "success", {
         razorpayPaymentId: razorpay_payment_id,
         razorpaySignature: razorpay_signature,
+        paymentDate: Date.now()
       });
 
-      res
-        .status(200)
-        .json({
-          success: true,
-          message: "Payment verified and recorded successfully",
-        });
+      res.status(200).json({
+        success: true,
+        message: "Payment verified and recorded successfully",
+      });
     } else {
-      await paymentService.updatePaymentStatus(razorpay_order_id, "failure");
-
+      await paymentService.updatePaymentStatus(razorpay_order_id, "pending");
       res
         .status(400)
         .json({ success: false, message: "Payment verification failed" });
@@ -52,17 +58,15 @@ exports.getPaymentById = asyncErrorHandler(async (req, res, next) => {
       .status(404)
       .json({ success: false, message: "Payment not found" });
   }
-  return res
-    .status(200)
-    .json({
-      success: true,
-      data: payment,
-      razorpayKey: process.env.RAZORPAY_KEY_ID,
-    });
+  return res.status(200).json({
+    success: true,
+    data: payment,
+    razorpayKey: process.env.RAZORPAY_KEY_ID,
+  });
 });
 
 exports.getPaymentsForUser = asyncErrorHandler(async (req, res, next) => {
-  const { ownerId } = req.params;
+  const { id: ownerId } = req.params;
   const payments = await paymentService.getPaymentsForUser(ownerId);
   return res.status(200).json({ success: true, data: payments });
 });

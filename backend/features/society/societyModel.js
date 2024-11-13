@@ -33,6 +33,10 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true ,
         onUpdate: 'CASCADE',
+      },
+      maintenance:{
+        type:DataTypes.INTEGER ,
+        allowNull:true
       }
     },
     {

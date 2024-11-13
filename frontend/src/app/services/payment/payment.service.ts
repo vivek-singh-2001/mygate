@@ -12,19 +12,17 @@ export class PaymentService {
 
   constructor(private readonly http: HttpClient) {}
 
-  createOrder(
-    amount: number,
-    ownerId: string,
-    houseId: string
-  ) {
-    return this.http.post<{ success: boolean; data: PaymentRecord; razorpayKey: string }>(
-      `${this.apiUrl}/create`,
-      {
-        amount,
-        ownerId,
-        houseId,
-      }
-    );
+
+  createOrder({societyId, amount, date, category }:any){
+    return this.http.post(`${this.apiUrl}/create`,{societyId, amount, date, category })
+  }
+
+  makePayment(paymentId: string) {
+    return this.http.post<{
+      success: boolean;
+      data: PaymentRecord;
+      razorpayKey: string;
+    }>(`${this.apiUrl}`, { paymentId });
   }
 
   verifyPayment(paymentData: any) {

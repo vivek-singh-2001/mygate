@@ -1,5 +1,99 @@
-<div class="payment-container">
-  <h2>Make a Payment</h2>
-  <p>Amount: {{ amount }} {{ currency }}</p>
-  <button (click)="onPayNow()">Pay Now</button>
+<div class="mx-8 mt-8">
+  <div class="display-card">
+    <div class="flex justify-content-between mb-4">
+      <p>
+        <b>{{ isPaymentHistory ? "Payment History" : "Payment" }}</b>
+      </p>
+
+      <div
+        class="flex align-items-center gap-2 cursor-pointer text-gray-700 hover:text-primary transition-duration-150 transition-ease-in-out"
+        (click)="toggleView()"
+      >
+        <i class="pi pi-history text-1.5xl"></i>
+        <p class="font-medium text-lg">
+          {{ isPaymentHistory ? "Payment " : "History" }}
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="!isPaymentHistory">
+      <p-table
+        [value]="paymentsData"
+        class="p-datatable-sm"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        *ngIf="paymentsData.length !== 0"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Payment Type</th>
+            <th>Amount</th>
+            <th>Due-Date</th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-payment>
+          <tr>
+            <td>{{ payment.purpose }}</td>
+            <td>{{ payment.amount | currency : "INR" }}</td>
+            <td>{{ payment.dueDate | date : "EEEE, MMM d" }}</td>
+            <td>
+              <button
+                pButton
+                type="button"
+                label="Pay Now"
+                (click)="onPayNow(payment.id)"
+                class="p-button-outlined"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <div
+        *ngIf="paymentsData.length === 0"
+      class="mb-5 text-center"
+      >
+        <p>You are All Clear up. No new Payment to Make</p>
+      </div>
+    </div>
+
+    <div *ngIf="isPaymentHistory">
+      <!-- Payment History Table -->
+      <p-table
+        [value]="paymentHistoryData"
+        class="p-datatable-sm"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        *ngIf="paymentHistoryData.length !== 0"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Payment Type</th>
+            <th>Amount</th>
+            <th>Payment Date</th>
+            <th>status</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-payment>
+          <tr>
+            <td>{{ payment.purpose }}</td>
+            <td>{{ payment.amount | currency : "INR" }}</td>
+            <td>{{ payment.paymentDate | date : "EEEE, MMM d" }}</td>
+            <td>{{ payment.status === "success" ? "Paid" : "Failed" }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div
+      *ngIf="paymentHistoryData.length === 0"
+    class="mb-5 text-center"
+    >
+      <p>you have not done any payment yet.</p>
+    </div>
+    </div>
+  </div>
 </div>
