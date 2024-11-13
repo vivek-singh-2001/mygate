@@ -78,9 +78,10 @@ exports.checkExistingOrder = async (
   });
 };
 
-exports.getAllPayments = async (societyId) => {
+exports.getAllPayments = async (societyId, paymentFilter) => {
   try {
     return await Payment.findAll({
+      where: { ...paymentFilter },
       attributes: ['amount', 'purpose', 'dueDate', 'status', 'paymentDate'],
       include: [
         {

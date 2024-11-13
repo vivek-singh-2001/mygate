@@ -3,6 +3,7 @@ const paymentRepository = require("./paymentRepository");
 const houseRepository = require("../house/houseRepository");
 const CustomError = require("../../utils/CustomError");
 const societyRepository = require("../society/societyRepository");
+const { Op } = require("sequelize");
 
 exports.makePayment = async (paymentId) => {
   try {
@@ -98,15 +99,23 @@ exports.getPaymentsForUser = async (ownerId) => {
   }
 };
 
-exports.getAllPaymentExpenses = async (societyId) => {
+exports.getAllPaymentExpenses = async (societyId, filters) => {
   try {
-    const society = await societyRepository.getSocietyById(societyId);
+    const { status, fromDate, toDate, type, purpose } = filters;
+    const society = await societyRepository.getsocietyById(societyId);
     if (!society) {
       throw new CustomError("Society not found", 404);
     }
 
+    const paymentFilter = {
+      ...(status && { status }),
+      ...(purpose && (purpose === 'Maintenance' ? { purpose } : { purpose: { [Op.not]: 'Maintenance' } })),
+      ...(fromDate && { paymentDate: { [Op.gte]: new Date(fromDate) } }),
+      ...(toDate && { paymentDate: { [Op.lte]: new Date(toDate) } }),
+    };
+    
     const [payments, expenses] = await Promise.all([
-      paymentRepository.getAllPayments(societyId),
+      paymentRepository.getAllPayments(societyId, paymentFilter),
       paymentRepository.getExpenses(societyId)
     ]);
 
