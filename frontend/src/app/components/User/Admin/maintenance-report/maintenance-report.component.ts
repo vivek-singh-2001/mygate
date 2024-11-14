@@ -25,7 +25,7 @@ import { CalendarModule } from 'primeng/calendar';
     InputTextareaModule,
     FormsModule,
     ToastModule,
-    CalendarModule
+    CalendarModule,
   ],
   providers: [MessageService],
   templateUrl: './maintenance-report.component.html',
@@ -145,6 +145,21 @@ export class MaintenanceReportComponent implements OnInit {
       category: this.expenseCategory,
       description: this.expenseDescription,
     });
-    this.displayExpensesDialog = false;
+    this.paymentService
+      .addExpense({
+        amount: this.expenseAmount,
+        date: this.expenseDate,
+        category: this.expenseCategory,
+        description: this.expenseDescription,
+        societyId:this.societyId
+      })
+      .subscribe({
+        next: () => {
+          this.displayExpensesDialog = false
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
   }
 }
