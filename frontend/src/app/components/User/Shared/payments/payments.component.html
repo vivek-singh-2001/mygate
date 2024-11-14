@@ -98,16 +98,16 @@
       *ngIf="paymentsData.length !== 0"
     >
       <ng-template pTemplate="header">
-        <tr>
-          <th>Payment Type</th>
-          <th>Amount</th>
-          <th>Due Date</th>
-          <th>Action</th>
+        <tr class="table-header">
+          <th scope="col">Payment Type</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Due Date</th>
+          <th scope="col">Action</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-payment>
-        <tr>
+        <tr class="table-header">
           <td>{{ payment.purpose }}</td>
           <td>{{ payment.amount | currency : "INR" }}</td>
           <td>{{ payment.dueDate | date : "EEEE, MMM d" }}</td>
@@ -139,16 +139,16 @@
       *ngIf="paymentHistoryData.length !== 0"
     >
       <ng-template pTemplate="header">
-        <tr>
-          <th>Payment Type</th>
-          <th>Amount</th>
-          <th>Payment Date</th>
-          <th>Status</th>
+        <tr class="table-header">
+          <th scope="col">Payment Type</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Payment Date</th>
+          <th scope="col">Status</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-payment>
-        <tr>
+        <tr class="table-header">
           <td>{{ payment.purpose }}</td>
           <td>{{ payment.amount | currency : "INR" }}</td>
           <td>{{ payment.paymentDate | date : "EEEE, MMM d" }}</td>
@@ -172,17 +172,17 @@
       *ngIf="societyPaymentData.length !== 0"
     >
       <ng-template pTemplate="header">
-        <tr>
-          <th>Purpose</th>
-          <th>Amount</th>
-          <th>Date</th>
-          <th>Payment entity</th>
-          <th>Type</th>
+        <tr class="table-header">
+          <th scope="col">Purpose</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Date</th>
+          <th scope="col">Payment entity</th>
+          <th scope="col">Type</th>
         </tr>
       </ng-template>
 
       <ng-template pTemplate="body" let-payment>
-        <tr>
+        <tr class="table-header">
           <td>{{ payment.purpose }}</td>
           <td>{{ payment.amount | currency : "INR" }}</td>
           <td>{{ payment.date | date : "EEEE, MMM d" }}</td>

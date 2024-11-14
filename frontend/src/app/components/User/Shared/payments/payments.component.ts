@@ -14,7 +14,7 @@ import { TableModule } from 'primeng/table';
 import { UserService } from '../../../../services/user/user.service';
 import { PaymentRecord } from '../../../../interfaces/payment.interfaces';
 import { DropdownModule } from 'primeng/dropdown';
-import { MaintenanceReportComponent } from "../../Admin/maintenance-report/maintenance-report.component";
+import { MaintenanceReportComponent } from '../../Admin/maintenance-report/maintenance-report.component';
 import { CalendarModule } from 'primeng/calendar';
 import { MultiSelectModule } from 'primeng/multiselect';
 
@@ -56,8 +56,8 @@ interface RazorpayOptions {
     ReactiveFormsModule,
     DropdownModule,
     CalendarModule,
-    MultiSelectModule
-],
+    MultiSelectModule,
+  ],
   templateUrl: './payments.component.html',
   styleUrl: './payments.component.css',
 })
@@ -82,7 +82,18 @@ export class PaymentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUserPayments();
-    // this.fetchSocietyPayments();
+  }
+
+  setDefaultDateRange() {
+    const currentDate = new Date();
+    const firstDayOfMonth = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    );
+
+    this.filters.fromDate = firstDayOfMonth.toLocaleDateString('en-CA');
+    this.filters.toDate = currentDate.toLocaleDateString('en-CA');
   }
 
   fetchUserPayments() {
@@ -125,10 +136,9 @@ export class PaymentsComponent implements OnInit {
   }
 
   toggleSocietyPayments() {
-    console.log("fefger", this.societyPaymentData);
-    
     if (this.societyPaymentData.length === 0) {
-      this.fetchSocietyPayments();      
+      this.setDefaultDateRange();
+      this.fetchSocietyPayments();
     }
     this.isSocietyPayments = !this.isSocietyPayments;
   }

@@ -113,16 +113,30 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
       const paymentFilter = {
         status,
         ...(purpose &&
-          purpose !== 'All' && 
+          purpose !== "All" &&
           (purpose === "Maintenance"
             ? { purpose }
             : { purpose: { [Op.not]: "Maintenance" } })),
-        ...(fromDate && { paymentDate: { [Op.gte]: new Date(fromDate) } }),
-        ...(toDate && {
-          paymentDate: {
-            [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)),
-          },
-        }),
+        ...(fromDate &&
+          (status === "pending"
+            ? { dueDate: { [Op.gte]: new Date(fromDate) } }
+            : { paymentDate: { [Op.gte]: new Date(fromDate) } })),
+        ...(toDate &&
+          (status === "pending"
+            ? {
+                dueDate: {
+                  [Op.lte]: new Date(
+                    new Date(toDate).setHours(23, 59, 59, 999)
+                  ),
+                },
+              }
+            : {
+                paymentDate: {
+                  [Op.lte]: new Date(
+                    new Date(toDate).setHours(23, 59, 59, 999)
+                  ),
+                },
+              })),
       };
       const payments = await paymentRepository.getAllPayments(
         societyId,
@@ -156,7 +170,9 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
       expenses.forEach((expense) => {
         paymentExpense.push({
           amount: expense.amount,
-          purpose: `${expense.category}: ${expense.description}`,
+          purpose: `${expense.category}${
+            expense.description ? `: ${expense.description}` : ""
+          }`,
           date: expense.date,
           paymentEntity: `Society Management`,
           type: "Debit",
@@ -171,7 +187,12 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
   }
 };
 
-
-exports.addExpense = async(amount,date,category,description,societyId)=>{
-return await paymentRepository.addExpense(amount,date,category,description,societyId)
-}
+exports.addExpense = async (amount, date, category, description, societyId) => {
+  return await paymentRepository.addExpense(
+    amount,
+    date,
+    category,
+    description,
+    societyId
+  );
+};

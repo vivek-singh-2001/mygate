@@ -69,10 +69,9 @@ export class MaintenanceReportComponent implements OnInit {
 
     this.minDate.setDate(1);
 
-    // Set maxDate to the last day of the next month
     const nextMonth = new Date(this.minDate);
     nextMonth.setMonth(this.minDate.getMonth() + 2);
-    nextMonth.setDate(0); // Last day of the next month
+    nextMonth.setDate(0);
     this.maxDate = nextMonth;
   }
 
@@ -139,26 +138,35 @@ export class MaintenanceReportComponent implements OnInit {
   }
 
   submitExpense() {
-    console.log('Expense Submitted', {
-      amount: this.expenseAmount,
-      date: this.expenseDate,
-      category: this.expenseCategory,
-      description: this.expenseDescription,
-    });
     this.paymentService
       .addExpense({
         amount: this.expenseAmount,
         date: this.expenseDate,
         category: this.expenseCategory,
         description: this.expenseDescription,
-        societyId:this.societyId
+        societyId: this.societyId,
       })
       .subscribe({
         next: () => {
-          this.displayExpensesDialog = false
+          this.displayExpensesDialog = false;
+          this.expenseAmount = null;
+          this.expenseDate = null;
+          this.expenseCategory = '';
+          this.selectedExpenseCategory = null;
+          this.expenseDescription = null;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Expense added successfully.',
+          });
         },
         error: (err) => {
           console.log(err);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: 'Something went wrong. Please try again later.',
+          });
         },
       });
   }
