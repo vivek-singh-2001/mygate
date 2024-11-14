@@ -4,6 +4,6 @@ export const environment = {
   // socketUrl: 'http://192.1.200.38:7500',
   apiUrl: 'http://localhost:7500/api/v1',
   socketUrl: 'http://localhost:7500',
-  googleMapsApiKey: 'AIzaSyC8HITVpKcrwQ1YkSe3OIkvD9JTQ4pfj5Q',
+  googleMapsApiKey: 'AIzaSyC4H0rmF3aKDg7CKmO6wZFOriMMJEXsH3M',
   enableDebug: true
 };
