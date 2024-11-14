@@ -1,95 +1,147 @@
-<app-maintenance-report></app-maintenance-report>
-
+<app-maintenance-report/>
 <div class="mx-8 mt-8">
-  <div class="display-card">
-    <div class="flex justify-content-between mb-4">
-      <p>
-        <b>{{ isPaymentHistory ? "Payment History" : "Payment" }}</b>
-      </p>
+  <!-- Header and View Toggle -->
+  <div class="flex justify-content-between mb-4">
+    <p><b>{{ isPaymentHistory ? "Payment History" : "Pending Payments" }}</b></p>
 
-      <div
-        class="flex align-items-center gap-2 cursor-pointer text-gray-700 hover:text-primary transition-duration-150 transition-ease-in-out"
-        (click)="toggleView()"
-      >
-        <i class="pi pi-history text-1.5xl"></i>
-        <p class="font-medium text-lg">
-          {{ isPaymentHistory ? "Payment " : "History" }}
-        </p>
-      </div>
+    <div class="flex align-items-center gap-2 cursor-pointer">
+      <button *ngIf="!isSocietyPayments" pButton class="p-button-outlined mr-2" (click)="toggleView()">
+        {{ isPaymentHistory ? "View Pending Payments" : "View Payment History" }}
+      </button>
+      <button pButton class="p-button-outlined" (click)="toggleSocietyPayments()">
+        {{ isSocietyPayments ? "Hide Society Payments" : "Show Society Payments" }}
+      </button>
     </div>
+  </div>
 
-    <div *ngIf="!isPaymentHistory">
-      <p-table
-        [value]="paymentsData"
-        class="p-datatable-sm"
-        [paginator]="true"
-        [rows]="10"
-        [responsive]="true"
-        *ngIf="paymentsData.length !== 0"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Payment Type</th>
-            <th>Amount</th>
-            <th>Due-Date</th>
-            <th>Action</th>
-          </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-payment>
-          <tr>
-            <td>{{ payment.purpose }}</td>
-            <td>{{ payment.amount | currency : "INR" }}</td>
-            <td>{{ payment.dueDate | date : "EEEE, MMM d" }}</td>
-            <td>
-              <button
-                pButton
-                type="button"
-                label="Pay Now"
-                (click)="onPayNow(payment.id)"
-                class="p-button-outlined"
-              ></button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-
-      <div *ngIf="paymentsData.length === 0" class="mb-5 text-center">
-        <p>You are All Clear up. No new Payment to Make</p>
-      </div>
+  <!-- Society Payments Filter Section -->
+  <div *ngIf="isSocietyPayments" class="p-fluid grid mb-4">
+    <div class="col-12 md:col-2">
+      <p-dropdown [(ngModel)]="filters.type" [options]="[{ label: 'All', value: 'all' },{ label: 'Credit', value: 'credit' }, { label: 'Debit', value: 'debit' }]" placeholder="Select Type"></p-dropdown>
     </div>
+    <div class="col-12 md:col-2">
+      <p-dropdown [(ngModel)]="filters.status" [options]="[{ label: 'Success', value: 'success' }, { label: 'Pending', value: 'pending' }]" placeholder="Select Status"></p-dropdown>
+    </div>
+    <div class="col-12 md:col-2">
+      <p-dropdown [(ngModel)]="filters.purpose" [options]="[{ label: 'All', value: 'All' }, { label: 'Maintenance', value: 'Maintenance' }, { label: 'Other', value: 'Other' }]" placeholder="Select Purpose"></p-dropdown>
+    </div>
+    <div class="col-12 md:col-2">
+      <p-calendar [(ngModel)]="filters.fromDate" placeholder="From Date" dateFormat="yy-mm-dd"></p-calendar>
+    </div>
+    <div class="col-12 md:col-2">
+      <p-calendar [(ngModel)]="filters.toDate" placeholder="To Date" dateFormat="yy-mm-dd"></p-calendar>
+    </div>
+    <div class="col-12 md:col-2">
+      <button pButton label="Apply Filters" class="p-button-outlined" (click)="applyFilters()"></button>
+    </div>
+  </div>
 
-    <div *ngIf="isPaymentHistory">
-      <!-- Payment History Table -->
-      <p-table
-        [value]="paymentHistoryData"
-        class="p-datatable-sm"
-        [paginator]="true"
-        [rows]="10"
-        [responsive]="true"
-        *ngIf="paymentHistoryData.length !== 0"
-      >
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Payment Type</th>
-            <th>Amount</th>
-            <th>Payment Date</th>
-            <th>status</th>
-          </tr>
-        </ng-template>
+  <!-- User Pending Payments Table -->
+  <div *ngIf="!isPaymentHistory && !isSocietyPayments">
+    <p-table
+      [value]="paymentsData"
+      class="p-datatable-sm"
+      [paginator]="true"
+      [rows]="10"
+      [responsive]="true"
+      *ngIf="paymentsData.length !== 0"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Payment Type</th>
+          <th>Amount</th>
+          <th>Due Date</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
 
-        <ng-template pTemplate="body" let-payment>
-          <tr>
-            <td>{{ payment.purpose }}</td>
-            <td>{{ payment.amount | currency : "INR" }}</td>
-            <td>{{ payment.paymentDate | date : "EEEE, MMM d" }}</td>
-            <td>{{ payment.status === "success" ? "Paid" : "Failed" }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
-      <div *ngIf="paymentHistoryData.length === 0" class="mb-5 text-center">
-        <p>you have not done any payment yet.</p>
-      </div>
+      <ng-template pTemplate="body" let-payment>
+        <tr>
+          <td>{{ payment.purpose }}</td>
+          <td>{{ payment.amount | currency : "INR" }}</td>
+          <td>{{ payment.dueDate | date : "EEEE, MMM d" }}</td>
+          <td>
+            <button
+              pButton
+              type="button"
+              label="Pay Now"
+              (click)="onPayNow(payment.id)"
+              class="p-button-outlined"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div *ngIf="paymentsData.length === 0" class="mb-5 text-center">
+      <p>You are all clear! No new payments to make.</p>
+    </div>
+  </div>
+
+  <!-- User Payment History Table -->
+  <div *ngIf="isPaymentHistory && !isSocietyPayments">
+    <p-table
+      [value]="paymentHistoryData"
+      class="p-datatable-sm"
+      [paginator]="true"
+      [rows]="10"
+      [responsive]="true"
+      *ngIf="paymentHistoryData.length !== 0"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Payment Type</th>
+          <th>Amount</th>
+          <th>Payment Date</th>
+          <th>Status</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-payment>
+        <tr>
+          <td>{{ payment.purpose }}</td>
+          <td>{{ payment.amount | currency : "INR" }}</td>
+          <td>{{ payment.paymentDate | date : "EEEE, MMM d" }}</td>
+          <td>{{ payment.status === "success" ? "Paid" : "Failed" }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div *ngIf="paymentHistoryData.length === 0" class="mb-5 text-center">
+      <p>You have not made any payments yet.</p>
+    </div>
+  </div>
+
+  <!-- Society Payments Table -->
+  <div *ngIf="isSocietyPayments">
+    <p-table
+      [value]="societyPaymentData"
+      class="p-datatable-sm"
+      [paginator]="true"
+      [rows]="10"
+      [responsive]="true"
+      *ngIf="societyPaymentData.length !== 0"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Purpose</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Payment entity</th>
+          <th>Type</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-payment>
+        <tr>
+          <td>{{ payment.purpose }}</td>
+          <td>{{ payment.amount | currency : "INR" }}</td>
+          <td>{{ payment.date | date : "EEEE, MMM d" }}</td>
+          <td>{{ payment.paymentEntity }}</td>
+          <td>{{ payment.type }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div *ngIf="societyPaymentData.length === 0" class="mb-5 text-center">
+      <p>No society-wide payments found.</p>
     </div>
   </div>
 </div>

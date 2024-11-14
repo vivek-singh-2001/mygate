@@ -109,15 +109,20 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
 
     const paymentExpense = [];
 
-    if (type !== "Debit") {
+    if (type !== "debit") {
       const paymentFilter = {
         status,
         ...(purpose &&
+          purpose !== 'All' && 
           (purpose === "Maintenance"
             ? { purpose }
             : { purpose: { [Op.not]: "Maintenance" } })),
         ...(fromDate && { paymentDate: { [Op.gte]: new Date(fromDate) } }),
-        ...(toDate && { paymentDate: { [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)) } }),
+        ...(toDate && {
+          paymentDate: {
+            [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)),
+          },
+        }),
       };
       const payments = await paymentRepository.getAllPayments(
         societyId,
@@ -133,14 +138,20 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
               : payment.dueDate,
           paymentEntity: `${payment.House.Floor.Wing.name} - ${payment.House.house_no}`,
           type: "Credit",
+          userId: payment.ownerId,
         });
       });
     }
 
-    if (type !== "Credit") {
+    if (type !== "credit") {
       const expenses = await paymentRepository.getExpenses(societyId, {
         ...(fromDate && { date: { [Op.gte]: new Date(fromDate) } }),
-        ...(toDate && { date: { [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)) } }),
+        ...(toDate && {
+          date: {
+            [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)),
+          },
+        }),
+        ...(purpose && purpose === "Maintenance" && { category: purpose }),
       });
       expenses.forEach((expense) => {
         paymentExpense.push({
