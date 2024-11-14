@@ -78,26 +78,26 @@ exports.checkExistingOrder = async (
   });
 };
 
-exports.getAllPayments = async (societyId, paymentFilter) => {
+exports.getAllPayments = async (societyId, paymentFilters) => {
   try {
     return await Payment.findAll({
-      where: { ...paymentFilter },
-      attributes: ['amount', 'purpose', 'dueDate', 'status', 'paymentDate'],
+      where: { ...paymentFilters },
+      attributes: ["amount", "purpose", "dueDate", "status", "paymentDate"],
       include: [
         {
           model: House,
           required: true,
-          attributes: ['house_no'],
+          attributes: ["house_no"],
           include: [
             {
               model: Floor,
               required: true,
-              attributes: ['floor_number'],
+              attributes: ["floor_number"],
               include: [
                 {
                   model: Wing,
                   required: true,
-                  attributes: ['name'],
+                  attributes: ["name"],
                   where: { societyId },
                 },
               ],
@@ -112,19 +112,19 @@ exports.getAllPayments = async (societyId, paymentFilter) => {
       ],
     });
   } catch (error) {
-    console.log("fwkfbw", error);
+    console.log("Error fetching payments:", error);
     throw new Error("Error fetching all payments: " + error.message);
   }
 };
 
-exports.getExpenses = async (societyId) => {
+exports.getExpenses = async (societyId, expenseFilters) => {
   try {
     return await SocietyExpense.findAll({
-      where: { societyId },
-      attributes: ['date', 'amount', 'category', 'description', 'status']
+      where: { societyId, ...expenseFilters },
+      attributes: ["date", "amount", "category", "description", "status"],
     });
   } catch (error) {
-    console.log("fwkfbw", error);
+    console.log("Error fetching expenses:", error);
     throw new Error("Error fetching all payments: " + error.message);
   }
 };

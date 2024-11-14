@@ -107,34 +107,53 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
       throw new CustomError("Society not found", 404);
     }
 
-    const paymentFilter = {
-      ...(status && { status }),
-      ...(purpose && (purpose === 'Maintenance' ? { purpose } : { purpose: { [Op.not]: 'Maintenance' } })),
-      ...(fromDate && { paymentDate: { [Op.gte]: new Date(fromDate) } }),
-      ...(toDate && { paymentDate: { [Op.lte]: new Date(toDate) } }),
-    };
-    
-    const [payments, expenses] = await Promise.all([
-      paymentRepository.getAllPayments(societyId, paymentFilter),
-      paymentRepository.getExpenses(societyId)
-    ]);
+    const paymentExpense = [];
 
-    return [
-      ...payments.map((payment) => ({
-        amount: payment.amount,
-        purpose: payment.purpose,
-        date: payment.status === 'success' ? payment.paymentDate : payment.dueDate,
-        paymentEntity: `${payment.House.Floor.Wing.name} - ${payment.House.house_no}`,
-        type: 'Credit'
-      })),
-      ...expenses.map((expense) => ({
-        amount: expense.amount,
-        purpose: `${expense.category}: ${expense.description}`,
-        date: expense.date,
-        paymentEntity: `Society Management`,
-        type: 'Debit'
-      }))
-    ];
+    if (type !== "Debit") {
+      const paymentFilter = {
+        status,
+        ...(purpose &&
+          (purpose === "Maintenance"
+            ? { purpose }
+            : { purpose: { [Op.not]: "Maintenance" } })),
+        ...(fromDate && { paymentDate: { [Op.gte]: new Date(fromDate) } }),
+        ...(toDate && { paymentDate: { [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)) } }),
+      };
+      const payments = await paymentRepository.getAllPayments(
+        societyId,
+        paymentFilter
+      );
+      payments.forEach((payment) => {
+        paymentExpense.push({
+          amount: payment.amount,
+          purpose: payment.purpose,
+          date:
+            payment.status === "success"
+              ? payment.paymentDate
+              : payment.dueDate,
+          paymentEntity: `${payment.House.Floor.Wing.name} - ${payment.House.house_no}`,
+          type: "Credit",
+        });
+      });
+    }
+
+    if (type !== "Credit") {
+      const expenses = await paymentRepository.getExpenses(societyId, {
+        ...(fromDate && { date: { [Op.gte]: new Date(fromDate) } }),
+        ...(toDate && { date: { [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)) } }),
+      });
+      expenses.forEach((expense) => {
+        paymentExpense.push({
+          amount: expense.amount,
+          purpose: `${expense.category}: ${expense.description}`,
+          date: expense.date,
+          paymentEntity: `Society Management`,
+          type: "Debit",
+        });
+      });
+    }
+
+    return paymentExpense;
   } catch (error) {
     console.error("Error fetching payment expenses:", error);
     throw new Error("Error fetching payment expenses: " + error.message);
