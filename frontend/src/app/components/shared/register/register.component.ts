@@ -72,16 +72,14 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadGoogleMapsScript();
     this.initializeForm();
+    this.getMapApiKey();
   }
 
-
-   // Dynamically load Google Maps script
-   loadGoogleMapsScript() {
-    const apiKey = environment.googleMapsApiKey;
+  // Dynamically load Google Maps script
+  loadGoogleMapsScript(apikey: string) {
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apikey}&libraries=places&callback=initMap`;
     script.async = true;
     document.body.appendChild(script);
 
@@ -302,5 +300,16 @@ export class RegisterComponent implements OnInit {
 
   goToLoginPage() {
     this.router.navigate(['/login']);
+  }
+
+  getMapApiKey() {
+    this.geolocationService.getMapApiKey().subscribe({
+      next: (data) => {
+        this.loadGoogleMapsScript(data.apiKey);
+      },
+      error: (err) => {
+        console.error( err);
+      },
+    });
   }
 }

@@ -21,7 +21,8 @@ const chat_route = require("./features/chat/chatApi");
 const visitor_route = require("./features/visitors/visitorApis");
 const notice_route = require("./features/notice/noticeApis");
 const notification_route = require("./features/notificationCount/notificationCountApis");
-const payment_route = require("./features/payment/paymentApis")
+const payment_route = require("./features/payment/paymentApis");
+const mapapikey = require("./utils/mapApiKeyRoute")
 
 const staff_Routes = require("./features/staff/staffApis");
 // USE MODULES HERE
@@ -92,6 +93,7 @@ app.use("/api/v1/staff", staff_Routes);
 app.use("/api/v1/notice", notice_route);
 app.use("/api/v1/notificationcount", notification_route);
 app.use("/api/v1/payments", payment_route);
+app.use("/api/v1/mapapikey", mapapikey);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use("*", (req, res, next) => {

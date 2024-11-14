@@ -12,7 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { UserService } from '../../../../services/user/user.service';
-import { MaintenanceReportComponent } from "../../Admin/maintenance-report/maintenance-report.component";
+import { MaintenanceReportComponent } from '../../Admin/maintenance-report/maintenance-report.component';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -36,7 +36,8 @@ interface RazorpayOptions {
 @Component({
   selector: 'app-payments',
   standalone: true,
-  imports: [TableModule,
+  imports: [
+    TableModule,
     ToastModule,
     ButtonModule,
     CommonModule,
@@ -44,35 +45,45 @@ interface RazorpayOptions {
     DialogModule,
     InputTextModule,
     FormsModule,
-    GalleriaModule, MaintenanceReportComponent],
+    GalleriaModule,
+    MaintenanceReportComponent,
+  ],
   templateUrl: './payments.component.html',
   styleUrl: './payments.component.css',
 })
 export class PaymentsComponent implements OnInit {
-  paymentsData:any[] = [];
+  paymentsData: any[] = [];
   isPaymentHistory: boolean = false;
   paymentHistoryData: any[] = [];
 
-  constructor(private readonly paymentService: PaymentService,
-    private readonly userService:UserService
+  constructor(
+    private readonly paymentService: PaymentService,
+    private readonly userService: UserService
   ) {}
 
   ngOnInit(): void {
     this.userService.getUserData().subscribe({
-      next:(user)=>{
+      next: (user) => {
         this.paymentService.getPaymentsForUser(user.id).subscribe({
-          next:(data)=>{
+          next: (data) => {
             data.data.forEach((payment: any) => {
               if (payment.status === 'pending') {
                 this.paymentsData.push(payment);
-              } else  {
+              } else {
                 this.paymentHistoryData.push(payment);
               }
             });
-          }
-        })
-      }
-    })
+            this.userService.userSocietyId$.subscribe((societyId) => {
+              this.paymentService.getAllPayments(societyId).subscribe({
+                next: (data) => {
+                  console.log("apple",data);
+                },
+              });
+            });
+          },
+        });
+      },
+    });
   }
 
   async onPayNow(paymentId: string) {
@@ -82,7 +93,6 @@ export class PaymentsComponent implements OnInit {
       );
 
       if (orderResponse?.success) {
-        
         const { data, razorpayKey } = orderResponse;
         // Razorpay SDK
         const razorpayScriptLoaded = await loadRazorpay();
@@ -131,5 +141,4 @@ export class PaymentsComponent implements OnInit {
   toggleView() {
     this.isPaymentHistory = !this.isPaymentHistory;
   }
-
 }

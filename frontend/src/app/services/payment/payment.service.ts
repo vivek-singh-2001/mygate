@@ -40,7 +40,7 @@ export class PaymentService {
     return this.http.get(`${this.apiUrl}/user/${ownerId}`);
   }
 
-  getAllPayments(): Observable<any> {
-    return this.http.get(this.apiUrl);
+  getAllPayments(societyId:string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/all/${societyId}`,{});
   }
 }
