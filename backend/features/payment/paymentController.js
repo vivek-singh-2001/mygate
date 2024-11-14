@@ -77,3 +77,12 @@ exports.getAllPayments = asyncErrorHandler(async (req, res, next) => {
   const payments = await paymentService.getAllPaymentExpenses(societyId, { status, fromDate, toDate, type, purpose });
   return res.status(200).json({ success: true, data: payments });
 });
+
+exports.addExpense = asyncErrorHandler ( async(req,res,next)=>{
+  const {amount,date,category,description,societyId} = req.body
+  
+  const newExpanse = await paymentService.addExpense(amount,date,category,description,societyId)
+
+  return res.status(200).json({ success: true, data: newExpanse });
+  
+})

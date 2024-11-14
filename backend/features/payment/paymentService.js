@@ -170,3 +170,8 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
     throw new Error("Error fetching payment expenses: " + error.message);
   }
 };
+
+
+exports.addExpense = async(amount,date,category,description,societyId)=>{
+return await paymentRepository.addExpense(amount,date,category,description,societyId)
+}

@@ -1,15 +1,30 @@
-<app-maintenance-report/>
+<app-maintenance-report />
 <div class="mx-8 mt-8">
   <!-- Header and View Toggle -->
   <div class="flex justify-content-between mb-4">
-    <p><b>{{ isPaymentHistory ? "Payment History" : "Pending Payments" }}</b></p>
+    <p>
+      <b>{{ isPaymentHistory ? "Payment History" : "Pending Payments" }}</b>
+    </p>
 
     <div class="flex align-items-center gap-2 cursor-pointer">
-      <button *ngIf="!isSocietyPayments" pButton class="p-button-outlined mr-2" (click)="toggleView()">
-        {{ isPaymentHistory ? "View Pending Payments" : "View Payment History" }}
+      <button
+        *ngIf="!isSocietyPayments"
+        pButton
+        class="p-button-outlined mr-2"
+        (click)="toggleView()"
+      >
+        {{
+          isPaymentHistory ? "View Pending Payments" : "View Payment History"
+        }}
       </button>
-      <button pButton class="p-button-outlined" (click)="toggleSocietyPayments()">
-        {{ isSocietyPayments ? "Hide Society Payments" : "Show Society Payments" }}
+      <button
+        pButton
+        class="p-button-outlined"
+        (click)="toggleSocietyPayments()"
+      >
+        {{
+          isSocietyPayments ? "Hide Society Payments" : "Show Society Payments"
+        }}
       </button>
     </div>
   </div>
@@ -17,22 +32,58 @@
   <!-- Society Payments Filter Section -->
   <div *ngIf="isSocietyPayments" class="p-fluid grid mb-4">
     <div class="col-12 md:col-2">
-      <p-dropdown [(ngModel)]="filters.type" [options]="[{ label: 'All', value: 'all' },{ label: 'Credit', value: 'credit' }, { label: 'Debit', value: 'debit' }]" placeholder="Select Type"></p-dropdown>
+      <p-dropdown
+        [(ngModel)]="filters.type"
+        [options]="[
+          { label: 'All', value: 'all' },
+          { label: 'Credit', value: 'credit' },
+          { label: 'Debit', value: 'debit' }
+        ]"
+        placeholder="Select Type"
+      ></p-dropdown>
     </div>
     <div class="col-12 md:col-2">
-      <p-dropdown [(ngModel)]="filters.status" [options]="[{ label: 'Success', value: 'success' }, { label: 'Pending', value: 'pending' }]" placeholder="Select Status"></p-dropdown>
+      <p-dropdown
+        [(ngModel)]="filters.status"
+        [options]="[
+          { label: 'Success', value: 'success' },
+          { label: 'Pending', value: 'pending' }
+        ]"
+        placeholder="Select Status"
+      ></p-dropdown>
     </div>
     <div class="col-12 md:col-2">
-      <p-dropdown [(ngModel)]="filters.purpose" [options]="[{ label: 'All', value: 'All' }, { label: 'Maintenance', value: 'Maintenance' }, { label: 'Other', value: 'Other' }]" placeholder="Select Purpose"></p-dropdown>
+      <p-dropdown
+        [(ngModel)]="filters.purpose"
+        [options]="[
+          { label: 'All', value: 'All' },
+          { label: 'Maintenance', value: 'Maintenance' },
+          { label: 'Other', value: 'Other' }
+        ]"
+        placeholder="Select Purpose"
+      ></p-dropdown>
     </div>
     <div class="col-12 md:col-2">
-      <p-calendar [(ngModel)]="filters.fromDate" placeholder="From Date" dateFormat="yy-mm-dd"></p-calendar>
+      <p-calendar
+        [(ngModel)]="filters.fromDate"
+        placeholder="From Date"
+        dateFormat="yy-mm-dd"
+      ></p-calendar>
     </div>
     <div class="col-12 md:col-2">
-      <p-calendar [(ngModel)]="filters.toDate" placeholder="To Date" dateFormat="yy-mm-dd"></p-calendar>
+      <p-calendar
+        [(ngModel)]="filters.toDate"
+        placeholder="To Date"
+        dateFormat="yy-mm-dd"
+      ></p-calendar>
     </div>
     <div class="col-12 md:col-2">
-      <button pButton label="Apply Filters" class="p-button-outlined" (click)="applyFilters()"></button>
+      <button
+        pButton
+        label="Apply Filters"
+        class="p-button-outlined"
+        (click)="applyFilters()"
+      ></button>
     </div>
   </div>
 
@@ -131,12 +182,19 @@
       </ng-template>
 
       <ng-template pTemplate="body" let-payment>
-        <tr [ngClass]="{ 'green-text': payment.type === 'Credit', 'red-text': payment.type === 'Debit' }">
+        <tr>
           <td>{{ payment.purpose }}</td>
           <td>{{ payment.amount | currency : "INR" }}</td>
           <td>{{ payment.date | date : "EEEE, MMM d" }}</td>
           <td>{{ payment.paymentEntity }}</td>
-          <td>{{ payment.type }}</td>
+          <td
+            [ngClass]="{
+              'green-text': payment.type === 'Credit',
+              'red-text': payment.type === 'Debit'
+            }"
+          >
+            {{ payment.type }}
+          </td>
         </tr>
       </ng-template>
     </p-table>

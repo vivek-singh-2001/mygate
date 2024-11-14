@@ -127,3 +127,19 @@ exports.getExpenses = async (societyId, expenseFilters) => {
     throw new Error("Error fetching all payments: " + error.message);
   }
 };
+
+exports.addExpense = async(amount,date,category,description,societyId)=>{
+  try {
+    return await SocietyExpense.create({
+      societyId:societyId,
+      date:date,
+      amount,
+      category,
+      description,
+      status:'approved'
+    });
+  } catch (error) {
+    console.log("Error fetching expenses:", error);
+    throw new Error("Error fetching all payments: " + error.message);
+  }
+}

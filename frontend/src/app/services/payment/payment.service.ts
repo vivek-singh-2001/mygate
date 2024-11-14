@@ -48,4 +48,8 @@ export class PaymentService {
     const params: any = { ...filters };
     return this.http.get(`${this.apiUrl}/all/${societyId}`, { params });
   } 
+
+  addExpense(expenseData:any){
+    return this.http.post(`${this.apiUrl}/addExpense`,expenseData)
+  }
 }

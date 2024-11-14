@@ -21,5 +21,6 @@ router.post('/verify-payment', paymentController.verifyPayment);
 router.get("/payments/:paymentId",validate(paymentIdValidationRules), paymentController.getPaymentById);
 router.get("/user/:id", paymentController.getPaymentsForUser);
 router.get("/all/:id", paymentController.getAllPayments);
+router.post("/addExpense",paymentController.addExpense)
 
 module.exports = router;
