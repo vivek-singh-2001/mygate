@@ -13,7 +13,7 @@
   
       <div class="field flex align-items-center justify-content-between mb-3">
         <label for="date" class="w-6">Due-date</label>
-        <input id="date" type="date" pInputText [(ngModel)]="paymentDate" class="w-6" />
+        <p-calendar id="date" type="date" [minDate]="minDate" [maxDate]="maxDate"  pInputText [(ngModel)]="paymentDate" class="w-6" appendTo="body" />
       </div>
   
       <div class="field flex align-items-center justify-content-between mb-3">
@@ -42,7 +42,7 @@
   
       <div class="field flex align-items-center justify-content-between mb-3">
         <label for="expenseDate" class="w-6">Date</label>
-        <input id="expenseDate" type="date" pInputText [(ngModel)]="expenseDate" class="w-6" />
+        <p-calendar id="expenseDate" type="date" [minDate]="minDate" [maxDate]="maxDate" appendTo="body" pInputText [(ngModel)]="expenseDate" class="w-6" />
       </div>
   
       <div class="field flex align-items-center justify-content-between mb-3">

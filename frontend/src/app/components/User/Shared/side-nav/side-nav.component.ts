@@ -120,11 +120,7 @@ export class SideNavComponent implements OnInit {
                   icon: 'pi pi-hourglass',
                   command: () => this.navigateTo('/home/apartments/AssignShift'),
                 },
-                {
-                  label: 'Maintenance Report',
-                  icon: 'pi pi-book',
-                  command: () => this.navigateTo('/home/apartments/maintenance-Report'),
-                },
+                
               ],
               // command: () => this.navigateTo('/home/apartments'),
             },

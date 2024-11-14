@@ -16,8 +16,7 @@ exports.makePayment = async (paymentId, orderId) => {
 };
 
 exports.createOrder = async (houseId, ownerId, amount, date, category) => {
-  console.log("reposss", category);
-
+  
   try {
     const newPayment = await Payment.create({
       ownerId: ownerId,

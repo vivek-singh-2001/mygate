@@ -88,7 +88,8 @@ exports.checkIsAdmin = asyncErrorHandler(async (req, res, next) => {
 exports.registerSociety = asyncErrorHandler(async (req, res, next) => {
   const societyDetails = req.body.society ? JSON.parse(req.body.society) : null;
   const csvFile = req.file;
-  console.log(csvFile);
+  const latitude = req.body.latitude;
+  const longitude = req.body.longitude;
 
   if (!societyDetails || !csvFile) {
     return next(
@@ -110,7 +111,11 @@ exports.registerSociety = asyncErrorHandler(async (req, res, next) => {
   societyDetails.filePath = csvFilePath;
 
   // Register the society
-  const result = await societyService.registerSociety(societyDetails);
+  const result = await societyService.registerSociety(
+    societyDetails,
+    latitude,
+    longitude
+  );
 
   res.status(200).json({ status: "success", societyDetails: result });
 });

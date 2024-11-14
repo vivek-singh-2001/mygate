@@ -125,7 +125,7 @@ exports.updateSocietyStatus = async (societyId, newStatus) => {
   }
 };
 
-exports.registerSociety = async (societyDetails, status, pendingRole) => {
+exports.registerSociety = async (societyDetails, status, pendingRole,latitude,longitude) => {
   const transaction = await db.connectDB.transaction();
   try {
     // Create the user within the transaction
@@ -162,6 +162,8 @@ exports.registerSociety = async (societyDetails, status, pendingRole) => {
         societyAdminId: user.id,
         status: societyDetails.status,
         csvData: societyDetails.societyDetails.filePath,
+        longitude:societyDetails.longitude,
+        latitude:societyDetails.latitude
       },
       { transaction }
     );
