@@ -3,7 +3,7 @@ import { PaymentService } from '../../../../services/payment/payment.service';
 import { loadRazorpay } from '../../../../utils/razorpay';
 import { firstValueFrom } from 'rxjs';
 import { GalleriaModule } from 'primeng/galleria';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { CardModule } from 'primeng/card';
@@ -12,7 +12,11 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { UserService } from '../../../../services/user/user.service';
-import { MaintenanceReportComponent } from '../../Admin/maintenance-report/maintenance-report.component';
+import { PaymentRecord } from '../../../../interfaces/payment.interfaces';
+import { DropdownModule } from 'primeng/dropdown';
+import { MaintenanceReportComponent } from "../../Admin/maintenance-report/maintenance-report.component";
+import { CalendarModule } from 'primeng/calendar';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -46,15 +50,30 @@ interface RazorpayOptions {
     InputTextModule,
     FormsModule,
     GalleriaModule,
+    DropdownModule,
     MaintenanceReportComponent,
-  ],
+    FormsModule,
+    ReactiveFormsModule,
+    DropdownModule,
+    CalendarModule,
+    MultiSelectModule
+],
   templateUrl: './payments.component.html',
   styleUrl: './payments.component.css',
 })
 export class PaymentsComponent implements OnInit {
-  paymentsData: any[] = [];
+  paymentsData: PaymentRecord[] = [];
+  paymentHistoryData: PaymentRecord[] = [];
+  societyPaymentData: PaymentRecord[] = [];
+  filters = {
+    status: 'success',
+    purpose: '',
+    type: '',
+    fromDate: '',
+    toDate: '',
+  };
   isPaymentHistory: boolean = false;
-  paymentHistoryData: any[] = [];
+  isSocietyPayments: boolean = false;
 
   constructor(
     private readonly paymentService: PaymentService,
@@ -62,28 +81,56 @@ export class PaymentsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.fetchUserPayments();
+    // this.fetchSocietyPayments();
+  }
+
+  fetchUserPayments() {
     this.userService.getUserData().subscribe({
       next: (user) => {
         this.paymentService.getPaymentsForUser(user.id).subscribe({
           next: (data) => {
-            data.data.forEach((payment: any) => {
+            data.data.forEach((payment: PaymentRecord) => {
               if (payment.status === 'pending') {
                 this.paymentsData.push(payment);
               } else {
                 this.paymentHistoryData.push(payment);
               }
             });
-            this.userService.userSocietyId$.subscribe((societyId) => {
-              this.paymentService.getAllPayments(societyId).subscribe({
-                next: (data) => {
-                  console.log("apple",data);
-                },
-              });
-            });
           },
+          error: (error) => console.log(error),
         });
       },
     });
+  }
+
+  fetchSocietyPayments() {
+    this.userService.userSocietyId$.subscribe((societyId) => {
+      this.paymentService.getAllPayments(societyId, this.filters).subscribe({
+        next: (response) => {
+          console.log(response.data);
+          this.societyPaymentData = response.data;
+        },
+        error: (error) => console.log(error),
+      });
+    });
+  }
+
+  applyFilters() {
+    this.fetchSocietyPayments();
+  }
+
+  toggleView() {
+    this.isPaymentHistory = !this.isPaymentHistory;
+  }
+
+  toggleSocietyPayments() {
+    console.log("fefger", this.societyPaymentData);
+    
+    if (this.societyPaymentData.length === 0) {
+      this.fetchSocietyPayments();      
+    }
+    this.isSocietyPayments = !this.isSocietyPayments;
   }
 
   async onPayNow(paymentId: string) {
@@ -136,9 +183,5 @@ export class PaymentsComponent implements OnInit {
       console.error('Payment error:', error);
       alert('Payment failed. Please try again.');
     }
-  }
-
-  toggleView() {
-    this.isPaymentHistory = !this.isPaymentHistory;
   }
 }

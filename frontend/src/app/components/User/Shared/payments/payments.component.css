@@ -1,0 +1,40 @@
+/* Style for PrimeNG MultiSelect */
+.styled-multiSelect .p-multiselect {
+    width: 100%; /* Full-width to match grid */
+    padding: 0.5rem;
+    font-size: 14px;
+  }
+  
+  .styled-multiSelect .p-multiselect-label-container {
+    border-radius: 5px;
+  }
+  
+  .styled-multiSelect .p-multiselect-token {
+    background-color: #e0f7fa; /* Light cyan background for selected items */
+    color: #00796b; /* Dark teal text color */
+    border-radius: 3px;
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .styled-multiSelect .p-multiselect-panel {
+    border: 1px solid #00796b; /* Border to match branding */
+  }
+  
+  .styled-multiSelect .p-checkbox .p-checkbox-box {
+    background-color: #e0f7fa; /* Custom checkbox color */
+    border-color: #00796b;
+  }
+  
+  .styled-multiSelect .p-checkbox .p-checkbox-icon {
+    color: #00796b; /* Custom checkmark color */
+  }
+
+  .green-text {
+    color: green;
+  }
+  
+  .red-text {
+    color: red;
+  }
+  
+  

@@ -12,9 +12,13 @@ export class PaymentService {
 
   constructor(private readonly http: HttpClient) {}
 
-
-  createOrder({societyId, amount, date, category }:any){
-    return this.http.post(`${this.apiUrl}/create`,{societyId, amount, date, category })
+  createOrder({ societyId, amount, date, category }: any) {
+    return this.http.post(`${this.apiUrl}/create`, {
+      societyId,
+      amount,
+      date,
+      category,
+    });
   }
 
   makePayment(paymentId: string) {
@@ -40,7 +44,8 @@ export class PaymentService {
     return this.http.get(`${this.apiUrl}/user/${ownerId}`);
   }
 
-  getAllPayments(societyId:string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/all/${societyId}`,{});
-  }
+  getAllPayments(societyId: string, filters?: { status?: string; fromDate?: string; toDate?: string; type?: string; purpose?: string }): Observable<any> {
+    const params: any = { ...filters };
+    return this.http.get(`${this.apiUrl}/all/${societyId}`, { params });
+  } 
 }
