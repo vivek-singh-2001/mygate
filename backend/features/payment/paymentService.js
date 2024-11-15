@@ -159,6 +159,7 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
 
     if (type !== "credit") {
       const expenses = await paymentRepository.getExpenses(societyId, {
+        ...(status === "success" ? { status: "approved" } : { status }),
         ...(fromDate && { date: { [Op.gte]: new Date(fromDate) } }),
         ...(toDate && {
           date: {
@@ -184,6 +185,65 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
   } catch (error) {
     console.error("Error fetching payment expenses:", error);
     throw new Error("Error fetching payment expenses: " + error.message);
+  }
+};
+
+exports.getPaymentSummary = async (societyId, dateRange) => {
+  try {
+    const { fromDate, toDate } = dateRange;
+    const society = await societyRepository.getsocietyById(societyId);
+    if (!society) {
+      throw new CustomError("Society not found", 404);
+    }
+
+    const totalIncomeRecords = await paymentRepository.getAllPayments(societyId, {
+      status: "success",
+      paymentDate: {
+        [Op.gte]: new Date(fromDate),
+        [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)),
+      },
+    });
+
+    const totalIncome = totalIncomeRecords.reduce(
+      (sum, record) => sum + record.amount,
+      0
+    );
+
+    const pendingIncomeRecords = await paymentRepository.getAllPayments(societyId, {
+      status: "pending",
+      dueDate: {
+        [Op.gte]: new Date(fromDate),
+        [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)),
+      },
+    });
+
+    const pendingIncome = pendingIncomeRecords.reduce(
+      (sum, record) => sum + record.amount,
+      0
+    );
+
+    const totalExpenseRecords = await paymentRepository.getExpenses(societyId, {
+      status: "approved",
+      date: {
+        [Op.gte]: new Date(fromDate),
+        [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)),
+      },
+    });
+
+    const totalExpense = totalExpenseRecords.reduce(
+      (sum, record) => sum + record.amount,
+      0
+    );
+
+    return {
+      totalIncome,
+      pendingIncome,
+      totalExpense,
+      expectedIncome: totalIncome + pendingIncome,
+    };
+  } catch (error) {
+    console.error("Error fetching payment summary:", error);
+    throw new Error("Error fetching payment summary: " + error.message);
   }
 };
 

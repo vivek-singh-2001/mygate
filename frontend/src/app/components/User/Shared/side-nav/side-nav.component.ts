@@ -87,6 +87,12 @@ export class SideNavComponent implements OnInit {
         iconSize: 'large',
         command: () => this.navigateTo('/home/payments'),
       },
+      {
+        label: 'Society Accounts',
+        icon: 'pi pi-book',
+        iconSize: 'large',
+        command: () => this.navigateTo('/home/society-accounts'),
+      },
       ...(this.isAdmin
         ? [
             {

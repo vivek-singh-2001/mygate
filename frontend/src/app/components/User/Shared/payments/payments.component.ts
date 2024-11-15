@@ -64,16 +64,7 @@ interface RazorpayOptions {
 export class PaymentsComponent implements OnInit {
   paymentsData: PaymentRecord[] = [];
   paymentHistoryData: PaymentRecord[] = [];
-  societyPaymentData: PaymentRecord[] = [];
-  filters = {
-    status: 'success',
-    purpose: '',
-    type: '',
-    fromDate: '',
-    toDate: '',
-  };
   isPaymentHistory: boolean = false;
-  isSocietyPayments: boolean = false;
 
   constructor(
     private readonly paymentService: PaymentService,
@@ -82,18 +73,6 @@ export class PaymentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUserPayments();
-  }
-
-  setDefaultDateRange() {
-    const currentDate = new Date();
-    const firstDayOfMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
-
-    this.filters.fromDate = firstDayOfMonth.toLocaleDateString('en-CA');
-    this.filters.toDate = currentDate.toLocaleDateString('en-CA');
   }
 
   fetchUserPayments() {
@@ -115,32 +94,8 @@ export class PaymentsComponent implements OnInit {
     });
   }
 
-  fetchSocietyPayments() {
-    this.userService.userSocietyId$.subscribe((societyId) => {
-      this.paymentService.getAllPayments(societyId, this.filters).subscribe({
-        next: (response) => {
-          console.log(response.data);
-          this.societyPaymentData = response.data;
-        },
-        error: (error) => console.log(error),
-      });
-    });
-  }
-
-  applyFilters() {
-    this.fetchSocietyPayments();
-  }
-
   toggleView() {
     this.isPaymentHistory = !this.isPaymentHistory;
-  }
-
-  toggleSocietyPayments() {
-    if (this.societyPaymentData.length === 0) {
-      this.setDefaultDateRange();
-      this.fetchSocietyPayments();
-    }
-    this.isSocietyPayments = !this.isSocietyPayments;
   }
 
   async onPayNow(paymentId: string) {

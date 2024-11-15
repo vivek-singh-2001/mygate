@@ -76,7 +76,14 @@ export const routes: Routes = [
         path: 'payments',
         loadComponent: () =>
           import('./components/User/Shared/payments/payments.component').then(
-            (visitor) => visitor.PaymentsComponent
+            (payment) => payment.PaymentsComponent
+          ),
+      },
+      {
+        path: 'society-accounts',
+        loadComponent: () =>
+          import('./components/User/Shared/society-accounts/society-accounts.component').then(
+            (society) => society.SocietyAccountsComponent
           ),
       },
       {
