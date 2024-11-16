@@ -1,30 +1,30 @@
 <div class="summary-container p-fluid grid mb-4">
-    <div class="summary-item col-12 md:col-3">
-      <p class="summary-title">Total Income</p>
-      <p class="summary-value income">
-        {{ paymentSummary.totalIncome | currency : "INR" }}
-      </p>
-    </div>
-    <div class="summary-item col-12 md:col-3">
-      <p class="summary-title">Total Expense</p>
-      <p class="summary-value expense">
-        {{ paymentSummary.totalExpense | currency : "INR" }}
-      </p>
-    </div>
-    <div class="summary-item col-12 md:col-3">
-      <p class="summary-title">Expected Income</p>
-      <p class="summary-value expected-income">
-        {{ paymentSummary.expectedIncome | currency : "INR" }}
-      </p>
-    </div>
-    <div class="summary-item col-12 md:col-3">
-      <p class="summary-title">Pending Income</p>
-      <p class="summary-value pending-income">
-        {{ paymentSummary.pendingIncome | currency : "INR" }}
-      </p>
-    </div>
+  <div class="summary-item col-12 md:col-3">
+    <p class="summary-title">Total Income</p>
+    <p class="summary-value income">
+      {{ paymentSummary.totalIncome | currency : "INR" }}
+    </p>
   </div>
-  
+  <div class="summary-item col-12 md:col-3">
+    <p class="summary-title">Total Expense</p>
+    <p class="summary-value expense">
+      {{ paymentSummary.totalExpense | currency : "INR" }}
+    </p>
+  </div>
+  <div class="summary-item col-12 md:col-3">
+    <p class="summary-title">Pending Income</p>
+    <p class="summary-value pending-income">
+      {{ paymentSummary.pendingIncome | currency : "INR" }}
+    </p>
+  </div>
+  <div class="summary-item col-12 md:col-3">
+    <p class="summary-title">Current Balance</p>
+    <p class="summary-value" [ngClass]="{ 'positive': paymentSummary.currentBalance > 0, 'negative': paymentSummary.currentBalance < 0 }">
+      <!-- {{ paymentSummary.currentBalance > 0 ? '+' : (paymentSummary.currentBalance < 0 ? '-' : '') }} -->
+      {{ paymentSummary.currentBalance | currency : "INR" }}
+    </p>
+  </div>
+</div>
 
 <div class="p-fluid grid mb-4">
   <div class="col-12 md:col-2">

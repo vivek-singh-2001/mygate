@@ -4,6 +4,8 @@ const houseRepository = require("../house/houseRepository");
 const CustomError = require("../../utils/CustomError");
 const societyRepository = require("../society/societyRepository");
 const { Op } = require("sequelize");
+const { db } = require("../../config/connection");
+const { sequelize } = db;
 
 exports.makePayment = async (paymentId) => {
   try {
@@ -191,55 +193,48 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
 exports.getPaymentSummary = async (societyId, dateRange) => {
   try {
     const { fromDate, toDate } = dateRange;
+
     const society = await societyRepository.getsocietyById(societyId);
     if (!society) {
       throw new CustomError("Society not found", 404);
     }
 
-    const totalIncomeRecords = await paymentRepository.getAllPayments(societyId, {
-      status: "success",
-      paymentDate: {
-        [Op.gte]: new Date(fromDate),
-        [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)),
-      },
-    });
+    const endDate = new Date(new Date(toDate).setHours(23, 59, 59, 999));
 
-    const totalIncome = totalIncomeRecords.reduce(
-      (sum, record) => sum + record.amount,
-      0
-    );
+    const [payments, expenses, totalIncome, totalExpenses] = await Promise.all([
+      paymentRepository.getAllPayments(societyId, {
+        [Op.or]: [
+          {
+            status: "success",
+            paymentDate: { [Op.gte]: fromDate, [Op.lte]: endDate },
+          },
+          {
+            status: "pending",
+            dueDate: { [Op.gte]: fromDate, [Op.lte]: endDate },
+          },
+        ],
+      }),
+      paymentRepository.getExpenses(societyId, {
+        status: "approved",
+        date: { [Op.gte]: fromDate, [Op.lte]: endDate },
+      }),
+      paymentRepository.getTotalIncome(societyId),
+      paymentRepository.getTotalExpenses(societyId),
+    ]);
 
-    const pendingIncomeRecords = await paymentRepository.getAllPayments(societyId, {
-      status: "pending",
-      dueDate: {
-        [Op.gte]: new Date(fromDate),
-        [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)),
-      },
-    });
+    const totalPayments = payments
+      .filter(payment => payment.status === 'success')
+      .reduce((sum, payment) => sum + payment.amount, 0);
 
-    const pendingIncome = pendingIncomeRecords.reduce(
-      (sum, record) => sum + record.amount,
-      0
-    );
-
-    const totalExpenseRecords = await paymentRepository.getExpenses(societyId, {
-      status: "approved",
-      date: {
-        [Op.gte]: new Date(fromDate),
-        [Op.lte]: new Date(new Date(toDate).setHours(23, 59, 59, 999)),
-      },
-    });
-
-    const totalExpense = totalExpenseRecords.reduce(
-      (sum, record) => sum + record.amount,
-      0
-    );
+    const pendingIncome = payments
+      .filter(payment => payment.status === 'pending')
+      .reduce((sum, payment) => sum + payment.amount, 0);
 
     return {
-      totalIncome,
+      totalIncome: totalPayments,
       pendingIncome,
-      totalExpense,
-      expectedIncome: totalIncome + pendingIncome,
+      totalExpense: expenses.reduce((sum, expense) => sum + expense.amount, 0),
+      currentBalance: totalIncome - totalExpenses,
     };
   } catch (error) {
     console.error("Error fetching payment summary:", error);

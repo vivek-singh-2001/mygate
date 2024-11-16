@@ -31,7 +31,8 @@ export class SocietyAccountsComponent implements OnInit {
     totalExpense?: string;
     expectedIncome?: string;
     pendingIncome?: string;
-  } = {};
+    currentBalance: number;
+  } = { currentBalance: 0 };
   filters = {
     status: 'success',
     purpose: '',

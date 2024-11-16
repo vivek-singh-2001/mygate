@@ -55,10 +55,14 @@
   color: #f44336;
 }
 
-.expected-income {
+.pending-income {
   color: #ff9800;
 }
 
-.pending-income {
-  color: #9e9e9e;
+.positive {
+  color: #4caf50;
+}
+
+.negative {
+  color: #f44336;
 }
