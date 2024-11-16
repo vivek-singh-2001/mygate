@@ -7,6 +7,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-society-accounts',
@@ -65,6 +67,40 @@ export class SocietyAccountsComponent implements OnInit {
     );
     this.filters.fromDate = firstDayOfMonth.toLocaleDateString('en-CA');
     this.filters.toDate = currentDate.toLocaleDateString('en-CA');
+  }
+
+  downloadPDF() {
+    const doc = new jsPDF();
+    const title = "Society Payment Report";
+    
+    // Add Title
+    doc.setFontSize(18);
+    doc.text(title, 14, 22);
+  
+    // Add Summary
+    doc.setFontSize(12);
+    doc.text(`Total Income: INR ${this.paymentSummary.totalIncome}`, 14, 40);
+    doc.text(`Total Expense: INR ${this.paymentSummary.totalExpense}`, 14, 48);
+    doc.text(`Pending Income: INR ${this.paymentSummary.pendingIncome}`, 14, 56);
+    doc.text(`Current Balance: INR ${this.paymentSummary.currentBalance}`, 14, 64);
+  
+    // Add Table Data
+    const tableData = this.societyPaymentData.map((payment: any) => [
+      payment.purpose,
+      payment.amount.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }),
+      new Date(payment.date).toLocaleDateString(),
+      payment.paymentEntity,
+      payment.type,
+    ]);
+  
+    autoTable(doc, {
+      head: [['Purpose', 'Amount', 'Date', 'Payment Entity', 'Type']],
+      body: tableData,
+      startY: 80,
+    });
+  
+    // Save PDF
+    doc.save('Society_Payment_Report.pdf');
   }
 
   fetchSocietyPayments() {

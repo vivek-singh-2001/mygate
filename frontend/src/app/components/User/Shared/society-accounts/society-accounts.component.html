@@ -20,7 +20,6 @@
   <div class="summary-item col-12 md:col-3">
     <p class="summary-title">Current Balance</p>
     <p class="summary-value" [ngClass]="{ 'positive': paymentSummary.currentBalance > 0, 'negative': paymentSummary.currentBalance < 0 }">
-      <!-- {{ paymentSummary.currentBalance > 0 ? '+' : (paymentSummary.currentBalance < 0 ? '-' : '') }} -->
       {{ paymentSummary.currentBalance | currency : "INR" }}
     </p>
   </div>
@@ -78,6 +77,12 @@
       (ngModelChange)="onDateChange()"
     ></p-calendar>
   </div>
+  <div class="col-12 md:col-2">
+  <button class="p-button p-button-success mb-3" (click)="downloadPDF()">
+    Download PDF
+  </button>
+  </div>
+  
 </div>
 
 <p-table
