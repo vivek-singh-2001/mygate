@@ -19,7 +19,13 @@
   </div>
   <div class="summary-item col-12 md:col-3">
     <p class="summary-title">Current Balance</p>
-    <p class="summary-value" [ngClass]="{ 'positive': paymentSummary.currentBalance > 0, 'negative': paymentSummary.currentBalance < 0 }">
+    <p
+      class="summary-value"
+      [ngClass]="{
+        positive: paymentSummary.currentBalance > 0,
+        negative: paymentSummary.currentBalance < 0
+      }"
+    >
       {{ paymentSummary.currentBalance | currency : "INR" }}
     </p>
   </div>
@@ -78,11 +84,14 @@
     ></p-calendar>
   </div>
   <div class="col-12 md:col-2">
-  <button class="p-button p-button-success mb-3" (click)="downloadPDF()">
-    Download PDF
-  </button>
+    <button
+      class="p-button p-mt-3 p-mb-3"
+      (click)="downloadPDF()"
+      style="width: 100%; font-size: 14px"
+    >
+      <i class="pi pi-download" style="margin-right: 8px"></i> Download Report
+    </button>
   </div>
-
 </div>
 
 <p-table

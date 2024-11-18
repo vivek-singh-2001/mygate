@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { PaymentRecord } from '../../../../interfaces/payment.interfaces';
 import { PaymentService } from '../../../../services/payment/payment.service';
 import { UserService } from '../../../../services/user/user.service';
 import { TableModule } from 'primeng/table';
@@ -7,9 +6,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
-import { jsPDF } from "jspdf";
+import { jsPDF } from 'jspdf';
 import { Chart, registerables } from 'chart.js';
 import autoTable from 'jspdf-autotable';
+import { AccountRecord } from '../../../../interfaces/account.interface';
 
 Chart.register(...registerables);
 
@@ -29,9 +29,8 @@ Chart.register(...registerables);
     '../payments/payments.component.css',
   ],
 })
-
 export class SocietyAccountsComponent implements OnInit {
-  societyPaymentData: any[] = [];
+  societyPaymentData: AccountRecord[] = [];
   paymentSummary: {
     totalIncome: number;
     totalExpense: number;
@@ -60,7 +59,7 @@ export class SocietyAccountsComponent implements OnInit {
     this.fetchSocietyPayments();
     this.fetchPaymentSummary();
   }
-  
+
   setDefaultDateRange() {
     const currentDate = new Date();
     const firstDayOfMonth = new Date(
@@ -72,70 +71,101 @@ export class SocietyAccountsComponent implements OnInit {
     this.filters.toDate = currentDate.toLocaleDateString('en-CA');
   }
 
-
   downloadPDF() {
     const doc = new jsPDF();
-    const title = 'Society Payment Report';
-    const reportDate = new Date().toLocaleDateString(); // Add current date
+    const title = 'Society Accounts Report';
+    const reportDate = new Date();
+    const formattedDate = `${reportDate
+      .getDate()
+      .toString()
+      .padStart(2, '0')}/${(reportDate.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}/${reportDate.getFullYear()}`;
+
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
 
-    // Add Title at the center of the page
     doc.setFontSize(16);
-    doc.text(`${title} - ${reportDate}`, pageWidth / 2, 20, { align: 'center' });
+    doc.text(`${title} - ${formattedDate}`, pageWidth / 2, 20, {
+      align: 'center',
+    });
 
-    // Draw Payment Summary Section
     const summaryStartY = 30;
     const summaryRowHeight = 10;
     const summaryData = [
-      { label: 'Total Income:', value: this.paymentSummary.totalIncome, style: 'income' },
-      { label: 'Total Expense:', value: this.paymentSummary.totalExpense, style: 'expense' },
-      { label: 'Pending Income:', value: this.paymentSummary.pendingIncome, style: 'pending-income' },
-      { label: 'Current Balance:', value: this.paymentSummary.currentBalance, style: this.paymentSummary.currentBalance >= 0 ? 'positive' : 'negative' },
+      {
+        label: 'Total Income:',
+        value: this.paymentSummary.totalIncome,
+        style: 'income',
+      },
+      {
+        label: 'Total Expense:',
+        value: this.paymentSummary.totalExpense,
+        style: 'expense',
+      },
+      {
+        label: 'Pending Income:',
+        value: this.paymentSummary.pendingIncome,
+        style: 'pending-income',
+      },
+      {
+        label: 'Current Balance:',
+        value: this.paymentSummary.currentBalance,
+        style:
+          this.paymentSummary.currentBalance >= 0 ? 'positive' : 'negative',
+      },
     ];
 
-    // Define styling properties
     const summaryStartX = 14;
     const summaryColWidths = [60, 80];
-    const headerBgColor: [number, number, number] = [240, 240, 240]; // Light gray background
+    const headerBgColor: [number, number, number] = [240, 240, 240];
     const fontSize = 12;
 
-    // Color map for different styles
     const colorMap: any = {
-      income: [76, 175, 80], // #4caf50
-      expense: [244, 67, 54], // #f44336
-      'pending-income': [255, 152, 0], // #ff9800
-      positive: [76, 175, 80], // #4caf50
-      negative: [244, 67, 54], // #f44336
+      income: [76, 175, 80],
+      expense: [244, 67, 54],
+      'pending-income': [255, 152, 0],
+      positive: [76, 175, 80],
+      negative: [244, 67, 54],
     };
 
     summaryData.forEach((row, index) => {
       const y = summaryStartY + index * summaryRowHeight;
 
-      // Add background color for rows
       if (index % 2 === 0) {
         doc.setFillColor(...headerBgColor);
-        doc.rect(summaryStartX, y, summaryColWidths[0] + summaryColWidths[1], summaryRowHeight, 'F'); // Fill row
+        doc.rect(
+          summaryStartX,
+          y,
+          summaryColWidths[0] + summaryColWidths[1],
+          summaryRowHeight,
+          'F'
+        );
       }
 
-      // Draw borders
-      doc.rect(summaryStartX, y, summaryColWidths[0], summaryRowHeight); // First column
-      doc.rect(summaryStartX + summaryColWidths[0], y, summaryColWidths[1], summaryRowHeight); // Second column
+      doc.rect(summaryStartX, y, summaryColWidths[0], summaryRowHeight);
+      doc.rect(
+        summaryStartX + summaryColWidths[0],
+        y,
+        summaryColWidths[1],
+        summaryRowHeight
+      );
 
-      // Add text with styles
       doc.setFontSize(fontSize);
-      doc.setTextColor(0, 0, 0); // Default black for labels
+      doc.setTextColor(0, 0, 0);
       doc.setFont('helvetica', 'normal');
-      doc.text(row.label, summaryStartX + 2, y + 7); // First column text
+      doc.text(row.label, summaryStartX + 2, y + 7);
 
-      // Set text color based on style
       const [r, g, b] = colorMap[row.style];
       doc.setTextColor(r, g, b);
-      doc.text(`Rs. ${row.value.toLocaleString('en-IN')}`, summaryStartX + summaryColWidths[0] + 2, y + 7); // Second column text
+      doc.text(
+        `Rs. ${row.value.toLocaleString('en-IN')}`,
+        summaryStartX + summaryColWidths[0] + 2,
+        y + 7
+      );
     });
 
-    // Prepare Table Data
-    const tableData = this.societyPaymentData.map((payment: any) => [
+    const tableData = this.societyPaymentData.map((payment: AccountRecord) => [
       payment.purpose,
       `${payment.amount.toLocaleString('en-IN')}`,
       new Date(payment.date).toLocaleDateString(),
@@ -143,49 +173,43 @@ export class SocietyAccountsComponent implements OnInit {
       payment.type,
     ]);
 
-    // Add Table with Conditional Styling
     autoTable(doc, {
       head: [['Purpose', 'Amount', 'Date', 'Payment Entity', 'Type']],
       body: tableData,
-      startY: summaryStartY + summaryData.length * summaryRowHeight + 10, // Start below summary
+      startY: summaryStartY + summaryData.length * summaryRowHeight + 10,
       styles: {
-        fontSize: 10, // Adjust font size if needed
-        cellPadding: 3, // Add padding inside cells
-        lineWidth: 0.1, // Adds grid lines
+        fontSize: 10,
+        cellPadding: 3,
+        lineWidth: 0.1,
       },
       columnStyles: {
-        0: { cellWidth: 40 }, // Purpose
-        1: { cellWidth: 35 }, // Amount
-        2: { cellWidth: 30 }, // Date
-        3: { cellWidth: 50 }, // Payment Entity
-        4: { cellWidth: 20 }, // Type
+        0: { cellWidth: 55 },
+        1: { cellWidth: 30 },
+        2: { cellWidth: 30 },
+        3: { cellWidth: 40 },
+        4: { cellWidth: 25 },
       },
       didParseCell: (data) => {
-        // Apply styles only to body rows and the "Type" column
         if (data.section === 'body' && data.column.index === 4) {
           if (data.cell.raw === 'Credit') {
-            data.cell.styles.textColor = [0, 128, 0]; // Green for "Credit"
+            data.cell.styles.textColor = [0, 128, 0];
           } else {
-            data.cell.styles.textColor = [255, 0, 0]; // Red for others
+            data.cell.styles.textColor = [255, 0, 0];
           }
         }
       },
     });
 
-    // Add footer with page numbers
-    const pageCount = (doc.internal as any).getNumberOfPages(); // Cast to 'any'
+    const pageCount = (doc.internal as any).getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
       doc.setFontSize(10);
       doc.setTextColor(100);
-      doc.text(`Page ${i} of ${pageCount}`, pageWidth - 30, pageHeight - 20);
+      doc.text(`Page ${i} of ${pageCount}`, pageWidth - 30, pageHeight - 10);
     }
 
-    // Save PDF
     doc.save('Society_Payment_Report.pdf');
   }
-
-  
 
   fetchSocietyPayments() {
     this.paymentService.getAllPayments(this.societyId, this.filters).subscribe({
