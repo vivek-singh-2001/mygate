@@ -76,6 +76,7 @@
           <th scope="col">Amount</th>
           <th scope="col">Payment Date</th>
           <th scope="col">Status</th>
+          <th scope="col">Action</th>
         </tr>
       </ng-template>
 
@@ -85,6 +86,15 @@
           <td>{{ payment.amount | currency : "INR" }}</td>
           <td>{{ payment.paymentDate | date : "EEEE, MMM d" }}</td>
           <td>{{ payment.status === "success" ? "Paid" : "Failed" }}</td>
+          <td>
+            <button
+              *ngIf="payment.status === 'success'"
+              pButton
+              label="Download Receipt"
+              (click)="downloadReceipt(payment)"
+              class="p-button-outlined"
+            ></button>
+          </td>
         </tr>
       </ng-template>
     </p-table>

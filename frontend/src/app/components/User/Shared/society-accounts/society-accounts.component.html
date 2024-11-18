@@ -104,20 +104,20 @@
 >
   <ng-template pTemplate="header">
     <tr class="table-header">
-      <th scope="col">Purpose</th>
-      <th scope="col">Amount</th>
       <th scope="col">Date</th>
       <th scope="col">Payment entity</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Purpose</th>
       <th scope="col">Type</th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-payment>
     <tr class="table-header">
-      <td>{{ payment.purpose }}</td>
-      <td>{{ payment.amount | currency : "INR" }}</td>
       <td>{{ payment.date | date : "EEEE, MMM d" }}</td>
       <td>{{ payment.paymentEntity }}</td>
+      <td>{{ payment.amount | currency : "INR" }}</td>
+      <td>{{ payment.purpose }}</td>
       <td
         [ngClass]="{
           'green-text': payment.type === 'Credit',
