@@ -1,71 +1,104 @@
-<!-- user-list.component.html -->
-<p-table [value]="users" class="p-datatable-sm">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Photo</th>
-      <th>Name</th>
-      <th>Number</th>
-      <th>Email</th>
-      <th>
-        <input
-          type="text"
-          [(ngModel)]="searchQuery"
-          (ngModelChange)="onSearch($event)"
-          placeholder="Search users..."
-        />
-      </th>
-    </tr>
-  </ng-template>
+<div class="display-card">
+  <p-table [value]="users" class="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Photo</th>
+        <th scope="col">Name</th>
+        <th scope="col">Number</th>
+        <th scope="col">Email</th>
+        <th scope="col">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="onSearch($event)"
+            placeholder="Search users..."
+          />
+        </th>
+      </tr>
+    </ng-template>
 
-  <ng-template pTemplate="body" let-user>
-    <tr>
-      <td>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>
+          <img
+            [src]="
+              user.photo ||
+              'https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg'
+            "
+            alt="{{ user.firstname }}"
+            class="p-shadow-2"
+            style="width: 50px; height: 50px; border-radius: 50%"
+          />
+        </td>
+        <td>{{ user.firstname }} {{ user.lastname }}</td>
+        <td>{{ user.number }}</td>
+        <td>{{ user.email }}</td>
+        <td>
+          <button
+            pButton
+            type="button"
+            label="View"
+            class="p-button p-button-primary"
+            (click)="viewUserDetails(user)"
+          >
+            View
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <div
+    *ngIf="users.length === 0"
+    class="flex justify-content-center align-items-center mt-6 mb-6"
+  >
+    <p><b>No users found for the search query.</b></p>
+  </div>
+
+  <div class="card flex justify-content-center">
+    <p-paginator
+      (onPageChange)="onPageChange($event)"
+      [first]="first"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [showCurrentPageReport]="true"
+      [showPageLinks]="false"
+      [showJumpToPageDropdown]="false"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+    />
+  </div>
+
+  <p-sidebar
+    [(visible)]="isSidebarVisible"
+    position="right"
+    [baseZIndex]="10000"
+    [modal]="true"
+  >
+    <h3>User Details</h3>
+    <div *ngIf="selectedUser">
+      <div class="user-info">
         <img
           [src]="
-            user.photo ||
+            selectedUser.photo ||
             'https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg'
           "
-          alt="{{ user.firstname }}"
+          alt="{{ selectedUser.firstname }}"
           class="p-shadow-2"
-          style="width: 50px; height: 50px; border-radius: 50%"
+          style="
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+          "
         />
-      </td>
-      <td>{{ user.firstname }} {{ user.lastname }}</td>
-      <td>{{ user.number }}</td>
-      <td>{{ user.email }}</td>
-      <td>
-        <button
-          pButton
-          type="button"
-          label="View"
-          icon="pi pi-eye"
-          class="p-button-outlined"
-          (click)="viewUserDetails(user)"
-        >
-          View
-        </button>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
-
-<!-- Display "No users found" message if no users found -->
-<div
-  *ngIf="noUsersFound"
-  class="flex justify-content-center align-items-center mt-6 mb-6"
->
-  <p><b>No users found for the search query.</b></p>
-</div>
-
-<div class="card flex justify-content-center">
-  <p-paginator
-    (onPageChange)="onPageChange($event)"
-    [first]="first"
-    [rows]="rows"
-    [totalRecords]="totalRecords"
-    [showCurrentPageReport]="true"
-    [showPageLinks]="false"
-    [showJumpToPageDropdown]="false"
-    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-  />
+        <p>
+          <b>Name:</b> {{ selectedUser.firstname }} {{ selectedUser.lastname }}
+        </p>
+        <p><b>Number:</b> {{ selectedUser.number }}</p>
+        <p><b>Email:</b> {{ selectedUser.email }}</p>
+        <p><b>Phone No.:</b> {{ selectedUser.number || "N/A" }}</p>
+        <p><b>House No.:</b> {{ selectedUser.house_no || "N/A" }}</p>
+      </div>
+    </div>
+  </p-sidebar>
 </div>

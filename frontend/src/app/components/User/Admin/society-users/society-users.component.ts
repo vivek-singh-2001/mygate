@@ -12,6 +12,7 @@ import {
 } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { User } from '../../../../interfaces/user.interface';
+import { SidebarModule } from 'primeng/sidebar';
 
 interface PageEvent {
   first?: number;
@@ -23,18 +24,19 @@ interface PageEvent {
 @Component({
   selector: 'app-society-users',
   standalone: true,
-  imports: [TableModule, PaginatorModule, CommonModule],
+  imports: [TableModule, PaginatorModule, CommonModule, SidebarModule],
   templateUrl: './society-users.component.html',
   styleUrls: ['./society-users.component.css'],
 })
 export class SocietyUsersComponent implements OnInit {
   users: User[] = [];
-  first: number = 0; //offset
-  rows: number = 20; //limit
+  first: number = 0;
+  rows: number = 20;
   societyId!: string;
-  totalRecords: number = 0; //total records fetched
+  totalRecords: number = 0;
   searchQuery: string = '';
-  noUsersFound: boolean = false;
+  selectedUser: any = null;
+  isSidebarVisible: boolean = false;
 
   private readonly searchSubject = new Subject<string>();
 
@@ -45,7 +47,6 @@ export class SocietyUsersComponent implements OnInit {
       .pipe(
         switchMap((societyId) => {
           if (!societyId) {
-            this.noUsersFound = true;
             return of([]);
           }
           console.log(societyId);
@@ -61,14 +62,12 @@ export class SocietyUsersComponent implements OnInit {
               console.log('Error during user fetch', error);
               this.users = [];
               this.totalRecords = 0;
-              this.noUsersFound = true;
               return of([]);
             })
           );
         })
       )
       .subscribe();
-
     this.searchSubject.next(this.searchQuery);
   }
 
@@ -84,13 +83,11 @@ export class SocietyUsersComponent implements OnInit {
         tap((data) => {
           this.users = data.data.users;
           this.totalRecords = data.totalRecords;
-          this.noUsersFound = this.users.length === 0;
         }),
         catchError((error) => {
           console.log('Error loading users:', error);
           this.users = [];
           this.totalRecords = 0;
-          this.noUsersFound = true;
           return of({ data: { users: [] }, totalRecords: 0 });
         })
       );
@@ -98,6 +95,8 @@ export class SocietyUsersComponent implements OnInit {
 
   viewUserDetails(user: User) {
     console.log('Viewing details of:', user);
+    this.selectedUser = user;
+    this.isSidebarVisible = true;
   }
 
   onSearch(query: string): void {

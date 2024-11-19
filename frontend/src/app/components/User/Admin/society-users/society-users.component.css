@@ -1,0 +1,10 @@
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user-info p {
+  font-size: 14px;
+  margin: 0;
+}
