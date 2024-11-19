@@ -39,6 +39,10 @@ module.exports = (connectDB, DataTypes) => {
           allowNull: false,
           defaultValue: "pending",
         },
+        attachment:{
+          type:DataTypes.STRING,
+          allowNull:true
+        }
       },
       {
         timestamps: true,

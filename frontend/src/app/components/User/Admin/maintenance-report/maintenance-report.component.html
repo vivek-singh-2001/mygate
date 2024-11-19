@@ -54,6 +54,16 @@
         <label for="description" class="w-6">Description</label>
         <textarea id="description" pInputTextarea [(ngModel)]="expenseDescription" rows="3" class="w-6" placeholder="Enter description"></textarea>
       </div>
+      <div class="field flex align-items-center justify-content-between mb-3">
+        <label for="attachment" class="w-6">Attachment</label>
+        <input
+          id="attachment"
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          class="w-6"
+        />
+      </div>
     </div>
   
     <p-footer>

@@ -57,6 +57,8 @@ export class SocietyListComponent {
     const status = this.selectedStatus ? this.selectedStatus : '';
     this.societyService.fetchAllSociety(status).subscribe({
       next: (societies: Society[]) => {
+        console.log('appppppppppp', societies);
+
         this.societies = societies;
         this.noUsersFound = societies.length === 0;
         this.isLoading = false;
@@ -133,35 +135,38 @@ export class SocietyListComponent {
   onCanelSociety(society: Society) {
     console.log(society);
     this.isLoading = true;
-    this.societyService.rejectSociety(society).pipe(
-      tap(() => {
-        this.fetchSocieties();
-        this.isLoading = false;
-      })
-    ).subscribe({
-      next:()=>{
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Society has been rejected!',
-        });
-      },
-      error: (err) => {
-        console.error(err.message);
-        this.isLoading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: err.message,
-        });
-      },
-    })
+    this.societyService
+      .rejectSociety(society)
+      .pipe(
+        tap(() => {
+          this.fetchSocieties();
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Society has been rejected!',
+          });
+        },
+        error: (err) => {
+          console.error(err.message);
+          this.isLoading = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.message,
+          });
+        },
+      });
   }
 
   onApproveSociety(society: Society) {
     this.isLoading = true;
     console.log(society);
-    
+
     this.societyService
       .createSociety(society)
       .pipe(

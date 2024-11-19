@@ -80,8 +80,14 @@ exports.getAllPayments = asyncErrorHandler(async (req, res, next) => {
 
 exports.addExpense = asyncErrorHandler ( async(req,res,next)=>{
   const {amount,date,category,description,societyId} = req.body
-  
-  const newExpanse = await paymentService.addExpense(amount,date,category,description,societyId)
+  const imagePath = req.file.filename
+
+  if ( !imagePath) {
+    return next(
+      new CustomError("Society details or CSV file is missing.", 400)
+    );
+  }
+  const newExpanse = await paymentService.addExpense(amount,date,category,description,societyId,imagePath)
 
   return res.status(200).json({ success: true, data: newExpanse });
   

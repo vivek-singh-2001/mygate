@@ -37,7 +37,7 @@
       <td>
         <img
           [src]="
-            society?.User?.photo ||
+            society?.societyDetails?.photo ||
             'https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg'
           "
           alt="{{ society.name || 'N/A' }}"
@@ -47,13 +47,13 @@
       </td>
       <td>
         {{
-          (society?.User?.firstname || "") + 
-          (society?.User?.lastname ? " " + society.User.lastname : "") || "N/A"
+          (society?.societyDetails?.firstname || "") + 
+          (society?.societyDetails?.lastname ? " " + society.societyDetails.lastname : "") || "N/A"
         }}
       </td>
       <td>{{ society?.name || "N/A" }}</td>
-      <td>{{ society?.User?.number || "N/A" }}</td>
-      <td>{{ society?.User?.email || "N/A" }}</td>
+      <td>{{ society?.societyDetails?.number || "N/A" }}</td>
+      <td>{{ society?.societyDetails?.email || "N/A" }}</td>
       <!-- <td>{{ society?.status }}</td> -->
       <td>
         <p-button

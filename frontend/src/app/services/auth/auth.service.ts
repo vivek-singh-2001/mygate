@@ -36,7 +36,6 @@ export class AuthService {
     const loginData = { email, password };
     return this.http.post<any>(`${this.apiUrl}/login`, loginData).pipe(
       switchMap((response) => {
-        console.log('ress login', response);
         const token = response.token;
         if (token) {
           localStorage.setItem('authToken', token);
@@ -72,13 +71,8 @@ export class AuthService {
   }
 
   handleGoogleLoginCallback(): void {
-    console.log("helooooo222", this.route.queryParams);
-    
     this.route.queryParams.subscribe((params) => {
-      console.log("paaaaaa", params);
-      
       const token = params['token'];
-      console.log('tokrn', token);
       if (token) {
         localStorage.setItem('authToken', token);
         localStorage.setItem('isLoggedIn', 'true');

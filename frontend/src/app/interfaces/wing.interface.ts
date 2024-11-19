@@ -8,4 +8,5 @@ export interface Wing {
   Society: Society;
   firstname?: string;
   lastname?: string;
+  wingAdminDetails:any
 }

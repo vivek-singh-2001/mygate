@@ -187,12 +187,13 @@ exports.getAllPaymentExpenses = async (societyId, filters) => {
   }
 };
 
-exports.addExpense = async (amount, date, category, description, societyId) => {
+exports.addExpense = async (amount, date, category, description, societyId,imagePath) => {
   return await paymentRepository.addExpense(
     amount,
     date,
     category,
     description,
-    societyId
+    societyId,
+    imagePath
   );
 };

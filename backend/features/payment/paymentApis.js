@@ -3,6 +3,9 @@ const router = express.Router();
 const paymentController = require("./paymentController");
 const { bodyValidator } = require("../../validations/bodyValidation");
 const validate = require("../../utils/validationMiddleware");
+const upload = require('../../middleware/multer');
+
+const { uploadSingle } = upload(/csv|jpg|jpeg|png|webp/,"file");
 
 const paymentValidationRules = bodyValidator([
   { name: "societyId", isRequired: true, type: "uuid" },
@@ -21,6 +24,6 @@ router.post('/verify-payment', paymentController.verifyPayment);
 router.get("/payments/:paymentId",validate(paymentIdValidationRules), paymentController.getPaymentById);
 router.get("/user/:id", paymentController.getPaymentsForUser);
 router.get("/all/:id", paymentController.getAllPayments);
-router.post("/addExpense",paymentController.addExpense)
+router.post("/addExpense",uploadSingle,paymentController.addExpense)
 
 module.exports = router;

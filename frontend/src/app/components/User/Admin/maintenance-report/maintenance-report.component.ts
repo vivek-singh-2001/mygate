@@ -35,6 +35,7 @@ export class MaintenanceReportComponent implements OnInit {
   displayPaymentDialog = false;
   displayExpensesDialog = false;
   societyId: string = '';
+ selectedFile: File | null = null;
 
   minDate: Date = new Date();
   maxDate: Date = new Date();
@@ -137,37 +138,66 @@ export class MaintenanceReportComponent implements OnInit {
       });
   }
 
-  submitExpense() {
-    this.paymentService
-      .addExpense({
-        amount: this.expenseAmount,
-        date: this.expenseDate,
-        category: this.expenseCategory,
-        description: this.expenseDescription,
-        societyId: this.societyId,
-      })
-      .subscribe({
-        next: () => {
-          this.displayExpensesDialog = false;
-          this.expenseAmount = null;
-          this.expenseDate = null;
-          this.expenseCategory = '';
-          this.selectedExpenseCategory = null;
-          this.expenseDescription = null;
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: 'Expense added successfully.',
-          });
-        },
-        error: (err) => {
-          console.log(err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Something went wrong. Please try again later.',
-          });
-        },
-      });
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      console.log('Selected file:', file);
+      this.selectedFile = file; 
+    }
   }
+  
+
+  submitExpense() {
+    // Check if required fields are filled
+    if (!this.expenseAmount || !this.expenseDate || !this.expenseCategory) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Warning',
+        detail: 'Please fill all the required fields.',
+      });
+      return;
+    }
+  
+    // Create and populate FormData
+    const formData = new FormData();
+    formData.append('amount', this.expenseAmount.toString());
+    formData.append('date', this.expenseDate.toString()); // Convert date to string
+    formData.append('category', this.expenseCategory);
+    formData.append('description', this.expenseDescription || '');
+    formData.append('societyId', this.societyId.toString());
+    
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile); // Add the file if it exists
+    }
+
+  
+    // Call the service method to send the FormData
+    this.paymentService.addExpense(formData).subscribe({
+      next: () => {
+        // Reset form and show success message
+        this.displayExpensesDialog = false;
+        this.expenseAmount = null;
+        this.expenseDate = null;
+        this.expenseCategory = '';
+        this.selectedExpenseCategory = null;
+        this.expenseDescription = null;
+        this.selectedFile = null;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Expense added successfully.',
+        });
+      },
+      error: (err) => {
+        console.log(err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Something went wrong. Please try again later.',
+        });
+      },
+    });
+  }
+  
 }

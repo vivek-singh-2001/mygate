@@ -67,24 +67,16 @@ export class LoginComponent implements OnInit {
 
   onLogin(): void {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
-      console.log(this.loginForm.value);
-      
+      const { email, password } = this.loginForm.value; 
       this.authService.login(email, password).subscribe({
         error: (error) => {
-          console.log("pppp");
-          
           this.messageService.add({
             severity: 'error',
             summary: 'Login Failed',
             detail: error,
           })
         },
-        next:(data)=>{
-          console.log("ccc");
-          
-          console.log(data);
-          
+        next:()=>{
         }
       });
     }

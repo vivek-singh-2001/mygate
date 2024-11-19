@@ -128,7 +128,7 @@ exports.getExpenses = async (societyId, expenseFilters) => {
   }
 };
 
-exports.addExpense = async(amount,date,category,description,societyId)=>{
+exports.addExpense = async(amount,date,category,description,societyId,imagePath)=>{
   try {
     return await SocietyExpense.create({
       societyId:societyId,
@@ -136,7 +136,8 @@ exports.addExpense = async(amount,date,category,description,societyId)=>{
       amount,
       category,
       description,
-      status:'approved'
+      status:'approved',
+      attachment:imagePath
     });
   } catch (error) {
     console.log("Error fetching expenses:", error);

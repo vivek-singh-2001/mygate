@@ -38,7 +38,7 @@
           <p>{{ userDetails.firstname || "N/A" }} {{ userDetails.lastname }}</p>
           <p>{{ userDetails.email }}</p>
           <p>{{ userDetails.number }}</p>
-          <p>{{ userDetails.gender }}</p>
+          <p>{{ userDetails.gender || 'N/A' }}</p>
           <p>{{ userDetails.dateofbirth }}</p>
         </div>
       </div>
@@ -58,8 +58,8 @@
           <p>{{ userDetails.passcode || "N/A" }}</p>
           <p>{{ userDetails.role  || "N/A" }}</p>
           <p>{{userDetails.house?.house_no || "N/A"}}</p>
-          <p>{{userDetails.house?.Wing?.name || "N/A"}}</p>
-          <p>{{userDetails.wingDetails?.firstname || "N/A"}} {{userDetails.wingDetails?.lastname || "N/A"}}</p>
+          <p>{{userDetails.wingDetails?.name || "N/A"}}</p>
+          <p>{{userDetails.wingDetails?.wingAdminDetails.firstname || "N/A"}} {{userDetails.wingDetails?.wingAdminDetails.lastname || "N/A"}}</p>
         </div>
       </div>
     </div>

@@ -35,7 +35,7 @@ db.Shift = require("../features/shift/shiftModel.js")(connectDB, DataTypes);
 db.NotificationCount = require("../features/notificationCount/notificationCountModel.js")(connectDB, DataTypes);
 db.SocietyStaff = require("../features/society/societyStaffModel.js")(connectDB, DataTypes);
 db.Payment = require("../features/payment/paymentModel.js")(connectDB, DataTypes);
-db.SocietyExpense = require("../features/expenses/societyExpensesModel.js")(connectDB,DataTypes)
+db.SocietyExpense = require("../features/payment/societyExpensesModel.js")(connectDB,DataTypes)
 
 // =============society-wing (: One to many)============================
 

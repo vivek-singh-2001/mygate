@@ -184,6 +184,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         .getWingDetails(wingId)
         .subscribe({
           next: (wingDetails) => {
+            console.log("apple",wingDetails.data);
+            
             // Add wing details to userDetails
             this.userDetails.wingDetails = wingDetails?.data || {};
           },

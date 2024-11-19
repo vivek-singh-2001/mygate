@@ -129,9 +129,16 @@ export class SideNavComponent implements OnInit {
     ];
   }
 
-  toggleSidebar() {
+  toggleSidebar(itemLabel?: string) {
+    // Expand sidebar if it's currently collapsed and "Admin Control" is clicked
+  if (itemLabel === 'Admin Control' && !this.isExpanded) {
+    this.isExpanded = true;
+  } else {
     this.isExpanded = !this.isExpanded;
-    this.expansionChanged.emit(this.isExpanded);
+  }
+
+  // Emit sidebar expansion state change
+  this.expansionChanged.emit(this.isExpanded);
   }
 
   navigateTo(route: string) {

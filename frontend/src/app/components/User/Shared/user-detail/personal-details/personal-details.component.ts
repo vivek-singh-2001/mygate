@@ -53,6 +53,8 @@ export class PersonalDetailsComponent implements OnInit {
   constructor(private readonly userService: UserService) {}
 
   ngOnInit(): void {
+    console.log("bananana",this.userDetails);
+    
   }
 
   onUserFormSubmit() {
