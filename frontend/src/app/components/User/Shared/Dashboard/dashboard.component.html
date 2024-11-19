@@ -7,15 +7,20 @@
     <div class="flex justify-content-between">
       <p><b class="no-data-text">Notice Board</b></p>
       <div class="flex gap-2">
-        
         <i class="pi pi-bell text-2xl" pBadge [value]="newNoticesCount"></i>
       </div>
     </div>
     <div class="m-2 h-11rem custom-scroll">
-      <p *ngIf="newNoticesCount == 0" class="p-6 flex justify-content-center alig-items-center">
+      <p
+        *ngIf="newNoticesCount == 0"
+        class="p-6 flex justify-content-center alig-items-center"
+      >
         <b class="no-data-text mt-3">No New Notices</b>
       </p>
-      <p *ngIf="newNoticesCount !== 0" class="p-4 mt-4 flex justify-content-center alig-items-center">
+      <p
+        *ngIf="newNoticesCount !== 0"
+        class="p-4 mt-4 flex justify-content-center alig-items-center"
+      >
         {{ notices?.text }}
       </p>
     </div>
@@ -28,16 +33,21 @@
     <div class="flex justify-content-between">
       <p><b class="no-data-text">Messages</b></p>
       <div class="flex gap-2">
-       
         <i class="pi pi-bell text-2xl" pBadge [value]="newChatCount"></i>
       </div>
     </div>
     <div class="m-2 h-11rem custom-scroll">
-      <p *ngIf="newChatCount == 0" class="p-6 flex justify-content-center alig-items-center">
+      <p
+        *ngIf="newChatCount == 0"
+        class="p-6 flex justify-content-center alig-items-center"
+      >
         <b class="no-data-text mt-3">No New Messages</b>
       </p>
-      <p *ngIf="newChatCount !== 0" class="p-6 flex justify-content-center alig-items-center">
-        <b class="no-data-text mt-3">{{newChatCount}} New Messages</b>
+      <p
+        *ngIf="newChatCount !== 0"
+        class="p-6 flex justify-content-center alig-items-center"
+      >
+        <b class="no-data-text mt-3">{{ newChatCount }} New Messages</b>
       </p>
     </div>
   </div>
@@ -46,7 +56,6 @@
     <div class="flex justify-content-between">
       <p><b class="no-data-text">Complaints</b></p>
       <div class="flex gap-2">
-        
         <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
       </div>
     </div>
@@ -61,7 +70,6 @@
     <div class="flex justify-content-between">
       <p><b class="no-data-text"> Visitors</b></p>
       <div class="flex gap-2">
-       
         <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
       </div>
     </div>
@@ -75,6 +83,4 @@
   </div>
 </div>
 
-<div class="calander">
-  <app-calander></app-calander>
-</div>
+<app-calander></app-calander>

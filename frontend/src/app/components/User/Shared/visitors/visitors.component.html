@@ -1,262 +1,264 @@
-<p-tabView>
-  <p-tabPanel header="Pending">
-    <p-table [value]="pendingVisitors" *ngIf="pendingVisitors.length > 0">
-      <ng-template pTemplate="header">
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Number</th>
-          <th scope="col">Visit Start</th>
-          <th scope="col">Visit End</th>
-          <th scope="col">Time</th>
-          <th scope="col">Purpose</th>
-          <th scope="col">Image</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-visitor>
-        <tr>
-          <td>{{ visitor.name }}</td>
-          <td>{{ visitor.number }}</td>
-          <td>{{ visitor.startDate | date : "shortDate" }}</td>
-          <td>{{ visitor.endDate | date : "shortDate" }}</td>
-          <td>{{ visitor.visitTime }}</td>
-          <td>{{ visitor.purpose }}</td>
-          <td>
-              <p-image
-                [src]="getImageUrl(visitor.image)"
-                [alt]="'Visitor Image'"
-                width="50"
-                height="70"
-                preview="true"
-                styleClass="visitor-image"
-              ></p-image>
-          </td>
-          <td>
-            <p-button
-              icon="pi pi-check"
-              [rounded]="true"
-              [outlined]="true"
-              (onClick)="showConfirmation(visitor, 'Approved')"
-            />
-            <p-button
-              icon="pi pi-times"
-              [rounded]="true"
-              [outlined]="true"
-              severity="danger"
-              (onClick)="showConfirmation(visitor, 'Rejected')"
-            />
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <p *ngIf="pendingVisitors.length === 0">No pending visitors to display.</p>
-  </p-tabPanel>
-
-  <p-tabPanel header="Past">
-    <p-table [value]="pastVisitors" *ngIf="pastVisitors.length > 0">
-      <ng-template pTemplate="header">
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Number</th>
-          <th scope="col">Passcode</th>
-          <th scope="col">Visit Start</th>
-          <th scope="col">Visit End</th>
-          <th scope="col">Time</th>
-          <th scope="col">Status</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-visitor>
-        <tr>
-          <td>{{ visitor.name }}</td>
-          <td>{{ visitor.number }}</td>
-          <td>{{ visitor.passcode }}</td>
-          <td>{{ visitor.startDate | date : "shortDate" }}</td>
-          <td>{{ visitor.endDate | date : "shortDate" }}</td>
-          <td>{{ visitor.visitTime }}</td>
-          <td>
-            {{ visitor.type === "Invited" ? visitor.type : visitor.status }}
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <p *ngIf="pastVisitors.length === 0">No past visitors to display.</p>
-  </p-tabPanel>
-
-  <p-tabPanel header="Expected">
-    <div class="header-container">
-      <p-button
-        label="Add Visitor"
-        icon="pi pi-plus"
-        (onClick)="showDialog()"
-        class="add-visitor-btn"
-      ></p-button>
-    </div>
-
-    <p-dialog
-      header="Visitor Details"
-      [(visible)]="display"
-      modal="modal"
-      [responsive]="true"
-      styleClass="visitor-dialog"
-      (onHide)="closeDialog()"
-    >
-      <div class="visitor-form-container">
-        <form [formGroup]="visitorForm" (ngSubmit)="onSubmit()">
-          <div class="p-field p-grid">
-            <label for="name" class="p-col-fixed" style="width: 150px"
-              >Name</label
-            >
-            <div class="p-col">
-              <input id="name" formControlName="name" type="text" pInputText />
-              <small
-                *ngIf="visitorForm.get('name')?.errors?.['required'] && visitorForm.get('name')?.touched"
-                class="p-error"
-              >
-                Name is required
-              </small>
-            </div>
-          </div>
-
-          <div class="p-field p-grid">
-            <label for="number" class="p-col-fixed" style="width: 150px"
-              >Number</label
-            >
-            <div class="p-col">
-              <input
-                id="number"
-                type="tel"
-                pattern="[0-9]{10}"
-                maxlength="10"
-                pInputText
-                formControlName="number"
-                inputmode="numeric"
-                (keypress)="validateNumericInput($event)"
+<div class="display-card">
+  <p-tabView>
+    <p-tabPanel header="Pending">
+      <p-table [value]="pendingVisitors" *ngIf="pendingVisitors.length > 0">
+        <ng-template pTemplate="header">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Number</th>
+            <th scope="col">Visit Start</th>
+            <th scope="col">Visit End</th>
+            <th scope="col">Time</th>
+            <th scope="col">Purpose</th>
+            <th scope="col">Image</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-visitor>
+          <tr>
+            <td>{{ visitor.name }}</td>
+            <td>{{ visitor.number }}</td>
+            <td>{{ visitor.startDate | date : "shortDate" }}</td>
+            <td>{{ visitor.endDate | date : "shortDate" }}</td>
+            <td>{{ visitor.visitTime }}</td>
+            <td>{{ visitor.purpose }}</td>
+            <td>
+                <p-image
+                  [src]="getImageUrl(visitor.image)"
+                  [alt]="'Visitor Image'"
+                  width="50"
+                  height="70"
+                  preview="true"
+                  styleClass="visitor-image"
+                ></p-image>
+            </td>
+            <td>
+              <p-button
+                icon="pi pi-check"
+                [rounded]="true"
+                [outlined]="true"
+                (onClick)="showConfirmation(visitor, 'Approved')"
               />
-              <small
-                *ngIf="visitorForm.get('number')?.errors?.['required'] && visitorForm.get('number')?.touched"
-                class="p-error"
-              >
-                Phone number is required.
-              </small>
-              <small
-                *ngIf="visitorForm.get('number')?.hasError('pattern') && !visitorForm.get('number')?.errors?.['required'] && visitorForm.get('number')?.touched"
-                class="p-error"
-              >
-                Please enter a valid phone number.
-              </small>
-            </div>
-          </div>
-          
-          <div class="p-field p-grid">
-            <label for="vehicleNumber" class="p-col-fixed" style="width: 150px">Vehicle Number</label>
-            <div class="p-col">
-              <p-inputMask
-                id="vehicleNumber"
-                formControlName="vehicleNumber"
-                mask="a*-99-a*-9999"
-                type="text"
-                placeholder="GJ-18-AA-0000"
-              ></p-inputMask>
-            </div>
-          </div>
-
-          <div class="p-field p-grid">
-            <label for="startDate" class="p-col-fixed" style="width: 150px"
-              >Start Date</label
-            >
-            <div class="p-col">
-              <p-calendar
-                id="startDate"
-                formControlName="startDate"
-                [iconDisplay]="'input'"
-                [showIcon]="true"
-                [minDate]="today"
-                appendTo="body"
-           
+              <p-button
+                icon="pi pi-times"
+                [rounded]="true"
+                [outlined]="true"
+                severity="danger"
+                (onClick)="showConfirmation(visitor, 'Rejected')"
               />
-            </div>
-          </div>
-
-          <div class="p-field p-grid">
-            <label for="endDate" class="p-col-fixed" style="width: 150px"
-              >End Date</label
-            >
-            <div class="p-col">
-              <p-calendar
-                id="startDate"
-                formControlName="endDate"
-                [iconDisplay]="'input'"
-                [showIcon]="true"
-                [minDate]="today"
-                appendTo="body"
-
-              />
-            </div>
-          </div>
-
-          <div class="p-field p-grid">
-            <label for="visitTime" class="p-col-fixed" style="width: 150px"
-              >Visit Time</label
-            >
-            <div class="p-col">
-              <p-calendar
-                id="visitTime"
-                formControlName="visitTime"
-                [iconDisplay]="'input'"
-                [showIcon]="true"
-                [timeOnly]="true"
-                hourFormat="12"
-              />
-            </div>
-          </div>
-
-          <div class="button-container">
-            <p-button label="Cancel" (onClick)="closeDialog()" />
-            <p-button
-              label="Submit"
-              type="submit"
-              icon="pi pi-check"
-              [disabled]="visitorForm.invalid"
-            />
-          </div>
-        </form>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p *ngIf="pendingVisitors.length === 0">No pending visitors to display.</p>
+    </p-tabPanel>
+  
+    <p-tabPanel header="Past">
+      <p-table [value]="pastVisitors" *ngIf="pastVisitors.length > 0">
+        <ng-template pTemplate="header">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Number</th>
+            <th scope="col">Passcode</th>
+            <th scope="col">Visit Start</th>
+            <th scope="col">Visit End</th>
+            <th scope="col">Time</th>
+            <th scope="col">Status</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-visitor>
+          <tr>
+            <td>{{ visitor.name }}</td>
+            <td>{{ visitor.number }}</td>
+            <td>{{ visitor.passcode }}</td>
+            <td>{{ visitor.startDate | date : "shortDate" }}</td>
+            <td>{{ visitor.endDate | date : "shortDate" }}</td>
+            <td>{{ visitor.visitTime }}</td>
+            <td>
+              {{ visitor.type === "Invited" ? visitor.type : visitor.status }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p *ngIf="pastVisitors.length === 0">No past visitors to display.</p>
+    </p-tabPanel>
+  
+    <p-tabPanel header="Expected">
+      <div class="header-container">
+        <p-button
+          label="Add Visitor"
+          icon="pi pi-plus"
+          (onClick)="showDialog()"
+          class="add-visitor-btn"
+        ></p-button>
       </div>
-    </p-dialog>
-    <p-table [value]="expectedVisitors" *ngIf="expectedVisitors.length > 0">
-      <ng-template pTemplate="header">
-        <tr>
-          <th scope="col">Name</th>
-          <th scope="col">Number</th>
-          <th scope="col">Passcode</th>
-          <th scope="col">Visit Start</th>
-          <th scope="col">Visit End</th>
-          <th scope="col">Time</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-visitor>
-        <tr>
-          <td>{{ visitor.name }}</td>
-          <td>{{ visitor.number }}</td>
-          <td>{{ visitor.passcode }}</td>
-          <td>{{ visitor.startDate | date : "shortDate" }}</td>
-          <td>{{ visitor.endDate | date : "shortDate" }}</td>
-          <td>{{ visitor.visitTime }}</td>
-          <td>
-            <p-button
-              icon="pi pi-share-alt"
-              class="p-button-rounded p-button-info"
-              (onClick)="openShareDialog(visitor)"
-            ></p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <p *ngIf="expectedVisitors.length === 0">
-      No expected visitors to display.
-    </p>
-  </p-tabPanel>
-</p-tabView>
+  
+      <p-dialog
+        header="Visitor Details"
+        [(visible)]="display"
+        modal="modal"
+        [responsive]="true"
+        styleClass="visitor-dialog"
+        (onHide)="closeDialog()"
+      >
+        <div class="visitor-form-container">
+          <form [formGroup]="visitorForm" (ngSubmit)="onSubmit()">
+            <div class="p-field p-grid">
+              <label for="name" class="p-col-fixed" style="width: 150px"
+                >Name</label
+              >
+              <div class="p-col">
+                <input id="name" formControlName="name" type="text" pInputText />
+                <small
+                  *ngIf="visitorForm.get('name')?.errors?.['required'] && visitorForm.get('name')?.touched"
+                  class="p-error"
+                >
+                  Name is required
+                </small>
+              </div>
+            </div>
+  
+            <div class="p-field p-grid">
+              <label for="number" class="p-col-fixed" style="width: 150px"
+                >Number</label
+              >
+              <div class="p-col">
+                <input
+                  id="number"
+                  type="tel"
+                  pattern="[0-9]{10}"
+                  maxlength="10"
+                  pInputText
+                  formControlName="number"
+                  inputmode="numeric"
+                  (keypress)="validateNumericInput($event)"
+                />
+                <small
+                  *ngIf="visitorForm.get('number')?.errors?.['required'] && visitorForm.get('number')?.touched"
+                  class="p-error"
+                >
+                  Phone number is required.
+                </small>
+                <small
+                  *ngIf="visitorForm.get('number')?.hasError('pattern') && !visitorForm.get('number')?.errors?.['required'] && visitorForm.get('number')?.touched"
+                  class="p-error"
+                >
+                  Please enter a valid phone number.
+                </small>
+              </div>
+            </div>
+            
+            <div class="p-field p-grid">
+              <label for="vehicleNumber" class="p-col-fixed" style="width: 150px">Vehicle Number</label>
+              <div class="p-col">
+                <p-inputMask
+                  id="vehicleNumber"
+                  formControlName="vehicleNumber"
+                  mask="a*-99-a*-9999"
+                  type="text"
+                  placeholder="GJ-18-AA-0000"
+                ></p-inputMask>
+              </div>
+            </div>
+  
+            <div class="p-field p-grid">
+              <label for="startDate" class="p-col-fixed" style="width: 150px"
+                >Start Date</label
+              >
+              <div class="p-col">
+                <p-calendar
+                  id="startDate"
+                  formControlName="startDate"
+                  [iconDisplay]="'input'"
+                  [showIcon]="true"
+                  [minDate]="today"
+                  appendTo="body"
+             
+                />
+              </div>
+            </div>
+  
+            <div class="p-field p-grid">
+              <label for="endDate" class="p-col-fixed" style="width: 150px"
+                >End Date</label
+              >
+              <div class="p-col">
+                <p-calendar
+                  id="startDate"
+                  formControlName="endDate"
+                  [iconDisplay]="'input'"
+                  [showIcon]="true"
+                  [minDate]="today"
+                  appendTo="body"
+  
+                />
+              </div>
+            </div>
+  
+            <div class="p-field p-grid">
+              <label for="visitTime" class="p-col-fixed" style="width: 150px"
+                >Visit Time</label
+              >
+              <div class="p-col">
+                <p-calendar
+                  id="visitTime"
+                  formControlName="visitTime"
+                  [iconDisplay]="'input'"
+                  [showIcon]="true"
+                  [timeOnly]="true"
+                  hourFormat="12"
+                />
+              </div>
+            </div>
+  
+            <div class="button-container">
+              <p-button label="Cancel" (onClick)="closeDialog()" />
+              <p-button
+                label="Submit"
+                type="submit"
+                icon="pi pi-check"
+                [disabled]="visitorForm.invalid"
+              />
+            </div>
+          </form>
+        </div>
+      </p-dialog>
+      <p-table [value]="expectedVisitors" *ngIf="expectedVisitors.length > 0">
+        <ng-template pTemplate="header">
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Number</th>
+            <th scope="col">Passcode</th>
+            <th scope="col">Visit Start</th>
+            <th scope="col">Visit End</th>
+            <th scope="col">Time</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-visitor>
+          <tr>
+            <td>{{ visitor.name }}</td>
+            <td>{{ visitor.number }}</td>
+            <td>{{ visitor.passcode }}</td>
+            <td>{{ visitor.startDate | date : "shortDate" }}</td>
+            <td>{{ visitor.endDate | date : "shortDate" }}</td>
+            <td>{{ visitor.visitTime }}</td>
+            <td>
+              <p-button
+                icon="pi pi-share-alt"
+                class="p-button-rounded p-button-info"
+                (onClick)="openShareDialog(visitor)"
+              ></p-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p *ngIf="expectedVisitors.length === 0">
+        No expected visitors to display.
+      </p>
+    </p-tabPanel>
+  </p-tabView>
+</div>
 
 <p-dialog
   header="Share Visitor Pass"

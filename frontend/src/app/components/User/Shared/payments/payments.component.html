@@ -1,105 +1,103 @@
-<app-maintenance-report />
-<div class="mx-8 mt-8">
-  <!-- Header and View Toggle -->
-  <div class="flex justify-content-between mb-4">
-    <h6>
-      {{ isPaymentHistory ? "Payment History" : "Pending Payments" }}
-    </h6>
+<div class="display-card">
+  <app-maintenance-report />
+  <div class="mx-6 mt-6">
+    <!-- Header and View Toggle -->
+    <div class="flex justify-content-between mb-4">
+      <h6>
+        {{ isPaymentHistory ? "Payment History" : "Pending Payments" }}
+      </h6>
 
-    <div class="flex align-items-center gap-2 cursor-pointer">
-      <button
-        pButton
-        class="p-button-outlined mr-2"
-        (click)="toggleView()"
+      <div class="flex align-items-center gap-2 cursor-pointer">
+        <button pButton class="p-button-outlined mr-2" (click)="toggleView()">
+          {{
+            isPaymentHistory ? "View Pending Payments" : "View Payment History"
+          }}
+        </button>
+      </div>
+    </div>
+
+    <!-- User Pending Payments Table -->
+    <div *ngIf="!isPaymentHistory">
+      <p-table
+        [value]="paymentsData"
+        class="p-datatable-sm"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        *ngIf="paymentsData.length !== 0"
       >
-        {{
-          isPaymentHistory ? "View Pending Payments" : "View Payment History"
-        }}
-      </button>
+        <ng-template pTemplate="header">
+          <tr class="table-header">
+            <th scope="col">Payment Type</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Due Date</th>
+            <th scope="col">Action</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-payment>
+          <tr class="table-header">
+            <td>{{ payment.purpose }}</td>
+            <td>{{ payment.amount | currency : "INR" }}</td>
+            <td>{{ payment.dueDate | date : "EEEE, MMM d" }}</td>
+            <td>
+              <button
+                pButton
+                type="button"
+                label="Pay Now"
+                (click)="onPayNow(payment.id)"
+                class="p-button-outlined"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="paymentsData.length === 0" class="mb-5 text-center">
+        <p>You are all clear! No new payments to make.</p>
+      </div>
     </div>
-  </div>
 
-  <!-- User Pending Payments Table -->
-  <div *ngIf="!isPaymentHistory">
-    <p-table
-      [value]="paymentsData"
-      class="p-datatable-sm"
-      [paginator]="true"
-      [rows]="10"
-      [responsive]="true"
-      *ngIf="paymentsData.length !== 0"
-    >
-      <ng-template pTemplate="header">
-        <tr class="table-header">
-          <th scope="col">Payment Type</th>
-          <th scope="col">Amount</th>
-          <th scope="col">Due Date</th>
-          <th scope="col">Action</th>
-        </tr>
-      </ng-template>
+    <!-- User Payment History Table -->
+    <div *ngIf="isPaymentHistory">
+      <p-table
+        [value]="paymentHistoryData"
+        class="p-datatable-sm"
+        [paginator]="true"
+        [rows]="10"
+        [responsive]="true"
+        *ngIf="paymentHistoryData.length !== 0"
+      >
+        <ng-template pTemplate="header">
+          <tr class="table-header">
+            <th scope="col">Payment Type</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Payment Date</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </ng-template>
 
-      <ng-template pTemplate="body" let-payment>
-        <tr class="table-header">
-          <td>{{ payment.purpose }}</td>
-          <td>{{ payment.amount | currency : "INR" }}</td>
-          <td>{{ payment.dueDate | date : "EEEE, MMM d" }}</td>
-          <td>
-            <button
-              pButton
-              type="button"
-              label="Pay Now"
-              (click)="onPayNow(payment.id)"
-              class="p-button-outlined"
-            ></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <div *ngIf="paymentsData.length === 0" class="mb-5 text-center">
-      <p>You are all clear! No new payments to make.</p>
-    </div>
-  </div>
-
-  <!-- User Payment History Table -->
-  <div *ngIf="isPaymentHistory">
-    <p-table
-      [value]="paymentHistoryData"
-      class="p-datatable-sm"
-      [paginator]="true"
-      [rows]="10"
-      [responsive]="true"
-      *ngIf="paymentHistoryData.length !== 0"
-    >
-      <ng-template pTemplate="header">
-        <tr class="table-header">
-          <th scope="col">Payment Type</th>
-          <th scope="col">Amount</th>
-          <th scope="col">Payment Date</th>
-          <th scope="col">Status</th>
-          <th scope="col">Action</th>
-        </tr>
-      </ng-template>
-
-      <ng-template pTemplate="body" let-payment>
-        <tr class="table-header">
-          <td>{{ payment.purpose }}</td>
-          <td>{{ payment.amount | currency : "INR" }}</td>
-          <td>{{ payment.paymentDate | date : "EEEE, MMM d" }}</td>
-          <td>{{ payment.status === "success" ? "Paid" : "Failed" }}</td>
-          <td>
-            <button
-              *ngIf="payment.status === 'success'"
-              pButton
-              label="Download Receipt"
-              (click)="downloadReceipt(payment)"
-              class="p-button-outlined"
-            ></button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-    <div *ngIf="paymentHistoryData.length === 0" class="mb-5 text-center">
-      <p>You have not made any payments yet.</p>
+        <ng-template pTemplate="body" let-payment>
+          <tr class="table-header">
+            <td>{{ payment.purpose }}</td>
+            <td>{{ payment.amount | currency : "INR" }}</td>
+            <td>{{ payment.paymentDate | date : "EEEE, MMM d" }}</td>
+            <td>{{ payment.status === "success" ? "Paid" : "Failed" }}</td>
+            <td>
+              <button
+                *ngIf="payment.status === 'success'"
+                pButton
+                label="Download Receipt"
+                (click)="downloadReceipt(payment)"
+                class="p-button-outlined"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <div *ngIf="paymentHistoryData.length === 0" class="mb-5 text-center">
+        <p>You have not made any payments yet.</p>
+      </div>
     </div>
   </div>
 </div>

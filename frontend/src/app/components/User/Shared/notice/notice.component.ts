@@ -41,7 +41,7 @@ interface ItemsToAppend {
 export class NoticeComponent implements OnInit {
   noticeForm: boolean = false;
   viewNoticeForm: boolean = false;
-  username!:string;
+  username!: string;
   specificNoticeDetail: any = [];
   noticeDescription: string = '';
   selectedFiles: File[] = [];
@@ -49,14 +49,14 @@ export class NoticeComponent implements OnInit {
   userId: string = '';
   formData!: FormData;
   notices!: any;
-  isAdmin:boolean = false;
+  isAdmin: boolean = false;
   @Output() noticeCountUpdated = new EventEmitter<number>();
 
   constructor(
     private readonly noticeService: NoticeService,
     private readonly userService: UserService,
     private readonly messageService: MessageService,
-    private readonly notificationCuntService:NotificationCountService
+    private readonly notificationCuntService: NotificationCountService
   ) {
     this.formData = new FormData();
   }
@@ -65,18 +65,21 @@ export class NoticeComponent implements OnInit {
     this.userService.userData$.subscribe({
       next: (userData) => {
         this.userId = userData.id;
-        this.username = userData.firstname
-        
+        this.username = userData.firstname;
+
         this.userService.userSocietyId$.subscribe({
           next: (societyId) => {
             this.societyId = societyId;
             this.userService.userRoles$.subscribe({
-              next:(roleArray)=>{
-                if(roleArray.includes('societyAdmin') || roleArray.includes('wingAdmin')){
-                  this.isAdmin = true
+              next: (roleArray) => {
+                if (
+                  roleArray.includes('societyAdmin') ||
+                  roleArray.includes('wingAdmin')
+                ) {
+                  this.isAdmin = true;
                 }
-              }
-            })
+              },
+            });
           },
         });
       },
@@ -85,18 +88,20 @@ export class NoticeComponent implements OnInit {
     this.noticeService.getNotices(this.societyId).subscribe({
       next: (notices) => {
         const sortedNoticeList = notices.noticeList.sort((a: any, b: any) => {
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
         });
         this.notices = sortedNoticeList;
         console.log(this.notices);
-        this.notificationCuntService.resetCount(this.societyId,this.userId,'notice').subscribe()
+        this.notificationCuntService
+          .resetCount(this.societyId, this.userId, 'notice')
+          .subscribe();
       },
       error: (err) => {
         console.log(err);
       },
     });
-
-   
   }
 
   showNoticeForm() {
@@ -112,7 +117,6 @@ export class NoticeComponent implements OnInit {
 
   createNotice(fileInput: HTMLInputElement) {
     this.formData = new FormData();
-
 
     const itemsToAppend: ItemsToAppend = {
       description: this.noticeDescription,
@@ -130,7 +134,7 @@ export class NoticeComponent implements OnInit {
         this.formData.append('files', element);
       }
     }
-    
+
     this.noticeService.createNotice(this.formData).subscribe({
       next: (data: any) => {
         this.messageService.add({
@@ -138,7 +142,7 @@ export class NoticeComponent implements OnInit {
           detail: data.message,
         });
         console.log(data.data.newNotice);
-      
+
         this.notices.unshift(data.data.newNotice);
         // Clear FormData by reinitializing it
         this.formData = new FormData();

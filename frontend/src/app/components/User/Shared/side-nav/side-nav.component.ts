@@ -151,6 +151,6 @@ export class SideNavComponent implements OnInit {
     this.router.navigate([route]).then(() => {
       console.log('Current route:', this.router.url);
     });
-    this.snackBar.open(`Navigated to ${route}`, 'Close', { duration: 1000 });
+    // this.snackBar.open(`Navigated to ${route}`, 'Close', { duration: 1000 });
   }
 }
