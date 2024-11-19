@@ -72,7 +72,7 @@ button:hover i {
 
 /* Header Section */
 .house-header {
-  background-color: #28a745;
+  background-color: rgba(15, 76, 228, 0.75);
   color: #fff;
   font-size: 1rem;
   font-weight: bold;

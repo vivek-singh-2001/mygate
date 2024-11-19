@@ -24,7 +24,7 @@
 }
 
 .page-container {
-  padding: 1rem; /* Increased padding around the container */
+  padding: 1rem;
   background-color: #f4f4f4;
   min-height: 100vh;
 }
@@ -65,7 +65,7 @@
   padding: 0.5rem;
   border-radius: 6px;
   text-align: center;
-  color: #007bff;
+  color: rgba(15, 76, 228, 0.75);
   font-weight: 600;
   margin-bottom: 1rem;
 }
@@ -90,7 +90,7 @@
 }
 
 .details-button {
-  background-color: #007bff;
+  background-color: rgba(15, 76, 228, 0.75);
   color: white;
   border: none;
   border-radius: 4px;

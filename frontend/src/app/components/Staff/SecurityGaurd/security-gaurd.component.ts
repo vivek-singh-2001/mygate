@@ -42,6 +42,7 @@ export class SecurityGaurdComponent implements OnInit {
   roles: Role[] = [];
   societyId: string = '';
   userId: string = '';
+  today: Date = new Date();
 
   constructor(
     private readonly fb: FormBuilder,

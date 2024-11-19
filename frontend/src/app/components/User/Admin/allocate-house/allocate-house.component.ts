@@ -16,7 +16,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from '../../../../../environments/environment';
 import { Wing } from '../../../../interfaces/wing.interface';
 import { WingService } from '../../../../services/wings/wing.service';
 

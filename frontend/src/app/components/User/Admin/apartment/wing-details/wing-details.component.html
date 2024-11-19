@@ -4,7 +4,6 @@
     <p-button (onClick)="goBack()">
       <i class="pi pi-arrow-left"></i>
     </p-button>
-    <p>{{ wingName || "N/A" }}</p>
   </div>
 
   <!-- Loading State -->
@@ -26,7 +25,7 @@
       <div *ngFor="let house of houses" class="house-card">
         <!-- House Header -->
         <div class="house-header">
-          <h4>{{ house.house_no || "N/A" }}</h4>
+          <h4>{{wingName}} - {{ house.house_no || "N/A" }}</h4>
         </div>
 
         <!-- Details Section -->
@@ -50,7 +49,7 @@
             pButton
             class="p-button-text"
           >
-            <i class="pi pi-eye"></i>
+          <i class="pi pi-eye"></i>
           </button>
         </div>
       </div>
@@ -64,7 +63,9 @@
     [modal]="false"
     styleClass="w-30rem"
   >
-    <h4>Family Members</h4>
+    <h5 *ngIf="selectedHouse">
+      House Members ({{ wingName }} - {{ selectedHouse.house_no }})
+    </h5>
 
     <!-- Loading Indicator -->
     <div *ngIf="isSidebarLoading" class="loading-indicator">
