@@ -17,6 +17,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { MaintenanceReportComponent } from '../../Admin/maintenance-report/maintenance-report.component';
 import { CalendarModule } from 'primeng/calendar';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { jsPDF } from 'jspdf';
 
 interface RazorpayResponse {
   razorpay_payment_id: string;
@@ -64,16 +65,7 @@ interface RazorpayOptions {
 export class PaymentsComponent implements OnInit {
   paymentsData: PaymentRecord[] = [];
   paymentHistoryData: PaymentRecord[] = [];
-  societyPaymentData: PaymentRecord[] = [];
-  filters = {
-    status: 'success',
-    purpose: '',
-    type: '',
-    fromDate: '',
-    toDate: '',
-  };
   isPaymentHistory: boolean = false;
-  isSocietyPayments: boolean = false;
 
   constructor(
     private readonly paymentService: PaymentService,
@@ -82,18 +74,6 @@ export class PaymentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchUserPayments();
-  }
-
-  setDefaultDateRange() {
-    const currentDate = new Date();
-    const firstDayOfMonth = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      1
-    );
-
-    this.filters.fromDate = firstDayOfMonth.toLocaleDateString('en-CA');
-    this.filters.toDate = currentDate.toLocaleDateString('en-CA');
   }
 
   fetchUserPayments() {
@@ -115,33 +95,120 @@ export class PaymentsComponent implements OnInit {
     });
   }
 
-  fetchSocietyPayments() {
-    this.userService.userSocietyId$.subscribe((societyId) => {
-      this.paymentService.getAllPayments(societyId, this.filters).subscribe({
-        next: (response) => {
-          console.log(response.data);
-          this.societyPaymentData = response.data;
-        },
-        error: (error) => console.log(error),
-      });
-    });
-  }
-
-  applyFilters() {
-    this.fetchSocietyPayments();
-  }
-
   toggleView() {
     this.isPaymentHistory = !this.isPaymentHistory;
   }
 
-  toggleSocietyPayments() {
-    if (this.societyPaymentData.length === 0) {
-      this.setDefaultDateRange();
-      this.fetchSocietyPayments();
-    }
-    this.isSocietyPayments = !this.isSocietyPayments;
-  }
+  downloadReceipt(payment: PaymentRecord) {
+    const doc = new jsPDF();
+    
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+
+    // Title of the receipt
+    const title = 'Payment Receipt';
+    const titleWidth = doc.getTextWidth(title);
+    const titleX = (pageWidth - titleWidth) / 2;
+    
+    // Set font and title (Poppins for a more relaxed modern look)
+    doc.setFont('Poppins', 'bold');
+    doc.setFontSize(20);
+    doc.text(title, titleX, 30);
+
+    // Set font for company info with a more relaxed and approachable style
+    doc.setFont('Poppins', 'normal');
+    doc.setFontSize(12);
+    const companyInfo = [
+      'MyGate - Payment Gateway',
+      'Address: 123 MyGate Lane, City, Country',
+      'Phone: +1 (123) 456-7890',
+      'Email: support@mygate.com'
+    ];
+    
+    let companyInfoY = 45;
+    companyInfo.forEach((line, index) => {
+      const lineWidth = doc.getTextWidth(line);
+      const lineX = (pageWidth - lineWidth) / 2;
+      doc.text(line, lineX, companyInfoY);
+      companyInfoY += 8;
+    });
+    
+    // Add a soft horizontal line for separation after company info
+    doc.setLineWidth(0.5);
+    doc.setDrawColor(200, 200, 200); // Light grey color for the line
+    doc.line(10, companyInfoY + 10, pageWidth - 10, companyInfoY + 10);
+  
+    // Payment Details Heading (bold, modern font size)
+    const startY = companyInfoY + 20;
+    doc.setFont('Poppins', 'bold');
+    doc.setFontSize(14);
+    doc.text('Payment Details', 20, startY);
+  
+    // Box around payment details (soft border with subtle light gray background)
+    doc.setFillColor(245, 245, 245); // Light gray background
+    doc.rect(20, startY + 8, pageWidth - 40, 85, 'F');  // Rectangular box
+    doc.setDrawColor(220, 220, 220); // Soft light border color
+    doc.setLineWidth(0.5);
+    doc.rect(20, startY + 8, pageWidth - 40, 85);  // Border of the box
+  
+    // Payment Detail Labels (bold and left-aligned)
+    doc.setFont('Poppins', 'bold');
+    const labels = [
+      'Order ID:',
+      'Payment Date:',
+      'Amount Paid:',
+      'Purpose:',
+      'Payment Status:',
+      'Transaction ID:',
+      'Paid via:'
+    ];
+  
+    labels.forEach((label, index) => {
+      const labelY = startY + 20 + index * 10;
+      doc.text(label, 25, labelY);
+    });
+  
+    // Set font back to normal for values and align to the right
+    doc.setFont('Poppins', 'normal');
+    const values = [
+      `${payment.razorpayPaymentId}`,
+      `${new Date(payment.paymentDate).toLocaleDateString()}`,
+      `Rs. ${payment.amount.toLocaleString('en-IN')}`,
+      `${payment.purpose}`,
+      `${payment.status === 'success' ? 'Success' : 'Failure'}`,
+      `${payment.razorpayPaymentId}`,
+      'Razorpay Gateway'
+    ];
+  
+    values.forEach((value, index) => {
+      const valueY = startY + 20 + index * 10;
+      doc.text(value, pageWidth - 25 - doc.getTextWidth(value), valueY);  // Right-aligned
+    });
+  
+    // Add space before the footer
+    const footerY = startY + 130;
+    
+    // Footer Text in Italic, smaller font size
+    doc.setFont('Poppins', 'italic');
+    doc.setFontSize(8);
+    doc.text('This is an autogenerated receipt. For questions, contact support@mygate.com', 105, footerY, { align: 'center' });
+  
+    // Save the document
+    doc.save(`Payment_Receipt_${payment.razorpayPaymentId}.pdf`);
+}
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
   async onPayNow(paymentId: string) {
     try {

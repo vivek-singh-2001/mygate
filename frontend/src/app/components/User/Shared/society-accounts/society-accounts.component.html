@@ -1,0 +1,135 @@
+<div class="summary-container p-fluid grid mb-4">
+  <div class="summary-item col-12 md:col-3">
+    <p class="summary-title">Total Income</p>
+    <p class="summary-value income">
+      {{ paymentSummary.totalIncome | currency : "INR" }}
+    </p>
+  </div>
+  <div class="summary-item col-12 md:col-3">
+    <p class="summary-title">Total Expense</p>
+    <p class="summary-value expense">
+      {{ paymentSummary.totalExpense | currency : "INR" }}
+    </p>
+  </div>
+  <div class="summary-item col-12 md:col-3">
+    <p class="summary-title">Pending Income</p>
+    <p class="summary-value pending-income">
+      {{ paymentSummary.pendingIncome | currency : "INR" }}
+    </p>
+  </div>
+  <div class="summary-item col-12 md:col-3">
+    <p class="summary-title">Current Balance</p>
+    <p
+      class="summary-value"
+      [ngClass]="{
+        positive: paymentSummary.currentBalance > 0,
+        negative: paymentSummary.currentBalance < 0
+      }"
+    >
+      {{ paymentSummary.currentBalance | currency : "INR" }}
+    </p>
+  </div>
+</div>
+
+<div class="p-fluid grid mb-4">
+  <div class="col-12 md:col-2">
+    <p-dropdown
+      [(ngModel)]="filters.type"
+      [options]="[
+        { label: 'All', value: 'all' },
+        { label: 'Credit', value: 'credit' },
+        { label: 'Debit', value: 'debit' }
+      ]"
+      placeholder="Select Type"
+      (ngModelChange)="onFilterChange()"
+    ></p-dropdown>
+  </div>
+  <div class="col-12 md:col-2">
+    <p-dropdown
+      [(ngModel)]="filters.status"
+      [options]="[
+        { label: 'Success', value: 'success' },
+        { label: 'Pending', value: 'pending' }
+      ]"
+      placeholder="Select Status"
+      (ngModelChange)="onFilterChange()"
+    ></p-dropdown>
+  </div>
+  <div class="col-12 md:col-2">
+    <p-dropdown
+      [(ngModel)]="filters.purpose"
+      [options]="[
+        { label: 'All', value: 'All' },
+        { label: 'Maintenance', value: 'Maintenance' },
+        { label: 'Other', value: 'Other' }
+      ]"
+      placeholder="Select Purpose"
+      (ngModelChange)="onFilterChange()"
+    ></p-dropdown>
+  </div>
+  <div class="col-12 md:col-2">
+    <p-calendar
+      [(ngModel)]="filters.fromDate"
+      placeholder="From Date"
+      dateFormat="yy-mm-dd"
+      (ngModelChange)="onDateChange()"
+    ></p-calendar>
+  </div>
+  <div class="col-12 md:col-2">
+    <p-calendar
+      [(ngModel)]="filters.toDate"
+      placeholder="To Date"
+      dateFormat="yy-mm-dd"
+      (ngModelChange)="onDateChange()"
+    ></p-calendar>
+  </div>
+  <div class="col-12 md:col-2">
+    <button
+      class="p-button p-mt-3 p-mb-3"
+      (click)="downloadPDF()"
+      style="width: 100%; font-size: 14px"
+    >
+      <i class="pi pi-download" style="margin-right: 8px"></i> Download Report
+    </button>
+  </div>
+</div>
+
+<p-table
+  [value]="societyPaymentData"
+  class="p-datatable-sm"
+  [paginator]="true"
+  [rows]="10"
+  [responsive]="true"
+  *ngIf="societyPaymentData.length !== 0"
+>
+  <ng-template pTemplate="header">
+    <tr class="table-header">
+      <th scope="col">Date</th>
+      <th scope="col">Payment entity</th>
+      <th scope="col">Amount</th>
+      <th scope="col">Purpose</th>
+      <th scope="col">Type</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-payment>
+    <tr class="table-header">
+      <td>{{ payment.date | date : "EEEE, MMM d" }}</td>
+      <td>{{ payment.paymentEntity }}</td>
+      <td>{{ payment.amount | currency : "INR" }}</td>
+      <td>{{ payment.purpose }}</td>
+      <td
+        [ngClass]="{
+          'green-text': payment.type === 'Credit',
+          'red-text': payment.type === 'Debit'
+        }"
+      >
+        {{ payment.type }}
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<div *ngIf="societyPaymentData.length === 0" class="mb-5 text-center">
+  <p>No society-wide payments found.</p>
+</div>

@@ -78,6 +78,13 @@ exports.getAllPayments = asyncErrorHandler(async (req, res, next) => {
   return res.status(200).json({ success: true, data: payments });
 });
 
+exports.getPaymentSummary = asyncErrorHandler(async (req, res, next) => {
+  const { id: societyId } = req.params;
+  const { fromDate, toDate } = req.query;
+  const payments = await paymentService.getPaymentSummary(societyId, { fromDate, toDate });
+  return res.status(200).json({ success: true, data: payments });
+});
+
 exports.addExpense = asyncErrorHandler ( async(req,res,next)=>{
   const {amount,date,category,description,societyId} = req.body
   const imagePath = req.file.filename

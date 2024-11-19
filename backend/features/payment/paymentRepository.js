@@ -128,7 +128,49 @@ exports.getExpenses = async (societyId, expenseFilters) => {
   }
 };
 
-exports.addExpense = async(amount,date,category,description,societyId,imagePath)=>{
+exports.getTotalIncome = async (societyId) => {
+  try {
+    return await Payment.sum("amount", {
+      where: { status: "success" },
+      include: [
+        {
+          model: House,
+          required: true,
+          attributes: [], // Exclude all columns from House
+          include: [
+            {
+              model: Floor,
+              attributes: [], // Exclude all columns from Floor
+              include: [
+                {
+                  model: Wing,
+                  attributes: [], // Exclude all columns from Wing
+                  where: { societyId },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+  } catch (error) {
+    console.error("Error fetching total income:", error);
+    throw new Error("Error fetching total income: " + error.message);
+  }
+};
+
+exports.getTotalExpenses = async (societyId) => {
+  try {
+    return await SocietyExpense.sum("amount", {
+      where: { societyId, status: "approved" },
+    });
+  } catch (error) {
+    console.error("Error fetching total expenses:", error);
+    throw new Error("Error fetching total expenses: " + error.message);
+  }
+};
+
+exports.addExpense = async(amount,date,category,description,societyId)=>{
   try {
     return await SocietyExpense.create({
       societyId:societyId,

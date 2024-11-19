@@ -47,7 +47,12 @@ export class PaymentService {
   getAllPayments(societyId: string, filters?: { status?: string; fromDate?: string; toDate?: string; type?: string; purpose?: string }): Observable<any> {
     const params: any = { ...filters };
     return this.http.get(`${this.apiUrl}/all/${societyId}`, { params });
-  } 
+  }
+
+  getPaymentSummary(societyId: string, filters?: { fromDate?: string; toDate?: string; }): Observable<any> {
+    const params: any = { ...filters };
+    return this.http.get(`${this.apiUrl}/summary/${societyId}`, { params });
+  }
 
   addExpense(expenseData:any){
     return this.http.post(`${this.apiUrl}/addExpense`,expenseData)

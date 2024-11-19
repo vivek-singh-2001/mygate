@@ -6,6 +6,7 @@ export interface PaymentRecord {
   status: 'pending' | 'failure' | 'success';
   paymentDate: Date;
   orderId: string;
+  purpose: string;
   razorpayPaymentId?: string;
   razorpaySignature?: string;
   failureReason?: string;
