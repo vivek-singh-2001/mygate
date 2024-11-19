@@ -32,8 +32,6 @@ export class ApartmentComponent implements OnInit {
       .userSocietyId$
       .pipe(
         switchMap((societyId) => {
-          console.log(societyId);
-          
           if (!societyId) {
             throw new Error('Society ID is missing');
           }
@@ -42,9 +40,7 @@ export class ApartmentComponent implements OnInit {
         map((responseData: any) => {
           console.log('Fetched society data:', responseData);
           this.isLoading = false;
-          return responseData.sort(
-            (a: any, b: any) => a.id - b.id
-          );
+          return responseData.sort((a: any, b: any) => a.name.localeCompare(b.name));
         })
       )
       .subscribe({

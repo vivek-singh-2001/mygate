@@ -19,6 +19,7 @@ export class WingDetailsComponent implements OnInit {
   wingName: string | null = '';
   houses: any[] = [];
   isLoading = false;
+  isSidebarLoading: boolean = false;
   sidebarVisible: boolean = false;
   selectedHouse: any = null;
 
@@ -56,11 +57,11 @@ export class WingDetailsComponent implements OnInit {
       },
     });
   }
+  
   onViewHouse(house: any) {
     this.selectedHouse = house;
-
+    this.isSidebarLoading = true;
     this.sidebarVisible = true;
-    this.isLoading = true;
     this.http
       .get<any>(`${environment.apiUrl}/houseuser/houseDetails/${house.id}`)
       .subscribe({
@@ -72,16 +73,14 @@ export class WingDetailsComponent implements OnInit {
               (a: any, b: any) =>
                 (b.User?.isOwner ? 1 : 0) - (a.User?.isOwner ? 1 : 0)
             );
-            this.isLoading = false;
           } else {
             this.selectedHouse.familyDetails = null;
-            this.isLoading = false;
           }
-          this.isLoading = false;
+          this.isSidebarLoading = false;
         },
         error: (error) => {
           console.error('Error fetching house user data:', error);
-          this.isLoading = false;
+          this.isSidebarLoading = false;
         },
       });
   }

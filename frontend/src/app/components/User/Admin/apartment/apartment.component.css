@@ -1,31 +1,126 @@
-.page-container {
-  height: 100%;
-  background-color: var(--gray-200);
-  overflow-y: auto;
-}
-
 .card {
   background-color: var(--offwhite);
   box-shadow: 0 4px 13px #e1e1e1;
-  border: none; 
-  margin:20px;
+  border: none;
+  margin: 20px;
   border-radius: 7px;
   align-items: center;
 }
 
-.personal-details{
+.personal-details {
   line-height: 1.5;
-font-weight: 500;
+  font-weight: 500;
 }
 
-.personal-details p{
-height: 35px;
-color: #4b5563;
-font:16px;
-letter-spacing: 1px;
-letter-spacing: 1.5;
-display: flex;
-align-items: center;
-white-space: nowrap;
+.personal-details p {
+  height: 35px;
+  color: #4b5563;
+  font: 16px;
+  letter-spacing: 1px;
+  letter-spacing: 1.5;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
+.page-container {
+  padding: 1rem; /* Increased padding around the container */
+  background-color: #f4f4f4;
+  min-height: 100vh;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  color: #666;
+}
+
+.society-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 1.5rem;
+}
+
+.society-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.society-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.society-header {
+  background-color: #eef6fc;
+  padding: 0.5rem;
+  border-radius: 6px;
+  text-align: center;
+  color: #007bff;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.society-details {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.detail-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.detail-group p {
+  margin: 0;
+  word-break: break-word;
+}
+
+.details-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-end;
+  margin-top: 1.5rem;
+}
+
+.details-button i {
+  font-size: 1.5rem;
+}
+
+.details-button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .society-list {
+    grid-template-columns: 1fr;
+  }
+
+  .society-card {
+    padding: 1.2rem;
+  }
+
+  .details-button {
+    width: 100%;
+  }
+}
