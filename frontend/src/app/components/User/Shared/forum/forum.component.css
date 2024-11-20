@@ -1,0 +1,78 @@
+/* Main container for the forum */
+.forum-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background-color: var(--surface-0);
+    
+
+
+  }
+  
+  /* Navigation Bar */
+  .navigation-bar {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+    max-width: 1200px;
+    overflow-x: auto; 
+    scrollbar-width: thin;
+  }
+  
+  .nav-item {
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 20px;
+    background-color: var(--surface-card);
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .nav-item:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  .selected {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  /* Scrollable Forum Section */
+  .forum-content {
+    flex: 1;
+    width: 60%;
+    max-width: 800px;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: var(--surface-0);
+    border-radius: 8px;
+    overflow-y: auto; /* Enables vertical scrolling */
+    max-height: 70vh; /* Ensures the section doesn't exceed the viewport height */
+  }
+  
+  .forum-content::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .forum-content::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 4px;
+  }
+  
+  /* Post Card Styling */
+  .post-card {
+    background-color: var(--surface-card);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    margin-bottom: 1rem; /* Adds spacing between posts */
+  }
+  
+  .post-card:hover {
+    transform: scale(1.02);
+  }
+  

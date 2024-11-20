@@ -15,6 +15,7 @@ import { SecurityGaurdComponent } from './components/Staff/SecurityGaurd/securit
 import { PendingUserComponent } from './components/shared/pending-user/pending-user.component';
 import { SecurityComponent } from './layouts/Security/security.component';
 import { SecurityGuard } from './gaurds/security.gaurd';
+import { ForumComponent } from './components/User/Shared/forum/forum.component';
 export const routes: Routes = [
   {
     path: 'login',
@@ -169,7 +170,7 @@ export const routes: Routes = [
     ],
   },
 
-  { path: 'test', component: SecurityGaurdComponent },
+  { path: 'test', component: ForumComponent },
 
   { path: 'unauthorized', component: UnauthorizedComponent },
   {
