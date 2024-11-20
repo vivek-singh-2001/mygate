@@ -171,8 +171,8 @@
       <p><b>Name</b></p>
       <p><b>Email</b></p>
       <p><b>Phone</b></p>
-      <p><b>Gender</b></p>
       <p><b>Date of Birth</b></p>
+      <p><b>Passcode</b></p>
     </div>
     <div
       class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
@@ -180,28 +180,8 @@
       <p>{{ member.firstname }}</p>
       <p>{{ member.email }}</p>
       <p>{{ member.number }}</p>
-      <p>{{ member.gender }}</p>
       <p>{{ member.dateofbirth }}</p>
-    </div>
-  </div>
-  <div class="card flex">
-    <div
-      class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-8"
-    >
-      <p><b>Passcode</b></p>
-      <p><b>Role</b></p>
-      <p><b>Room No</b></p>
-      <p><b>Wing name</b></p>
-      <p><b>Wing Admin</b></p>
-    </div>
-    <div
-      class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column p-2 ml-6"
-    >
       <p>{{ member.passcode }}</p>
-      <p>{{ userDetails?.role }}</p>
-      <p>{{ userDetails?.house?.house_no }}</p>
-      <p>{{ userDetails?.house?.Wing?.name }}</p>
-      <p>w-admin name</p>
     </div>
   </div>
 </div>

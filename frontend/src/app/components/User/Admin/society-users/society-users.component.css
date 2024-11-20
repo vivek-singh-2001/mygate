@@ -8,3 +8,37 @@
   font-size: 14px;
   margin: 0;
 }
+
+.custom-height {
+  height: 2rem;
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 7px;
+  border: 1px solid #b4b4b4;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.action-btn {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+button.p-button-text {
+  background-color: transparent;
+  color: var(--blue-500);
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button.p-button-text:hover {
+  color: var(--blue-700);
+  text-decoration: underline;
+}

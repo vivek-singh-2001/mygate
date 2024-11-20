@@ -8,10 +8,12 @@
         <th scope="col">Email</th>
         <th scope="col">
           <input
+            pInputText
             type="text"
             [(ngModel)]="searchQuery"
             (ngModelChange)="onSearch($event)"
-            placeholder="Search users..."
+            placeholder="Search users"
+            class="p-inputtext-lg custom-height"
           />
         </th>
       </tr>
@@ -34,15 +36,16 @@
         <td>{{ user.number }}</td>
         <td>{{ user.email }}</td>
         <td>
-          <button
-            pButton
-            type="button"
-            label="View"
-            class="p-button p-button-primary"
-            (click)="viewUserDetails(user)"
-          >
-            View
-          </button>
+          <div class="action-btn">
+            <button
+              type="button"
+              (click)="viewUserDetails(user)"
+              pButton
+              class="p-button-text"
+            >
+              <i class="pi pi-eye"></i> View Details
+            </button>
+          </div>
         </td>
       </tr>
     </ng-template>

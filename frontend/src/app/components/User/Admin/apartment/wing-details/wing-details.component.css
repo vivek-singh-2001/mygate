@@ -1,4 +1,3 @@
-/* General Page Styling */
 .page-container {
   padding: 1rem;
   background-color: #f9fafb;
@@ -38,7 +37,6 @@ button:hover i {
   margin: 0;
 }
 
-/* Loading Indicator */
 .flex.w-full.h-full {
   font-size: 1rem;
   color: #888;
@@ -101,7 +99,6 @@ button:hover i {
   color: #333;
 }
 
-/* Action Button */
 .action-btn {
   text-align: center;
   margin-top: 1rem;
@@ -149,7 +146,6 @@ button.p-button-text i {
   font-size: 0.8rem;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
   .houses-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
