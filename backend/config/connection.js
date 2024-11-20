@@ -36,6 +36,8 @@ db.NotificationCount = require("../features/notificationCount/notificationCountM
 db.SocietyStaff = require("../features/society/societyStaffModel.js")(connectDB, DataTypes);
 db.Payment = require("../features/payment/paymentModel.js")(connectDB, DataTypes);
 db.SocietyExpense = require("../features/payment/societyExpensesModel.js")(connectDB,DataTypes)
+db.Forum = require("../features/forum/forumModel.js")(connectDB,DataTypes)
+db.Thread = require("../features/forum/threadModel.js")(connectDB,DataTypes)
 
 // =============society-wing (: One to many)============================
 
@@ -181,6 +183,22 @@ db.Payment.belongsTo(db.House, { foreignKey: "houseId" });
 // ==============society-societyExpanses (: One to many)=========================
 db.Society.hasMany(db.SocietyExpense, { foreignKey: 'societyId' });
 db.SocietyExpense.belongsTo(db.Society, { foreignKey: 'societyId' });
+
+// ============== user-forum (: One to many)=========================
+db.User.hasMany(db.Forum, { foreignKey: 'createdBy' });
+db.Forum.belongsTo(db.User, { foreignKey: 'createdBy' });
+
+// ============== society-forum (: One to many)=========================
+db.Society.hasMany(db.Forum, { foreignKey: 'societyId' });
+db.Forum.belongsTo(db.Society, { foreignKey: 'societyId' });
+
+// ============== forum-thread (: One to many)=========================
+db.Forum.hasMany(db.Thread, { foreignKey: 'forumId' });
+db.Thread.belongsTo(db.Forum, { foreignKey: 'forumId' });
+
+// ============== user-thread (: One to many)=========================
+db.User.hasMany(db.Thread, { foreignKey: 'createdBy' });
+db.Thread.belongsTo(db.User, { foreignKey: 'createdBy' });
 
 const check = async () => {
   try {

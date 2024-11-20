@@ -93,6 +93,7 @@ app.use("/api/v1/staff", staff_Routes);
 app.use("/api/v1/notice", notice_route);
 app.use("/api/v1/notificationcount", notification_route);
 app.use("/api/v1/payments", payment_route);
+// app.use("/api/v1/forum", forum_route);
 app.use("/api/v1/mapapikey", mapapikey);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

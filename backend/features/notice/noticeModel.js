@@ -1,6 +1,6 @@
 module.exports = (connectDB, DataTypes) => {
   const Notice = connectDB.define(
-    "Notification",
+    "Notice",
     {
       id: {
         type: DataTypes.UUID,
@@ -29,7 +29,7 @@ module.exports = (connectDB, DataTypes) => {
     },
     {
       timestamps: true,
-      tableName:'notifications'
+      tableName:'notices'
     }
   );
   return Notice
