@@ -18,7 +18,7 @@ interface ContentCheckResult {
   providedIn: 'root',
 })
 export class ForumService {
-  private readonly apiUrl = `${environment.apiUrl}/forums`;
+  private readonly apiUrl = `${environment.apiUrl}/forum`;
   private readonly pythonApiUrl = 'http://localhost:5000/check-content'
 
   private readonly forumTypesSubject = new BehaviorSubject<ForumType[]>([]);

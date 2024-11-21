@@ -40,6 +40,7 @@ db.Forum = require("../features/forum/forumModel.js")(connectDB,DataTypes)
 db.Thread = require("../features/forum/thread/threadModel.js")(connectDB,DataTypes)
 db.Post = require("../features/forum/threadPost/postModel.js")(connectDB,DataTypes)
 db.Comment = require("../features/forum/postComment/commentModel.js")(connectDB,DataTypes)
+db.Like = require("../features/forum/postLike/likeModel.js")(connectDB,DataTypes)
 
 // =============society-wing (: One to many)============================
 
@@ -217,6 +218,14 @@ db.Comment.belongsTo(db.Post, { foreignKey: 'postId' });
 // ============== user-comment (: One to many)=========================
 db.User.hasMany(db.Comment, { foreignKey: 'userId' });
 db.Comment.belongsTo(db.User, { foreignKey: 'userId' });
+
+// ============== post-like (: One to many)=========================
+db.Post.hasMany(db.Like, { foreignKey: 'postId' });
+db.Like.belongsTo(db.Post, { foreignKey: 'postId' });
+
+// ============== user-comment (: One to many)=========================
+db.User.hasMany(db.Like, { foreignKey: 'userId' });
+db.Like.belongsTo(db.User, { foreignKey: 'userId' });
 
 const check = async () => {
   try {

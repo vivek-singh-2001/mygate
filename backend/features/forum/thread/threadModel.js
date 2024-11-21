@@ -33,6 +33,7 @@ module.exports = (connectDB, DataTypes) => {
       isPinned: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+        allowNull: false
       },
     },
     {

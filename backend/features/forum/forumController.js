@@ -1,7 +1,6 @@
 const forumService = require("./forumService");
 const asyncErrorHandler = require("../../utils/asyncErrorHandler");
 const CustomError = require("../../utils/CustomError");
-const { log } = require("util");
 
 exports.createForum = asyncErrorHandler(async (req, res, next) => {
   const { name, description } = req.body;
