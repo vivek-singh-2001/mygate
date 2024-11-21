@@ -3,6 +3,15 @@ const router = express.Router();
 const visitorController = require("./visitorController");
 const validate = require("../../utils/validationMiddleware");
 const { bodyValidator } = require("../../validations/bodyValidation");
+const { idValidationSchema } = require("../../validations/idValidation");
+const upload = require("../../middleware/multer");
+const { patch } = require("../../app");
+const path = require("path");
+
+const { uploadSingle } = upload(/jpeg|jpg|png|webp/, "image");
+
+const { addVisitor, getVisitors, verifyPasscode, approveVisitor, imagePath, getAllVisitors } =
+  visitorController;
 
 const visitorValidationRules = bodyValidator([
   { name: "name", isRequired: true, type: "string" },
@@ -28,9 +37,19 @@ const visitorValidationRules = bodyValidator([
   { name: "responsibleUser", isRequired: true, type: "uuid" },
 ]);
 
-const { addVisitor, getVisitors } = visitorController;
+const passcodeValidationRules = bodyValidator([
+  { name: "passcode", isRequired: true, type: "string" },
+]);
 
-router.get("/", getVisitors)
-router.post("/add", validate(visitorValidationRules), addVisitor);
+router.get("/", getVisitors);
+router.post("/add", uploadSingle, validate(visitorValidationRules), addVisitor);
+router.post(
+  "/verify-passcode",
+  validate(passcodeValidationRules),
+  verifyPasscode
+);
+router.patch("/approval/:id", validate(idValidationSchema), approveVisitor);
+router.get("/image/:filename", imagePath);
+router.get("/all/:id", getAllVisitors)
 
 module.exports = router;

@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
     private readonly router: Router,
     private readonly messageService: MessageService
   ) {}
+  
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -66,15 +67,17 @@ export class LoginComponent implements OnInit {
 
   onLogin(): void {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+      const { email, password } = this.loginForm.value; 
       this.authService.login(email, password).subscribe({
         error: (error) => {
           this.messageService.add({
             severity: 'error',
             summary: 'Login Failed',
             detail: error,
-          });
+          })
         },
+        next:()=>{
+        }
       });
     }
   }

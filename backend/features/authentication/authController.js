@@ -46,6 +46,8 @@ exports.googleAuthCallback = passport.authenticate("google", {
 });
 
 exports.googleAuthSuccess = (req, res) => {
+  console.log("cvvfdvf", req.user.id);
+  
   const token = authService.signToken(req.user.id, req.user.email);
   res.redirect(`http://localhost:4200/google/success?token=${token}`);
   res.status(200).json({ status: "success", token });

@@ -18,6 +18,7 @@
           class="p-button-text icon-btn"
           [ngClass]="item.iconSize" 
           pTooltip="{{ item.label }}"
+          (click)="item.items ? toggleSidebar(item.label) : item.command()"
         ></button>
       </div>
     </ng-template>

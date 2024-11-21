@@ -1,6 +1,7 @@
 const visitorRepository = require("./visitorRepository");
 const houseRepository = require("../house/houseRepository");
 const userRepository = require("../users/userRepository");
+const societyRepository = require("../society/societyRepository")
 const CustomError = require("../../utils/CustomError");
 
 const generatePasscode = () => {
@@ -22,7 +23,10 @@ exports.addVisitor = async (visitorData) => {
   }
 
   if (visitEndDate < visitStartDate) {
-    throw new CustomError("Visit end date must be after or equal to start date", 400);
+    throw new CustomError(
+      "Visit end date must be after or equal to start date",
+      400
+    );
   }
 
   if (visitStartDate.toDateString() === currentDate.toDateString()) {
@@ -65,5 +69,48 @@ exports.getVisitors = async (houseId, userId) => {
     filters.responsibleUser = userId;
   }
 
-  return await visitorRepository.getVisitors(filters)
+  return await visitorRepository.getVisitors(filters);
 };
+
+exports.verifyPasscode = async (passcode) => {
+  if (passcode.length !== 6) {
+    throw new CustomError("Invalid passcode", 404);
+  }
+
+  const visitor = await visitorRepository.findByPasscode(passcode);
+
+  if (!visitor) {
+    throw new CustomError("Invalid passcode", 404);
+  }
+
+  return visitor;
+};
+
+exports.approveVisitor = async (visitorId, status) => {
+  const visitor = await visitorRepository.findById(visitorId);
+  
+  if (!visitor) {
+    throw new CustomError("Visitor not found", 404);
+  }
+
+  if (visitor.status === 'Approved') {
+    throw new CustomError("Visitor has already been approved", 400);
+  }
+
+  const updatedVisitor = await visitorRepository.updateVisitorStatus(visitorId, status);
+
+  if (!updatedVisitor) {
+    throw new CustomError("Error while updating visitor status", 500);
+  }
+
+  return updatedVisitor;
+}
+
+exports.getAllVisitors = async(societyId) => {
+  const society = await societyRepository.getsocietyById(societyId);
+  if (!society) {
+    throw new CustomError("Society not found", 404);
+  }
+
+  return await visitorRepository.getAllVisitors(societyId)
+}

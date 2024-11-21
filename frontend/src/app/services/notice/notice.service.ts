@@ -16,7 +16,7 @@ export class NoticeService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getNotices(societyId: string): Observable<any> {
+    getNotices(societyId: string): Observable<any> {
     if (this.noticeSubject.getValue().noticeList?.length > 0) {
       return this.notices$;
     } else {
@@ -28,9 +28,9 @@ export class NoticeService {
     }
   }
 
-  fetchNotices(societyId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/getAllNotice/${societyId}`).pipe(
-      tap((response: any) => {
+  fetchNotices(societyId: string): Observable<ResponseOutput> {
+    return this.http.get<ResponseOutput>(`${this.apiUrl}/getAllNotice/${societyId}`).pipe(
+      tap((response: ResponseOutput) => {
         this.noticeSubject.next(response.data);
       })
     );
@@ -40,7 +40,8 @@ export class NoticeService {
     return this.http.post<ResponseOutput>(this.apiUrl, noticeData);
   }
 
-  clearEvents() {
+  clearNotices() {
     this.noticeSubject.next([]);
   }
+  
 }

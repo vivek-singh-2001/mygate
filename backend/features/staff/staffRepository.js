@@ -1,27 +1,57 @@
 const { db } = require("../../config/connection");
-const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole, Staff } =
+const CustomError = require("../../utils/CustomError");
+const userRepository = require("../users/userRepository");
+const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole, Staff,SocietyStaff } =
   db;
 
 const staffRepository = {
   createStaff: async (staffData) => {
-    const newStaff = await Staff.create({
-      roleId: staffData.roleId,
-      name: staffData.gaurdDetails.name,
-      contactNumber: staffData.gaurdDetails.contactNumber,
-      email: staffData.gaurdDetails.email,
-      address: staffData.gaurdDetails.address,
-      startDate: staffData.gaurdDetails.startDate,
-      status: staffData.gaurdDetails.status,
-      societyId: staffData.societyId,
-      createdBy: staffData.createdBy,
-    });
-    console.log(newStaff);
+   const  transaction = await db.connectDB.transaction();
 
+    try {
+      const newStaff = await User.create(
+        {
+          firstname: staffData.gaurdDetails.firstname,
+          lastname: staffData.gaurdDetails.lastname,
+          number: staffData.gaurdDetails.contactNumber,
+          email: staffData.gaurdDetails.email,
+          dateofbirth: staffData.gaurdDetails.dateofbirth,
+        },
+        { transaction }
+      );
+
+      const roleToAssign = await userRepository.getRoleByName(
+        staffData.gaurdDetails.role.name
+      );
+      await UserRole.create(
+        {
+          userId: newStaff.id,
+          roleId: roleToAssign.id,
+        },
+        { transaction }
+      );
+
+      await SocietyStaff.create({
+        societyId:staffData.societyId,
+        staffId:newStaff.id
+      },{
+        transaction
+      })
+      
+      await transaction.commit()
+
+      return newStaff;
+    } catch (error) {
+      console.log(error);
+      
+      await transaction.rollback();
+      throw new CustomError(error.message || "Failed to create staff", 500);
+    }
   },
 
   getAllStaff: async (societyId) => {
     return await Staff.findAll({
-      where:{societyId:societyId}
+      where: { societyId: societyId },
     });
   },
 

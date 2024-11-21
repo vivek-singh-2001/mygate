@@ -1,0 +1,114 @@
+:host {
+  display: block;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+
+.mx-8 {
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.p-fluid {
+  padding: 1rem;
+}
+
+.p-button-outlined {
+  background-color: transparent;
+  border: 1px solid #007ad9;
+  color: #007ad9;
+  transition: background-color 0.3s;
+}
+
+.p-button-outlined:hover {
+  background-color: #007ad9;
+  color: white;
+}
+
+.p-datatable-sm {
+  font-size: 14px;
+}
+
+.table-header {
+  background-color: #f5f5f5;
+}
+
+.table-row {
+  background-color: white;
+  &:hover {
+    background-color: #f1f1f1;
+  }
+}
+
+.green-text {
+  color: green;
+}
+
+.red-text {
+  color: red;
+}
+
+.mb-5 {
+  margin-bottom: 1.5rem;
+}
+
+.text-warning {
+  color: #f0ad4e;
+}
+
+.p-dropdown {
+  width: 100%;
+  font-size: 14px;
+}
+
+.p-dropdown-label {
+  color: #333;
+}
+
+.p-calendar {
+  width: 100%;
+  font-size: 14px;
+  background-color: #ffffff;
+}
+
+.p-table .p-paginator {
+  background-color: #f5f5f5;
+  border-top: 1px solid #dcdcdc;
+}
+
+button.p-button-outlined {
+  border-radius: 4px;
+  min-width: 120px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+}
+
+p-table th {
+  font-weight: bold;
+  text-align: left;
+}
+
+p-table td {
+  padding: 0.5rem;
+  text-align: left;
+}

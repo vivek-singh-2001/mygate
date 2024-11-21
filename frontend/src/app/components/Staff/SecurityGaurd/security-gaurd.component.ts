@@ -42,6 +42,7 @@ export class SecurityGaurdComponent implements OnInit {
   roles: Role[] = [];
   societyId: string = '';
   userId: string = '';
+  today: Date = new Date();
 
   constructor(
     private readonly fb: FormBuilder,
@@ -50,16 +51,15 @@ export class SecurityGaurdComponent implements OnInit {
     private readonly userService: UserService
   ) {
     this.securityGuardForm = this.fb.group({
-      name: ['', Validators.required],
-      role: ['', Validators.required],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
       contactNumber: [
         '',
         [Validators.required, Validators.pattern(/^\d{10}$/)],
       ],
-      email: [null, [Validators.email]],
-      address: [''],
-      startDate: ['', Validators.required],
-      status: ['Active', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      dateofbirth: ['', Validators.required],
+      role: ['', Validators.required],
     });
   }
 
@@ -71,7 +71,9 @@ export class SecurityGaurdComponent implements OnInit {
         } else {
           this.staffService.fetchRoles().subscribe({
             next: (response: response) => {
-              this.roles = response.roles.filter((role: Role) => role.name === 'security');
+              this.roles = response.roles.filter(
+                (role: Role) => role.name === 'security'
+              );
             },
             error: (err) => {
               console.error('Error fetching roles:', err);
@@ -104,17 +106,11 @@ export class SecurityGaurdComponent implements OnInit {
   }
 
   onSubmit() {
-  
     if (this.securityGuardForm.valid) {
-      const formData = {
-        roleId: this.securityGuardForm.get('role')?.value.id,
-        gaurdDetails: this.securityGuardForm.value,
-        societyId: this.societyId,
-        createdBy: this.userId,
-      };
-      console.log(formData);
-      this.staffService.registerStaff(formData).subscribe({
-        next: () => {
+      this.staffService.registerStaff(this.securityGuardForm.value,this.societyId).subscribe({
+        next: (staff) => {
+          console.log(staff);
+          
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -124,14 +120,18 @@ export class SecurityGaurdComponent implements OnInit {
         },
         error: (err) => {
           console.log(err);
-          
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: 'Please fill in the required fields correctly.',
+            detail: 'Something is wrong. Try Again later',
           });
-          this.securityGuardForm.reset();
         },
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Please fill in the required fields correctly.',
       });
     }
   }

@@ -1,26 +1,31 @@
 <p-toast></p-toast>
 
-
-<div class="top-profile  ">
+<div class="top-profile">
   <h4>Register Security Gaurd</h4>
   <form [formGroup]="securityGuardForm">
     <div
-          class="flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-        >
-          <p>Role</p>
-          <p-dropdown
-            class="abc"
-            [options]="roles"
-            formControlName="role"
-            optionLabel="name"
-            placeholder="Select Your Role"
-          />
-        </div>
+      class="p-field flex align-items-center gap-4 justify-content-between px-4 flex-wrap mb-4"
+    >
+      <label for="role">Role</label>
+      <p-dropdown
+        class="abc"
+        [options]="roles"
+        formControlName="role"
+        optionLabel="name"
+        placeholder="Select Role"
+      />
+    </div>
     <div
       class="p-field flex align-items-center gap-4 justify-content-between px-4 flex-wrap mb-4"
     >
-      <label for="name">Name</label>
-      <input id="name" type="text" formControlName="name" pInputText />
+      <label for="name">Firstname</label>
+      <input id="name" type="text" formControlName="firstname" pInputText />
+    </div>
+    <div
+      class="p-field flex align-items-center gap-4 justify-content-between px-4 flex-wrap mb-4"
+    >
+      <label for="name">Lastname</label>
+      <input id="name" type="text" formControlName="lastname" pInputText />
     </div>
     <div
       class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
@@ -30,7 +35,6 @@
         type="tel"
         pattern="[0-9]{10}"
         maxlength="10"
-        placeholder="Phone Number"
         pInputText
         formControlName="contactNumber"
         inputmode="numeric"
@@ -45,36 +49,30 @@
         type="text"
         pInputText
         formControlName="email"
-        placeholder="(Optional)"
+        placeholder=""
       />
-    </div>
-    <div
-      class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
-    >
-      <label for="name">Address</label>
-      <input id="address" type="text" formControlName="address" pInputText />
     </div>
 
     <div
       class="p-field flex align-items-center gap-6 justify-content-between px-4 flex-wrap mb-4"
     >
-      <label for="dateofbirth">Start Date</label>
+      <label for="dateofbirth" class="flex align-items-center"
+        >Date of Birth</label
+      >
       <p-calendar
-        formControlName="startDate"
-        dateFormat="dd/mm/yy"
+        name="dateofbirth"
+        [iconDisplay]="'input'"
+        [showIcon]="true"
+        formControlName="dateofbirth"
+        [style]="{ width: '100%' }"
         appendTo="body"
+        [maxDate]="today"
       />
     </div>
     <div
       class="p-field flex align-items-center gap-6 justify-content-center px-4 flex-wrap mb-4"
     >
-      <p-button
-        (onClick)="onSubmit()"
-        label="submit"
-        [disabled]="!securityGuardForm.valid"
-      />
+      <p-button (onClick)="onSubmit()" label="Submit" />
     </div>
   </form>
 </div>
-
-

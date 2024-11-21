@@ -1,5 +1,5 @@
 const { db } = require("../../config/connection");
-const { User, HouseUser, House, Floor, UserRole, Role } = db;
+const { User, HouseUser, House, Floor, UserRole, Role ,Wing} = db;
 
 exports.getWingHouseDetailsById = async (wingId) => {
   try {
@@ -66,4 +66,48 @@ exports.findById = async (houseId) => {
   return await House.findOne({
     where: { id: houseId },
   });
+};
+
+exports.getHousesBySocietyId = async (societyId) => {
+  try {
+    return await House.findAll({
+      attributes: ['id'],
+      include: [
+        {
+          model: Floor,
+          attributes: [],
+          required: true,
+          include: [
+            {
+              model: Wing,
+              attributes: [],
+              required: true,
+              where: { societyId: societyId }, 
+            },
+          ],
+        },
+        {
+          model: User,
+          attributes: ['id'],
+          required: true, 
+          through: { 
+            model: HouseUser,
+            attributes: [],
+            required: true,  
+          },
+          include: [
+            {
+              model: Role,
+              attributes: [],
+              required: true,  
+              where: { name: 'owner' },
+            },
+          ],
+        },
+      ],
+    });
+  } catch (error) {
+    console.error("Error fetching houses for society:", error);
+    throw error; 
+  }
 };

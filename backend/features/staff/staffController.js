@@ -5,13 +5,16 @@ const CustomError = require('../../utils/CustomError');
 
 exports.createStaff = asyncErrorHandler(async (req, res, next) => {
   const staffData = req.body;
-  const newStaff = await staffService.createStaff(staffData);
+
+  console.log(staffData.societyId);
+  
+
+  const newStaff = await staffService.createStaff(staffData,next);
   res.status(201).json({ status: 'success', data: newStaff });
 });
 
 exports.getAllStaff = asyncErrorHandler(async (req, res, next) => {
   const {societyId} = req.params;
-  console.log(societyId);
   
   const staffList = await staffService.getAllStaff(societyId);
   if(!staffList){

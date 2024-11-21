@@ -8,7 +8,7 @@ import { AuthService } from './services/auth/auth.service';
   standalone: true,
   imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'], 
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent  {
   title = 'frontend';
@@ -18,7 +18,6 @@ export class AppComponent  {
     private readonly authService: AuthService,
   ) {
     if (this.authService.isLoggedIn()) {
-      console.log("is initialized called................................")
      this.appInitializationService.initialize().subscribe();
     }
   }

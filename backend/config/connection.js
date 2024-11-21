@@ -32,6 +32,12 @@ db.UserRole = require("../features/users/userRoleModel")(connectDB, DataTypes);
 db.Visitor = require("../features/visitors/visitorModel.js")(connectDB, DataTypes);
 db.Staff = require("../features/staff/staffModel.js")(connectDB, DataTypes);
 db.Shift = require("../features/shift/shiftModel.js")(connectDB, DataTypes);
+db.NotificationCount = require("../features/notificationCount/notificationCountModel.js")(connectDB, DataTypes);
+db.SocietyStaff = require("../features/society/societyStaffModel.js")(connectDB, DataTypes);
+db.Payment = require("../features/payment/paymentModel.js")(connectDB, DataTypes);
+db.SocietyExpense = require("../features/payment/societyExpensesModel.js")(connectDB,DataTypes)
+db.Forum = require("../features/forum/forumModel.js")(connectDB,DataTypes)
+db.Thread = require("../features/forum/threadModel.js")(connectDB,DataTypes)
 
 // =============society-wing (: One to many)============================
 
@@ -54,8 +60,8 @@ db.User.hasMany(db.Wing, { foreignKey: "wingAdminId" });
 db.Wing.belongsTo(db.User, { foreignKey: "wingAdminId" });
 
 // =============society-user (: One to many)============================
-db.User.hasMany(db.Society, { foreignKey: "societyAdminId" });
-db.Society.belongsTo(db.User, { foreignKey: "societyAdminId" });
+db.User.hasMany(db.Society, { foreignKey: "societyAdminId" ,as:'societyDetails'});
+db.Society.belongsTo(db.User, { foreignKey: "societyAdminId",as:'societyDetails' });
 
 // =============user-notice (: One to many)============================
 
@@ -95,9 +101,6 @@ db.HouseUser.belongsTo(db.House, { foreignKey: "houseId" });
 db.HouseUser.belongsTo(db.User, { foreignKey: "userId" });
 db.User.hasMany(db.HouseUser, { foreignKey: "userId" });
 
-// db.House.hasMany(db.HouseUser, { foreignKey: "houseId", as: "HouseUsers" });
-// db.User.hasMany(db.HouseUser, { foreignKey: "userId", as: "HouseUsers" });
-
 // ==============user-role (: Many to many)=========================
 
 db.User.belongsToMany(db.Role, {
@@ -131,7 +134,7 @@ db.Visitor.belongsTo(db.House, { foreignKey: "houseId", allowNull: true });
 // ============== user-visitor (One to many) ======================
 
 db.User.hasMany(db.Visitor, { foreignKey: "responsibleUser" });
-db.Visitor.belongsTo(db.House, { foreignKey: "responsibleUser" });
+db.Visitor.belongsTo(db.User, { foreignKey: "responsibleUser" });
 
 // ==============staff-society (: One to many)=========================
 db.Society.hasMany(db.Staff, { foreignKey: "societyId" });
@@ -144,6 +147,58 @@ db.Staff.belongsTo(db.Role, { foreignKey: "roleId" });
 // ==============staff-shift (: One to many)=========================
 db.Staff.hasMany(db.Shift, { foreignKey: "staffId" });
 db.Shift.belongsTo(db.Staff, { foreignKey: "staffId" });
+
+// ==============notification count with society and user (: One to many)=========================
+db.Society.hasMany(db.NotificationCount, { foreignKey: "societyId" });
+db.NotificationCount.belongsTo(db.Society, { foreignKey: "societyId" });
+
+db.User.hasMany(db.NotificationCount, { foreignKey: "userId" });
+db.NotificationCount.belongsTo(db.User, { foreignKey: "userId" });
+
+// =============societyStaff with society and user (: One to many)=========================
+
+db.User.belongsToMany(db.Society, {
+  through: db.SocietyStaff,
+  foreignKey: "staffId",
+  otherKey: "societyId",
+});
+db.Society.belongsToMany(db.User, {
+  through: db.SocietyStaff,
+  foreignKey: "societyId",
+  otherKey: "staffId",
+});
+db.User.hasMany(db.SocietyStaff, { foreignKey: "staffId" });
+db.SocietyStaff.belongsTo(db.User, { foreignKey: "staffId" });
+db.SocietyStaff.belongsTo(db.Society, { foreignKey: "societyId", as: 'Society', });
+db.Society.hasMany(db.SocietyStaff, { foreignKey: "societyId",as:'Staff' });
+
+// ==============user-payment (: One to many)=========================
+db.User.hasMany(db.Payment, { foreignKey: "ownerId" });
+db.Payment.belongsTo(db.User, { foreignKey: "ownerId" });
+
+// ==============house-payment (: One to many)=========================
+db.House.hasMany(db.Payment, { foreignKey: "houseId" });
+db.Payment.belongsTo(db.House, { foreignKey: "houseId" });
+
+// ==============society-societyExpanses (: One to many)=========================
+db.Society.hasMany(db.SocietyExpense, { foreignKey: 'societyId' });
+db.SocietyExpense.belongsTo(db.Society, { foreignKey: 'societyId' });
+
+// ============== user-forum (: One to many)=========================
+db.User.hasMany(db.Forum, { foreignKey: 'createdBy' });
+db.Forum.belongsTo(db.User, { foreignKey: 'createdBy' });
+
+// ============== society-forum (: One to many)=========================
+db.Society.hasMany(db.Forum, { foreignKey: 'societyId' });
+db.Forum.belongsTo(db.Society, { foreignKey: 'societyId' });
+
+// ============== forum-thread (: One to many)=========================
+db.Forum.hasMany(db.Thread, { foreignKey: 'forumId' });
+db.Thread.belongsTo(db.Forum, { foreignKey: 'forumId' });
+
+// ============== user-thread (: One to many)=========================
+db.User.hasMany(db.Thread, { foreignKey: 'createdBy' });
+db.Thread.belongsTo(db.User, { foreignKey: 'createdBy' });
 
 const check = async () => {
   try {

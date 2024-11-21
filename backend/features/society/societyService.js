@@ -3,9 +3,15 @@ const CustomError = require("../../utils/CustomError");
 const userRepository = require("../users/userRepository");
 const { parseCsvFile } = require("../../utils/csvFileParse");
 const { db } = require("../../config/connection");
+const sendEmail = require("../../utils/sendEmail");
 
 exports.getUsersBySociety = async (societyId, limits, offsets, searchQuery) => {
-  const users = await societyRepository.findUsersBySociety(societyId, limits, offsets, searchQuery);
+  const users = await societyRepository.findUsersBySociety(
+    societyId,
+    limits,
+    offsets,
+    searchQuery
+  );
   if (users.length === 0) {
     throw new CustomError(`No users found for Society ID ${societyId}`, 404);
   }
@@ -14,9 +20,15 @@ exports.getUsersBySociety = async (societyId, limits, offsets, searchQuery) => {
 };
 
 exports.getUsersBySocietyAndWing = async (societyId, wingId) => {
-  const users = await societyRepository.findUsersBySocietyAndWing(societyId, wingId);
+  const users = await societyRepository.findUsersBySocietyAndWing(
+    societyId,
+    wingId
+  );
   if (users.length === 0) {
-    throw new CustomError(`No users found for Society ID ${societyId} and Wing ${wingName}`, 404);
+    throw new CustomError(
+      `No users found for Society ID ${societyId} and Wing ${wingName}`,
+      404
+    );
   }
   return users;
 };
@@ -35,13 +47,15 @@ exports.isUserAdmin = async (userId) => {
   return society;
 };
 
-exports.registerSociety = async (societyDetails) => {
+exports.registerSociety = async (societyDetails,latitude,longitude) => {
   const pendingRole = await userRepository.getRoleByName("pending");
 
   const result = await societyRepository.registerSociety({
     societyDetails,
     status: "pending",
     pendingRole,
+    latitude,
+    longitude
   });
   return result;
 };
@@ -62,7 +76,12 @@ exports.createSociety = async (csvData, societyId, userId, next) => {
       return next(new CustomError("somethng wrong with csvFile", 400));
     }
 
-    const result = await societyRepository.createSociety(wingsArray, societyId, userId, transaction);
+    const result = await societyRepository.createSociety(
+      wingsArray,
+      societyId,
+      userId,
+      transaction
+    );
 
     const currentRole = await userRepository.getRoleByName("pending");
     console.log("pending", currentRole);
@@ -80,6 +99,20 @@ exports.createSociety = async (csvData, societyId, userId, next) => {
       newRole.id,
       transaction // Pass the transaction
     );
+
+    // Send notification email
+    const user = await userRepository.getUserById(userId);
+    const email = user.email;
+    const subject = "Welcome to Society Management!";
+    const firstFourLettersOfFirstName = user.firstname
+      .slice(0, 2)
+      .toLowerCase();
+    const birthYear = new Date(user.dateofbirth).getFullYear();
+    const generatedPassword = `${firstFourLettersOfFirstName}-${firstFourLettersOfFirstName}@${birthYear}`;
+
+    const message = `Hello ${user.firstname},\n\nYour society has been successfully created!\n\nYour login details:\nEmail: ${email}\nTemporary Password: ${generatedPassword}\n\nPlease log in to start managing your society.\n\nRegards,\nSociety Management Team`;
+
+    await sendEmail(email, subject, message);
 
     // Commit the transaction
     await transaction.commit();
@@ -101,6 +134,12 @@ exports.rejectSociety = async (societyId, userId) => {
     return { message: "Society rejected and user deleted successfully" };
   } catch (error) {
     console.error("Error in rejecting society:", error);
-    throw new Error("Failed to reject society and delete user. Please try again.");
+    throw new Error(
+      "Failed to reject society and delete user. Please try again."
+    );
   }
+};
+
+exports.getStaffDetails = async (userId) => {
+  return await societyRepository.getStaffDetails(userId);
 };

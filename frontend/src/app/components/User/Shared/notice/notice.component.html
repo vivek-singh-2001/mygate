@@ -1,63 +1,59 @@
-<div class="mx-8 mt-8">
-  <div class="display-card">
-    <div class="flex justify-content-between mb-4">
-      <p><b>Notifications</b></p>
-      <i
-        class="pi pi-plus-circle"
-        style="font-size: 1.5rem; cursor: pointer"
-        (click)="showNoticeForm()"
-      ></i>
-    </div>
-    <div>
-      <!-- user-list.component.html -->
-      <p-table [value]="notices"  class="p-datatable-sm">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Description</th>
-            <th>Time</th>
-            <th>Author</th>
-            <th>Action</th>
-          </tr>
-        </ng-template>
+<div class="display-card">
+  <div class="flex justify-content-between mb-4">
+    <p><b>Notifications</b></p>
+    <i
+      *ngIf="isAdmin"
+      class="pi pi-plus-circle"
+      style="font-size: 1.5rem; cursor: pointer"
+      (click)="showNoticeForm()"
+    ></i>
+  </div>
+  <div>
+    <!-- user-list.component.html -->
+    <p-table [value]="notices" class="p-datatable-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th scope="col">Description</th>
+          <th scope="col">Time</th>
+          <th scope="col">Author</th>
+          <th scope="col">Action</th>
+        </tr>
+      </ng-template>
 
-        <ng-template pTemplate="body" let-notice>
-          <tr>
-            <td>{{ notice.text  }} </td>
-            <td>{{ notice.createdAt | date:'EEEE , d , MMM' }}</td>
-            <td>{{ notice.User.firstname }} {{ notice.User.lastname }}</td>
-            <td>
-              <button
-                pButton
-                type="button"
-                label="View"
-                icon="pi pi-eye"
-                class="p-button-outlined"
-              >
-              </button>
-            </td>
-          </tr>
-        </ng-template>
-      </p-table>
-    </div>
+      <ng-template pTemplate="body" let-notice>
+        <tr>
+          <td>{{ notice.text }}</td>
+          <td>{{ notice.createdAt | date : "EEEE , d , MMM" }}</td>
+          <td>{{ notice.User?.firstname }} {{ notice.User?.lastname }}</td>
+          <td>
+            <button
+              pButton
+              type="button"
+              label="View"
+              (click)="viewNotice(notice)"
+              class="p-button-outlined"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 </div>
 
 <!--  create notice form -->
-<p-dialog [(visible)]="noticeForm">
+<p-dialog [(visible)]="noticeForm" modal="true">
   <div class="main-container">
-    <p-card header="Create    Notice" [style]="{ width: '360px' }">
       <div class="field">
-        <label for="email">Description</label>
+        <label for="Description">Description</label>
         <input
           type="text"
           pInputText
           class="w-full"
-          name="email"
+          name="Description"
           [(ngModel)]="noticeDescription"
           placeholder="Description..."
         />
       </div>
-      <!-- Media Upload Field -->
       <div class="field">
         <label for="media">Media</label>
         <input
@@ -76,8 +72,43 @@
         styleClass="w-full"
         severity="contrast"
         type="submit"
-        (click)="createNotice(fileInput)"
+        (onClick)="createNotice(fileInput)"
       />
+  </div>
+</p-dialog>
+
+<!-- view notice template -->
+
+<p-dialog
+  [(visible)]="viewNoticeForm"
+  modal="true"
+  [style]="{ width: '500px' }"
+>
+  <div class="card flex justify-content-center">
+    <p-card
+      header="Notice Title"
+      [subheader]="specificNoticeDetail.User?.firstname"
+    >
+      @if(specificNoticeDetail.mediaUrls){
+      <p-galleria
+        [value]="specificNoticeDetail.mediaUrls"
+        [showIndicators]="true"
+        [showThumbnails]="false"
+        [circular]="true"
+        [autoPlay]="false"
+        [containerStyle]="{ 'max-width': '340px' }"
+      >
+        <ng-template pTemplate="item" let-item>
+          <img
+            [src]="item"
+            alt="Notice "
+            [style]="{ width: '100%', height: 'auto' }"
+          />
+        </ng-template>
+      </p-galleria>
+      }
+
+      <p>{{ specificNoticeDetail?.text }}</p>
     </p-card>
   </div>
 </p-dialog>

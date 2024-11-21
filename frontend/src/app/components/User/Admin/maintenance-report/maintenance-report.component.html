@@ -1,0 +1,77 @@
+<div class="flex justify-content-between align-items-center mx-6">
+    <button pButton type="button" label="Request Payment" (click)="showPaymentDialog()"></button>
+    <button pButton type="button" label="Add Expenses" (click)="showExpensesDialog()"></button>
+  </div>
+  
+  <!-- Request Payment Dialog -->
+  <p-dialog header="Request Payment" [(visible)]="displayPaymentDialog" [modal]="true" [closable]="true" [style]="{ width: '30vw' }">
+    <div class="p-fluid">
+      <div class="field flex align-items-center justify-content-between mb-3">
+        <label for="amount" class="w-6">Amount</label>
+        <input id="amount" type="number" pInputText [(ngModel)]="paymentAmount" class="w-6" />
+      </div>
+  
+      <div class="field flex align-items-center justify-content-between mb-3">
+        <label for="date" class="w-6">Due-date</label>
+        <p-calendar id="date" type="date" [minDate]="minDate" [maxDate]="maxDate"  pInputText [(ngModel)]="paymentDate" class="w-6" appendTo="body" />
+      </div>
+  
+      <div class="field flex align-items-center justify-content-between mb-3">
+        <label for="category" class="w-6">Category</label>
+        <p-dropdown appendTo="body" [options]="paymentCategories" [(ngModel)]="selectedPaymentCategory" placeholder="Select a category" class="w-6" (onChange)="onCategoryChange()"></p-dropdown>
+      </div>
+  
+      <div *ngIf="selectedPaymentCategory === 'Other'" class="field flex align-items-center justify-content-between mb-3">
+        <label for="customCategory" class="w-6">Custom Category</label>
+        <input id="customCategory" type="text" pInputText [(ngModel)]="customCategory" placeholder="Enter category" class="w-6" />
+      </div>
+    </div>
+  
+    <p-footer>
+      <button pButton type="button" label="Submit" (click)="submitPaymentRequest()"></button>
+    </p-footer>
+  </p-dialog>
+  
+  <!-- Add Expenses Dialog -->
+  <p-dialog header="Add Expense" [(visible)]="displayExpensesDialog" [modal]="true" [closable]="true" [style]="{ width: '30vw' }">
+    <div class="p-fluid">
+      <div class="field flex align-items-center justify-content-between mb-3">
+        <label for="expenseAmount" class="w-6">Amount</label>
+        <input id="expenseAmount" type="number" pInputText [(ngModel)]="expenseAmount" class="w-6" />
+      </div>
+  
+      <div class="field flex align-items-center justify-content-between mb-3">
+        <label for="expenseDate" class="w-6">Date</label>
+        <p-calendar id="expenseDate" type="date" [minDate]="minDate" [maxDate]="maxDate" appendTo="body" pInputText [(ngModel)]="expenseDate" class="w-6" />
+      </div>
+  
+      <div class="field flex align-items-center justify-content-between mb-3">
+        <label for="expenseCategory" class="w-6">Category</label>
+        <input id="expenseCategory" type="text" pInputText [(ngModel)]="expenseCategory" placeholder="Enter category" class="w-6" />
+      </div>
+  
+      <div class="field flex align-items-center justify-content-between mb-3">
+        <label for="description" class="w-6">Description</label>
+        <textarea id="description" pInputTextarea [(ngModel)]="expenseDescription" rows="3" class="w-6" placeholder="Enter description"></textarea>
+      </div>
+      <div class="field flex align-items-center justify-content-between mb-3">
+        <label for="attachment" class="w-6">Attachment</label>
+        <input
+          id="attachment"
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          class="w-6"
+        />
+      </div>
+    </div>
+  
+    <p-footer>
+      <button pButton type="button" label="Submit" (click)="submitExpense()"></button>
+    </p-footer>
+  </p-dialog>
+
+
+  <div class="card flex justify-content-center gap-2">
+    <p-toast />
+  </div>

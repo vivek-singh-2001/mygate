@@ -73,23 +73,25 @@ export class SideNavComponent implements OnInit {
         iconSize: 'large',
         command: () => this.navigateTo('/home/notice'),
       },
-      {
-        label: 'Events',
-        icon: 'pi pi-calendar-plus',
-        iconSize: 'large',
-        command: () => this.navigateTo('/home/events'),
-      },
-      {
-        label: 'Complaints',
-        icon: 'pi pi-pen-to-square',
-        iconSize: 'large',
-        command: () => this.navigateTo('/home/complaints'),
-      },
+  
+     
       {
         label: 'Visitors',
         icon: 'pi pi-id-card',
         iconSize: 'large',
         command: () => this.navigateTo('/home/visitors'),
+      },
+      {
+        label: 'Payments',
+        icon: 'pi pi-wallet',
+        iconSize: 'large',
+        command: () => this.navigateTo('/home/payments'),
+      },
+      {
+        label: 'Society Accounts',
+        icon: 'pi pi-book',
+        iconSize: 'large',
+        command: () => this.navigateTo('/home/society-accounts'),
       },
       ...(this.isAdmin
         ? [
@@ -124,6 +126,7 @@ export class SideNavComponent implements OnInit {
                   icon: 'pi pi-hourglass',
                   command: () => this.navigateTo('/home/apartments/AssignShift'),
                 },
+                
               ],
               // command: () => this.navigateTo('/home/apartments'),
             },
@@ -132,15 +135,22 @@ export class SideNavComponent implements OnInit {
     ];
   }
 
-  toggleSidebar() {
+  toggleSidebar(itemLabel?: string) {
+    // Expand sidebar if it's currently collapsed and "Admin Control" is clicked
+  if (itemLabel === 'Admin Control' && !this.isExpanded) {
+    this.isExpanded = true;
+  } else {
     this.isExpanded = !this.isExpanded;
-    this.expansionChanged.emit(this.isExpanded);
+  }
+
+  // Emit sidebar expansion state change
+  this.expansionChanged.emit(this.isExpanded);
   }
 
   navigateTo(route: string) {
     this.router.navigate([route]).then(() => {
       console.log('Current route:', this.router.url);
     });
-    this.snackBar.open(`Navigated to ${route}`, 'Close', { duration: 1000 });
+    // this.snackBar.open(`Navigated to ${route}`, 'Close', { duration: 1000 });
   }
 }

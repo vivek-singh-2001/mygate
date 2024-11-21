@@ -1,23 +1,83 @@
 .top-profile {
-    /* background-color: var(--gray-200); */
-    box-shadow: 0 4px 13px #e1e1e1;
-    align-items: center;
-    padding: 1rem;
-    /* border-radius: 8px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
+.display-card {
+  width: 100%;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.form-title {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  margin-right: 20px;
+  width: 40%;
+}
+
+.input-field, .dropdown, .calendar {
+  width: 55%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+::ng-deep .form-group .p-dropdown, .form-group p-calendar .p-calender {
+ width: 100%;
+}
+
+.submit-btn {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.submit-btn p-button {
+  width: 100%;
+  max-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .display-card {
+    width: 100%;
+    padding: 20px;
   }
-
-  .card{
-    
-    height: 600px;
-    width: 50%;
-    background-color: var(--gray-200);
-    box-shadow: 0 4px 13px #e1e1e1;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+  .form-group {
+    margin-bottom: 15px;
+    flex-direction: column; /* Stack label and input vertically for smaller screens */
   }
-  ::ng-deep .p-inputtext{
-    padding: 5px;
-    width: 200px;
-  } 
-
+  .form-group label {
+    margin-right: 0;
+    width: auto;
+  }
+  .form-group input,
+  .form-group p-dropdown,
+  .form-group .calendar {
+    width: 100%;
+  }
+  .form-title {
+    font-size: 20px;
+  }
+}

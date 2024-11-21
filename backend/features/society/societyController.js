@@ -13,23 +13,19 @@ exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
     return next(new CustomError("Society ID is required", 400));
   }
 
-  try {
-    const users = await societyService.getUsersBySociety(
-      societyId,
-      limits,
-      offsets,
-      searchQuery
-    );
-    res.status(200).json({
-      status: "success",
-      totalRecords: users[0].total_count,
-      data: {
-        users,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
+  const users = await societyService.getUsersBySociety(
+    societyId,
+    limits,
+    offsets,
+    searchQuery
+  );
+  res.status(200).json({
+    status: "success",
+    totalRecords: users[0].total_count,
+    data: {
+      users,
+    },
+  });
 });
 
 exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
@@ -92,6 +88,8 @@ exports.checkIsAdmin = asyncErrorHandler(async (req, res, next) => {
 exports.registerSociety = asyncErrorHandler(async (req, res, next) => {
   const societyDetails = req.body.society ? JSON.parse(req.body.society) : null;
   const csvFile = req.file;
+  const latitude = req.body.latitude;
+  const longitude = req.body.longitude;
 
   if (!societyDetails || !csvFile) {
     return next(
@@ -113,7 +111,11 @@ exports.registerSociety = asyncErrorHandler(async (req, res, next) => {
   societyDetails.filePath = csvFilePath;
 
   // Register the society
-  const result = await societyService.registerSociety(societyDetails);
+  const result = await societyService.registerSociety(
+    societyDetails,
+    latitude,
+    longitude
+  );
 
   res.status(200).json({ status: "success", societyDetails: result });
 });
@@ -150,15 +152,9 @@ exports.getCsvFile = asyncErrorHandler(async (req, res, next) => {
 
 exports.createSociety = asyncErrorHandler(async (req, res, next) => {
   const societyData = req.body;
+
   const { csvData: csvFile, id: societyId } = societyData;
-  const userId = societyData.User.id;
-
-  console.log(csvFile);
-  console.log(societyId);
-  console.log(userId);
-  
- 
-
+  const userId = societyData.societyAdminId;
 
   if (!csvFile) {
     return next(new CustomError("csvFile not found!", 404));
@@ -168,7 +164,12 @@ exports.createSociety = asyncErrorHandler(async (req, res, next) => {
     return next(new CustomError("society is not in pending state", 400));
   }
 
-  const response = await societyService.createSociety(csvFile, societyId,userId,next);
+  const response = await societyService.createSociety(
+    csvFile,
+    societyId,
+    userId,
+    next
+  );
 
   if (!response) {
     return next(new CustomError("unable to create society", 404));
@@ -184,7 +185,7 @@ exports.createSociety = asyncErrorHandler(async (req, res, next) => {
 exports.rejectSociety = asyncErrorHandler(async (req, res, next) => {
   const societyData = req.body;
   const { id: societyId, societyAdminId: userId, status } = societyData;
-  
+
   if (!status == "pending") {
     return next(new CustomError("Society is not in pending state", 400));
   }
@@ -194,10 +195,19 @@ exports.rejectSociety = asyncErrorHandler(async (req, res, next) => {
 
   const response = await societyService.rejectSociety(societyId, userId);
 
-  // Send a success response to the client
   res.status(200).json({
     status: "success",
     message: "Society rejected and society admin deleted successfully",
     data: response,
+  });
+});
+
+exports.getStaffDetails = asyncErrorHandler(async (req, res, next) => {
+  const { userId } = req.params;
+  const staffData = await societyService.getStaffDetails(userId);
+
+  res.status(200).json({
+    status: "success",
+    data: staffData,
   });
 });

@@ -62,7 +62,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   genders: Gender[] = [];
   userProfileForm!: FormGroup;
   userDetails: User = {
-    id: 0,
+    id: '',
     isMember: true,
     isOwner: true,
     firstname: '',
@@ -115,10 +115,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       .getUserData()
       .pipe(
         switchMap((userData) => {
-          console.log(userData);
-          
           if (userData) {
-            
             this.userDetails = userData;
             this.userProfileForm.patchValue({
               firstname: userData.firstname || 'apple',
@@ -141,12 +138,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (house) => {
-          console.log('houseee', house);
-
           this.selectedHouse = house;
           if (house) {
-
-            console.log('house from userdetails', house);
             this.userDetails.house = house;
             this.userProfileForm.patchValue({
               roomno: house.house_no || '',
@@ -160,7 +153,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             this.fetchWingDetails(house.Floor?.Wing?.id);
 
             // Fetch family details
-            this.getFamilyMembers(this.userDetails.id , house.id )
+            this.getFamilyMembers(this.userDetails.id, house.id);
           } else {
             console.log('Selected house is null or undefined');
           }
@@ -174,7 +167,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
 
   //Get Family Members
-  getFamilyMembers(userId: number, houseId: number) {
+  getFamilyMembers(userId: string, houseId: number) {
     this.familySubscription = this.userService
       .getFamilyMembers(userId, houseId)
       .subscribe((response) => {
@@ -187,17 +180,19 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   // Fetch wing details after getting house info
   fetchWingDetails(wingId: number) {
     if (wingId) {
-      this.wingSubscription = this.wingService.getWingDetails(wingId).subscribe({
-        next: (wingDetails) => {
-          console.log('Fetched wing details:', wingDetails);
-          // Add wing details to userDetails
-          this.userDetails.wingDetails =
-            wingDetails?.data || {};
-        },
-        error: (error) => {
-          console.error('Error fetching wing details:', error);
-        },
-      });
+      this.wingSubscription = this.wingService
+        .getWingDetails(wingId)
+        .subscribe({
+          next: (wingDetails) => {
+            console.log("apple",wingDetails.data);
+            
+            // Add wing details to userDetails
+            this.userDetails.wingDetails = wingDetails?.data || {};
+          },
+          error: (error) => {
+            console.error('Error fetching wing details:', error);
+          },
+        });
     }
   }
 

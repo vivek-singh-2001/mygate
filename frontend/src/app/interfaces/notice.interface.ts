@@ -1,3 +1,5 @@
+import { User } from "./user.interface"
+
 export interface Notice{
     id:string,
     text:string,
@@ -5,5 +7,8 @@ export interface Notice{
     createdAt:string,
     updatedAt:string,
     societyId:string,
-    userId:string
+    userId:string,
+    mediaUrls:string[],
+    noticeList:string[],
+    User:User[]
 }

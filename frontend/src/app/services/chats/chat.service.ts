@@ -15,7 +15,7 @@ export class ChatService {
 
   constructor(private readonly http: HttpClient) {
     // Initialize WebSocket connection
-    this.socket = io('http://localhost:7500', {
+    this.socket = io(environment.socketUrl, {
       transports: ['websocket'],
       withCredentials: true,
     });

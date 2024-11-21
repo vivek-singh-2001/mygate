@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SecurityGaurdComponent } from './security-gaurd.component';
+import { SocietyAccountsComponent } from './society-accounts.component';
 
-describe('SecurityGaurdComponent', () => {
-  let component: SecurityGaurdComponent;
-  let fixture: ComponentFixture<SecurityGaurdComponent>;
+describe('SocietyAccountsComponent', () => {
+  let component: SocietyAccountsComponent;
+  let fixture: ComponentFixture<SocietyAccountsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SecurityGaurdComponent]
+      imports: [SocietyAccountsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SecurityGaurdComponent);
+    fixture = TestBed.createComponent(SocietyAccountsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

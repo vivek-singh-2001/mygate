@@ -1,12 +1,12 @@
 <div class="page-container">
-<div class="flex justify-content-between align-item-center mt-4 px-4">
-  <button (click)="goBack()">
-    <i class="pi pi-arrow-left"></i>
-  </button>
-  <p >{{wingName || "N/A"}}</p>
+  <!-- Header Section -->
+  <div class="flex justify-content-between align-items-center mt-4 px-4">
+    <p-button (onClick)="goBack()">
+      <i class="pi pi-arrow-left"></i>
+    </p-button>
+  </div>
 
-</div>
-
+  <!-- Loading State -->
   <div
     *ngIf="isLoading"
     class="flex w-full h-full justify-content-center align-items-center"
@@ -14,84 +14,97 @@
     wait, data is loading...
   </div>
 
-  <div *ngIf="houses?.length">
-    <div *ngFor="let house of houses" class="card flex gap-4 flex-wrap mb-6">
-      <div class="flex flex-wrap justify-content-center align-item-center p-4">
-        <div class="w-full h-full p-6 bg-green-600 align-item-center">
-          <h4>{{ house.house_no || "N/A" }}</h4>
-        </div>
-      </div>
-
-      <div class="flex flex-1 justify-content-between">
-        <div
-          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column gap-2 p-2 "
-        >
-          <p><b>Room Number</b></p>
-          <p><b>Owner Name</b></p>
-          <p><b>Owner Number</b></p>
-          <p><b>Total Members</b></p>
-        </div>
-        <div
-          class="personal-details flex flex-1 justify-content-center align-items-space-evenly flex-column gap-2 p-2 "
-        >
-          <p>{{ house.house_no || "N/A"}}</p>
-          <p>{{ house?.owner?.firstname || 'N/A'}} {{ house?.owner?.lastname }}</p>
-          <p>{{house?.owner?.number || 'N/A'}} </p>
-          <p>{{house.userCount || "N/A"}}</p>
-        </div>
-      </div>
-
-      <!-- Sidebar -->
-      <p-sidebar
-        [(visible)]="sidebarVisible"
-        position="right"
-        [modal]="false"
-        styleClass="w-30rem"
-      >
-        <h4>Family Members</h4>
-
-        <!-- Loading Indicator -->
-        <div *ngIf="isLoading" class="loading-indicator">
-          <p>Loading family details...</p>
+  <!-- Wrapper for content to be blurred -->
+  <div class="content-wrapper" [class.blur-background]="sidebarVisible">
+    <!-- Grid Layout for Houses -->
+    <div
+      *ngIf="houses?.length"
+      class="houses-grid"
+      [ngClass]="{ 'no-click': sidebarVisible }"
+    >
+      <div *ngFor="let house of houses" class="house-card">
+        <!-- House Header -->
+        <div class="house-header">
+          <h4>{{ wingName }} - {{ house.house_no || "N/A" }}</h4>
         </div>
 
-        <!-- Display family details if available -->
-        <div *ngIf="!isLoading">
-          <ul class=""
-            *ngIf="
-              selectedHouse?.familyDetails &&
-              selectedHouse?.familyDetails.length > 0
-            "
+        <!-- Details Section -->
+        <div class="house-details">
+          <div class="details-group">
+            <p><b>House Number:</b> {{ house.house_no || "N/A" }}</p>
+            <p>
+              <b>Owner Name:</b> {{ house?.owner?.firstname || "N/A" }}
+              {{ house?.owner?.lastname || "" }}
+            </p>
+            <p><b>Owner Number:</b> {{ house?.owner?.number || "N/A" }}</p>
+            <p><b>Total Members:</b> {{ house.userCount || "N/A" }}</p>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="action-btn">
+          <button
+            type="button"
+            (click)="onViewHouse(house)"
+            pButton
+            class="p-button-text"
           >
-            <li *ngFor="let user of selectedHouse.familyDetails" class="card list-none mb-4 ">
-              <p>
-                <b>Name:</b> {{ user.User?.firstname }} {{ user.User?.lastname }}
-                <span *ngIf="user.User?.isOwner" class="badge badge-primary">(Owner)</span>
-              </p>
-              <p><b>Email:</b> {{ user.User?.email }}</p>
-              <p><b>Phone:</b> {{ user.User?.number || "N/A" }}</p>
-            </li>
-          </ul>
-
-          <!-- Display no data message if familyDetails is null or empty -->
-          <p
-            *ngIf="
-              !selectedHouse?.familyDetails ||
-              selectedHouse?.familyDetails.length === 0
-            "
-          >
-            No family members found.
-          </p>
+            <i class="pi pi-eye"></i>
+          </button>
         </div>
-      </p-sidebar>
-
-      <!-- Button to trigger the sidebar -->
-      <div class="flex-1 pr-4">
-        <button type="button" (click)="onViewHouse(house)" pButton class="p-button-text">
-          <i class="pi pi-eye" style="font-size: 2rem"></i>
-        </button>
       </div>
-      
     </div>
   </div>
+
+  <!-- Family Member Sidebar -->
+  <p-sidebar
+    [(visible)]="sidebarVisible"
+    position="right"
+    [modal]="false"
+    styleClass="w-30rem"
+  >
+    <h5 *ngIf="selectedHouse">
+      House Members ({{ wingName }} - {{ selectedHouse.house_no }})
+    </h5>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="isSidebarLoading" class="loading-indicator">
+      <p>Loading family details...</p>
+    </div>
+
+    <!-- Display family details if available -->
+    <div *ngIf="!isSidebarLoading">
+      <ul
+        *ngIf="
+          selectedHouse?.familyDetails &&
+          selectedHouse?.familyDetails.length > 0
+        "
+        class="family-list"
+      >
+        <li
+          *ngFor="let user of selectedHouse.familyDetails"
+          class="family-card"
+        >
+          <p>
+            <b>Name:</b> {{ user.User?.firstname }} {{ user.User?.lastname }}
+            <span *ngIf="user.User?.isOwner" class="badge badge-primary">
+              (Owner)
+            </span>
+          </p>
+          <p><b>Email:</b> {{ user.User?.email }}</p>
+          <p><b>Phone:</b> {{ user.User?.number || "N/A" }}</p>
+        </li>
+      </ul>
+
+      <!-- Display no data message if familyDetails is null or empty -->
+      <p
+        *ngIf="
+          !selectedHouse?.familyDetails ||
+          selectedHouse?.familyDetails.length === 0
+        "
+      >
+        No family members found.
+      </p>
+    </div>
+  </p-sidebar>
 </div>

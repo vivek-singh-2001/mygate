@@ -33,6 +33,14 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true ,
         onUpdate: 'CASCADE',
+      },
+      latitude:{
+        type:DataTypes.STRING,
+        allowNull:true
+      },
+      longitude:{
+        type:DataTypes.STRING,
+        allowNull:true
       }
     },
     {

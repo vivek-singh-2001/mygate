@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
@@ -11,8 +11,8 @@ import { NoticeService } from '../../../../services/notice/notice.service';
 import { UserService } from '../../../../services/user/user.service';
 import { MessageService } from 'primeng/api';
 import { Notice } from '../../../../interfaces/notice.interface';
-import { DatePipe } from '@angular/common';
-
+import { GalleriaModule } from 'primeng/galleria';
+import { NotificationCountService } from '../../../../services/notificationCount/notificationCount.service';
 
 interface ItemsToAppend {
   description: string;
@@ -32,24 +32,31 @@ interface ItemsToAppend {
     DialogModule,
     InputTextModule,
     FormsModule,
+    GalleriaModule,
   ],
-  providers: [MessageService,DatePipe],
+  providers: [MessageService, DatePipe],
   templateUrl: './notice.component.html',
   styleUrl: './notice.component.css',
 })
 export class NoticeComponent implements OnInit {
   noticeForm: boolean = false;
+  viewNoticeForm: boolean = false;
+  username!: string;
+  specificNoticeDetail: any = [];
   noticeDescription: string = '';
   selectedFiles: File[] = [];
   societyId: string = '';
   userId: string = '';
   formData!: FormData;
-  notices!: Notice[];
+  notices!: any;
+  isAdmin: boolean = false;
+  @Output() noticeCountUpdated = new EventEmitter<number>();
 
   constructor(
     private readonly noticeService: NoticeService,
     private readonly userService: UserService,
-    private readonly messageService: MessageService
+    private readonly messageService: MessageService,
+    private readonly notificationCuntService: NotificationCountService
   ) {
     this.formData = new FormData();
   }
@@ -58,9 +65,21 @@ export class NoticeComponent implements OnInit {
     this.userService.userData$.subscribe({
       next: (userData) => {
         this.userId = userData.id;
+        this.username = userData.firstname;
+
         this.userService.userSocietyId$.subscribe({
           next: (societyId) => {
             this.societyId = societyId;
+            this.userService.userRoles$.subscribe({
+              next: (roleArray) => {
+                if (
+                  roleArray.includes('societyAdmin') ||
+                  roleArray.includes('wingAdmin')
+                ) {
+                  this.isAdmin = true;
+                }
+              },
+            });
           },
         });
       },
@@ -68,8 +87,16 @@ export class NoticeComponent implements OnInit {
 
     this.noticeService.getNotices(this.societyId).subscribe({
       next: (notices) => {
-        console.log(notices)   
-        this.notices = notices.noticeList    
+        const sortedNoticeList = notices.noticeList.sort((a: any, b: any) => {
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        });
+        this.notices = sortedNoticeList;
+        console.log(this.notices);
+        this.notificationCuntService
+          .resetCount(this.societyId, this.userId, 'notice')
+          .subscribe();
       },
       error: (err) => {
         console.log(err);
@@ -104,17 +131,19 @@ export class NoticeComponent implements OnInit {
     // Append multiple files
     if (this.selectedFiles && this.selectedFiles.length > 0) {
       for (const element of this.selectedFiles) {
-        this.formData.append('files', element); // 'files' is the key for multiple files
+        this.formData.append('files', element);
       }
     }
 
     this.noticeService.createNotice(this.formData).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.messageService.add({
           severity: 'success',
           detail: data.message,
         });
+        console.log(data.data.newNotice);
 
+        this.notices.unshift(data.data.newNotice);
         // Clear FormData by reinitializing it
         this.formData = new FormData();
         this.noticeForm = false;
@@ -129,5 +158,10 @@ export class NoticeComponent implements OnInit {
         });
       },
     });
+  }
+
+  viewNotice(notice: Notice) {
+    this.viewNoticeForm = true;
+    this.specificNoticeDetail = notice;
   }
 }

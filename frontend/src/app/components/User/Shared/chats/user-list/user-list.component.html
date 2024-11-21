@@ -1,15 +1,17 @@
 <div class="user-list-box">
   <div class="user-nav-card">
-    <p>chat application</p>
+    <p>Society Community</p>
   </div>
   <div class="user-list-container">
     <ul class="user-list">
       <li
         *ngFor="let user of SocietyUsers"
         (click)="selectUser(user)"
-        class="user-card"
+        class="user-card flex justify-content-between"
+
       >
-        {{ user.firstname }}
+        <p>{{ user.firstname }}</p>
+        <p-badge *ngIf="unreadMessages[user.id] > 0" value="{{ unreadMessages[user.id] }}"></p-badge>
       </li>
     </ul>
   </div>

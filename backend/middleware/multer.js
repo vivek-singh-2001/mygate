@@ -1,19 +1,40 @@
 const multer = require("multer");
+const path = require("path");
 
-// Set up storage for uploaded files
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/"); 
+    cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname); 
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-// Create upload middleware for multiple files
-const uploadMultiple = multer({ storage: storage }).array("files", 5); 
-// Create upload middleware for a single file
-const uploadSingle = multer({ storage: storage }).single("file");
+const fileFilter = (allowedTypes) => {
+  return (req, file, cb) => {
+    const extName = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimeType = allowedTypes.test(file.mimetype);
 
+    if (extName && mimeType) {
+      cb(null, true);
+    } else {
+      cb(new Error(`Only files of type ${allowedTypes.toString()} are allowed!`), false);
+    }
+  };
+};
 
-module.exports = { uploadMultiple, uploadSingle };
+const upload = (allowedTypes,fieldName = "files", maxFiles = 5) => {
+  return {
+    uploadMultiple: multer({
+      storage: storage,
+      fileFilter: fileFilter(allowedTypes),
+    }).array(fieldName, maxFiles),
+
+    uploadSingle: multer({
+      storage: storage,
+      fileFilter: fileFilter(allowedTypes),
+    }).single(fieldName),
+  };
+};
+
+module.exports = upload;

@@ -95,9 +95,8 @@ module.exports = (connectDB, DataTypes) => {
     const firstFourLettersOfFirstName = this.firstname
       .slice(0, 2)
       .toLowerCase();
-    const firstFourLettersOfLastName = this.firstname.slice(0, 2).toLowerCase();
     const birthYear = new Date(this.dateofbirth).getFullYear();
-    return `${firstFourLettersOfFirstName}-${firstFourLettersOfLastName}@${birthYear}`;
+    return `${firstFourLettersOfFirstName}-${firstFourLettersOfFirstName}@${birthYear}`;
   };
 
   User.prototype.validPassword = async function (password) {

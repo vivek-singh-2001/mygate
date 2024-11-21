@@ -16,8 +16,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from '../../../../../environments/environment';
 import { Wing } from '../../../../interfaces/wing.interface';
+import { WingService } from '../../../../services/wings/wing.service';
 
 @Component({
   selector: 'app-allocate-house',
@@ -31,15 +31,15 @@ import { Wing } from '../../../../interfaces/wing.interface';
     CalendarModule,
     ToastModule,
   ],
-  providers:[],
+  providers: [],
   templateUrl: './allocate-house.component.html',
   styleUrl: './allocate-house.component.css',
 })
 export class AllocateHouseComponent implements OnInit {
-  wingOptions: any[] = []; 
-  houseOptions: any[] = []; 
-  numberOfWings!: { name: number; value: number }; 
-  numberOfHouse!: { house_no: number; value: number }; 
+  wingOptions: any[] = [];
+  houseOptions: any[] = [];
+  numberOfWings!: { name: number; value: string };
+  numberOfHouse!: { house_no: number; value: number };
   userDetailForm!: FormGroup;
   genders: Gender[] = [];
 
@@ -49,7 +49,7 @@ export class AllocateHouseComponent implements OnInit {
     private readonly http: HttpClient,
     private readonly fb: FormBuilder,
     private readonly snackBar: MatSnackBar,
-
+    private readonly wingService: WingService
   ) {
     this.genders = [
       { label: 'Male', value: 'male' },
@@ -74,18 +74,18 @@ export class AllocateHouseComponent implements OnInit {
   generateWingOptions() {
     this.userService.userSocietyId$.subscribe({
       next: (societyId) => {
-        console.log("from allocate house ?",societyId);
-        
+        console.log('from allocate house ?', societyId);
+
         this.societyService.fetchSocietyData(societyId).subscribe({
-          next: (response:any) => {
+          next: (response: any) => {
             console.log(response);
-            
-            const sortedWings = response.sort(
-              (a: Wing, b: Wing) => a.name.localeCompare(b.name)
+
+            const sortedWings = response.sort((a: Wing, b: Wing) =>
+              a.name.localeCompare(b.name)
             );
             this.wingOptions = sortedWings.map((wing: Wing) => ({
-              name: wing.name, 
-              value: wing.id, 
+              name: wing.name,
+              value: wing.id,
             }));
           },
           error: (error) => {
@@ -95,18 +95,16 @@ export class AllocateHouseComponent implements OnInit {
       },
     });
   }
-  
+
   onWingSelection() {
-    const houseApiUrl = `${environment.apiUrl}/house/wingHouseDetails/${this.numberOfWings.value}`;
-    this.http.get<any>(houseApiUrl).subscribe({
+    this.wingService.fetchHousesByWingId(this.numberOfWings.value).subscribe({
       next: (response: any) => {
         const sortedHouse = response.data.wingHouseDetails.sort(
           (a: any, b: any) => a.house_no - b.house_no
         );
-
         this.houseOptions = sortedHouse.map((house: any) => ({
-          house_no: house.house_no, // Use the wing name from the response
-          value: house.id, // Assign a value (index-based or from response)
+          house_no: house.house_no,
+          value: house.id,
         }));
       },
       error: (error: Error) => {
@@ -131,21 +129,25 @@ export class AllocateHouseComponent implements OnInit {
 
       this.userService.addFamilyMember(allocationDetails).subscribe({
         next: (response: any) => {
-          console.log('User added successfully:', response);  
-          this.snackBar.open(`House Allocated to  ${allocationDetails.firstname}`, 'Close', { duration: 2000 });
+          console.log('User added successfully:', response);
+          this.snackBar.open(
+            `House Allocated to  ${allocationDetails.firstname}`,
+            'Close',
+            { duration: 2000 }
+          );
 
           // Clear the form and variables
-          this.userDetailForm.reset(); 
-          this.numberOfWings = { name: 0, value: 0 }; 
-          this.numberOfHouse = { house_no: 0, value: 0 }; 
+          this.userDetailForm.reset();
+          this.numberOfWings = { name: 0, value: '' };
+          this.numberOfHouse = { house_no: 0, value: 0 };
         },
         error: (error: Error) => {
           console.error('Failed to add user:', error);
           this.snackBar.open(`${error.message}`, 'Close', { duration: 2000 });
-          
-          this.userDetailForm.reset(); 
-          this.numberOfWings = { name: 0, value: 0 }; 
-          this.numberOfHouse = { house_no: 0, value: 0 }; 
+
+          this.userDetailForm.reset();
+          this.numberOfWings = { name: 0, value: '' };
+          this.numberOfHouse = { house_no: 0, value: 0 };
         },
       });
     } else {

@@ -7,13 +7,14 @@ import { AdminGuard } from './gaurds/admin.gaurd';
 import { SystemAdminComponent } from './layouts/system-admin/system-admin.component';
 import { SystemAdminGuard } from './gaurds/system-admin.guard';
 import { UnauthorizedComponent } from './components/shared/unauthorized/unauthorized.component';
-import { RegisterComponent } from './components/shared/register/register.component';
 import { LoginComponent } from './components/shared/login/login.component';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { PageNotFoundComponent } from './components/shared/pageNotFound/page-not-found.component';
 import { SecurityGaurdComponent } from './components/Staff/SecurityGaurd/security-gaurd.component';
 import { PendingUserComponent } from './components/shared/pending-user/pending-user.component';
+import { SecurityComponent } from './layouts/Security/security.component';
+import { SecurityGuard } from './gaurds/security.gaurd';
 export const routes: Routes = [
   {
     path: 'login',
@@ -22,12 +23,14 @@ export const routes: Routes = [
   },
   {
     path: 'register',
-    component: RegisterComponent,
+    loadComponent: () =>
+      import('./components/shared/register/register.component').then(
+        (r) => r.RegisterComponent
+      ),
   },
   {
     path: 'google/success',
     component: GoogleCallbackComponent,
-    canActivate: [AuthGuard],
   },
   { path: 'pending', component: PendingUserComponent },
 
@@ -67,6 +70,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/User/Shared/visitors/visitors.component').then(
             (visitor) => visitor.VisitorsComponent
+          ),
+      },
+      {
+        path: 'payments',
+        loadComponent: () =>
+          import('./components/User/Shared/payments/payments.component').then(
+            (payment) => payment.PaymentsComponent
+          ),
+      },
+      {
+        path: 'society-accounts',
+        loadComponent: () =>
+          import('./components/User/Shared/society-accounts/society-accounts.component').then(
+            (society) => society.SocietyAccountsComponent
           ),
       },
       {
@@ -135,6 +152,22 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'Security',
+    component: SecurityComponent,
+    canActivate: [SecurityGuard],
+    children: [
+      { path: '', redirectTo: 'visitors', pathMatch: 'full' },
+      {
+        path: 'visitors',
+        canActivate: [SecurityGuard],
+        loadComponent: () =>
+          import(
+            './components/Staff/security-visitor/security-visitor.component'
+          ).then((security) => security.SecurityVisitorComponent),
+      },
+    ],
+  },
 
   { path: 'test', component: SecurityGaurdComponent },
 
@@ -148,5 +181,4 @@ export const routes: Routes = [
     path: '**',
     component: PageNotFoundComponent,
   },
-  { path: 'unauthorized', component: UnauthorizedComponent },
 ];

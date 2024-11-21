@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { environment } from '../../../../../../environments/environment';
+import { WingService } from '../../../../../services/wings/wing.service';
 
 @Component({
   selector: 'app-wing-details',
@@ -18,10 +19,16 @@ export class WingDetailsComponent implements OnInit {
   wingName: string | null = '';
   houses: any[] = [];
   isLoading = false;
+  isSidebarLoading: boolean = false;
   sidebarVisible: boolean = false;
   selectedHouse: any = null;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient,private router:Router) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly http: HttpClient,
+    private readonly router: Router,
+    private readonly wingService: WingService
+  ) {}
 
   ngOnInit(): void {
     // Get the wingId from the URL
@@ -36,54 +43,48 @@ export class WingDetailsComponent implements OnInit {
     });
   }
 
-  // Method to call the API and fetch houses by wingId
   fetchHousesByWingId(wingId: string): void {
     this.isLoading = true;
-    const apiUrl = `${environment.apiUrl}/house/wingHouseDetails/${wingId}`;
 
-    this.http.get<any>(apiUrl).subscribe({
-      next: (response) => {
+    this.wingService.fetchHousesByWingId(wingId).subscribe({
+      next: (response: any) => {
         this.houses = response.data.wingHouseDetails;
         this.isLoading = false;
       },
-      error: (error) => {
+      error: (error: Error) => {
         console.error('Error fetching house data:', error);
         this.isLoading = false;
       },
     });
   }
+  
   onViewHouse(house: any) {
     this.selectedHouse = house;
-
-    
+    this.isSidebarLoading = true;
     this.sidebarVisible = true;
-    this.isLoading = true;
     this.http
-      .get<any>(
-        `${environment.apiUrl}/houseuser/houseDetails/${house.id}`
-      )
+      .get<any>(`${environment.apiUrl}/houseuser/houseDetails/${house.id}`)
       .subscribe({
         next: (response) => {
-          console.log('response',response);
-          
+          console.log('response', response);
+
           if (response.data.HouseDetails.length > 0) {
             this.selectedHouse.familyDetails = response.data.HouseDetails.sort(
-              (a: any, b: any) => (b.User?.isOwner ? 1 : 0) - (a.User?.isOwner ? 1 : 0)
+              (a: any, b: any) =>
+                (b.User?.isOwner ? 1 : 0) - (a.User?.isOwner ? 1 : 0)
             );
-            this.isLoading = false;
           } else {
             this.selectedHouse.familyDetails = null;
-            this.isLoading = false;
           }
-          this.isLoading = false;
+          this.isSidebarLoading = false;
         },
         error: (error) => {
           console.error('Error fetching house user data:', error);
-          this.isLoading = false;
+          this.isSidebarLoading = false;
         },
       });
   }
-  goBack(){
-    this.router.navigate(['/home/apartments/'])
+  goBack() {
+    this.router.navigate(['/home/apartments/']);
   }
 }

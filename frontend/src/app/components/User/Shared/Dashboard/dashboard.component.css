@@ -6,7 +6,6 @@
   align-items: center;
   padding: 20px;
   margin: 20px;
-  height: 250px;
  
 }
 .calander {
@@ -17,7 +16,6 @@
   align-items: center;
   padding: 20px;
   margin: 20px;
-
 }
 
 .number {
@@ -44,5 +42,20 @@
 .icon{
   opacity: 0.7;
 }
+
+
+.custom-scroll {
+  overflow-y: scroll;
+  scrollbar-width: none; /* For Firefox */
+}
+
+.custom-scroll::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Edge */
+}
+
+.no-data-text{
+  letter-spacing: 1.2px;
+}
+
 
 

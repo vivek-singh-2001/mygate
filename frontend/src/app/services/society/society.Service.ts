@@ -32,9 +32,6 @@ export class SocietyService {
             .get<any>(`${this.societyApiUrl}/societyAdminsDetails/${societyId}`)
             .pipe(
               tap((response) => {
-                console.log("fafhwauifgwauvwaufwaufwugd",response);
-                
-                
                 if (response?.data) {
                   this.societyDataSubject.next(response.data); // Update BehaviorSubject
                 }
@@ -64,6 +61,8 @@ export class SocietyService {
   }
 
   createSociety(societyData: Society): Observable<Society> {
+    console.log("aaja",societyData);
+    
     return this.http.post<Society>(`${this.societyApiUrl}/createSociety`, societyData)
   }
 

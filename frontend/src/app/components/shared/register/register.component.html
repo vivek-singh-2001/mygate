@@ -104,19 +104,14 @@
                 (keypress)="validateNumericInput($event)"
               />
               <small
-                *ngIf="
-                  reactiveForm.get('number')?.errors?.['required'] &&
-                  reactiveForm.get('number')?.touched
-                "
+                *ngIf="reactiveForm.get('number')?.errors?.['required'] && reactiveForm.get('number')?.touched"
+                class="p-error"
               >
                 *Phone number is required.
               </small>
               <small
-                *ngIf="
-                  reactiveForm.get('number')?.hasError('pattern') &&
-                  !reactiveForm.get('number')?.errors?.['required'] &&
-                  reactiveForm.get('number')?.touched
-                "
+                *ngIf="reactiveForm.get('number')?.hasError('pattern') && !reactiveForm.get('number')?.errors?.['required'] && reactiveForm.get('number')?.touched"
+                class="p-error"
               >
                 *Please enter a valid phone number.
               </small>
@@ -151,6 +146,10 @@
                 iconPos="right"
               />
             </div>
+
+            <p class="justify-content-center flex align-items-center mt-4">
+              Already Registered?&nbsp;<a href="/login">Login</a>
+            </p>
           </ng-template>
         </p-stepperPanel>
         <p-stepperPanel>
@@ -255,7 +254,6 @@
                       *Invalid Pincode.
                     </small>
                   </div>
-
                   <div class="input-box">
                     <input
                       type="text"
@@ -290,33 +288,52 @@
                   </div>
                 </div>
               </div>
-
-              <div class="flex pt-4 justify-content-between">
-                <p-button
-                  (onClick)="prevCallback.emit()"
-                  label="Back"
-                  severity="secondary"
-                  icon="pi pi-arrow-left"
-                />
-                <p-button
-                  (onClick)="
-                    onNextStep(
-                      [
-                        'address.s_name',
-                        'address.street',
-                        'address.postal',
-                        'address.city',
-                        'address.state',
-                        'address.country'
-                      ],
-                      nextCallback
-                    )
-                  "
-                  label="Next"
-                  icon="pi pi-arrow-right"
-                  iconPos="right"
-                />
+            </div>
+            <div class="w-full">
+              <div *ngIf="latitude && longitude" class="map-container">
+                <h3>Select Location on Map</h3>
+                <google-map
+                  [center]="{ lat: latitude, lng: longitude }"
+                  [zoom]="14"
+                  height="300px"
+                  width="100%"
+                  (mapClick)="selectLocation($event)"
+                >
+                  <!-- Marker for selected location -->
+                  <map-marker
+                    *ngIf="selectedLocation"
+                    [position]="selectedLocation"
+                  ></map-marker>
+                </google-map>
               </div>
+
+              
+            </div>
+            <div class="flex pt-4 justify-content-between">
+              <p-button
+                (onClick)="prevCallback.emit()"
+                label="Back"
+                severity="secondary"
+                icon="pi pi-arrow-left"
+              />
+              <p-button
+                (onClick)="
+                  onNextStep(
+                    [
+                      'address.s_name',
+                      'address.street',
+                      'address.postal',
+                      'address.city',
+                      'address.state',
+                      'address.country'
+                    ],
+                    nextCallback
+                  )
+                "
+                label="Next"
+                icon="pi pi-arrow-right"
+                iconPos="right"
+              />
             </div>
           </ng-template>
         </p-stepperPanel>
@@ -373,30 +390,7 @@
                 fileError
               }}</small>
             </div>
-            <div class="text-start text-xl font-semibold mb-4">
-              Your House Number Preference ?
-            </div>
-
-            <div class="flex flex-wrap justify-content-center gap-3">
-              <p-radioButton
-                formControlName="house_option"
-                label="A-101"
-                name="house_option"
-                value="A-101"
-              />
-              <p-radioButton
-                formControlName="house_option"
-                label="A-11"
-                name="house_option"
-                value="A-11"
-              />
-              <p-radioButton
-                formControlName="house_option"
-                label="A-1001"
-                name="house_option"
-                value="A-1001"
-              />
-            </div>
+            
 
             <div class="flex pt-4 justify-content-between">
               <p-button
