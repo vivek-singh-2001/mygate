@@ -1,32 +1,37 @@
-<div class="surface-0 forum-container">
+<div class="main-container">
+  <div class="surface-0 forum-container">
     <!-- Navigation Bar -->
     <div class="navigation-bar">
       <p-chip
         *ngFor="let section of forumSections"
-        label="{{ section }}"
+        label="{{ section.name }}"
         (click)="selectSection(section)"
-        [styleClass]="section === selectedSection ? 'p-chip-selected' : ''"
+        [styleClass]="
+          section.name === selectedSection ? 'p-chip-selected' : 'p-chip'
+        "
       >
       </p-chip>
     </div>
-  
+
     <!-- Create New Thread Button -->
-    <div class="p-mt-3">
-      <button pButton label="Create New Thread" icon="pi pi-plus" (click)="showCreateThreadForm()"></button>
+    <div class="create-btn">
+      <button
+        pButton
+        label="Create New Thread"
+        icon="pi pi-plus"
+        (click)="showCreateThreadForm()"
+      ></button>
     </div>
-  
+
     <!-- Scrollable Forum Section -->
-    <div class="forum-content p-d-flex p-flex-column p-shadow-2 p-mt-3">
-      <div
-        *ngFor="let post of forumPosts"
-        class="post-card p-mb-3 p-p-3 p-border-round surface-card"
-      >
+    <div class="forum-content">
+      <div *ngFor="let post of forumPosts" class="post-card">
         <h3>{{ post.title }}</h3>
         <p>{{ post.description }}</p>
         <small class="text-muted">Posted by {{ post.author }}</small>
       </div>
     </div>
-  
+
     <!-- Create Thread Modal -->
     <p-dialog
       [(visible)]="createThreaddialogue"
@@ -36,9 +41,8 @@
       [style]="{ width: '50vw' }"
       [resizable]="false"
       [draggable]="false"
-    
     >
       <app-thread></app-thread>
     </p-dialog>
   </div>
-  
+</div>

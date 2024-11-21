@@ -93,6 +93,7 @@ export class SideNavComponent implements OnInit {
         iconSize: 'large',
         command: () => this.navigateTo('/home/society-accounts'),
       },
+      
       ...(this.isAdmin
         ? [
             {

@@ -77,6 +77,11 @@ export class NavigationComponent implements OnInit {
         onMouseEnter: () => this.showDropdown(),
         onMouseLeave: () => this.hideDropdown(),
       },
+      {
+        label: 'Community Forum',
+        icon: 'pi pi-id-card',
+        command: () => this.goToForum(),
+      },
       // {
       //   label: 'Projects',
       //   icon: 'pi pi-search',
@@ -136,6 +141,10 @@ export class NavigationComponent implements OnInit {
 
   goToVisitors() {
     this.router.navigate(['/home/visitors']);
+  }
+
+  goToForum(){
+    this.router.navigate(['/home/forums'])
   }
 
   goToProfile() {

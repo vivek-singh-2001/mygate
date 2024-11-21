@@ -83,8 +83,15 @@ export const routes: Routes = [
       {
         path: 'society-accounts',
         loadComponent: () =>
-          import('./components/User/Shared/society-accounts/society-accounts.component').then(
-            (society) => society.SocietyAccountsComponent
+          import(
+            './components/User/Shared/society-accounts/society-accounts.component'
+          ).then((society) => society.SocietyAccountsComponent),
+      },
+      {
+        path: 'forums',
+        loadComponent: () =>
+          import('./components/User/Shared/forum/forum.component').then(
+            (society) => society.ForumComponent
           ),
       },
       {
@@ -169,8 +176,6 @@ export const routes: Routes = [
       },
     ],
   },
-
-  { path: 'test', component: ForumComponent },
 
   { path: 'unauthorized', component: UnauthorizedComponent },
   {

@@ -26,15 +26,15 @@ export class ForumService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getForumTypes(societyId: string): Observable<ForumType[]> {
+  getAllForumTypes(societyId: string): Observable<ForumType[]> {
     if (this.forumTypesSubject.value.length > 0) {
       return this.forumTypesSubject.asObservable();
     }
-    return this.fetchForumTypes(societyId);
+    return this.fetchAllForumTypes(societyId);
   }
 
-  private fetchForumTypes(societyId: string): Observable<ForumType[]> {
-    return this.http.get<ForumType[]>(`${this.apiUrl}/${societyId}/types`).pipe(
+  private fetchAllForumTypes(societyId: string): Observable<ForumType[]> {
+    return this.http.get<ForumType[]>(`${this.apiUrl}/getAllForum/${societyId}`).pipe(
       switchMap((forumTypes) => {
         this.forumTypesSubject.next(forumTypes);
         return this.forumTypesSubject.asObservable();
