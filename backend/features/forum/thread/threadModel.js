@@ -2,6 +2,12 @@ module.exports = (connectDB, DataTypes) => {
   const Thread = connectDB.define(
     "Thread",
     {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
       title: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -10,7 +16,7 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      media: {
+      attachments: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
@@ -27,6 +33,7 @@ module.exports = (connectDB, DataTypes) => {
       isPinned: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
+        allowNull: false
       },
     },
     {
@@ -34,14 +41,6 @@ module.exports = (connectDB, DataTypes) => {
       tableName: "threads",
     }
   );
-
-  // Associations
-  //   // A thread can have many posts
-  //   Thread.hasMany(models.Post, {
-  //     foreignKey: 'threadId',
-  //     as: 'posts',
-  //   });
-  // };
 
   return Thread;
 };

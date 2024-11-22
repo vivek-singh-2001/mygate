@@ -11,11 +11,9 @@ import { LoginComponent } from './components/shared/login/login.component';
 import { GoogleCallbackComponent } from './services/auth/googleCallback.component';
 import { RedirectIfLoggedInGuard } from './gaurds/redirect-if-logged-in.guard';
 import { PageNotFoundComponent } from './components/shared/pageNotFound/page-not-found.component';
-import { SecurityGaurdComponent } from './components/Staff/SecurityGaurd/security-gaurd.component';
 import { PendingUserComponent } from './components/shared/pending-user/pending-user.component';
 import { SecurityComponent } from './layouts/Security/security.component';
 import { SecurityGuard } from './gaurds/security.gaurd';
-import { ForumComponent } from './components/User/Shared/forum/forum.component';
 export const routes: Routes = [
   {
     path: 'login',

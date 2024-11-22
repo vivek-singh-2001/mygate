@@ -37,7 +37,10 @@ db.SocietyStaff = require("../features/society/societyStaffModel.js")(connectDB,
 db.Payment = require("../features/payment/paymentModel.js")(connectDB, DataTypes);
 db.SocietyExpense = require("../features/payment/societyExpensesModel.js")(connectDB,DataTypes)
 db.Forum = require("../features/forum/forumModel.js")(connectDB,DataTypes)
-db.Thread = require("../features/forum/threadModel.js")(connectDB,DataTypes)
+db.Thread = require("../features/forum/thread/threadModel.js")(connectDB,DataTypes)
+db.Post = require("../features/forum/threadPost/postModel.js")(connectDB,DataTypes)
+db.Comment = require("../features/forum/postComment/commentModel.js")(connectDB,DataTypes)
+db.Like = require("../features/forum/postLike/likeModel.js")(connectDB,DataTypes)
 
 // =============society-wing (: One to many)============================
 
@@ -199,6 +202,30 @@ db.Thread.belongsTo(db.Forum, { foreignKey: 'forumId' });
 // ============== user-thread (: One to many)=========================
 db.User.hasMany(db.Thread, { foreignKey: 'createdBy' });
 db.Thread.belongsTo(db.User, { foreignKey: 'createdBy' });
+
+// ============== thread-post (: One to many)=========================
+db.Thread.hasMany(db.Post, { foreignKey: 'threadId' });
+db.Post.belongsTo(db.Thread, { foreignKey: 'threadId' });
+
+// ============== user-post (: One to many)=========================
+db.User.hasMany(db.Post, { foreignKey: 'userId' });
+db.Post.belongsTo(db.User, { foreignKey: 'userId' });
+
+// ============== post-comment (: One to many)=========================
+db.Post.hasMany(db.Comment, { foreignKey: 'postId' });
+db.Comment.belongsTo(db.Post, { foreignKey: 'postId' });
+
+// ============== user-comment (: One to many)=========================
+db.User.hasMany(db.Comment, { foreignKey: 'userId' });
+db.Comment.belongsTo(db.User, { foreignKey: 'userId' });
+
+// ============== post-like (: One to many)=========================
+db.Post.hasMany(db.Like, { foreignKey: 'postId' });
+db.Like.belongsTo(db.Post, { foreignKey: 'postId' });
+
+// ============== user-comment (: One to many)=========================
+db.User.hasMany(db.Like, { foreignKey: 'userId' });
+db.Like.belongsTo(db.User, { foreignKey: 'userId' });
 
 const check = async () => {
   try {
