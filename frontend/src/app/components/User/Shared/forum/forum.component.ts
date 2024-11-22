@@ -55,9 +55,9 @@ export class ForumComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.userSocietyId$.subscribe({
-      next: (societyId) => {
+      next: (societyId) => {     
         this.societyId = societyId;
-        this.forumService.getAllForumTypes(societyId).subscribe({
+        this.forumService.fetchAllForumTypes(societyId).subscribe({
           next: (forumData: any) => {
             this.forumSections = forumData.data;
           },
@@ -70,8 +70,6 @@ export class ForumComponent implements OnInit {
   }
 
   selectSection(section: any) {
-    console.log("",section);
-    
     this.selectedSection = section.name;
     this.forumPosts = this.mockFetchPosts(section.name);
   }

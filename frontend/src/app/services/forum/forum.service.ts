@@ -1,12 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 interface ForumType {
   id: number;
   name: string;
+}
+
+interface ForumResponse {
+  status: string;
+  data: ForumType[];
 }
 
 interface ContentCheckResult {
@@ -19,29 +24,36 @@ interface ContentCheckResult {
 })
 export class ForumService {
   private readonly apiUrl = `${environment.apiUrl}/forums`;
-  private readonly pythonApiUrl = 'http://localhost:5000/check-content'
+  private readonly pythonApiUrl = 'http://127.0.0.1:5000/check-content';
 
-  private readonly forumTypesSubject = new BehaviorSubject<ForumType[]>([]);
+  private readonly forumTypesSubject = new BehaviorSubject<ForumResponse[]>([]);
   forumTypes$ = this.forumTypesSubject.asObservable();
 
   constructor(private readonly http: HttpClient) {}
 
-  getAllForumTypes(societyId: string): Observable<ForumType[]> {
-    if (this.forumTypesSubject.value.length > 0) {
-      return this.forumTypesSubject.asObservable();
-    }
-    return this.fetchAllForumTypes(societyId);
-  }
+ 
 
-  private fetchAllForumTypes(societyId: string): Observable<ForumType[]> {
-    return this.http.get<ForumType[]>(`${this.apiUrl}/getAllForum/${societyId}`).pipe(
-      switchMap((forumTypes) => {
-        this.forumTypesSubject.next(forumTypes);
-        return this.forumTypesSubject.asObservable();
-      }),
-      catchError((error) => {
-        console.error('Error fetching forum types:', error);
-        return throwError(() => new Error('Error fetching forum types'));
+  fetchAllForumTypes(societyId: string): Observable<ForumResponse[]> {
+    return this.forumTypes$.pipe(
+      switchMap((forumTypes: any) => {
+        if (forumTypes.data) {
+          return of(forumTypes); // Return cached data if available
+        } else {
+          // Fetch the forum types from API if not cached
+          return this.http
+            .get<ForumResponse[]>(`${this.apiUrl}/getAllForum/${societyId}`)
+            .pipe(
+              tap((forumTypes) => {
+                this.forumTypesSubject.next(forumTypes);
+              }),
+              catchError((error) => {
+                console.error('Error fetching forum types:', error);
+                return throwError(
+                  () => new Error('Error fetching forum types')
+                ); // Handle error
+              })
+            );
+        }
       })
     );
   }
@@ -49,13 +61,18 @@ export class ForumService {
   checkContent(
     title: string,
     description: string,
-    image_url:string,
+    image_url: any
   ): Observable<ContentCheckResult> {
     // Prepare the content object to send to the backend
-    const content = { title, description,image_url };
+
+    const content = { title, description, image_url };
 
     return this.http
-      .post<ContentCheckResult>(this.pythonApiUrl, content)
+      .post<ContentCheckResult>(this.pythonApiUrl, content, {
+        headers: { 'Content-Type': 'application/json' },
+    
+       // This is important for sending credentials
+      })
       .pipe(
         catchError((error: Error) => {
           console.error('Error checking content:', error);
@@ -72,6 +89,4 @@ export class ForumService {
       })
     );
   }
-
-  
 }

@@ -1,12 +1,12 @@
 <div class="thread-container">
     <h2 class="thread-header">Create a New Thread</h2>
-    <form [formGroup]="threadForm" >
+    <form [formGroup]="threadForm" (ngSubmit)="onSubmit()" >
       <!-- Forum Type Dropdown -->
       <div class="form-group">
         <label for="forumType" class="form-label">Forum Type</label>
         <select formControlName="forumType" class="form-control" id="forumType">
-          <option value="" disabled>Select Forum Type</option>
-          <option *ngFor="let forumType of forumTypes$ | async" [value]="forumType.id">{{ forumType.name }}</option>
+          <p >Select Forum Type</p>
+          <option *ngFor="let forumType of forumSections ">{{ forumType.name }}</option>
         </select>
         <div *ngIf="threadForm.get('forumType')?.invalid && threadForm.get('forumType')?.touched" class="error-message">
           Forum Type is required.
