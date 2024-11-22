@@ -42,10 +42,11 @@
 }
 
 :host ::ng-deep .p-chip-selected {
-  font-size: 0.8rem;
-  /* background-color: #007bff; */
+  font-size: 1rem;
   color: red;
-  border: 1px solid #ddd;
+  text-decoration:overline;
+  border: 1px solid white;
+  font-weight: 800;
   border-radius: 16px;
   white-space: nowrap;
   overflow: hidden;
