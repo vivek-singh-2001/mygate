@@ -93,7 +93,7 @@ export class NoticeComponent implements OnInit {
           );
         });
         this.notices = sortedNoticeList;
-        console.log(this.notices);
+        console.log("juice piladooooo",this.notices);
         this.notificationCuntService
           .resetCount(this.societyId, this.userId, 'notice')
           .subscribe();

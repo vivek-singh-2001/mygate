@@ -23,11 +23,18 @@ interface ContentCheckResult {
   providedIn: 'root',
 })
 export class ForumService {
-  private readonly apiUrl = `${environment.apiUrl}/forums`;
+  private readonly apiUrl = `${environment.apiUrl}/forum`;
   private readonly pythonApiUrl = 'http://127.0.0.1:5000/check-content';
 
   private readonly forumTypesSubject = new BehaviorSubject<ForumResponse[]>([]);
   forumTypes$ = this.forumTypesSubject.asObservable();
+
+
+    // Cache for forum threads, using a Map to store by forum name
+    private readonly forumThreadsCache = new Map<string, any[]>();
+    private readonly forumThreadsSubject = new BehaviorSubject<Map<string, any[]>>(this.forumThreadsCache);
+    forumThreads$ = this.forumThreadsSubject.asObservable();
+  
 
   constructor(private readonly http: HttpClient) {}
 
@@ -61,17 +68,13 @@ export class ForumService {
   checkContent(
     title: string,
     description: string,
-    image_url: any
+
   ): Observable<ContentCheckResult> {
     // Prepare the content object to send to the backend
-
-    const content = { title, description, image_url };
-
+    const content = { title, description };
     return this.http
       .post<ContentCheckResult>(this.pythonApiUrl, content, {
         headers: { 'Content-Type': 'application/json' },
-    
-       // This is important for sending credentials
       })
       .pipe(
         catchError((error: Error) => {
@@ -81,12 +84,40 @@ export class ForumService {
       );
   }
 
-  createThread(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/create`, formData).pipe(
+  createThread(data:any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/thread`, data).pipe(
       catchError((error: any) => {
         console.error('Error creating thread:', error);
         return throwError(() => new Error('Error creating thread'));
       })
     );
+  }
+
+  getAllThreadByForumName(forumName: string, societyId: string): Observable<any> {
+    // Check if data is cached for the selected forum type
+    const cachedThreads = this.forumThreadsCache.get(forumName);
+    if (cachedThreads) {
+      // If data is cached, return it as an Observable
+      return of({ data: cachedThreads });
+    }
+
+    // If data is not cached, fetch it from the API
+    return this.http
+      .post<any>(`${this.apiUrl}/thread/societyThread`, {
+        forumName,
+        societyId,
+      })
+      .pipe(
+        tap((data) => {
+          // Cache the fetched data
+          this.forumThreadsCache.set(forumName, data.data);
+          // Emit the updated cache to the subject
+          this.forumThreadsSubject.next(this.forumThreadsCache);
+        }),
+        catchError((error) => {
+          console.error('Error fetching threads:', error);
+          return throwError(() => new Error('Error fetching threads'));
+        })
+      );
   }
 }

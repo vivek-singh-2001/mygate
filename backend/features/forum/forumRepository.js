@@ -1,3 +1,4 @@
+const { log } = require("util");
 const { db } = require("../../config/connection");
 const CustomError = require("../../utils/CustomError");
 const { Forum } = db;
@@ -8,12 +9,25 @@ exports.createForum = async (forumData) => {
 
 exports.getAllForums = async (societyId) => {
   return await Forum.findAll({
-    where:{societyId}
+    where: { societyId },
   });
 };
 
 exports.getForumById = async (id) => {
   return await Forum.findByPk(id);
+};
+
+exports.getForumByName = async (name, societyId) => {
+  const forums = await Forum.findOne({
+    where: {
+      name: name,
+      societyId: societyId,
+    },
+  });
+
+  const forumsJSON = forums.toJSON();
+
+  return forumsJSON;
 };
 
 exports.updateForum = async (id, updates) => {
