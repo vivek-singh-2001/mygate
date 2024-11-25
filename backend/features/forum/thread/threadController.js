@@ -16,6 +16,8 @@ exports.createThread = asyncErrorHandler(async (req, res, next) => {
 
 exports.getThreadById = asyncErrorHandler(async (req, res, next) => {
   const { id: threadId } = req.params;
+  console.log(threadId);
+  
   const thread = await threadService.getThreadById(threadId);
   res.status(200).json({ success: true, data: thread });
 });

@@ -93,6 +93,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'forums/:id',
+        loadComponent: () =>
+          import(
+            './components/User/Shared/forum/thread-detail/thread-detail.component'
+          ).then((forum) => forum.ThreadDetailComponent),
+      },
+      {
         path: 'apartments',
         loadComponent: () =>
           import('./components/User/Admin/apartment/apartment.component').then(

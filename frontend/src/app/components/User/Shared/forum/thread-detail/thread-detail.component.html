@@ -1,0 +1,114 @@
+<div class="back-button">
+  <p-button
+    [label]="threadDetails?.Forum?.name || 'go back'"
+    icon="pi pi-arrow-left"
+    [raised]="false"
+    [text]="true"
+    (click)="goBack()"
+    ></p-button
+  >
+</div>
+
+<div class="thread-detail-container">
+  <div class="surface-card p-4 shadow-2 border-round">
+    <!-- Author Section -->
+    <div class="flex align-items-center mb-3">
+      <p-avatar
+        [image]="threadDetails?.User.photo"
+        styleClass="mr-2"
+        size="large"
+        [style]="{ 'background-color': '#2196F3' }"
+        shape="circle"
+      >
+      </p-avatar>
+      <div class="flex flex-column">
+        <div class="flex align-items-center">
+          <span class="font-bold text-lg mr-2">{{
+            threadDetails?.User.firstname
+          }}</span>
+        </div>
+        <span class="text-500">{{
+          threadDetails?.createdAt | date : "medium"
+        }}</span>
+      </div>
+      <!-- Options Menu -->
+      <!-- <p-button icon="pi pi-ellipsis-v" 
+                      styleClass="p-button-rounded p-button-text p-button-plain ml-auto"
+                      (onClick)="showOptions($event)">
+            </p-button> -->
+    </div>
+
+    <!-- Thread Title -->
+    <div class="mb-3" *ngIf="threadDetails?.title">
+      <h2 class="text-xl font-bold m-0">{{ threadDetails?.title }}</h2>
+    </div>
+
+    <!-- Thread Content -->
+    <div class="mb-3">
+      <p class="line-height-3 text-700">{{ threadDetails?.content }}</p>
+
+      <!-- Conditional Image Display -->
+      <div
+        *ngIf="
+          threadDetails?.attachmentUrls &&
+          threadDetails?.attachmentUrls?.length > 0
+        "
+        class="mt-3 thread-image"
+      >
+        <p-galleria
+          [value]="threadDetails.attachmentUrls"
+          [containerStyle]="{ 'max-width': '100%' }"
+          [numVisible]="5"
+          [showThumbnails]="false"
+          [showIndicators]="threadDetails.attachmentUrls?.length > 1"
+          [circular]="true"
+          [showItemNavigators]="true"
+        >
+          <ng-template pTemplate="item" let-item>
+            <img
+              [src]="item"
+              class="w-full border-round-lg cursor-pointer"
+              style="object-fit: cover; max-height: 300px"
+            />
+          </ng-template>
+          <ng-template pTemplate="thumbnail" let-item>
+            <img
+              [src]="item"
+              [alt]="item"
+              style="width: 60px; height: 40px; object-fit: cover"
+            />
+          </ng-template>
+        </p-galleria>
+      </div>
+    </div>
+
+    <!-- Engagement Stats -->
+    <div
+      class="flex align-items-center justify-content-between border-top-1 surface-border pt-3"
+    >
+      <p-button
+        styleClass="p-button-text p-button-plain"
+        [label]="threadDetails?.replyCount + ' Replies'"
+        icon="pi pi-comments"
+      >
+      </p-button>
+      <p-button
+        styleClass="p-button-text p-button-plain"
+        [label]="threadDetails?.retweetCount + ' Retweets'"
+        icon="pi pi-refresh"
+      >
+      </p-button>
+      <p-button
+        styleClass="p-button-text p-button-plain"
+        [label]="threadDetails?.likeCount + ' Likes'"
+        icon="pi pi-heart"
+      >
+      </p-button>
+      <p-button
+        styleClass="p-button-text p-button-plain"
+        icon="pi pi-share-alt"
+      >
+      </p-button>
+    </div>
+  </div>
+</div>

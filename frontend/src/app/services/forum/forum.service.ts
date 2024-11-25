@@ -29,16 +29,14 @@ export class ForumService {
   private readonly forumTypesSubject = new BehaviorSubject<ForumResponse[]>([]);
   forumTypes$ = this.forumTypesSubject.asObservable();
 
-
-    // Cache for forum threads, using a Map to store by forum name
-    private readonly forumThreadsCache = new Map<string, any[]>();
-    private readonly forumThreadsSubject = new BehaviorSubject<Map<string, any[]>>(this.forumThreadsCache);
-    forumThreads$ = this.forumThreadsSubject.asObservable();
-  
+  // Cache for forum threads, using a Map to store by forum name
+  private readonly forumThreadsCache = new Map<string, any[]>();
+  private readonly forumThreadsSubject = new BehaviorSubject<
+    Map<string, any[]>
+  >(this.forumThreadsCache);
+  forumThreads$ = this.forumThreadsSubject.asObservable();
 
   constructor(private readonly http: HttpClient) {}
-
- 
 
   fetchAllForumTypes(societyId: string): Observable<ForumResponse[]> {
     return this.forumTypes$.pipe(
@@ -67,8 +65,7 @@ export class ForumService {
 
   checkContent(
     title: string,
-    description: string,
-
+    description: string
   ): Observable<ContentCheckResult> {
     // Prepare the content object to send to the backend
     const content = { title, description };
@@ -84,7 +81,7 @@ export class ForumService {
       );
   }
 
-  createThread(data:any): Observable<any> {
+  createThread(data: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/thread`, data).pipe(
       catchError((error: any) => {
         console.error('Error creating thread:', error);
@@ -93,7 +90,10 @@ export class ForumService {
     );
   }
 
-  getAllThreadByForumName(forumName: string, societyId: string): Observable<any> {
+  getAllThreadByForumName(
+    forumName: string,
+    societyId: string
+  ): Observable<any> {
     // Check if data is cached for the selected forum type
     const cachedThreads = this.forumThreadsCache.get(forumName);
     if (cachedThreads) {
@@ -119,5 +119,14 @@ export class ForumService {
           return throwError(() => new Error('Error fetching threads'));
         })
       );
+  }
+
+  getThreadById(threadId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/thread/${threadId}`).pipe(
+      catchError((error) => {
+        console.error('Error fetching threads:', error);
+        return throwError(() => new Error('Error fetching thread'));
+      })
+    );
   }
 }

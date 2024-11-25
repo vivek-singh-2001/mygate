@@ -10,6 +10,7 @@ import { UserService } from '../../../../services/user/user.service';
 import { Observable } from 'rxjs';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forum',
@@ -42,7 +43,8 @@ export class ForumComponent implements OnInit {
 
   constructor(
     private readonly forumService: ForumService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly router: Router
   ) {
   }
 
@@ -100,5 +102,9 @@ export class ForumComponent implements OnInit {
     } else {
       this.createThreaddialogue = true;
     }
+  }
+
+  goToThreadDetailComponent(post:any){
+    this.router.navigate(['home/forums', post.id]);
   }
 }

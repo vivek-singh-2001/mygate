@@ -25,10 +25,10 @@
     </div>
 
     <!-- Scrollable Forum Content Section -->
-    <div class="forum-content">
+    <div class="forum-content" >
       @if(forumPosts.length > 0){
       <div class="post-list">
-        <div *ngFor="let post of forumPosts" class="post-card">
+        <div *ngFor="let post of forumPosts" class="post-card" (click)="goToThreadDetailComponent(post)">
           <!-- First div: Author's Picture -->
           <div class="author-section">
             <p-avatar

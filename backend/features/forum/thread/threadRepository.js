@@ -3,7 +3,7 @@ const { db } = require("../../../config/connection");
 const CustomError = require("../../../utils/CustomError");
 const { getUserById } = require("../../users/userRepository");
 
-const { Thread, User } = db;
+const { Thread, User,Forum } = db;
 
 exports.createThread = async (threadData, attachments, forum) => {
   const transaction = await db.connectDB.transaction();
@@ -52,12 +52,62 @@ exports.createThread = async (threadData, attachments, forum) => {
   }
 };
 
-exports.getThreadById = async (threadId) => {
-  return await Thread.findByPk(threadId);
+exports.getThreadById = async (id) => {
+  const transaction = await db.connectDB.transaction(); // Start the transaction
+  try {
+    // Fetch the thread by ID within the transaction
+    const thread = await Thread.findByPk(id, {
+      include: [
+        {
+          model: User,
+          attributes: ["id", "firstname", "lastname", "photo"],
+        },
+        {
+          model: Forum, // Include the Forum model
+          attributes: ["id", "name", "description"], // Specify the fields you want from the Forum table
+        },
+      ],
+      transaction,
+    });
+
+    if (!thread) {
+      throw new CustomError("Thread not found", 404);
+    }
+
+    // Process the thread to include attachment URLs
+    const attachmentFilenames = JSON.parse(thread.attachments || "[]");
+    const attachmentUrls = attachmentFilenames.map((filename) => {
+      return `${process.env.BASE_URL}/uploads/${filename}`;
+    });
+
+    // Get author data
+    const authorData = {
+      firstname: thread.User.firstname,
+      lastname: thread.User.lastname,
+      photo: thread.User.photo,
+    };
+
+    // Return the thread data with the attachment URLs and author data
+    const threadWithAttachments = {
+      ...thread.toJSON(),
+      attachmentUrls,
+      User: authorData,
+    };
+
+    await transaction.commit(); // Commit the transaction if all goes well
+    return threadWithAttachments;
+  } catch (error) {
+    await transaction.rollback(); // Rollback the transaction in case of an error
+    console.log(error);
+    throw new CustomError(
+      "Could not fetch the thread. Please try again later.",
+      400
+    );
+  }
 };
 
 exports.getAllThreads = async (forum) => {
-  const transaction = await db.connectDB.transaction();  // Start the transaction
+  const transaction = await db.connectDB.transaction(); // Start the transaction
   try {
     // Fetch threads for the given forum within the transaction
     const threads = await Thread.findAll({
@@ -65,15 +115,15 @@ exports.getAllThreads = async (forum) => {
       include: [
         {
           model: User,
-          attributes: ["id", "firstname", "lastname", "email","photo"], 
+          attributes: ["id", "firstname", "lastname", "email", "photo"],
         },
       ],
-      transaction,  
+      transaction,
     });
 
     // Process the threads to include attachment URLs
     const threadsWithAttachmentUrls = threads.map((thread) => {
-      const attachmentFilenames = JSON.parse(thread.attachments || '[]');
+      const attachmentFilenames = JSON.parse(thread.attachments || "[]");
       const attachmentUrls = attachmentFilenames.map((filename) => {
         return `${process.env.BASE_URL}/uploads/${filename}`;
       });
@@ -82,8 +132,8 @@ exports.getAllThreads = async (forum) => {
       const authorData = {
         firstname: thread.User.firstname,
         lastname: thread.User.lastname,
-        email:thread.User.email,
-        photo:thread.User.photo
+        email: thread.User.email,
+        photo: thread.User.photo,
       };
 
       // Return the thread data with the attachment URLs and author data
@@ -94,10 +144,10 @@ exports.getAllThreads = async (forum) => {
       };
     });
 
-    await transaction.commit();  // Commit the transaction if all goes well
+    await transaction.commit(); // Commit the transaction if all goes well
     return threadsWithAttachmentUrls;
   } catch (error) {
-    await transaction.rollback();  // Rollback the transaction in case of an error
+    await transaction.rollback(); // Rollback the transaction in case of an error
     console.log(error);
     throw new CustomError(
       "Could not fetch threads. Please try again later.",
@@ -105,7 +155,6 @@ exports.getAllThreads = async (forum) => {
     );
   }
 };
-
 
 exports.updateThread = async (threadId, threadData) => {
   const thread = await Thread.findByPk(threadId);
