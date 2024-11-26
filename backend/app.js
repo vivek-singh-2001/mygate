@@ -25,6 +25,7 @@ const payment_route = require("./features/payment/paymentApis");
 const forum_route = require("./features/forum/forumApis");
 const thread_route = require("./features/forum/thread/threadApi")
 const threadPost_route = require("./features/forum/threadPost/threadpostApis")
+const threadPostcomment_route = require("./features/forum/postComment/postCommentApis")
 const mapapikey = require("./utils/mapApiKeyRoute")
 const staff_Routes = require("./features/staff/staffApis");
 // USE MODULES HERE
@@ -98,6 +99,7 @@ app.use("/api/v1/payments", payment_route);
 app.use("/api/v1/forum", forum_route);
 app.use("/api/v1/forum/thread", thread_route);
 app.use("/api/v1/forum/threadpost", threadPost_route);
+app.use("/api/v1/forum/threadpost/comment", threadPostcomment_route);
 app.use("/api/v1/mapapikey", mapapikey);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

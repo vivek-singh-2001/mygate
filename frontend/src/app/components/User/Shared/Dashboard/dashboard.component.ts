@@ -40,8 +40,6 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.userService.userData$.subscribe({
       next: (userData) => {
-        console.log(userData.id);
-        
         this.userId = userData.id;
         this.userService.userSocietyId$.subscribe({
           next: (societyId) => {
@@ -55,7 +53,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.notificationCountService.notificationCount$.subscribe({
-      next: (count: any) => {
+      next: (count: number) => {
         this.newNoticesCount = count;
         this.noticeService.getNotices(this.societyId).subscribe((notice) => {
           const sortedNoticeList = notice.noticeList.sort((a: any, b: any) => {

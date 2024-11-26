@@ -165,3 +165,17 @@ exports.deleteThread = async (threadId) => {
   const thread = await Thread.findByPk(id);
   return await thread.destroy();
 };
+
+exports.incrementRepliedCount = async (threadId) => {
+  const thread = await Thread.findByPk(threadId);
+  if (!thread) {
+    throw new CustomError("Thread not found", 404);
+  }
+
+  // Increment the repliedCount by 1
+  thread.replyCount += 1;
+  await thread.save();
+
+  return thread;
+};
+

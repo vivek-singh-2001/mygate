@@ -1,5 +1,6 @@
 const postRepository = require("./threadPostRepository");
 const CustomError = require("../../../utils/CustomError");
+const threadRepository = require("../thread/threadRepository");
 
 exports.createPost = async (postData) => {
   if (!postData.threadId || !postData.userId || !postData.content) {
@@ -11,6 +12,14 @@ exports.createPost = async (postData) => {
   if (!post) {
     throw new CustomError("Error creating post", 400);
   }
+
+  // Increment the repliedCount for the thread
+  const thread = await threadRepository.getThreadById(postData.threadId); // Get the thread
+  if (!thread) {
+    throw new CustomError("Thread not found", 404);
+  }
+
+  await threadRepository.incrementRepliedCount(postData.threadId);
 
   return post;
 };

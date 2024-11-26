@@ -9,6 +9,8 @@ exports.createPost = async (postData) => {
       threadId: postData.threadId,
       userId: postData.userId,
     });
+
+
     return post;
   } catch (error) {
     console.log(error);
@@ -47,3 +49,16 @@ exports.deletePost = async (postId) => {
   const post = await Post.findByPk(postId);
   return await post.destroy();
 };
+
+exports.incrementRepliedCount = async (postId) => {
+    const post = await Post.findByPk(postId);
+    if (!post) {
+      throw new CustomError("Post not found", 404);
+    }
+  
+    post.repliedCount += 1; // Increment repliedCount
+    await post.save();
+  
+    return post;
+  };
+  
