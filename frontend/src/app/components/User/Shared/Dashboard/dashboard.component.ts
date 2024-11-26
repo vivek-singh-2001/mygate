@@ -40,6 +40,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     this.userService.userData$.subscribe({
       next: (userData) => {
+        console.log(userData.id);
+        
         this.userId = userData.id;
         this.userService.userSocietyId$.subscribe({
           next: (societyId) => {
