@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
       },
     });
 
-    // // Subscribe to chat notification count updates
+    // Subscribe to chat notification count updatesgngngn
     // this.notificationCountService.chatNotificationCount$.subscribe({
     //   next: (count: any) => {
     //     this.newChatCount = count;
