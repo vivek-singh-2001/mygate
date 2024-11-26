@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const postController = require("./threadPostController");
 const upload = require("../../../middleware/multer");
+const validate = require("../../../utils/validationMiddleware");
 const { bodyValidator } = require("../../../validations/bodyValidation");
 
 const postValidationRules = bodyValidator([
@@ -15,7 +16,7 @@ const { uploadSingle } = upload(/jpg|jpeg|png|webp/, "file");
 router.post(
   "/",
   uploadSingle,
-  postValidationRules,
+  validate(postValidationRules),
   postController.createPost
 );
 router.get("/:id", postController.getPostById);

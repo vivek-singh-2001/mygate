@@ -129,4 +129,22 @@ export class ForumService {
       })
     );
   }
+
+  getPostsByThreadId(threadId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/threadpost/thread/${threadId}`).pipe(
+      catchError((error) => {
+        console.error('Error fetching threads:', error);
+        return throwError(() => new Error('Error fetching thread'));
+      })
+    );
+  }
+
+  createThreadPost(postData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/threadpost`, postData).pipe(
+      catchError((error: any) => {
+        console.error('Error creating thread:', error);
+        return throwError(() => new Error('Error creating thread'));
+      })
+    );
+  }
 }

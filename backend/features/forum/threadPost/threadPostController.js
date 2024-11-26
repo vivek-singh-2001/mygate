@@ -4,7 +4,7 @@ const postService = require("./threadPostService");
 exports.createPost = asyncErrorHandler(async (req, res, next) => {
   const postData = req.body;
   const attachment = req.file;
-  postData.attachments = attachment.filename;
+  postData.attachments = attachment?.filename;
 
   const post = await postService.createPost(postData);
   res.status(201).json({

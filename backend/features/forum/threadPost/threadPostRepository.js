@@ -10,7 +10,6 @@ exports.createPost = async (postData) => {
       userId: postData.userId,
     });
 
-
     return post;
   } catch (error) {
     console.log(error);

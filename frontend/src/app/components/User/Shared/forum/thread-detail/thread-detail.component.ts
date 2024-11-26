@@ -1,10 +1,4 @@
-import {
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 // PrimeNG modules
 import { CardModule } from 'primeng/card';
 import { AvatarModule } from 'primeng/avatar';
@@ -20,6 +14,10 @@ import { CarouselModule } from 'primeng/carousel';
 import { ActivatedRoute } from '@angular/router';
 import { ForumService } from '../../../../../services/forum/forum.service';
 import { GalleriaModule } from 'primeng/galleria';
+import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../../../environments/environment';
+import { ImageModule } from 'primeng/image';
+import { UserService } from '../../../../../services/user/user.service';
 
 @Component({
   selector: 'app-thread-detail',
@@ -37,6 +35,8 @@ import { GalleriaModule } from 'primeng/galleria';
     ScrollPanelModule,
     CarouselModule,
     GalleriaModule,
+    FormsModule,
+    ImageModule,
   ],
   templateUrl: './thread-detail.component.html',
   styleUrl: './thread-detail.component.css',
@@ -45,113 +45,83 @@ import { GalleriaModule } from 'primeng/galleria';
 export class ThreadDetailComponent implements OnInit {
   threadId!: string;
   threadDetails: any;
+  posts: any[] = []; // Array to store posts
+  newPostContent = ''; // For storing the new post content
+  uploadedImage: File | null = null; // To store the uploaded image
+  userId: string = '';
 
   constructor(
     private readonly route: ActivatedRoute,
-    private readonly forumService: ForumService
+    private readonly forumService: ForumService,
+    private readonly userService: UserService
   ) {}
 
-  // Comments
-  comments = [
-    {
-      id: 1,
-      content: 'You should use lazy loading for modules!',
-      createdBy: {
-        firstname: 'Jane',
-        lastname: 'Smith',
-        photo: 'https://via.placeholder.com/150',
-      },
-      createdAt: new Date('2024-11-01T12:30:00'),
-      likes: 5,
-    },
-    {
-      id: 2,
-      content: 'Make sure to use OnPush change detection strategy.',
-      createdBy: {
-        firstname: 'Mike',
-        lastname: 'Williams',
-        photo: 'https://via.placeholder.com/150',
-      },
-      createdAt: new Date('2024-11-01T13:00:00'),
-      likes: 8,
-    },
-    {
-      id: 2,
-      content: 'Make sure to use OnPush change detection strategy.',
-      createdBy: {
-        firstname: 'Mike',
-        lastname: 'Williams',
-        photo: 'https://via.placeholder.com/150',
-      },
-      createdAt: new Date('2024-11-01T13:00:00'),
-      likes: 8,
-    },
-    {
-      id: 2,
-      content: 'Make sure to use OnPush change detection strategy.',
-      createdBy: {
-        firstname: 'Mike',
-        lastname: 'Williams',
-        photo: 'https://via.placeholder.com/150',
-      },
-      createdAt: new Date('2024-11-01T13:00:00'),
-      likes: 8,
-    },
-    {
-      id: 2,
-      content: 'Make sure to use OnPush change detection strategy.',
-      createdBy: {
-        firstname: 'Mike',
-        lastname: 'Williams',
-        photo: 'https://via.placeholder.com/150',
-      },
-      createdAt: new Date('2024-11-01T13:00:00'),
-      likes: 8,
-    },
-  ];
-
-  // New comment model for the input field
-  newComment = {
-    content: '',
-  };
-
-  addComment() {
-    if (this.newComment.content.trim()) {
-      this.comments.push({
-        id: this.comments.length + 1,
-        content: this.newComment.content,
-        createdBy: {
-          firstname: 'Current',
-          lastname: 'User',
-          photo: 'https://via.placeholder.com/150', // Replace with actual user's photo
-        },
-        createdAt: new Date(),
-        likes: 0,
-      });
-      this.newComment.content = ''; // Clear the input field
-    }
-  }
-
-  postComment() {
-    console.log('comment');
-  }
-
   ngOnInit(): void {
-    // this.route.paramMap.subscribe((params) => {
-    //   this.threadId = params.get('id')!;
-    //   console.log(params.get('forum')!);
+    this.threadId = this.route.snapshot.paramMap.get('id')!;
+    this.userService.userData$.subscribe((user) => {
+      this.userId = user.id;
+    });
+    this.fetchThreadDetails();
+    this.fetchPosts();
+  }
 
-    //   console.log('Updated Thread ID:', this.threadId);
-    // });
-    this.threadId = this.route.snapshot.paramMap.get('id')!; // Get thread ID from route
+  fetchThreadDetails() {
     this.forumService.getThreadById(this.threadId).subscribe({
       next: (data) => {
-        console.log(data.data);
-        
         this.threadDetails = data.data;
       },
       error: (err) => {
-        console.log(err);
+        console.error('Error fetching thread details:', err);
+      },
+    });
+  }
+
+  fetchPosts() {
+    this.forumService.getPostsByThreadId(this.threadId).subscribe({
+      next: (data) => {
+        this.posts = data.data;
+      },
+      error: (err) => {
+        console.error('Error fetching posts:', err);
+      },
+    });
+  }
+
+  onImageUpload(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.uploadedImage = input.files[0];
+    }
+  }
+
+  getImageUrl(imagePath: string): string {
+    if (!imagePath) {
+      console.error('Image path not found');
+      return '';
+    }
+
+    const filename = imagePath.split('/').pop() ?? '';
+
+    return `${environment.apiUrl}/visitors/image/${filename}`;
+  }
+
+  addPost(): void {
+    const formData = new FormData();
+    formData.append('content', this.newPostContent);
+    formData.append('threadId', this.threadId);
+    formData.append('userId', this.userId);
+    if (this.uploadedImage) {
+      formData.append('attachment', this.uploadedImage);
+    }
+
+    this.forumService.createThreadPost(formData).subscribe({
+      next: (newPost) => {
+        this.posts.unshift(newPost);
+        this.newPostContent = '';
+        this.uploadedImage = null;
+      },
+      error: (err) => {
+        console.error('Error adding post:', err);
       },
     });
   }
