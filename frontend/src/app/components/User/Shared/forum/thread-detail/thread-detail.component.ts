@@ -54,6 +54,7 @@ export class ThreadDetailComponent implements OnInit {
   uploadedImage: File | null = null;
   uploadedImageName: string | null = null;
   userData: any = null;
+  isNewPostFormVisible = false;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -152,6 +153,10 @@ export class ThreadDetailComponent implements OnInit {
         });
       },
     });
+  }
+
+  toggleNewPostForm(): void {
+    this.isNewPostFormVisible = !this.isNewPostFormVisible; // Toggle visibility
   }
 
   goBack(): void {

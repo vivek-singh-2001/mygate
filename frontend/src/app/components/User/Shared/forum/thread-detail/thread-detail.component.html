@@ -1,14 +1,15 @@
-<div class="thread-detail-container">
-  <!-- Back Button -->
-  <div class="back-button">
-    <p-button
-      [label]="threadDetails?.Forum?.name || 'Back'"
-      icon="pi pi-arrow-left"
-      class="p-button-text"
-      (onClick)="goBack()"
-    ></p-button>
-  </div>
+<!-- Back Button -->
+<div class="back-button">
+  <p-button
+    [label]="threadDetails?.Forum?.name || 'Back'"
+    icon="pi pi-arrow-left"
+    class="p-button-text"
+    [text]="true"
+    (onClick)="goBack()"
+  ></p-button>
+</div>
 
+<div class="thread-detail-container">
   <!-- Main Thread Header -->
   <div class="thread-header">
     <div class="flex align-items-center">
@@ -104,7 +105,7 @@
   </div>
 
   <!-- Interaction Buttons -->
-  <div
+  <!-- <div
     class="thread-interactions flex justify-content-between p-3 border-bottom"
   >
     <p-button
@@ -122,7 +123,7 @@
       class="p-button-text p-button-secondary"
       label="Repost"
     ></p-button>
-  </div>
+  </div> -->
 
   <!-- Posts Section -->
   <div class="posts-section">
@@ -155,14 +156,26 @@
               </ng-container>
             </div>
 
-            <div class="flex align-items-center text-secondary mt-2">
-              <span class="mr-3">
-                <i class="pi pi-heart mr-1"></i>
-                {{ post.likes || 0 }}
-              </span>
-              <span>
-                {{ post.createdAt | date : "mediumTime" }}
-              </span>
+            <div
+              class="flex align-items-center justify-content-between text-secondary mt-2"
+            >
+              <div class="flex align-items-center">
+                <span class="mr-3">
+                  <i class="pi pi-comment mr-1"></i>
+                  {{ post.likes || 0 }}
+                </span>
+                <span class="mr-3">
+                  <i class="pi pi-heart mr-1"></i>
+                  {{ post.likes || 0 }}
+                </span>
+                <span>
+                  {{ post.createdAt | date : "mediumTime" }}
+                </span>
+              </div>
+              <div class="flex align-items-center gap-2">
+                <i class="pi pi-reply mr-1"></i>
+                <p class="mr-8">reply...</p>
+              </div>
             </div>
           </div>
         </div>
@@ -177,51 +190,49 @@
   </div>
 
   <!-- New Post Form -->
-  <div class="new-post-form">
-    <div class="flex">
+  <div class="new-post-form sticky-bottom">
+    <div class="flex align-items-center">
+      <!-- User Avatar -->
       <p-avatar
         [image]="userData?.photo"
         size="large"
         shape="circle"
-        class="mr-3"
+        class="mr-2"
       ></p-avatar>
-      <div class="flex-grow-1">
-        <textarea
-          [(ngModel)]="newPostContent"
-          rows="3"
-          class="new-post-textarea w-full p-3"
-          placeholder="Post your reply..."
-        ></textarea>
 
-        <div class="flex align-items-center justify-content-between mt-3">
-          <div class="flex align-items-center">
-            <input
-              type="file"
-              accept="image/*"
-              (change)="onImageUpload($event)"
-              class="hidden"
-              #imageInput
-            />
-            <p-button
-              icon="pi pi-image"
-              class="p-button-text"
-              (onClick)="imageInput.click()"
-            ></p-button>
+      <!-- Input Section -->
+      <textarea
+        [(ngModel)]="newPostContent"
+        rows="1"
+        class="new-post-textarea flex-grow-1"
+        placeholder="Type a message..."
+      ></textarea>
 
-            <span *ngIf="uploadedImageName" class="ml-2 text-secondary text-sm">
-              {{ uploadedImageName }}
-            </span>
-          </div>
-
-          <p-button
-            label="Reply"
-            icon="pi pi-send"
-            class="p-button-primary"
-            (onClick)="addPost()"
-            [disabled]="!newPostContent.trim() && !uploadedImage"
-          ></p-button>
-        </div>
+      <!-- Image Upload Button -->
+      <div class="image-upload-container">
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onImageUpload($event)"
+          class="hidden"
+          #imageInput
+        />
+        <p-button
+          icon="pi pi-paperclip"
+          class="p-button-text upload-button"
+          (onClick)="imageInput.click()"
+          title="Attach an image"
+        ></p-button>
       </div>
+
+      <!-- Reply Button -->
+      <p-button
+        icon="pi pi-send"
+        class="p-button-primary reply-button"
+        (onClick)="addPost()"
+        [disabled]="!newPostContent.trim() && !uploadedImage"
+        title="Send message"
+      ></p-button>
     </div>
   </div>
 </div>

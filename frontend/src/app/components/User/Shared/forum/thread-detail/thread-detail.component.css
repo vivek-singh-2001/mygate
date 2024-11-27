@@ -1,7 +1,8 @@
 /* General Body Styling */
 body {
   background-color: #f7f9fc; /* Subtle light background */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
   color: #2c3e50; /* Elegant dark text color for better readability */
 }
 
@@ -20,6 +21,9 @@ body {
   padding: 10px 15px;
   border-bottom: 1px solid #dfe3e8; /* Softer divider */
   background-color: #f9fafc; /* Light tint for clarity */
+  position: absolute;
+  top: 80px;
+  left: 60px;
 }
 
 .back-button p-button {
@@ -75,6 +79,9 @@ p-avatar {
   background-color: #f9fafc; /* Slightly tinted background */
   border-top: 1px solid #dfe3e8;
   padding: 15px;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .new-post-textarea {
@@ -84,11 +91,16 @@ p-avatar {
   padding: 10px;
   font-size: 1rem;
   color: #34495e; /* Consistent text color */
+  flex-grow: 1;
+  resize: none; /* Disable manual resizing */
+  outline: none;
+  height: 40px; /* Keep the height consistent */
+  overflow: hidden;
 }
 
 .new-post-textarea:focus {
   border-color: #1da1f2; /* Highlight on focus */
-  box-shadow: 0 0 8px rgba(29, 161, 242, 0.2); /* Subtle glow */
+  box-shadow: 0 0 4px rgba(29, 161, 242, 0.5);
 }
 
 /* Primary and Secondary Text */
@@ -159,7 +171,6 @@ p-avatar {
   object-position: center; /* Centers the image inside the container */
 }
 
-
 .thread-image-grid {
   display: grid;
   grid-gap: 4px;
@@ -202,5 +213,61 @@ p-avatar {
   .thread-image {
     max-height: 250px;
     max-width: 100%;
+  }
+}
+
+/* Flexbox for a Single Row */
+.new-post-form .flex {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between elements */
+}
+
+/* Image Upload Button */
+.image-upload-container {
+  flex-shrink: 0;
+}
+
+.upload-button {
+  color: #7f8c8d;
+}
+
+.upload-button:hover {
+  color: #1da1f2;
+}
+
+/* Reply Button */
+.reply-button {
+  flex-shrink: 0;
+  height: 40px; /* Consistent height with textarea */
+  border-radius: 50%;
+  width: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1da1f2;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.reply-button:hover {
+  background-color: #1a91da;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .sticky-bottom {
+    padding: 10px;
+  }
+
+  .new-post-textarea {
+    font-size: 0.9rem;
+  }
+
+  .reply-button {
+    font-size: 1rem;
+    height: 36px;
+    width: 36px;
   }
 }
