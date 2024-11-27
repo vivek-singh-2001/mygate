@@ -63,7 +63,7 @@ exports.incrementRepliedCount = async (postId) => {
       throw new CustomError("Post not found", 404);
     }
   
-    post.repliedCount += 1; // Increment repliedCount
+    post.replyCount += 1; // Increment repliedCount
     await post.save();
   
     return post;

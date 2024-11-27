@@ -54,7 +54,10 @@ export class ThreadDetailComponent implements OnInit {
   uploadedImage: File | null = null;
   uploadedImageName: string | null = null;
   userData: any = null;
-  isNewPostFormVisible = false;
+  activeReplyIndex: number | null = null; // Tracks the index of the active reply box
+  replyContent: string = ''; // Tracks the reply content
+  showComments: { [key: number]: boolean } = {};
+  comments: { [key: number]: any[] } = {};
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -86,6 +89,8 @@ export class ThreadDetailComponent implements OnInit {
   fetchPosts() {
     this.forumService.getPostsByThreadId(this.threadId).subscribe({
       next: (data) => {
+        console.log(data.data);
+
         this.posts = data.data;
       },
       error: (err) => {
@@ -96,11 +101,11 @@ export class ThreadDetailComponent implements OnInit {
 
   onImageUpload(event: Event): void {
     const input = event.target as HTMLInputElement;
-  
+
     if (input.files && input.files.length > 0) {
       // Allow only one image
       const file = input.files[0];
-  
+
       if (file.type.startsWith('image/')) {
         this.uploadedImage = file;
         this.uploadedImageName = file.name; // Display the name of the uploaded image
@@ -155,11 +160,55 @@ export class ThreadDetailComponent implements OnInit {
     });
   }
 
-  toggleNewPostForm(): void {
-    this.isNewPostFormVisible = !this.isNewPostFormVisible; // Toggle visibility
+  toggleReplyInput(index: number): void {
+    // Toggle reply input visibility
+    this.activeReplyIndex = this.activeReplyIndex === index ? null : index;
+    this.replyContent = ''; // Clear the input when switching
+  }
+
+  submitReply(postId: any): void {
+    const formData = new FormData();
+    formData.append('content', this.replyContent);
+    formData.append('postId', postId);
+    formData.append('userId', this.userData.id);
+
+    this.forumService.createPostComment(formData).subscribe({
+      next: (data) => {
+        console.log(data);
+      },
+    });
+  }
+  toggleComments(postId: any): void {
+    // Toggle the visibility of comments for a specific post
+    this.showComments[postId] = !this.showComments[postId];
+
+    // If comments are not already fetched, fetch them from the backend
+    if (this.showComments[postId] && !this.comments[postId]) {
+      this.forumService.getCommentsByPostId(postId).subscribe(
+        (fetchedComments: any) => {
+          console.log('pppppppp', fetchedComments);
+
+          this.comments[postId] = fetchedComments.data; // Save comments in the map
+        },
+        (error) => {
+          console.error(
+            `Error fetching comments for post ID ${postId}:`,
+            error
+          );
+        }
+      );
+    }
   }
 
   goBack(): void {
     window.history.back(); // Navigate to the previous page
+  }
+
+  fetchComments(postId: string) {
+    this.forumService.getCommentsByPostId(postId).subscribe({
+      next: (cooment) => {
+        console.log(cooment);
+      },
+    });
   }
 }

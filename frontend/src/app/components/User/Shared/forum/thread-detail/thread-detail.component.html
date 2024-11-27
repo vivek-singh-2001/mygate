@@ -128,8 +128,9 @@
   <!-- Posts Section -->
   <div class="posts-section">
     <div *ngIf="posts.length > 0; else noPosts">
-      <div *ngFor="let post of posts" class="post-item">
+      <div *ngFor="let post of posts; let i = index" class="post-item">
         <div class="flex">
+          <!-- User Avatar -->
           <p-avatar
             [image]="post.User?.photo"
             size="large"
@@ -137,14 +138,17 @@
             class="mr-3"
           ></p-avatar>
           <div class="flex-grow-1">
+            <!-- User Name -->
             <div class="flex align-items-center">
               <h6 class="m-0 mr-2 text-md">
                 {{ post.User?.firstname || "Anonymous" }}
               </h6>
             </div>
 
+            <!-- Post Content -->
             <p class="mt-4 text-md">{{ post.content }}</p>
 
+            <!-- Post Attachments -->
             <div *ngIf="post.attachments" class="thread-image mt-2">
               <ng-container>
                 <p-image
@@ -156,13 +160,17 @@
               </ng-container>
             </div>
 
+            <!-- Post Metadata and Reply -->
             <div
               class="flex align-items-center justify-content-between text-secondary mt-2"
             >
               <div class="flex align-items-center">
                 <span class="mr-3">
-                  <i class="pi pi-comment mr-1"></i>
-                  {{ post.likes || 0 }}
+                  <i
+                    class="pi pi-comment mr-1"
+                    (click)="toggleComments(post.id)"
+                  ></i>
+                  {{ post.replyCount || 0 }}
                 </span>
                 <span class="mr-3">
                   <i class="pi pi-heart mr-1"></i>
@@ -172,10 +180,60 @@
                   {{ post.createdAt | date : "mediumTime" }}
                 </span>
               </div>
-              <div class="flex align-items-center gap-2">
+              <!-- Reply Button -->
+              <div
+                class="flex align-items-center gap-2 reply-action"
+                (click)="toggleReplyInput(i)"
+              >
                 <i class="pi pi-reply mr-1"></i>
-                <p class="mr-8">reply...</p>
+                <p class="mr-8">Reply...</p>
               </div>
+            </div>
+
+            <div *ngIf="showComments[post.id]" class="comments-container">
+              <div
+                *ngFor="let comment of comments[post.id]"
+                class="comment-item"
+              >
+                <div class="flex">
+                  <!-- Commenter Avatar -->
+                  <p-avatar
+                    [image]="comment.User?.photo"
+                    size="normal"
+                    shape="circle"
+                    class="mr-3"
+                  ></p-avatar>
+                  <div class="flex-grow-1">
+                    <!-- Commenter Name and Content -->
+                    <div class="flex align-items-center">
+                      <h5 class="m-0 mr-2">
+                        {{ comment.User?.firstname || "Anonymous" }}
+                      </h5>
+                    </div>
+                    <p class="mt-2 text-sm">{{ comment.content }}</p>
+                    <!-- Comment Metadata -->
+                    <div class="text-secondary mt-1">
+                      {{ comment.createdAt | date : "mediumTime" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Reply Input -->
+            <div *ngIf="activeReplyIndex === i" class="reply-input">
+              <textarea
+                [(ngModel)]="replyContent"
+                rows="1"
+                class="reply-textarea w-full"
+                placeholder="Write a reply..."
+              ></textarea>
+              <p-button
+                icon="pi pi-send"
+                class="reply-send-button"
+                (onClick)="submitReply(post.id)"
+                title="Send reply"
+              ></p-button>
             </div>
           </div>
         </div>

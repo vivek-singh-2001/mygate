@@ -271,3 +271,101 @@ p-avatar {
     width: 36px;
   }
 }
+
+/* Reply Action */
+.reply-action {
+  cursor: pointer;
+  color: #1da1f2; /* Primary blue for action */
+}
+
+.reply-action:hover {
+  color: #1a91da; /* Slightly darker hover color */
+}
+
+/* Reply Input Container */
+.reply-input {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding-left: 60px; /* Indent to align with the content */
+}
+
+/* Reply Textarea */
+.reply-textarea {
+  flex-grow: 1;
+  border: 1px solid #dfe3e8;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-size: 0.95rem;
+  resize: none;
+  outline: none;
+  background-color: rgba(240, 240, 240, 0.7); /* Transparent effect */
+  color: #2c3e50; /* Consistent text color */
+}
+
+.reply-textarea:focus {
+  border-color: #1da1f2;
+  background-color: white;
+  box-shadow: 0 0 4px rgba(29, 161, 242, 0.5);
+}
+
+/* Reply Send Button */
+.reply-send-button {
+  margin-left: 10px;
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1da1f2;
+  color: white;
+}
+
+.reply-send-button:hover {
+  background-color: #1a91da;
+}
+
+/* Post Section Adjustments */
+.post-item {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dfe3e8;
+}
+
+/* Comments Container */
+.comments-container {
+  margin-top: 15px;
+  padding-left: 50px; /* Indent to show as nested */
+  border-left: 2px solid #dfe3e8; /* Visual indicator of nesting */
+}
+
+.comment-item {
+  margin-bottom: 15px;
+}
+
+.comment-item p-avatar {
+  flex-shrink: 0; /* Prevents the avatar from resizing */
+}
+
+.comment-item h5 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.comment-item p {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+}
+
+.comment-item .text-secondary {
+  font-size: 0.75rem;
+  color: #bdc3c7;
+}
+
+/* Post Section Adjustments */
+.post-item {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #dfe3e8;
+}
+

@@ -4,7 +4,7 @@ const commentService = require("./postCommentService");
 exports.createComment = asyncErrorHandler(async (req, res, next) => {
   const commentData = req.body;
   const attachment = req.file;
-  commentData.attachments = attachment.filename
+  commentData.attachments = attachment?.filename || null
   console.log(commentData);
   
 
