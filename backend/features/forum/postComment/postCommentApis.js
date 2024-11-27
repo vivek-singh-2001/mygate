@@ -3,6 +3,7 @@ const router = express.Router();
 const commentController = require("./postCommentController");
 const upload = require("../../../middleware/multer");
 const { bodyValidator } = require("../../../validations/bodyValidation");
+const validate = require("../../../utils/validationMiddleware");
 
 const commentValidationRules = bodyValidator([
   { name: "content", isRequired: true, type: "string" },
@@ -15,7 +16,7 @@ const { uploadSingle } = upload(/jpg|jpeg|png|webp/, "file");
 router.post(
   "/",
   uploadSingle,
-  commentValidationRules,
+  validate(commentValidationRules),
   commentController.createComment
 );
 router.get("/:id", commentController.getCommentById);

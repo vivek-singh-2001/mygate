@@ -147,4 +147,22 @@ export class ForumService {
       })
     );
   }
+
+  getCommentsByPostId(postId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/threadpost/comment/post/${postId}`).pipe(
+      catchError((error) => {
+        console.error('Error fetching threads:', error);
+        return throwError(() => new Error('Error fetching thread'));
+      })
+    );
+  }
+
+  createPostComment(commentData: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/threadpost/comment`, commentData).pipe(
+      catchError((error: any) => {
+        console.error('Error creating thread:', error);
+        return throwError(() => new Error('Error creating thread'));
+      })
+    );
+  }
 }
