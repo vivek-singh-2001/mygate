@@ -175,6 +175,8 @@ export class ThreadDetailComponent implements OnInit {
     this.forumService.createPostComment(formData).subscribe({
       next: (data) => {
         console.log(data);
+        this.replyContent = ''
+        this.toggleComments(postId)
       },
     });
   }
