@@ -9,8 +9,16 @@ exports.createPost = async (postData) => {
       threadId: postData.threadId,
       userId: postData.userId,
     });
+    
+    const createdPost = await Post.findOne({
+      where: { id: post.id },
+      include: {
+        model: User,
+        attributes: ['id', 'firstname', 'lastname', 'photo'],
+      },
+    });
 
-    return post;
+    return createdPost;
   } catch (error) {
     console.log(error);
   }

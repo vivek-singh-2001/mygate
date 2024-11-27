@@ -5,6 +5,8 @@ exports.createPost = asyncErrorHandler(async (req, res, next) => {
   const postData = req.body;
   const attachment = req.file;
   postData.attachments = attachment?.filename;
+  
+  console.log("kdhcff", attachment)
 
   const post = await postService.createPost(postData);
   res.status(201).json({

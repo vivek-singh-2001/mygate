@@ -18,6 +18,8 @@ import { FormsModule } from '@angular/forms';
 import { environment } from '../../../../../../environments/environment';
 import { ImageModule } from 'primeng/image';
 import { UserService } from '../../../../../services/user/user.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-thread-detail',
@@ -37,29 +39,33 @@ import { UserService } from '../../../../../services/user/user.service';
     GalleriaModule,
     FormsModule,
     ImageModule,
+    ToastModule,
   ],
   templateUrl: './thread-detail.component.html',
   styleUrl: './thread-detail.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [MessageService],
 })
 export class ThreadDetailComponent implements OnInit {
   threadId!: string;
   threadDetails: any;
   posts: any[] = []; // Array to store posts
   newPostContent = ''; // For storing the new post content
-  uploadedImage: File | null = null; // To store the uploaded image
-  userId: string = '';
+  uploadedImage: File | null = null;
+  uploadedImageName: string | null = null;
+  userData: any = null;
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly forumService: ForumService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.threadId = this.route.snapshot.paramMap.get('id')!;
     this.userService.userData$.subscribe((user) => {
-      this.userId = user.id;
+      this.userData = user;
     });
     this.fetchThreadDetails();
     this.fetchPosts();
@@ -89,12 +95,23 @@ export class ThreadDetailComponent implements OnInit {
 
   onImageUpload(event: Event): void {
     const input = event.target as HTMLInputElement;
+  
     if (input.files && input.files.length > 0) {
-      this.uploadedImage = input.files[0];
+      // Allow only one image
+      const file = input.files[0];
+  
+      if (file.type.startsWith('image/')) {
+        this.uploadedImage = file;
+        this.uploadedImageName = file.name; // Display the name of the uploaded image
+      } else {
+        console.error('Selected file is not an image.');
+        this.uploadedImage = null;
+        this.uploadedImageName = null;
+      }
     }
   }
 
-  getImageUrl(imagePath: string): string {
+  getImageUrl(imagePath: any): string {
     if (!imagePath) {
       console.error('Image path not found');
       return '';
@@ -109,19 +126,30 @@ export class ThreadDetailComponent implements OnInit {
     const formData = new FormData();
     formData.append('content', this.newPostContent);
     formData.append('threadId', this.threadId);
-    formData.append('userId', this.userId);
+    formData.append('userId', this.userData.id);
     if (this.uploadedImage) {
       formData.append('attachment', this.uploadedImage);
     }
 
     this.forumService.createThreadPost(formData).subscribe({
-      next: (newPost) => {
-        this.posts.unshift(newPost);
+      next: (response) => {
+        this.posts.unshift(response.data);
         this.newPostContent = '';
         this.uploadedImage = null;
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Post Added',
+          detail: 'Your post was added successfully.',
+        });
       },
       error: (err) => {
         console.error('Error adding post:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Post Failed',
+          detail: 'There was an error adding your post. Please try again.',
+        });
       },
     });
   }

@@ -11,7 +11,7 @@ const postValidationRules = bodyValidator([
   { name: "userId", isRequired: true, type: "uuid" },
 ]);
 
-const { uploadSingle } = upload(/jpg|jpeg|png|webp/, "file");
+const { uploadSingle } = upload(/jpg|jpeg|png|webp/, "attachment");
 
 router.post(
   "/",

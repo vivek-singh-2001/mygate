@@ -1,53 +1,206 @@
+/* General Body Styling */
+body {
+  background-color: #f7f9fc; /* Subtle light background */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #2c3e50; /* Elegant dark text color for better readability */
+}
+
+/* Thread Detail Container */
 .thread-detail-container {
-  margin: auto;
-  padding: 20px;
-  max-width: 700px;
+  margin: 0 auto;
+  max-width: 600px;
+  background-color: #ffffff; /* Clean white background */
+  border-radius: 10px; /* Soft rounded corners for aesthetics */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Light shadow for subtle depth */
+  padding: 0;
 }
 
+/* Back Button */
+.back-button {
+  padding: 10px 15px;
+  border-bottom: 1px solid #dfe3e8; /* Softer divider */
+  background-color: #f9fafc; /* Light tint for clarity */
+}
+
+.back-button p-button {
+  color: #1da1f2; /* Primary action color */
+}
+
+/* Thread Header */
 .thread-header {
-  border-left: 5px solid #3f51b5;
+  padding: 15px;
+  border-bottom: 1px solid #dfe3e8; /* Subtle divider for separation */
+  background-color: #f9fafc; /* Light background to distinguish section */
 }
 
-.thread-image {
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.thread-header h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #34495e; /* Deep gray for titles */
+  margin-bottom: 5px;
 }
 
-.text-primary {
-  color: #3f51b5;
+.thread-header .text-secondary {
+  color: #7f8c8d; /* Muted gray for secondary text */
+  font-size: 0.9rem;
 }
 
-.text-secondary {
-  color: #6c757d;
+/* Avatar Styling */
+p-avatar {
+  margin-right: 10px;
 }
 
+/* Posts Section */
+.posts-section {
+  background-color: #ffffff; /* Consistent with thread container */
+  max-height: 500px;
+  overflow-y: auto;
+  border-radius: 0 0 10px 10px; /* Rounded bottom corners */
+}
+
+/* Post Items */
 .post-item {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-bottom: 1px solid #dfe3e8; /* Subtle separator */
+  padding: 15px;
+  background-color: #ffffff;
+  transition: background-color 0.2s ease;
 }
 
 .post-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background-color: #f4f6f8; /* Light hover effect */
+}
+
+/* New Post Form */
+.new-post-form {
+  background-color: #f9fafc; /* Slightly tinted background */
+  border-top: 1px solid #dfe3e8;
+  padding: 15px;
 }
 
 .new-post-textarea {
   width: 100%;
+  border: 1px solid #dfe3e8; /* Softer border for inputs */
+  border-radius: 15px; /* Rounded corners for elegance */
+  padding: 10px;
+  font-size: 1rem;
+  color: #34495e; /* Consistent text color */
 }
 
-.galleria-wrapper {
-  max-width: 100%;
+.new-post-textarea:focus {
+  border-color: #1da1f2; /* Highlight on focus */
+  box-shadow: 0 0 8px rgba(29, 161, 242, 0.2); /* Subtle glow */
 }
 
+/* Primary and Secondary Text */
+.text-primary {
+  color: #1da1f2; /* Vibrant blue for primary actions */
+}
+
+.text-secondary {
+  color: #7f8c8d; /* Muted gray for secondary elements */
+}
+
+/* Button Styles */
+.p-button-primary {
+  background-color: #1da1f2; /* Primary action button color */
+  border-color: #1da1f2;
+  color: white;
+  border-radius: 10px; /* Rounded buttons for modern look */
+}
+
+.p-button-primary:hover {
+  background-color: #1a91da; /* Slightly darker hover effect */
+  border-color: #1a91da;
+}
+
+.p-button-text {
+  color: #1da1f2; /* Link-like button text */
+}
+
+.p-button-text:hover {
+  color: #1a91da; /* Darker hover color */
+}
+
+/* Scrollbar Styling */
+.posts-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.posts-section::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light background */
+}
+
+.posts-section::-webkit-scrollbar-thumb {
+  background: #bdc3c7; /* Subtle gray */
+  border-radius: 4px;
+}
+
+.posts-section::-webkit-scrollbar-thumb:hover {
+  background: #95a5a6; /* Darker gray on hover */
+}
+
+.thread-image {
+  width: 100%;
+  max-height: 200px;
+  max-width: 300px;
+  overflow: hidden;
+  border-radius: 15px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0; /* Optional: background for empty space */
+}
+
+.thread-image p-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ensures the entire image is visible within the container */
+  object-position: center; /* Centers the image inside the container */
+}
+
+
+.thread-image-grid {
+  display: grid;
+  grid-gap: 4px;
+  max-height: 300px;
+}
+
+.thread-image-grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.thread-image-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.thread-image-grid p-image,
+.thread-image-grid p-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.image-count-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+  color: white; /* High contrast for text */
+  padding: 5px 10px;
+  border-radius: 0 0 15px 0; /* Rounded bottom-right corner */
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .thread-detail-container {
-    padding: 15px;
+    max-width: 100%;
+    margin: 0;
   }
 
-  .new-post-form,
-  .thread-header {
-    padding: 15px;
+  .thread-image {
+    max-height: 250px;
+    max-width: 100%;
   }
 }
