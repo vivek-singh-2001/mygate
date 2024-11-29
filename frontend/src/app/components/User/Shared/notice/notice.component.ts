@@ -87,13 +87,15 @@ export class NoticeComponent implements OnInit {
 
     this.noticeService.getNotices(this.societyId).subscribe({
       next: (notices) => {
+        console.log(notices.noticeList);
+        
         const sortedNoticeList = notices.noticeList.sort((a: any, b: any) => {
           return (
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           );
         });
         this.notices = sortedNoticeList;
-        console.log(this.notices);
+        console.log("juice piladooooo",this.notices);
         this.notificationCuntService
           .resetCount(this.societyId, this.userId, 'notice')
           .subscribe();

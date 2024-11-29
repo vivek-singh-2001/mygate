@@ -20,6 +20,11 @@ module.exports = (connectDB, DataTypes) => {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
+      replyCount: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false
+      },
     },
     {
       timestamps: true,

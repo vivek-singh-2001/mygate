@@ -1,4 +1,3 @@
-const { where } = require("sequelize");
 const { db } = require("../../config/connection");
 const { User, HouseUser, House, Wing, Society, Floor, Role, UserRole } = db;
 

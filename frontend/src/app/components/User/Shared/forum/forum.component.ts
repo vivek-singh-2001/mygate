@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChipModule } from 'primeng/chip';
 import { ForumService } from '../../../../services/forum/forum.service';
@@ -7,6 +7,11 @@ import { ThreadComponent } from './create-thread/thread.component';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { UserService } from '../../../../services/user/user.service';
+import { Observable } from 'rxjs';
+import { AvatarModule } from 'primeng/avatar';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { Router } from '@angular/router';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-forum',
@@ -18,10 +23,14 @@ import { UserService } from '../../../../services/user/user.service';
     ThreadComponent,
     ButtonModule,
     DialogModule,
+    AvatarGroupModule,
+    AvatarModule,
+
   ],
   templateUrl: './forum.component.html',
   styleUrls: ['./forum.component.css'],
   providers: [],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA] 
 })
 export class ForumComponent implements OnInit {
   forumSections: any[] = [];
@@ -29,37 +38,27 @@ export class ForumComponent implements OnInit {
   createThreaddialogue: boolean = false;
 
   selectedSection = '';
+  forumPosts$!: Observable<any[]>; 
 
-  forumPosts = [
-    {
-      title: 'Leaking Tap Issue',
-      description: 'There’s a leaking tap on the 3rd floor.',
-      author: 'John',
-    },
-    {
-      title: 'Event Scheduling',
-      description: 'Can we move the event to next week?',
-      author: 'Mary',
-    },
-    {
-      title: 'Cleaning Staff',
-      description: 'The cleaning staff did not come today.',
-      author: 'Ali',
-    },
-  ];
+  forumPosts: any[] = [];
 
   constructor(
     private readonly forumService: ForumService,
-    private readonly userService: UserService
-  ) {}
+    private readonly userService: UserService,
+    private readonly router: Router
+  ) {
+  }
 
   ngOnInit(): void {
     this.userService.userSocietyId$.subscribe({
-      next: (societyId) => {     
+      next: (societyId) => {
         this.societyId = societyId;
         this.forumService.fetchAllForumTypes(societyId).subscribe({
           next: (forumData: any) => {
+            console.log(forumData);
             this.forumSections = forumData.data;
+            this.selectedSection = forumData.data[0].name;
+            this.FetchThreads(forumData.data[0].name);
           },
           error: (err) => {
             console.log(err);
@@ -71,65 +70,53 @@ export class ForumComponent implements OnInit {
 
   selectSection(section: any) {
     this.selectedSection = section.name;
-    this.forumPosts = this.mockFetchPosts(section.name);
+    this.forumPosts = [];
+
+    this.FetchThreads(section.name);
   }
 
-  mockFetchPosts(section: string) {
-    return [
-      {
-        title: `${section} Post 1`,
-        description: `Description of ${section} issue 1`,
-        author: 'User A',
-      },
-      {
-        title: `${section} Post 2`,
-        description: `Description of ${section} issue 2`,
-        author: 'User B',
-      },
-      {
-        title: `${section} Post 3`,
-        description: `Description of ${section} issue 3`,
-        author: 'User C',
-      },
-      {
-        title: `${section} Post 3`,
-        description: `Description of ${section} issue 3`,
-        author: 'User C',
-      },
-      {
-        title: `${section} Post 3`,
-        description: `Description of ${section} issue 3`,
-        author: 'User C',
-      },
-      {
-        title: `${section} Post 3`,
-        description: `Description of ${section} issue 3`,
-        author: 'User C',
-      },
-      {
-        title: `${section} Post 3`,
-        description: `Description of ${section} issue 3`,
-        author: 'User C',
-      },
-      {
-        title: `${section} Post 3`,
-        description: `Description of ${section} issue 3`,
-        author: 'User C',
-      },
-      {
-        title: `${section} Post 3`,
-        description: `Description of ${section} issue 3`,
-        author: 'User C',
-      },
-      {
-        title: `${section} Post 3`,
-        description: `Description of ${section} issue 3`,
-        author: 'User C',
-      },
-    ];
+  FetchThreads(section: string) {
+    this.forumService
+      .getAllThreadByForumName(section, this.societyId)
+      .subscribe({
+        next: (data) => {
+          console.log(data.data);
+          
+          data.data.forEach((thread: any) => {
+            this.forumPosts.push(thread);
+          });
+        },
+        error: (err) => {
+          console.log('bbbbbbbbb', err);
+        },
+      });
+  }
+
+  getImageUrl(imagePath: string): string {
+    if (!imagePath) {
+      console.error('Image path not found');
+      return '';
+    }
+
+    const filename = imagePath.split('/').pop() ?? '';
+
+    return `${environment.apiUrl}/visitors/image/${filename}`;
   }
 
   showCreateThreadForm() {
     this.createThreaddialogue = true;
+  }
+
+  onThreadCreated(event: { isCreated: boolean; newThread: any }): void {
+    if (event.isCreated) {
+      this.createThreaddialogue = false;
+      this.forumPosts.push(event.newThread);
+    } else {
+      this.createThreaddialogue = true;
+    }
+  }
+
+  goToThreadDetailComponent(post:any){
+    this.router.navigate(['home/forums', post.id]);
   }
 }

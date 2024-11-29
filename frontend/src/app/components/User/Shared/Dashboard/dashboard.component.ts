@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.notificationCountService.notificationCount$.subscribe({
-      next: (count: any) => {
+      next: (count: number) => {
         this.newNoticesCount = count;
         this.noticeService.getNotices(this.societyId).subscribe((notice) => {
           const sortedNoticeList = notice.noticeList.sort((a: any, b: any) => {
@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit {
       },
     });
 
-    // // Subscribe to chat notification count updates
+    // Subscribe to chat notification count updatesgngngn
     // this.notificationCountService.chatNotificationCount$.subscribe({
     //   next: (count: any) => {
     //     this.newChatCount = count;

@@ -1,8 +1,12 @@
+const { log } = require("util");
 const asyncErrorHandler = require("../../../utils/asyncErrorHandler");
 const threadService = require("./threadService");
 
 exports.createThread = asyncErrorHandler(async (req, res, next) => {
-  const thread = await threadService.createThread(req.body);
+  const threadData = req.body;
+  const attachments = req.files;
+
+  const thread = await threadService.createThread(threadData, attachments);
   res.status(201).json({
     success: true,
     message: "Thread created successfully",
@@ -12,14 +16,17 @@ exports.createThread = asyncErrorHandler(async (req, res, next) => {
 
 exports.getThreadById = asyncErrorHandler(async (req, res, next) => {
   const { id: threadId } = req.params;
+  console.log(threadId);
+  
   const thread = await threadService.getThreadById(threadId);
   res.status(200).json({ success: true, data: thread });
 });
 
 exports.getAllThreads = asyncErrorHandler(async (req, res, next) => {
-  const { id: forumId } = req.params;
-  const threads = await threadService.getAllThreads(forumId);
-  res.status(200).json({ data: threads });
+  const { forumName, societyId } = req.body;
+
+  const threads = await threadService.getAllThreads(forumName,societyId);
+  res.status(200).json({ status:'success',data: threads });
 });
 
 exports.updateThread = asyncErrorHandler(async (req, res, next) => {

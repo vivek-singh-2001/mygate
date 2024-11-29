@@ -13,23 +13,71 @@
       </p-chip>
     </div>
 
-    <!-- Create New Thread Button -->
-    <div class="create-btn">
+    <!-- Forum Header with Create Button -->
+    <div class="forum-header">
+      <h1 class="forum-title">Community Forum</h1>
       <button
         pButton
-        label="Create New Thread"
         icon="pi pi-plus"
         (click)="showCreateThreadForm()"
+        class="p-button-rounded p-button-secondary create-thread-btn"
       ></button>
     </div>
 
-    <!-- Scrollable Forum Section -->
+    <!-- Scrollable Forum Content Section -->
     <div class="forum-content">
-      <div *ngFor="let post of forumPosts" class="post-card">
-        <h3>{{ post.title }}</h3>
-        <p>{{ post.description }}</p>
-        <small class="text-muted">Posted by {{ post.author }}</small>
+      @if(forumPosts.length > 0){
+      <div class="post-list">
+        <div
+          *ngFor="let post of forumPosts"
+          class="post-card"
+          (click)="goToThreadDetailComponent(post)"
+        >
+          <!-- First div: Author's Picture -->
+          <div class="author-section">
+            <p-avatar
+              [image]="post?.User?.photo"
+              size="large"
+              class="author-avatar"
+            ></p-avatar>
+          </div>
+
+          <!-- Second div: Post Details -->
+          <div class="post-details">
+            <h3 class="post-title">{{ post?.title }}</h3>
+            <p class="post-content">{{ post?.content }}</p>
+            <small class="post-author"
+              >Posted by {{ post?.User?.firstname }}</small
+            >
+            <small class="replied-count">Replied: {{ post?.replyCount }}</small>
+          </div>
+
+          <!-- Third div: Overlapping Images of Posts -->
+          <div class="post-images">
+            <p-avatar-group *ngIf="post?.attachmentUrls?.length > 0">
+              <p-avatar
+                *ngFor="let image of post?.attachmentUrls; let i = index"
+                [image]="getImageUrl(image)"
+                size="large"
+                [style.zIndex]="post?.attachmentUrls.length - i"
+              ></p-avatar>
+            </p-avatar-group>
+          </div>
+          <div
+            class="post-images-placeholder"
+            *ngIf="!post?.attachmentUrls?.length"
+          >
+            <small class="no-attachments-message"
+              >No attachments provided</small
+            >
+          </div>
+        </div>
       </div>
+      } @else if (forumPosts.length == 0){
+      <div class="no-posts-message">
+        No threads found. Be the first to post!
+      </div>
+      }
     </div>
 
     <!-- Create Thread Modal -->
@@ -42,7 +90,7 @@
       [resizable]="false"
       [draggable]="false"
     >
-      <app-thread></app-thread> 
+      <app-thread (threadCreated)="onThreadCreated($event)"></app-thread>
     </p-dialog>
   </div>
 </div>

@@ -24,6 +24,8 @@ const notification_route = require("./features/notificationCount/notificationCou
 const payment_route = require("./features/payment/paymentApis");
 const forum_route = require("./features/forum/forumApis");
 const thread_route = require("./features/forum/thread/threadApi")
+const threadPost_route = require("./features/forum/threadPost/threadpostApis")
+const threadPostcomment_route = require("./features/forum/postComment/postCommentApis")
 const mapapikey = require("./utils/mapApiKeyRoute")
 const staff_Routes = require("./features/staff/staffApis");
 // USE MODULES HERE
@@ -32,7 +34,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-const allowedOrigins = ["http://localhost:4200", "http://192.1.200.38:4200"];
+const allowedOrigins = ["http://localhost:4200", "http://192.1.125.175:4200"];
 app.use(
   cors({
     origin: function (origin, callback) {
@@ -96,6 +98,8 @@ app.use("/api/v1/notificationcount", notification_route);
 app.use("/api/v1/payments", payment_route);
 app.use("/api/v1/forum", forum_route);
 app.use("/api/v1/forum/thread", thread_route);
+app.use("/api/v1/forum/threadpost", threadPost_route);
+app.use("/api/v1/forum/threadpost/comment", threadPostcomment_route);
 app.use("/api/v1/mapapikey", mapapikey);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
