@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { Router } from '@angular/router';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-forum',
@@ -89,6 +90,17 @@ export class ForumComponent implements OnInit {
           console.log('bbbbbbbbb', err);
         },
       });
+  }
+
+  getImageUrl(imagePath: string): string {
+    if (!imagePath) {
+      console.error('Image path not found');
+      return '';
+    }
+
+    const filename = imagePath.split('/').pop() ?? '';
+
+    return `${environment.apiUrl}/visitors/image/${filename}`;
   }
 
   showCreateThreadForm() {

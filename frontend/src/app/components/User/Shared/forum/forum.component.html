@@ -25,10 +25,14 @@
     </div>
 
     <!-- Scrollable Forum Content Section -->
-    <div class="forum-content" >
+    <div class="forum-content">
       @if(forumPosts.length > 0){
       <div class="post-list">
-        <div *ngFor="let post of forumPosts" class="post-card" (click)="goToThreadDetailComponent(post)">
+        <div
+          *ngFor="let post of forumPosts"
+          class="post-card"
+          (click)="goToThreadDetailComponent(post)"
+        >
           <!-- First div: Author's Picture -->
           <div class="author-section">
             <p-avatar
@@ -53,7 +57,7 @@
             <p-avatar-group *ngIf="post?.attachmentUrls?.length > 0">
               <p-avatar
                 *ngFor="let image of post?.attachmentUrls; let i = index"
-                [image]="image"
+                [image]="getImageUrl(image)"
                 size="large"
                 [style.zIndex]="post?.attachmentUrls.length - i"
               ></p-avatar>
@@ -70,11 +74,9 @@
         </div>
       </div>
       } @else if (forumPosts.length == 0){
-
       <div class="no-posts-message">
         No threads found. Be the first to post!
       </div>
-
       }
     </div>
 
