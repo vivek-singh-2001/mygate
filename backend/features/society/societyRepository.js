@@ -1,6 +1,7 @@
 const { db } = require("../../config/connection");
 const { Sequelize } = require("sequelize");
 const CustomError = require("../../utils/CustomError");
+const { getSocket } = require("../../utils/socketManager");
 const {
   User,
   HouseUser,
@@ -125,7 +126,13 @@ exports.updateSocietyStatus = async (societyId, newStatus) => {
   }
 };
 
-exports.registerSociety = async (societyDetails, status, pendingRole,latitude,longitude) => {
+exports.registerSociety = async (
+  societyDetails,
+  status,
+  pendingRole,
+  latitude,
+  longitude
+) => {
   const transaction = await db.connectDB.transaction();
   try {
     // Create the user within the transaction
@@ -162,8 +169,8 @@ exports.registerSociety = async (societyDetails, status, pendingRole,latitude,lo
         societyAdminId: user.id,
         status: societyDetails.status,
         csvData: societyDetails.societyDetails.filePath,
-        longitude:societyDetails.longitude,
-        latitude:societyDetails.latitude
+        longitude: societyDetails.longitude,
+        latitude: societyDetails.latitude,
       },
       { transaction }
     );
@@ -194,7 +201,7 @@ exports.getAllSocieties = async (status) => {
       include: [
         {
           model: User,
-          as:'societyDetails'
+          as: "societyDetails",
         },
       ],
     });
@@ -279,14 +286,42 @@ exports.createSociety = async (wingsArray, societyId, userId, transaction) => {
 exports.getStaffDetails = async (userId) => {
   const staffData = await SocietyStaff.findOne({
     where: { staffId: userId },
-    attributes: ['id','staffId',"societyId","createdAt","updatedAt"],
+    attributes: ["id", "staffId", "societyId", "createdAt", "updatedAt"],
     include: [
       {
         model: Society,
-        as:'Society',
-        attributes:['name']
+        as: "Society",
+        attributes: ["name"],
       },
     ],
   });
-  return staffData
+  return staffData;
+};
+
+exports.updateAllSocietyThought = async (thought) => {
+  const transaction = await db.connectDB.transaction();
+  try {
+    const [updatedCount] = await Society.update(
+      { thought: thought },
+      { where: {}, transaction }
+    );
+
+    const io = getSocket();
+
+    io.emit("thoughtUpdated", {
+      thought: thought,
+    });
+
+    if (updatedCount === 0) {
+      throw new Error("No societies were updated");
+    }
+
+    await transaction.commit();
+
+    return updatedCount;
+  } catch (error) {
+    console.log("Error updating societies thoughts:", error);
+    if (transaction) await transaction.rollback();
+    throw error;
+  }
 };

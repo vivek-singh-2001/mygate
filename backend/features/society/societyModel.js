@@ -41,6 +41,10 @@ module.exports = (connectDB, DataTypes) => {
       longitude:{
         type:DataTypes.STRING,
         allowNull:true
+      },
+      thought:{
+        type:DataTypes.STRING(512),
+        allowNull:true
       }
     },
     {

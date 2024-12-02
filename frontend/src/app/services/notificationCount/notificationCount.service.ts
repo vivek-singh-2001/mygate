@@ -14,9 +14,11 @@ export class NotificationCountService {
   private readonly notificationCountSubject = new BehaviorSubject<number>(0);
   private readonly chatNotificationCounts = new Map<string, BehaviorSubject<number>>(); // Declare chatNotificationCounts here
   private readonly newNoticeSubject = new BehaviorSubject<any>('');
+  private readonly newThoughtSubject = new BehaviorSubject<any>('');
 
   notificationCount$ = this.notificationCountSubject.asObservable();
   newNotice$ = this.newNoticeSubject.asObservable();
+  newthought$ = this.newThoughtSubject.asObservable();
 
   private readonly socket: Socket;
   private noticeCachedCount: number | null = null;
@@ -59,6 +61,11 @@ export class NotificationCountService {
             this.chatNotificationCounts.get(senderId)?.next(count);
           }
         });
+
+        this.socket.on('thoughtUpdated', ({thought:thought})=>{
+          console.log(thought);
+          this.newThoughtSubject.next(thought)
+        })
       }
     });
   }

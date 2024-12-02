@@ -1,0 +1,33 @@
+# Use Node.js image
+FROM node:18
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json to the container
+COPY backend/package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Install nodemon globally
+RUN npm install -g nodemon
+
+
+# Copy the rest of the backend files to the container
+COPY backend/ .
+
+# Copy the wait-for-it script if it's not in the backend directory
+COPY backend/wait-for-it.sh /usr/src/app/wait-for-it.sh
+
+# Make sure the script is executable
+RUN chmod +x /usr/src/app/wait-for-it.sh
+
+# Set environment variables if required
+ENV NODE_ENV=production
+
+# Expose the port your app will run on
+EXPOSE 7500
+
+# Start the application
+CMD ["npm", "start"]

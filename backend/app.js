@@ -28,6 +28,10 @@ const threadPost_route = require("./features/forum/threadPost/threadpostApis")
 const threadPostcomment_route = require("./features/forum/postComment/postCommentApis")
 const mapapikey = require("./utils/mapApiKeyRoute")
 const staff_Routes = require("./features/staff/staffApis");
+
+
+require("./scheduler/dailyThoughtScheduler")
+
 // USE MODULES HERE
 const app = express();
 if (process.env.NODE_ENV === "development") {

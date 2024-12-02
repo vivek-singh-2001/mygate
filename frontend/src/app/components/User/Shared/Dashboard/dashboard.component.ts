@@ -30,6 +30,7 @@ export class DashboardComponent implements OnInit {
   notices: any = [];
   societyId: string = '';
   userId: string = '';
+  newThought: string = '';
 
   constructor(
     private readonly notificationCountService: NotificationCountService,
@@ -47,6 +48,11 @@ export class DashboardComponent implements OnInit {
             this.societyId = societyId;
             this.fetchNoticeCount();
             // this.fetchChatCount(); 
+            this.notificationCountService.newthought$.subscribe({
+              next:(thought)=>{
+                this.newThought = thought
+              }
+            })
           },
         });
       },

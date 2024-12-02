@@ -69,6 +69,10 @@ export class SocietyService {
   rejectSociety(societyData:Society):Observable<Society>{
     return this.http.post<Society>(`${this.societyApiUrl}/rejectSociety`,societyData)
   }
+
+  updateSocietyThought(){
+    
+  }
   
 }
 

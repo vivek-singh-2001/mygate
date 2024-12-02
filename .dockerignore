@@ -1,0 +1,21 @@
+# Ignore node_modules
+node_modules/
+**/node_modules/
+
+# Ignore build files
+dist/
+build/
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore logs
+*.log
+
+# Ignore environment files (if you prefer to handle them outside the Docker image)
+*.env
+
+# Ignore any other local or temporary files
+*.tmp
+*.swp
+.DS_Store

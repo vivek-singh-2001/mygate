@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # Backend Service
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: mygate_backend
+    env_file:
+      - .env
+    
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DATABASE=${DATABASE}
+      - DB_HOST=db
+      - NODE_ENV=development
+    ports:
+      - "7500:7500"  # Expose backend to localhost:3000
+    depends_on:
+      - db  # Make sure the backend service waits for the db to be ready
+    command: ["./wait-for-it.sh", "db:5432", "--", "nodemon", "server.js"]
+    volumes:
+      - ./backend:/usr/src/app
+      - ./backend/config.env:/usr/src/app/.env  # Map the .env file from the backend
+    networks:
+      - mygate_network
+
+  # Frontend Service
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: mygate_frontend
+    ports:
+      - "8080:80"  # Expose frontend to localhost:80
+    volumes:
+      - ./dist:/usr/share/nginx/html
+    depends_on:
+      - backend  # Wait for backend service
+    networks:
+      - mygate_network
+
+  # PostgreSQL Database Service
+  db:
+    image: postgres:13
+    container_name: db
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DATABASE}
+    # ports:
+      # - "5432:5432"  # Expose PostgreSQL to localhost:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist DB data
+    networks:
+      - mygate_network
+
+networks:
+  mygate_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

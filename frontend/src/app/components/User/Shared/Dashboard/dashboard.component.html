@@ -52,16 +52,16 @@
     </div>
   </div>
 
-  <div class="card flex-1 bg-green-300" [routerLink]="['/home/Complaints']">
+  <div class="card flex-1 bg-green-300" >
     <div class="flex justify-content-between">
-      <p><b class="no-data-text">Complaints</b></p>
+      <p><b class="no-data-text">Thought of the Day</b></p>
       <div class="flex gap-2">
         <i class="pi pi-bell text-2xl" pBadge [value]="newComplaintsCount"></i>
       </div>
     </div>
     <div class="m-2 h-11rem custom-scroll">
-      <p class="p-6 flex justify-content-center alig-items-center">
-        <b class="no-data-text mt-3">No New Complaints</b>
+      <p class=" flex justify-content-center alig-items-center">
+        <b class="no-data-text mt-3">{{newThought || 'now new Thought for the Day'}}</b>
       </p>
     </div>
   </div>

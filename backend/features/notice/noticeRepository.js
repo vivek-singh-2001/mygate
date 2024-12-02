@@ -16,6 +16,7 @@ const NoticeRepository = {
           media: JSON.stringify(mediaFilenames),
           societyId: noticeData.societyId,
           userId: noticeData.userId,
+          isNotice:true,
         },
         { transaction }
       );
