@@ -25,6 +25,7 @@
     "@angular/router": "^18.1.0",
     "chart.js": "^4.4.6",
     "csv-parser": "^3.0.0",
+    "hls.js": "^1.5.17",
     "jspdf": "^2.5.2",
     "jspdf-autotable": "^3.8.4",
     "ngx-cookie-service": "^18.0.0",

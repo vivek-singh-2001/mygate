@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, fromEvent, Observable, of, tap } from 'rxjs';
+import { catchError, fromEvent, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { io, Socket } from 'socket.io-client';
-import { Visitor } from '../../interfaces/visitor.interface';
 
 @Injectable({
   providedIn: 'root',

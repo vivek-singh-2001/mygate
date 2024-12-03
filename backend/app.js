@@ -28,7 +28,7 @@ const threadPost_route = require("./features/forum/threadPost/threadpostApis")
 const threadPostcomment_route = require("./features/forum/postComment/postCommentApis")
 const mapapikey = require("./utils/mapApiKeyRoute")
 const staff_Routes = require("./features/staff/staffApis");
-
+const video_route = require("./features/live-stream/liveStreamApi");
 
 require("./scheduler/dailyThoughtScheduler")
 
@@ -66,6 +66,8 @@ app.use(
     },
   })
 );
+// Serve HLS files (stream.m3u8 and .ts files)
+app.use('/hls', express.static('hls'));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -105,6 +107,7 @@ app.use("/api/v1/forum/thread", thread_route);
 app.use("/api/v1/forum/threadpost", threadPost_route);
 app.use("/api/v1/forum/threadpost/comment", threadPostcomment_route);
 app.use("/api/v1/mapapikey", mapapikey);
+app.use("/api/v1/stream", video_route);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use("*", (req, res, next) => {

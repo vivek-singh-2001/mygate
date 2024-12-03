@@ -73,8 +73,6 @@ export class SideNavComponent implements OnInit {
         iconSize: 'large',
         command: () => this.navigateTo('/home/notice'),
       },
-  
-     
       {
         label: 'Visitors',
         icon: 'pi pi-id-card',
@@ -93,9 +91,14 @@ export class SideNavComponent implements OnInit {
         iconSize: 'large',
         command: () => this.navigateTo('/home/society-accounts'),
       },
-      
       ...(this.isAdmin
         ? [
+            {
+              label: 'CCTV Stream',
+              icon: 'pi pi-book',
+              iconSize: 'large',
+              command: () => this.navigateTo('/home/live-stream'),
+            },
             {
               label: 'Admin Control',
               iconSize: 'large',
@@ -120,14 +123,15 @@ export class SideNavComponent implements OnInit {
                 {
                   label: 'Add Security',
                   icon: 'pi pi-lock',
-                  command: () => this.navigateTo('/home/apartments/AddSecurityGaurd'),
+                  command: () =>
+                    this.navigateTo('/home/apartments/AddSecurityGaurd'),
                 },
                 {
                   label: 'Assign Staff Shift',
                   icon: 'pi pi-hourglass',
-                  command: () => this.navigateTo('/home/apartments/AssignShift'),
+                  command: () =>
+                    this.navigateTo('/home/apartments/AssignShift'),
                 },
-                
               ],
               // command: () => this.navigateTo('/home/apartments'),
             },
@@ -138,14 +142,14 @@ export class SideNavComponent implements OnInit {
 
   toggleSidebar(itemLabel?: string) {
     // Expand sidebar if it's currently collapsed and "Admin Control" is clicked
-  if (itemLabel === 'Admin Control' && !this.isExpanded) {
-    this.isExpanded = true;
-  } else {
-    this.isExpanded = !this.isExpanded;
-  }
+    if (itemLabel === 'Admin Control' && !this.isExpanded) {
+      this.isExpanded = true;
+    } else {
+      this.isExpanded = !this.isExpanded;
+    }
 
-  // Emit sidebar expansion state change
-  this.expansionChanged.emit(this.isExpanded);
+    // Emit sidebar expansion state change
+    this.expansionChanged.emit(this.isExpanded);
   }
 
   navigateTo(route: string) {

@@ -32,7 +32,6 @@ export const routes: Routes = [
     component: GoogleCallbackComponent,
   },
   { path: 'pending', component: PendingUserComponent },
-
   {
     path: 'home',
     component: HomeComponent,
@@ -144,6 +143,14 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./components/Staff/assign-role/assign-role.component').then(
             (g) => g.AssignRoleComponent
+          ),
+        canActivate: [AdminGuard],
+      },
+      {
+        path: 'live-stream',
+        loadComponent: () =>
+          import('./components/shared/live-stream/live-stream.component').then(
+            (l) => l.LiveStreamComponent
           ),
         canActivate: [AdminGuard],
       },
