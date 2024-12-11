@@ -29,6 +29,7 @@ const threadPostcomment_route = require("./features/forum/postComment/postCommen
 const mapapikey = require("./utils/mapApiKeyRoute")
 const staff_Routes = require("./features/staff/staffApis");
 const video_route = require("./features/live-stream/liveStreamApi");
+const postLike_route = require("./features/forum/postLike/postLikeApis")
 
 require("./scheduler/dailyThoughtScheduler")
 
@@ -106,6 +107,7 @@ app.use("/api/v1/forum", forum_route);
 app.use("/api/v1/forum/thread", thread_route);
 app.use("/api/v1/forum/threadpost", threadPost_route);
 app.use("/api/v1/forum/threadpost/comment", threadPostcomment_route);
+app.use("/api/v1/forum/threadpost/like", postLike_route);
 app.use("/api/v1/mapapikey", mapapikey);
 app.use("/api/v1/stream", video_route);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

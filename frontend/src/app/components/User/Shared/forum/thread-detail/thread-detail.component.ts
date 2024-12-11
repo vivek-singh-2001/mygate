@@ -89,9 +89,7 @@ export class ThreadDetailComponent implements OnInit {
   fetchPosts() {
     this.forumService.getPostsByThreadId(this.threadId).subscribe({
       next: (data) => {
-        console.log(data.data);
-
-        this.posts = data.data;
+        this.posts = data.data.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       },
       error: (err) => {
         console.error('Error fetching posts:', err);
@@ -175,8 +173,8 @@ export class ThreadDetailComponent implements OnInit {
     this.forumService.createPostComment(formData).subscribe({
       next: (data) => {
         console.log(data);
-        this.replyContent = ''
-        this.toggleComments(postId)
+        this.replyContent = '';
+        this.toggleComments(postId);
       },
     });
   }
@@ -189,7 +187,6 @@ export class ThreadDetailComponent implements OnInit {
       this.forumService.getCommentsByPostId(postId).subscribe(
         (fetchedComments: any) => {
           console.log('pppppppp', fetchedComments);
-
           this.comments[postId] = fetchedComments.data; // Save comments in the map
         },
         (error) => {
@@ -210,6 +207,14 @@ export class ThreadDetailComponent implements OnInit {
     this.forumService.getCommentsByPostId(postId).subscribe({
       next: (cooment) => {
         console.log(cooment);
+      },
+    });
+  }
+
+  likePost(postId: string) {
+    this.forumService.likePost(postId, this.userData.id).subscribe({
+      next: (data) => {
+        console.log(data);
       },
     });
   }
