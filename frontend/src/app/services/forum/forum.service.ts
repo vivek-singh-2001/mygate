@@ -165,4 +165,16 @@ export class ForumService {
       })
     );
   }
+
+  likePost(postId: string, userId: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/threadpost/like`,
+      { postId, userId }
+    ).pipe(
+      catchError((error: any) => {
+        console.error('Error liking post:', error);
+        return throwError(() => new Error('Error liking post'));
+      })
+    );
+  }
 }
