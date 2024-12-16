@@ -62,7 +62,7 @@ export class NoticeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userService.userData$.subscribe({
+    this.userService.userData$?.subscribe({
       next: (userData) => {
         this.userId = userData.id;
         this.username = userData.firstname;
@@ -85,7 +85,7 @@ export class NoticeComponent implements OnInit {
       },
     });
 
-    this.noticeService.getNotices(this.societyId).subscribe({
+    this.noticeService.getNotices(this.societyId)?.subscribe({
       next: (notices) => {
         console.log(notices.noticeList);
         
@@ -98,7 +98,7 @@ export class NoticeComponent implements OnInit {
         console.log("juice piladooooo",this.notices);
         this.notificationCuntService
           .resetCount(this.societyId, this.userId, 'notice')
-          .subscribe();
+          ?.subscribe();
       },
       error: (err) => {
         console.log(err);

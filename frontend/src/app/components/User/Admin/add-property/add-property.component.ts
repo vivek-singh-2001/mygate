@@ -20,7 +20,7 @@ interface WingOptions {
 export class AddPropertyComponent implements OnInit {
   wingOptions: WingOptions[] = []; // Array to hold wings
   numberOfWings: any; // Selected wing
-  societyId = 1; // Example society ID
+  societyId = ''; // Example society ID
 
   constructor(private societyService: SocietyService) {}
 
@@ -29,7 +29,7 @@ export class AddPropertyComponent implements OnInit {
   }
 
   // Fetch wings from the service
-  fetchSocietyDetails(societyId: number): void {
+  fetchSocietyDetails(societyId: string): void {
     this.societyService
       .fetchSocietyData(societyId)
       .subscribe((responseData: any) => {

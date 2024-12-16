@@ -1,14 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UnauthorizedComponent } from './unauthorized.component';
+import { HttpClient } from '@angular/common/http';
 
 describe('UnauthorizedComponent', () => {
   let component: UnauthorizedComponent;
   let fixture: ComponentFixture<UnauthorizedComponent>;
+  let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
   beforeEach(async () => {
+    httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get']);
+
     await TestBed.configureTestingModule({
-      imports: [UnauthorizedComponent]
+      imports: [UnauthorizedComponent,
+      ],
+      providers:[
+        { provide: HttpClient, useValue: httpClientSpy }, 
+        
+      ]
     })
     .compileComponents();
 

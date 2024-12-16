@@ -42,47 +42,22 @@ export class SystemAdminNavigationComponent {
   isDropdownVisible: boolean = true; // Control dropdown visibility
 
   constructor(
+    private readonly router: Router,
+    private readonly societyService: SocietyService,
     private readonly authService: AuthService,
     private readonly userService: UserService,
-    private readonly router: Router,
-    private readonly societyService: SocietyService
-  ) {}
+
+
+  ) { }
 
   ngOnInit(): void {
     this.loadUserData();
-    console.log('ngonit 1');
   }
 
   private initializeMenu(): void {
-    this.items = [
-      // {
-      //   label: 'Society',
-      //   icon: 'pi pi-warehouse',
-      //   badge: this.ApprovedSocieties,
-      //   styleClass: 'society-item',
-      //   command: () => this.goToSocieties(),
-      // },
-      // {
-      //   label: 'Projects',
-      //   icon: 'pi pi-search',
-      // },
-      // {
-      //   label: 'Contact',
-      //   icon: 'pi pi-envelope',
-      // },
-    ];
+
 
     this.item = [
-      // {
-      //   label: 'Profile',
-      //   icon: 'pi pi-user',
-      //   command: () => this.goToProfile(),
-      // },
-      // {
-      //   label: 'Settings',
-      //   icon: 'pi pi-cog',
-      //   command: () => this.goToSettings(),
-      // },
       {
         label: 'Logout',
         icon: 'pi pi-sign-out',
@@ -112,7 +87,7 @@ export class SystemAdminNavigationComponent {
   private fetchSocietyData() {
     this.societyService.allSocietyData$.subscribe({
       next: (societies) => {
-        
+
         this.societies = societies;
         this.ApprovedSocieties = societies.filter(society => society.status == 'approved').length.toString()
         this.initializeMenu();

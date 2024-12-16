@@ -47,7 +47,7 @@ export class UserService {
   }
 
   getCurrentUser(): Observable<any> {
-    return this.http.get(`${this.userApiUrl}/getUser/me`).pipe(
+    return this.http.get(`${this.userApiUrl}/getUser/me`)?.pipe(
       tap((response: any) => {
         response.data.role = roleMappings[response.data.Roles[0].name];
         this.userDataSubject.next(response.data);
@@ -109,13 +109,22 @@ export class UserService {
     societyId: string,
     wingId: string
   ): Observable<any> {
+    console.log(societyId);
+    console.log(wingId);
+    
     if (this.usersBySocietyIdandWingIdSubject.value.length) {
+      console.log("yha aaya");
+      
       return this.usersBySocietyIdandWingId$;
     } else {
+      console.log("yha aaya nhiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+
       return this.http
         .get(`${this.societyApiUrl}/${societyId}/wing/${wingId}`)
         .pipe(
           map((response: any) => {
+            console.log(response);
+            
             this.usersBySocietyIdandWingIdSubject.next(response.data.users);
 
             return response.data.users;

@@ -70,8 +70,8 @@ export class AuthService {
     window.location.href = `${this.apiUrl}/google`;
   }
 
-  handleGoogleLoginCallback(): void {
-    this.route.queryParams.subscribe((params) => {
+  handleGoogleLoginCallback(): void { 
+    this.route?.queryParams.subscribe((params) => {
       const token = params['token'];
       if (token) {
         localStorage.setItem('authToken', token);
@@ -125,7 +125,7 @@ export class AuthService {
     const token = localStorage.getItem('authToken');
     if (token) {
       const decodedToken = this.decodeToken(token);
-      return decodedToken.exp * 1000 > Date.now();
+      return decodedToken?.exp * 1000 > Date.now();
     }
     return false;
   }

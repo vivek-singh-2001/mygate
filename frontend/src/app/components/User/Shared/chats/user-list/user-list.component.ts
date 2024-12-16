@@ -35,6 +35,8 @@ export class UserListComponent implements OnInit {
       .pipe(
         switchMap((selectedHouse) => {
           if (selectedHouse) {
+            console.log(selectedHouse);
+            
             this.societyId = selectedHouse.Floor.Wing.societyId
             return this.userService.getUsersBySocietyIdAndWingId(
               selectedHouse.Floor.Wing.societyId,
@@ -47,6 +49,8 @@ export class UserListComponent implements OnInit {
       )
       .subscribe({
         next: (societyUsers: any) => {
+          console.log(societyUsers);
+          
           this.SocietyUsers = societyUsers;
           this.SocietyUsers.forEach((user: any) => {
             this.notificationCountService

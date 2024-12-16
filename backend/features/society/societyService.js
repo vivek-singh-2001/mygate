@@ -20,17 +20,27 @@ exports.getUsersBySociety = async (societyId, limits, offsets, searchQuery) => {
 };
 
 exports.getUsersBySocietyAndWing = async (societyId, wingId) => {
-  const users = await societyRepository.findUsersBySocietyAndWing(
-    societyId,
-    wingId
-  );
-  if (users.length === 0) {
-    throw new CustomError(
-      `No users found for Society ID ${societyId} and Wing ${wingName}`,
-      404
+  console.log(societyId);
+  console.log(wingId);
+  try {
+    const users = await societyRepository.findUsersBySocietyAndWing(
+      societyId,
+      wingId
     );
+    console.log(users);
+    
+    if (users.length === 0) {
+      throw new CustomError(
+        `No users found for Society ID ${societyId} and Wing ${wingName}`,
+        404
+      );
+    }
+    return users;
+  } catch (error) {
+    console.log(error);
+    
   }
-  return users;
+ 
 };
 
 exports.getSocietyAdminsDetails = async (societyId) => {

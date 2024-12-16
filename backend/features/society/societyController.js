@@ -30,6 +30,8 @@ exports.getUsersBySociety = asyncErrorHandler(async (req, res, next) => {
 
 exports.getUsersBySocietyAndWing = asyncErrorHandler(async (req, res, next) => {
   const { societyId, wingId } = req.params;
+  
+  
 
   if (!societyId || !wingId) {
     return next(new CustomError("Society ID and Wing Name are required", 400));

@@ -1,14 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RegisterComponent } from './register.component';
+import { HttpClient } from '@angular/common/http';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
+  let httpClientSpy: jasmine.SpyObj<HttpClient>;
 
   beforeEach(async () => {
+    httpClientSpy = jasmine.createSpyObj('HttpClient', ['post', 'get']);
     await TestBed.configureTestingModule({
-      imports: [RegisterComponent]
+      imports: [RegisterComponent,
+      ],
+      providers:[
+        { provide: HttpClient, useValue: httpClientSpy }, 
+
+      ]
     })
     .compileComponents();
 

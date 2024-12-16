@@ -20,7 +20,7 @@ export class NoticeService {
     if (this.noticeSubject.getValue().noticeList?.length > 0) {
       return this.notices$;
     } else {
-      return this.fetchNotices(societyId).pipe(
+      return this.fetchNotices(societyId)?.pipe(
         map((response) => {
           return response.data;
         })
@@ -29,7 +29,7 @@ export class NoticeService {
   }
 
   fetchNotices(societyId: string): Observable<ResponseOutput> {
-    return this.http.get<ResponseOutput>(`${this.apiUrl}/getAllNotice/${societyId}`).pipe(
+    return this.http.get<ResponseOutput>(`${this.apiUrl}/getAllNotice/${societyId}`)?.pipe(
       tap((response: ResponseOutput) => {
         this.noticeSubject.next(response.data);
       })

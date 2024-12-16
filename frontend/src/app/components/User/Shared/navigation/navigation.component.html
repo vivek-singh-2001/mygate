@@ -12,7 +12,7 @@
       <p-menu #menu [model]="item" popup="true"></p-menu>
       <p-avatar
         [image]="
-          user.photo ||
+          user?.photo ||
           'https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg'
         "
         shape="circle"
@@ -24,8 +24,8 @@
       <div
         class="flex flex-column justify-content-center align-items-start gap-0"
       >
-        <p class="user-name">{{ user.firstname || 'N/A' }}</p>
-        <p class="user-role">{{ user.role || 'N/A'}}</p>
+        <p class="user-name">{{ user?.firstname || 'N/A' }}</p>
+        <p class="user-role">{{ user?.role || 'N/A'}}</p>
       </div>
     </div>
   </ng-template>

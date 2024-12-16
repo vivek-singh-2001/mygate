@@ -29,8 +29,6 @@ export class SystemAdminSideNavigationComponent {
 
   constructor(
     private router: Router,
-    private snackBar: MatSnackBar,
-    private adminService: AdminService
   ) {}
 
   ngOnInit() {

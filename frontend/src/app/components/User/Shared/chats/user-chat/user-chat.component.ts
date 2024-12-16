@@ -77,7 +77,7 @@ export class UserChatComponent
   }
 
   private loadCurrentUser() {
-    this.userService.getUserData().subscribe({
+    this.userService.getUserData()?.subscribe({
       next: (userData) => {
         this.currentUser = userData;
         if (this.selectedUser) {
@@ -92,7 +92,7 @@ export class UserChatComponent
   private subscribeToMessages() {
     this.messageSubscription = this.chatService
       .getMessages()
-      .pipe(
+      ?.pipe(
         withLatestFrom(this.selectedUserSubject),
         filter(
           ([message, selectedUser]) =>

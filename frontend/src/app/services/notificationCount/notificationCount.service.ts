@@ -38,7 +38,7 @@ export class NotificationCountService {
     });
 
     // Subscribe to user data to join notification room and set up event listeners
-    this.userService.getUserData().subscribe((user) => {
+    this.userService.getUserData()?.subscribe((user) => {
       if (user?.id) {
         this.joinNotificationRoom(user.id);
 
