@@ -8,7 +8,7 @@ const session = require("express-session");
 const passport = require("./config/passport");
 const path = require("path");
 
-// import routes here
+// Import routes here
 const user_route = require("./features/users/userApis");
 const society_route = require("./features/society/societyApis");
 const wing_route = require("./features/wing/wingApis");
@@ -23,15 +23,15 @@ const notice_route = require("./features/notice/noticeApis");
 const notification_route = require("./features/notificationCount/notificationCountApis");
 const payment_route = require("./features/payment/paymentApis");
 const forum_route = require("./features/forum/forumApis");
-const thread_route = require("./features/forum/thread/threadApi")
-const threadPost_route = require("./features/forum/threadPost/threadpostApis")
-const threadPostcomment_route = require("./features/forum/postComment/postCommentApis")
-const mapapikey = require("./utils/mapApiKeyRoute")
+const thread_route = require("./features/forum/thread/threadApi");
+const threadPost_route = require("./features/forum/threadPost/threadpostApis");
+const threadPostcomment_route = require("./features/forum/postComment/postCommentApis");
+const mapapikey = require("./utils/mapApiKeyRoute");
 const staff_Routes = require("./features/staff/staffApis");
 const video_route = require("./features/live-stream/liveStreamApi");
-const postLike_route = require("./features/forum/postLike/postLikeApis")
+const postLike_route = require("./features/forum/postLike/postLikeApis");
 
-require("./scheduler/dailyThoughtScheduler")
+require("./scheduler/dailyThoughtScheduler");
 
 // USE MODULES HERE
 const app = express();
@@ -53,21 +53,17 @@ app.use(
   })
 );
 
-// Serve static files from the 'dist' directory
-app.use(
-  "/static",
-  express.static(path.join(__dirname, "dist"), {
-    maxAge: "1y",
-    setHeaders: function (res, path) {
-      if (path.endsWith(".html")) {
-        res.setHeader("Cache-Control", "no-cache");
-      } else {
-        res.setHeader("Cache-Control", "public, max-age=31536000");
-      }
-    },
-  })
-);
-// Serve HLS files (stream.m3u8 and .ts files)
+app.use("/static", express.static(path.join(__dirname, "dist"), {
+  maxAge: "1y",
+  setHeaders: function (res, path) {
+    if (path.endsWith(".html")) {
+      res.setHeader("Cache-Control", "no-cache");
+    } else {
+      res.setHeader("Cache-Control", "public, max-age=31536000");
+    }
+  },
+}));
+
 app.use('/hls', express.static('hls'));
 app.use(express.json());
 app.use(cookieParser());
@@ -79,12 +75,13 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: process.env.NODE_ENV === "production", // set to true if using HTTPS
+      secure: process.env.NODE_ENV === "production",
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -112,6 +109,12 @@ app.use("/api/v1/mapapikey", mapapikey);
 app.use("/api/v1/stream", video_route);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Route all other requests to Angular
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist/frontend/browser/index.html"));
+});
+
+// ERROR HANDLER MUST BE DEFINED LAST
 app.use("*", (req, res, next) => {
   const err = new CustomError(
     `can't find ${req.originalUrl} on the server`,
@@ -120,11 +123,6 @@ app.use("*", (req, res, next) => {
   next(err);
 });
 
-// Route all other requests to Angular
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist/frontend/browser/index.html"));
-});
-
-// ERROR HANDLER MUST BE DEFINED LAST
 app.use(globalErrorHandler);
+
 module.exports = app;
