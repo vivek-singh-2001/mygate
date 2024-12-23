@@ -1,0 +1,43 @@
+{
+  "status": "success",
+  "data": {
+    "noticeList": [
+      {
+        "id": "a771da4f-ee22-4bfa-a8cb-4ee1588e6a87",
+        "text": "Notice 2",
+        "media": "[]",
+        "isThought": false,
+        "isNotice": true,
+        "createdAt": "2024-12-20T11:43:53.099Z",
+        "updatedAt": "2024-12-20T11:43:53.099Z",
+        "societyId": "03660b97-c749-4c52-af19-ef2dff80286d",
+        "userId": "1404fe56-aed7-4630-bf2c-a3a3ab8a66a2",
+        "User": {
+          "firstname": "Tatum",
+          "lastname": "Bartell",
+          "email": "Rowland_Stroman6@yahoo.com"
+        },
+        "mediaUrls": []
+      },
+      {
+        "id": "a45723e2-d4b5-433b-9e1d-0424b8647a88",
+        "text": "Notice content",
+        "media": "[\"1734694949893-1731324795206-Screenshot from 2024-07-10 15-20-22.png\"]",
+        "isThought": false,
+        "isNotice": true,
+        "createdAt": "2024-12-20T11:42:29.918Z",
+        "updatedAt": "2024-12-20T11:42:29.918Z",
+        "societyId": "03660b97-c749-4c52-af19-ef2dff80286d",
+        "userId": "1404fe56-aed7-4630-bf2c-a3a3ab8a66a2",
+        "User": {
+          "firstname": "Tatum",
+          "lastname": "Bartell",
+          "email": "Rowland_Stroman6@yahoo.com"
+        },
+        "mediaUrls": [
+          "http://192.1.125.175:7500/uploads/1734694949893-1731324795206-Screenshot from 2024-07-10 15-20-22.png"
+        ]
+      }
+    ]
+  }
+}

@@ -107,6 +107,7 @@
         [touchUI]="true"
         [readonlyInput]="true"
         [(ngModel)]="eventData.start_date"
+        [minDate]="today"
       />
     </div>
     <div class="flex justify-content-end gap-2">
@@ -115,7 +116,7 @@
         severity="secondary"
         (onClick)="addEventFlag = false"
       />
-      <p-button label="Add" (onClick)="onEventSubmit()" />
+      <p-button class="event-submit-btn" label="Add" (onClick)="onEventSubmit()" />
     </div>
   </p-dialog>
 </div>

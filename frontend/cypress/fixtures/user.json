@@ -1,0 +1,67 @@
+{
+  "status": "success",
+  "data": {
+    "id": "1404fe56-aed7-4630-bf2c-a3a3ab8a66a2",
+    "firstname": "Tatum",
+    "lastname": "Bartell",
+    "number": "6448620507",
+    "passcode": "564956",
+    "email": "Rowland_Stroman6@yahoo.com",
+    "dateofbirth": "2024-01-08",
+    "photo": "https://picsum.photos/seed/46d30a32-bab2-4d39-b989-18e93df17879/200",
+    "Houses": [
+      {
+        "id": "ea8758bc-413a-4268-aa55-8c191ff934a2",
+        "house_no": 404,
+        "floorId": "0dd671d1-a119-4a7d-988b-28e50289f4d8",
+        "Floor": {
+          "id": "0dd671d1-a119-4a7d-988b-28e50289f4d8",
+          "floor_number": 4,
+          "wingId": "038a6426-c4a1-41d1-b87c-ea869c740970",
+          "Wing": {
+            "id": "038a6426-c4a1-41d1-b87c-ea869c740970",
+            "name": "C",
+            "societyId": "03660b97-c749-4c52-af19-ef2dff80286d",
+            "Society": {
+              "id": "03660b97-c749-4c52-af19-ef2dff80286d",
+              "name": "Green Meadows Society",
+              "address": {
+                "street": "Andheri",
+                "city": "Mumbai",
+                "state": "Maharashtra",
+                "zip": "400001"
+              }
+            }
+          }
+        },
+        "HouseUser": {
+          "id": "c8b92461-8ce1-4b33-878a-b944d31e07fe",
+          "houseId": "ea8758bc-413a-4268-aa55-8c191ff934a2",
+          "userId": "1404fe56-aed7-4630-bf2c-a3a3ab8a66a2"
+        }
+      }
+    ],
+    "Roles": [
+      {
+        "id": "682acf62-8a6f-41db-94c6-4df8ef2d47c5",
+        "name": "societyAdmin"
+      },
+      {
+        "id": "ed2b3b07-2126-4927-895a-b7a34e28a196",
+        "name": "owner"
+      }
+    ],
+    "societyDetails": [
+      {
+        "id": "03660b97-c749-4c52-af19-ef2dff80286d",
+        "name": "Green Meadows Society",
+        "address": {
+          "street": "Andheri",
+          "city": "Mumbai",
+          "state": "Maharashtra",
+          "zip": "400001"
+        }
+      }
+    ]
+  }
+}
