@@ -1,11 +1,25 @@
 describe('Visitor Module Tests', () => {
+  const visitorTestData = {
+    name: {
+      operator: 'like',
+      value: 'Test_Visitor_%',
+    },
+  };
+
   before(() => {
     cy.login('Rowland_Stroman6@yahoo.com', 'password123');
   });
 
   beforeEach(() => {
-    cy.restoreLoginState();
-    cy.visit('/home/visitors');
+    cy.restoreLocalStorage();
+  });
+
+  afterEach(() => {
+    cy.saveLocalStorage();
+  });
+
+  after(() => {
+    cy.cleanupTestData('Visitor', visitorTestData);
   });
 
   it('Should navigate to the Visitors page', () => {
@@ -29,27 +43,30 @@ describe('Visitor Module Tests', () => {
   //   });
 
   it('Should display a message when no pending visitors are present', () => {
-    cy.contains('Pending').click();
+    cy.visit('/home/visitors');
 
+    cy.contains('Pending').click();
     cy.get('p-tabPanel[header="Pending"]')
       .contains('No pending visitors to display.')
       .should('be.visible');
   });
 
   it('Should display a message when no visitors are present', () => {
-    cy.contains('Past').click();
+    cy.visit('/home/visitors');
 
+    cy.contains('Past').click();
     cy.get('p-tabPanel[header="Past"]')
       .contains('No past visitors to display.')
       .should('be.visible');
   });
 
   it('Should add a new expected visitor', () => {
-    cy.contains('Expected').click();
+    cy.visit('/home/visitors');
 
+    cy.contains('Expected').click();
     cy.contains('Add Visitor').click();
 
-    cy.get('#name').type('Jane Smith');
+    cy.get('#name').type('Test_Visitor_Jane');
     cy.get('#number').type('9876543210');
     cy.get('#vehicleNumber').type('GJ-18-AA-0000');
     cy.get('#startDate').click();
@@ -73,16 +90,27 @@ describe('Visitor Module Tests', () => {
   });
 
   it('Should allow sharing a visitor pass', () => {
-    cy.contains('Expected').click();
+    cy.visit('/home/visitors');
 
+    cy.contains('Expected').click();
     cy.get('p-tabPanel[header="Expected"]')
-      .contains('tr', 'Jane Smith')
+      .contains('tr', 'Test_Visitor_Jane')
       .find('.p-button-info')
       .click();
 
     cy.contains('Share Visitor Pass').should('be.visible');
 
+    cy.window().then((win) => {
+      cy.stub(win, 'open').as('windowOpen');
+    });
+
     cy.contains('Share on WhatsApp').click();
+
+    // Adjust the regex to match the actual URL
+    cy.get('@windowOpen').should(
+      'be.calledWithMatch',
+      /https:\/\/api\.whatsapp\.com\/send\?text=/
+    );
 
     cy.log('WhatsApp sharing triggered');
   });

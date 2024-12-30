@@ -7,5 +7,8 @@ declare namespace Cypress {
      */
     login(email: string, password: string): Chainable<void>;
     restoreLoginState(): Chainable<void>;
+    saveLocalStorage(): void;
+    restoreLocalStorage(): void;
+    cleanupTestData(tableName: string, filter: any): Chainable<void>;
   }
 }
